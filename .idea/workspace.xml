@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c9d5fa33-697e-47a5-a0ef-5e07cd308ddf" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1ZXa1HcwWd46wSzJf4qTnhiTH1q" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c9d5fa33-697e-47a5-a0ef-5e07cd308ddf" name="Default Changelist" comment="" />
+      <created>1584987675548</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584987675548</updated>
+      <workItem from="1584987680195" duration="3093000" />
+      <workItem from="1586174573508" duration="12188000" />
+      <workItem from="1586942489283" duration="212000" />
+      <workItem from="1587377865241" duration="429000" />
+      <workItem from="1587574225596" duration="7447000" />
+      <workItem from="1588236707751" duration="23949000" />
+      <workItem from="1588422719744" duration="10373000" />
+      <workItem from="1588848285211" duration="5187000" />
+      <workItem from="1589100706481" duration="184000" />
+      <workItem from="1591112700075" duration="590000" />
+      <workItem from="1593596376294" duration="1658000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="484" y="146" key="#ESLint" timestamp="1588236907553">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="484" y="146" key="#ESLint/0.0.1920.1040@0.0.1920.1040" timestamp="1588236907553" />
+    <state x="662" y="263" key="run.anything.popup" timestamp="1588269420104">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="662" y="263" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1588269420104" />
+    <state x="622" y="240" width="672" height="678" key="search.everywhere.popup" timestamp="1586178613188">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="622" y="240" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1586178613188" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/redux/dialogsReducer.js</url>
+          <line>25</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

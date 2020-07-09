@@ -1,0 +1,44 @@
+
+.blockMenu {
+    /*background-color: lightgreen;*/
+    background-color: lightgreen;
+    height: 100%;
+    display: grid;
+    border-radius: 4px 4px 4px 20px;
+}
+
+.menu {
+    margin: 0 0 0 0;
+    list-style-type: none;
+    font-family: Verdana;
+    font-size: 26px;
+    font-weight: bold;
+    padding: 0;
+
+}
+
+.menu ul {
+
+}
+
+.menu li {
+    margin: 35px 0 35px 30% ;
+    /*margin-top: 35px;*/
+}
+
+.menu a {
+    color: darkgreen;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    color: dodgerblue;
+}
+
+.menu a:active {
+    color: red
+}
+
+.menu a.activeLink {
+    color: red
+}

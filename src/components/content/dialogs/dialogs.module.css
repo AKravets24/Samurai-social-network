@@ -1,0 +1,182 @@
+.dialogsPage {
+    display: grid;
+
+    grid-template-areas: 'dialogList specificDialog';
+
+    grid-template-columns: 1fr 4fr;
+
+    background-color: lightblue;
+    border-radius: 5px 5px 20px 5px;
+    /*min-height: 500px;*/
+}
+
+
+.dialogList {
+    grid-area: dialogList;
+    width: 100%;
+}
+
+.dialogList ul {
+    list-style-type: none;
+    /*height: 90%;*/
+    /*background-color: lightyellow;*/
+    width: 75%;
+    margin: 0 auto;
+    border-radius: 15px;
+    padding: 0 0 0 15px;
+    text-align: center;
+
+}
+
+.dialogList div {
+    margin-top: 25px;
+    /*background-color: red;*/
+    /*width: 15px;*/
+    height: 32px;
+    padding-top: 10px;
+}
+
+
+.dialogList a {
+    text-decoration: none;
+    font-size: 25px;
+    color: dodgerblue;
+    font-weight: bold;
+    font-family: Arial;
+}
+
+.dialogList a:hover {
+    color: red;
+}
+
+.dialogsAreaAndSender {
+    display: flex;
+    flex-direction: column;
+}
+
+.dialogArea {
+    grid-area: specificDialog;
+    width: 95%;
+    margin: 25px auto 1px auto;
+    background-color: lightyellow;
+    border-radius: 20px 0 0 20px;
+    min-height: 500px;
+    height: auto !important;
+    max-height: 600px;
+    /*height: 650px;*/
+    /*overflow: auto;*/
+    overflow-x: hidden;
+}
+
+
+.dialogArea::-webkit-scrollbar {
+    width: 5px;
+    background-color: lightyellow;
+}
+
+.dialogArea::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: lightskyblue;
+    /*border-radius: 10% 0 0 10%;*/
+
+}
+
+.dialogArea::-webkit-scrollbar-button{
+    background-color: lightskyblue;
+    height: 20px;
+    border-radius: 12%;
+}
+
+.dialogArea::-webkit-scrollbar-track-piece {
+    background-color: lightyellow;
+}
+
+
+
+
+
+/*
+::-webkit-scrollbar { !*параметры скроллера внутри блока с сообщениями*!
+    width: 30px; height: 3px;
+}
+::-webkit-scrollbar-button {  !*пареметры кнопок скроллера (верх и низ)*!
+    background-color: green
+}
+::-webkit-scrollbar-track {  !*хер знает что за настройка*!
+    background-color: yellow;
+}
+::-webkit-scrollbar-track-piece { !*параметры направляющих скроллера*!
+    background-color: orange;
+}
+::-webkit-scrollbar-thumb { !*параметры подвижного блока скроллера*!
+    height: 50px;
+    background-color: black;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-corner { !* тоже хер знает что за настройка*!
+    background-color: saddlebrown;
+}
+::-webkit-resizer { !* тоже хер знает что за настройка*!
+    background-color: violet;
+}
+*/
+
+
+
+.messageBlock {
+    padding: 2px 15px 5px 15px;
+    background-color: lightgreen;
+    border-radius: 15px;
+    min-width: 10%;
+    width: auto;
+    max-width: 70%;
+    margin: 15px 25px 25px auto;
+}
+
+.messageBody {
+    color: black;
+    font-size: 22px;
+    margin: 0;
+    text-align: left;
+}
+
+.messageBlockTime{
+    color: green;
+    font-size: 14px;
+    margin: 0;
+    text-align: right;
+    position: relative;
+}
+
+.messageBlockTime::after {
+    content: '';
+    border: 12px solid transparent;
+    position: absolute; /* Абсолютное позиционирование */
+    right: -40px; bottom: -1px; /* Положение треугольника */
+    border-left: 20px solid lightgreen; /* Прозрачные границы */
+    /*border-top: 10px solid green; !* Добавляем треугольник *!*/
+}
+
+
+.sender {
+    height: 150px;
+    background-color: lightblue;
+    border-radius: 0 0 20px 0;
+}
+
+.sender textarea {
+    width: 90%;
+    resize: none;
+    margin: 10px 0 0 4%;
+    height: 70px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    font-size: 22px;
+    padding-left: 2%;
+}
+
+.sender .sendBTN {
+    margin-left: 75%;
+
+}
