@@ -1,27 +1,10 @@
-const UPDATE_MESSAGE_BODY = "UPDATE-MESSAGE-BODY";
 const SEND_MESSAGE_TO_USER = "SEND-MESSAGE-TO-USER";
 
-const updateMessageFieldActionCreator = (newSomeMessageText) => ({
-    type: UPDATE_MESSAGE_BODY,
-    text: newSomeMessageText
-});
+const sendMessageToUserAC = (text, date, time) => ({type: SEND_MESSAGE_TO_USER, text, date, time });
 
-const sendMessageToUserActionCreator = (finishedMessage, date, time) => ({
-    type: SEND_MESSAGE_TO_USER,
-    text: finishedMessage,
-    date: date,
-    time: time
-});
+const dialogActions = {sendMessageToUserAC};
 
-const dialogActions = {
-    updateMessageFieldActionCreator: updateMessageFieldActionCreator,
-    sendMessageToUserActionCreator: sendMessageToUserActionCreator,
-};
-
-export const dialogActionsCreators = (state
-                                    = dialogActions)=> {
-    return state
-};
+export const dialogACs = (state = dialogActions)=> { return state };
 
 let initialDialogsState = {
     dialogs: [
@@ -86,9 +69,7 @@ let initialDialogsState = {
 export const dialogsReducer = ( state = initialDialogsState, action, date, time ) => {
     let stateCopy = {...state};
     switch (action.type) {
-        case UPDATE_MESSAGE_BODY:
-            stateCopy.messageField = action.text;
-            return stateCopy;
+
         case SEND_MESSAGE_TO_USER:
             let finishedMessage = {
                 id: state.messages[0].length + 1,

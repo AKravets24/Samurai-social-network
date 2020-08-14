@@ -8,19 +8,13 @@ import logo from './../../../redux/img/login/logo.png'
 
 
 class LoginContainer extends React.Component {
-    constructor(props) {
-        super(props)
-        // console.log(props)
+    constructor(props) { super(props); /*console.log(props)*/
     }
 
-    setMeLogin = (email, password, rememberMe) => {
-        this.props.setMeLoginThunk(email, password, rememberMe)
-    };
+    setMeLogin = (email, password, rememberMe) => { this.props.setMeLoginThunk(email, password, rememberMe) };
 
-    render() {
-        return <Login setMeLogin={this.setMeLogin} authErr={this.props.state.authErr}
-                      isAuth={this.props.state.isAuth} id={this.props.state.id}
-        />
+    render() {return <Login setMeLogin={this.setMeLogin} authErr={this.props.state.authErr}
+                      isAuth={this.props.state.isAuth} id={this.props.state.id} />
     }
 }
 
@@ -28,7 +22,6 @@ const Login = (props) => {
     // console.log(props.isAuth)
 
     let crownPosition = ['0px 6px', '-100px 6px'];
-
     let [crown, setCrown] = useState(crownPosition[0]);
     let styles = {
         background: {
@@ -47,18 +40,7 @@ const Login = (props) => {
             overflow: 'hidden',
         }
     };
-
-
-    const loginListener = (email, password, rememberMe) => {
-        // console.log(email, password, rememberMe)
-        props.setMeLogin(email, password, rememberMe)
-    };
-
-    if (props.isAuth === true) {
-        console.log(props.isAuth)
-        return <Redirect to={`/profile/${props.id}`}/>
-    }
-
+    const loginListener = (email, password, rememberMe) => { props.setMeLogin(email, password, rememberMe) };
 
     return  <div style={styles.background} className={stl.loginBackground}>
                 <div style={styles.reactCrown} className={stl.reactCrown}/>

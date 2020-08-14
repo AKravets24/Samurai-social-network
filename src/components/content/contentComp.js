@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import stl from './content.module.css';
 import ProfileComposer from "./profile/profileContainer";
-import DialogsConnector from "./dialogs/dialogContainer";
+import DialogsConnector from "./dialogs/dialogs";
 import News from './news/News';
 import Music from './music/music';
 import Settings from "./settings/settings";
@@ -25,7 +25,7 @@ function Content(props) {
     let loginChecker = () => {
         if (props.isAuth) {         // ЗАЛОГИНЕН
             if (props.pathname.match (/^\/login$|^\/$/) ) return <Redirect to={`profile/${props.myId}`      }/>
-            if (!props.pathname.match(/^\/profile\/\d{1,4}\b$|^\/dialogs$|^\/friends$|^\/users$|^\/$| ^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/))
+            if (!props.pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs$|^\/friends$|^\/users$|^\/$| ^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/))
                 return <Redirect to='/404'/>
             return  <>
                 <Route exact path='/profile/:userId?' render={() => <ProfileComposer myId = {props.myId}/>  }/>

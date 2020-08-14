@@ -1,10 +1,10 @@
-import React from 'react';
-import stl from './App.module.css';
-import { connect } from 'react-redux';
-import HeaderConnector from './header/header';
-import NavBarConnector from './navBar/navBar';
-import ContentComposer from './content/contentComp';
-import StoreContext from "./storeContext";
+import React            from 'react';
+import { connect }      from 'react-redux';
+import stl              from './App.module.css';
+import HeaderConnector  from './header/header';
+import NavBarConnector  from './navBar/navBar';
+import ContentComposer  from './content/contentComp';
+import StoreContext     from './storeContext';
 
 class App extends React.Component {
 constructor(props) {super(props);
@@ -12,8 +12,8 @@ constructor(props) {super(props);
 }
 
     componentDidMount() {
-        this.props.getLogInThunk()
-        // this.props.getInitializeAppThunk()
+        // this.props.getLogInThunk()
+        this.props.getInitializeAppThunk()
     }
 
     render() {
@@ -21,9 +21,9 @@ constructor(props) {super(props);
             <StoreContext.Consumer>
                 {
                     () => {
-                        // if (!this.props.state.authData.appInitialized) {
-                        //     return 'NOT INITIALISED'
-                        // }
+                        if (!this.props.state.authData.appInitialized) {
+                            return 'NOT INITIALISED'
+                        }
                             return (
                                 <div className={stl.container}>
                                     <div className={stl.header}>
@@ -57,14 +57,11 @@ const mapStateToProps = (state) =>{
 const mergeProps = (stateProps, dispatchProps) => {
     const state = stateProps;
     const {dispatch} = dispatchProps;
-
     const getLogInThunk = () => dispatch ( state.appAC.getLogInThunkAC    () );
     const getInitializeAppThunk   = () => dispatch ( state.appAC.initializeAppThunkAC () );
 
     return { state, getLogInThunk, getInitializeAppThunk }
 };
-
-
 export default connect (mapStateToProps, null, mergeProps) (App)
 
 

@@ -5,7 +5,6 @@ import userMale from './img/defaultUserAvas/userMale.jpg'
 import {userLoaderTheme} from "./backGroundSetter";
 import {usersApi} from "./app";
 
-const UPDATE_POST_FIELD           = 'UPDATE-POST-FIELD';
 const ADD_POST                    = "ADD-POST";
 const SET_USER_PROFILE            = 'SET_USER_PROFILE';
 const TOGGLE_IS_LOADING           = 'TOGGLE_IS_LOADING';
@@ -15,7 +14,6 @@ const UPDATE_MY_AVATAR            = 'UPDATE_MY_AVATAR';
 const GET_MY_AVATAR               = 'GET_MY_AVATAR';
 const USER_STATUS_SETTER          = 'USER_STATUS_SETTER';
 
-const updatePostFieldAC           = (text)                  => ({type: UPDATE_POST_FIELD, text});
 const addPostAC                   = (finalPost, date, time) => ({type: ADD_POST, txt: finalPost, date, time});
 const setUserProfileAC            = (profile)               => ({type: SET_USER_PROFILE, profile });
 const toggleIsLoadingAC           = (isLoading)             => ({type: TOGGLE_IS_LOADING, isLoading});
@@ -41,7 +39,7 @@ const updateMyAvatarThunkAC       = (file)                  => (dispatch) => {
             dispatch(updateMyAvatarAC(data.data.photos.large))
         })
 };
-const getMyAvatarAC               = (myAva)                 => ({ type: GET_MY_AVATAR, myAva })
+const getMyAvatarAC               = (myAva)                 => ({type: GET_MY_AVATAR, myAva })
 const getProfileThUnkAC           = (userId)                => (dispatch) => {
     dispatch(toggleIsLoadingAC(true));
     if (!userId) userId = 2;
@@ -75,7 +73,7 @@ const getUserStatusThunkAC        = (userId)                => (dispatch) => {
 const profilePictures = { panoramaPic: Panorama, avatarPic: Avatar, };
 export const profilePics = (state = profilePictures)=> { return state };
 
-const actionsCreators = {updatePostFieldAC, addPostAC, setUserProfileAC, toggleIsLoadingAC, getProfileThUnkAC,
+const actionsCreators = { addPostAC, setUserProfileAC, toggleIsLoadingAC, getProfileThUnkAC,
     statusChangeAC, updateStatusThunkAC, getMyStatusThunkAC, updateMyAvatarThunkAC,
     getMyProfileThunkAC, getUserStatusThunkAC, };
 
@@ -89,7 +87,6 @@ let initialProfileState = {
         {"id": 2, "likesCount": 25, "date": "28.04.20", "time": "14:30", "message": "how are you?"},
         {"id": 1, "likesCount": 12, "date": "28.04.20", "time": "14:00", "message": "hey"},
     ],
-    postField:        '',
     profile:          {
         photos: {
             small: null,
@@ -109,7 +106,6 @@ export const profileReducer = (state = initialProfileState, action,  date, time)
     // debugger
     let stateCopy = {...state};
     switch (action.type) {
-        case UPDATE_POST_FIELD : stateCopy.postField = action.text; return stateCopy;
 
         case ADD_POST:
             let text = {
