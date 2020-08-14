@@ -7,15 +7,35 @@ import { compose } from 'redux';
 
 class profileClassContainer extends React.Component {
     constructor(props) { super(props);
-    console.log(props)
+    // console.log(props)
+        this.state = { myId: this.props.state.myId, comparativeId: +this.props.match.params.userId, }
     };
-    componentDidMount = () => {
-        // let userId = this.props.match.params.userId;
-        // this.props.getProfileThunk(userId);
-        this.props.getMyStatusThunk();
-        this.props.getMyProfileThunk();
 
+    profileSelector = () => {
+        let {myId, comparativeId} = this.state;
+        if  ( myId  === comparativeId || !comparativeId ){
+                this.props.getMyProfileThunk    (myId);
+                this.props.getMyStatusThunk     (myId);
+                this.props.history.push         (`/profile/${myId}`);
+        }
+        if (+comparativeId && +comparativeId !== myId){
+                this.props.getProfileThunk      (comparativeId);
+                this.props.getUserStatusThunk   (comparativeId);
+        }
     };
+
+    componentDidMount = () => { this.profileSelector() };
+
+    componentDidUpdate(prevProps, prevState,snapshot) {
+        let thisPropsId = +this.props.match.params.userId; // меняется динамически !!
+        let prevPropsId = +prevProps.match.params.userId
+        if (thisPropsId !== prevPropsId) {
+            this.props.getMyProfileThunk    (thisPropsId);
+            this.props.getMyStatusThunk     (thisPropsId);
+            this.props.history.push         (`/profile/${thisPropsId}`);
+        }
+    };
+
     render() {
         // console.log(this.props.match.params)
         return <Profile
@@ -23,21 +43,19 @@ class profileClassContainer extends React.Component {
                     addPost              = { this.props.addPost              }
                     onPostChange         = { this.props.onPostChange         }
                     state                = { this.props.state                }
-                    profile              = { this.props.state.profile        }
+                    match                = { this.props.match                }
                     stateChanger         = { this.props.stateChanger         }
-                    statusEditOn         = { this.props.statusEditOn         }
-                    statusEditOff        = { this.props.statusEditOff        }
                     updateStatusThunk    = { this.props.updateStatusThunk    }
                     updateMyAvatarThunk  = { this.props.updateMyAvatarThunk  }
-                    letterBalanceCounter = { this.props.letterBalanceCounter }
+                    getMyStatusThunk     = { this.props.getMyStatusThunk     }
         />
     }
 }
 
 let mapStateToProps = (state)=> {
-    // console.log(state.profileReducer.myId);
+    // console.log(state);
     return {
-        myId: state.authReducer.id,
+        myId: state.appAuthReducer.id,
         profilePics: state.profilePics,
         props: state.profileReducer,
         profileACs: state.profileACs,
@@ -49,30 +67,28 @@ let mergeProps = (stateProps, dispatchProps)=>{
     const { dispatch } = dispatchProps;
     // console.log(state);
 
-    const onPostChange           = (newSomeText) =>  { dispatch(state.profileACs.updatePostFieldAC(newSomeText)) };
-    const addPost                = (finalPost) =>    {
+    const onPostChange          = (newSomeText) => { dispatch(state.profileACs.updatePostFieldAC       (newSomeText) )};
+    const addPost               = (finalPost) =>   {
         let dataObj = new Date();
         let date = `${("0" + dataObj.getDate()).slice(-2)}.${("0" + (dataObj.getMonth() +
             + 1)).slice(-2)}.${(dataObj.getFullYear() - 2000)}`;
         let time = `${("0" + dataObj.getHours()).slice(-2)}:${("0" + dataObj.getMinutes()).slice(-2)}`;
         dispatch(state.profileACs.addPostAC(finalPost, date, time));
     };
-    // const getProfileThunk     = (userId) =>       { dispatch (state.profileACs.getProfileThUnkAC(userId)) };
-    const statusEditOn           = () =>             { dispatch (state.profileACs.statusEditOnAC())};
-    const stateChanger           = (text) =>         { dispatch (state.profileACs.statusChangeAC(text))};
-    const statusEditOff          = () =>             { dispatch (state.profileACs.statusEditOffAC())};
-    const updateStatusThunk      = (text)=>          { dispatch (state.profileACs.updateStatusThunkAC(text))};
-    const getMyStatusThunk       = (status)=>        { dispatch (state.profileACs.getMyStatusThunkAC(status))};
-    const updateMyAvatarThunk    = (image)=>         { dispatch (state.profileACs.updateMyAvatarThunkAC(image)) };
-    const getMyProfileThunk      = () =>             { dispatch (state.profileACs.getMyProfileThunkAC()) };
-    const letterBalanceCounter   = (number)=>        { dispatch (state.profileACs.letterBalanceCounterAC(number)) }
+    const getProfileThunk       = (userId) =>      { dispatch (state.profileACs.getProfileThUnkAC      (userId)      )};
+    const stateChanger          = (text) =>        { dispatch (state.profileACs.statusChangeAC         (text)        )};
+    const updateStatusThunk     = (text)=>         { dispatch (state.profileACs.updateStatusThunkAC    (text)        )};
+    const getMyStatusThunk      = (status, myId)=> { dispatch (state.profileACs.getMyStatusThunkAC     (status,myId) )};
+    const updateMyAvatarThunk   = (image)=>        { dispatch (state.profileACs.updateMyAvatarThunkAC  (image)       )};
+    const getMyProfileThunk     = (myId) =>        { dispatch (state.profileACs.getMyProfileThunkAC    (myId)        )};
+    const getUserStatusThunk    = (userId)=>       { dispatch (state.profileACs.getUserStatusThunkAC   (userId)      )};
 
-    return { state, onPostChange, addPost, /*getProfileThunk,*/ statusEditOn, stateChanger,statusEditOff, updateStatusThunk,
-            getMyStatusThunk, updateMyAvatarThunk, getMyProfileThunk, letterBalanceCounter}
+    return { state, onPostChange, addPost, getProfileThunk, stateChanger, updateStatusThunk,
+            getMyStatusThunk, updateMyAvatarThunk, getMyProfileThunk, getUserStatusThunk}
 };
 
 export default compose (
     connect(mapStateToProps, null, mergeProps),
     withRouter,
-    // withAuthRedirect,
+    withAuthRedirect,
 )(profileClassContainer);

@@ -2,22 +2,24 @@ import userLoader from './loader/users/24.gif'
 import maleProfilePic from './img/defaultUserAvas/male.jpg'
 import { usersApi } from "./app";
 
-const FOLLOW = 'FOLLOW';
-const UNFOLLOW = 'UNFOLLOW';
-const SET_USERS = 'SET_USERS';
-const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
-const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT';
-const TOGGLE_IS_LOADING = 'TOGGLE_IS_LOADING';
-const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS';
+const FOLLOW                        = 'FOLLOW';
+const UNFOLLOW                      = 'UNFOLLOW';
+const SET_USERS                     = 'SET_USERS';
+const SET_CURRENT_PAGE              = 'SET_CURRENT_PAGE';
+const SET_TOTAL_USERS_COUNT         = 'SET_TOTAL_USERS_COUNT';
+const TOGGLE_IS_LOADING             = 'TOGGLE_IS_LOADING';
+const TOGGLE_IS_FOLLOWING_PROGRESS  = 'TOGGLE_IS_FOLLOWING_PROGRESS';
+const TOGGLE_USER_SEARCH_MODE       = 'TOGGLE_USER_SEARCH_MODE';
+const UPDATE_SEARCH_FIELD           = 'UPDATE_SEARCH_FIELD';
 
-const followBTNAC               = (userId) => ({type: FOLLOW, userId});
-const unFollowBTNAC             = (userId) => ({type: UNFOLLOW, userId});
-const setUsersAC                = (users) => ({type: SET_USERS, users});
-const setCurrentPageAC          = (currentPage) => ({type: SET_CURRENT_PAGE, currentPage});
-const setTotalUsersCountAC      = (totalCount) => ({type: SET_TOTAL_USERS_COUNT, totalCount});
-const toggleIsLoadingAC         = (isLoading) => ({type: TOGGLE_IS_LOADING, isLoading});
-const toggleFollowingProgressAC = (isLoading, userId) => ({type: TOGGLE_IS_FOLLOWING_PROGRESS, isLoading, userId});
-const getUsersThunkAC           = (pageSize, currentPage) => (dispatch) => {
+const followBTNAC               = (userId)                =>  ({type: FOLLOW, userId});
+const unFollowBTNAC             = (userId)                =>  ({type: UNFOLLOW, userId});
+const setUsersAC                = (users)                 =>  ({type: SET_USERS, users});
+const setCurrentPageAC          = (currentPage)           =>  ({type: SET_CURRENT_PAGE, currentPage});
+const setTotalUsersCountAC      = (totalCount)            =>  ({type: SET_TOTAL_USERS_COUNT, totalCount});
+const toggleIsLoadingAC         = (isLoading)             =>  ({type: TOGGLE_IS_LOADING, isLoading});
+const toggleFollowingProgressAC = (isLoading, userId)     =>  ({type: TOGGLE_IS_FOLLOWING_PROGRESS, isLoading, userId});
+const getUsersThunkAC           = (pageSize, currentPage) =>  (dispatch) =>  {
         dispatch(toggleIsLoadingAC(true));
         usersApi.getUsers(pageSize, currentPage)
             .then(data => {
@@ -27,7 +29,7 @@ const getUsersThunkAC           = (pageSize, currentPage) => (dispatch) => {
             })
 
 };
-const setCurrentPageThunkAC     = (pageSize, currentPage) => (dispatch) => {
+const setCurrentPageThunkAC     = (pageSize, currentPage) =>  (dispatch) =>  {
         dispatch(toggleIsLoadingAC(true));
         dispatch(setCurrentPageAC(currentPage));
         usersApi.getUsers(pageSize, currentPage )
@@ -36,7 +38,7 @@ const setCurrentPageThunkAC     = (pageSize, currentPage) => (dispatch) => {
                 dispatch(toggleIsLoadingAC(false));
             });
 };
-const followThunkAC             = (userId) =>                (dispatch) => {
+const followThunkAC             = (userId)                =>  (dispatch) =>  {
         dispatch(toggleFollowingProgressAC(true, userId));
         usersApi.followRequest(userId)
             .then( data =>{
@@ -46,7 +48,7 @@ const followThunkAC             = (userId) =>                (dispatch) => {
                 dispatch(toggleFollowingProgressAC(false, userId));
             })
 };
-const unFollowThunkAC           = (userId) =>                (dispatch) => {
+const unFollowThunkAC           = (userId)                =>  (dispatch) =>  {
     dispatch(toggleFollowingProgressAC(true, userId))
     usersApi.unFollowRequest(userId)
         .then( data =>{
@@ -57,22 +59,37 @@ const unFollowThunkAC           = (userId) =>                (dispatch) => {
             dispatch(toggleFollowingProgressAC(false, userId))
         })
 };
-const setUsersThunkAC           = (pageSize, currentPage) => (dispatch) => {
+const setUsersThunkAC           = (pageSize, currentPage) =>  (dispatch) =>  {
     usersApi.getUsers(pageSize, currentPage)
         .then(data => {
             dispatch(setUsersAC(data.items));
         });
 };
+const toggleUserSearchModeAC    = (userSearchMode)        =>  ({type: TOGGLE_USER_SEARCH_MODE, userSearchMode})
+const getCertainUserThunkAC     = (userName)              =>  (dispatch) =>  {
+    dispatch (toggleUserSearchModeAC(true))
+    dispatch (toggleIsLoadingAC(true));
+    usersApi.getCertainUser(userName)
+        .then(data => {
+            dispatch(setUsersAC(data.items))
+            dispatch(toggleIsLoadingAC(false));
+            }
+        )
+};
+const updateSearchFieldAC       = (text)                  =>  ({type: UPDATE_SEARCH_FIELD, text});
+
 
 const initialUsersInfo = {
     initialUsersList: [],
-    pageSize: 100,
+    pageSize: 7,
     totalCount: 0,
     currentPage: 1,
     isLoading: false,
     loader: userLoader,
     defaultAvatar: maleProfilePic,
     followingInProgress: [],
+    userSearchMode: false,
+    userSearchField: '',
 };
 
 export const usersReducer = (state = initialUsersInfo, action) => {
@@ -106,10 +123,18 @@ export const usersReducer = (state = initialUsersInfo, action) => {
                 ...state, followingInProgress: action.isLoading
                     ? [...state.followingInProgress, action.userId]
                     : [...state.followingInProgress.filter(id => id != action.userId)]  };
+        case TOGGLE_USER_SEARCH_MODE:
+            console.log('TOGGLE_USER_SEARCH_MODE');
+            return {...state, userSearchMode: action.userSearchMode};
+        case UPDATE_SEARCH_FIELD:
+            console.log('UPDATE_SEARCH_FIELD');
+            return { ...state, userSearchField: action.text  };
+
         default:
             return {...state};
     }
 };
-const actionCreators = {getUsersThunkAC, setCurrentPageThunkAC, followThunkAC, unFollowThunkAC,setUsersThunkAC,};
+const actionCreators = {getUsersThunkAC, setCurrentPageThunkAC, followThunkAC, unFollowThunkAC,setUsersThunkAC,
+    getCertainUserThunkAC, toggleUserSearchModeAC, updateSearchFieldAC};
 export const usersActionCreators = (state = actionCreators) => {
     return state };

@@ -1,0 +1,73 @@
+.modalWindow {
+    position: absolute;
+    height: 300px;
+    /*width: 800px;*/
+    width: 130%;
+    background-color: lightgoldenrodyellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    top: 40px;
+    right: 10px;
+    border: 1px solid black;
+}
+
+.statusTextArea {
+    width: 700px;
+    /*height: 40px;*/
+    outline: none;
+    font-size: 30px;
+    resize: none;
+    border-radius: 10px;
+
+    min-height: 40px;
+    /*height: auto !important;*/
+    height: 500px;
+    max-height: 150px
+
+}
+
+.twoBTNs {
+    width: 90%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.twoBTNs button{
+    font-size: 30px;
+    width: 250px;
+    height: 40px;
+    border-radius: 10px;
+    outline: none;
+}
+
+.BTNChangeSaver {
+    background-color: lightgreen;
+}
+
+.BTNChangeSaver:hover {
+    cursor: pointer;
+}
+
+.BTNChangeReject {
+    background-color: lightcoral;
+}
+.BTNChangeReject:hover {
+    cursor: pointer;
+}
+
+.statusWrapper {
+
+}
+
+.statusWrapper:hover {
+    background-color: lightgrey;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.statusField {
+
+}

@@ -1,16 +1,21 @@
 import React, {useEffect} from "react";
 import stl from './header.module.css'
 import logo from './img/logo.jpg'
-import {NavLink} from 'react-router-dom';
+import {NavLink, Route, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 function Header(props) {
-    // console.log(props.state)
+    // console.log(props)
+    const logOutListener = () => {
+        props.setMeLogOutThunk()
+    };
+
     return <>
         <div
             style={props.state.headerThemes.header}
-             className={stl.header}>
-            <div className={stl.boofer}></div>
+            className={stl.header}>
+
+            <div className={stl.boofer}/>
 
             <div className={stl.logotype}>
                 <img src={logo} alt="#err"/>
@@ -21,9 +26,14 @@ function Header(props) {
 
             <div className={stl.login}>
                 {props.state.authData.isAuth ?
-                    <h4
-                        style={props.state.headerThemes.loginH4}>
-                        {props.state.authData.login} (It's you)</h4> :
+                    <div className={stl.loginTrue}>
+                        <h4 style={props.state.headerThemes.loginH4}>
+                            {props.state.authData.login} (It's you) </h4>
+                        <button className={stl.logOutBTN}
+                            onClick={() => logOutListener()}
+                        >X</button>
+                    </div>
+                    :
                     <NavLink to={'login'}><h3 style={props.state.headerThemes.loginHref}
                         className={stl.loginHref}>Login</h3></NavLink>
                 }
@@ -35,21 +45,20 @@ function Header(props) {
 function HeaderContainer(props) {
     // console.log(props)
     useEffect( ()=> {
-        props.getLogInThunk();
         let themeRebootTimer = props.state.backGroundSetter.timeToChangeTheme * 60 * 1000;
         setInterval(props.state.backGroundSetter.funcSetTheme , themeRebootTimer);
         // console.log(themeRebootTimer)
     }, [] );
 
     return <>
-            <Header {...props} />
+            <Header {...props}/>
         </>
 }
 
 const mapStateToProps = (state) => {
     // console.log(state);
     return {
-        authData: state.authReducer,
+        authData: state.appAuthReducer,
         headerAC: state.headerAC,
         backGroundSetter: state.backGroundSetter,
         headerThemes: state.backGroundSetter.themes.header,
@@ -61,10 +70,10 @@ const mergeProps = (stateProps, dispatchProps) => {
     const {dispatch} = dispatchProps;
     // console.log( state );
 
-    const getLogInThunk = () => dispatch(state.headerAC.getLogInThunkAC());
+    const setMeLogOutThunk = () => dispatch( state.headerAC.setMeLogOutThunkAC ()  );
 
     return {
-        state, getLogInThunk,
+        state, setMeLogOutThunk
     }
 };
 

@@ -1,16 +1,24 @@
-import {createStore, combineReducers, applyMiddleware } from "redux";
-import {profileReducer, profileACs, profilePics} from "./profileReducer";
-import {dialogsReducer, dialogActionsCreators} from "./dialogsReducer";
-import {usersReducer, usersActionCreators} from "./usersReducer";
-import {backGroundSetter} from "./backGroundSetter";
-import {authReducer, headerAC} from "./headerReducer";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import { profileReducer, profileACs, profilePics} from "./profileReducer";
+import { dialogsReducer, dialogActionsCreators} from "./dialogsReducer";
+import { usersReducer, usersActionCreators} from "./usersReducer";
+import { backGroundSetter} from "./backGroundSetter";
+import { headerAC } from "./headerReducer";
+import { friendsReducer, friendsACs} from './friendsReducer';
+import { contentCompReducer, contentCompACs} from './contentCompReducer';
 import thunkMiddleWare  from 'redux-thunk';
+import {appAC, appAuthReducer} from "./appReducer";
 
 
 let reducers = combineReducers({
-    profileReducer, dialogsReducer, usersReducer, authReducer,
-    profilePics, backGroundSetter,
-    profileACs, dialogActionsCreators, usersActionCreators, headerAC,
+    profileReducer,    profilePics,             profileACs,
+    dialogsReducer,    dialogActionsCreators,
+    usersReducer,      usersActionCreators,
+    friendsReducer,    friendsACs,
+    backGroundSetter,
+    headerAC,
+    appAC,  appAuthReducer,
+    // contentCompReducer, contentCompACs  // вроде они нафиг не нужны
 });
 
 export let store = createStore(reducers, applyMiddleware(thunkMiddleWare));

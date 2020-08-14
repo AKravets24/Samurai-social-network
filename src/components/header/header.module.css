@@ -5,6 +5,7 @@
     display: grid;
     grid-template-areas: "boofer logotype login";
     grid-template-columns: 1fr 3fr 1fr;
+    vertical-align: center;
 }
 
 .boofer {
@@ -38,13 +39,31 @@
 
 .login {
     grid-area: login;
-    margin: 45px auto 0 auto;
+    /*margin: 45px auto 0 auto;*/
+    margin-top: 45px;
 
+}
+
+.logOutBTN {
+    background-color: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    color: red;
+    width: 30px;
+    height: 30px;
+    border: 2px solid red;
+
+}
+
+.loginTrue {
+    display: flex;
+    justify-content: center;
+    height: 30px;
 }
 
 .login h4  {
     text-align: center;
-    margin: 0;
+    margin: 0 15px 0  0;
     color: white;
 }
 

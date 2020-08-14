@@ -1,9 +1,4 @@
 .profile {
-    display: grid;
-    grid-gap: 10px;
-
-    grid-template-rows: 0.7fr 0.6fr;
-
     background-color: lightyellow;
     opacity: 0.9;
 }
@@ -20,41 +15,45 @@
 .panorama img {
     width: 100%;
     border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.profileWrapper {
+    width: 98%;
+    margin: 0 auto;
 }
 
 .profileDetails {
-
-    display: grid;
-    grid-gap: 15px;
-
-    grid-template-areas:
-            'profilePic profileInfo'
-            'wallContainer wallContainer'
-            'userInfo userInfo';
-
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 4fr;
-
-    width: 90%;
-    margin: 15px auto;
-
+    display: flex;
 }
 
-
 .profilePic {
-
-    display: flex;
-    grid-area: profilePic;
+    width: 35%;
 }
 
 .profilePic img {
-    border-radius: 50%;
+    border-radius: 5px;
     width: 100%;
     vertical-align: center;
 }
 
+.fileInput {
+    display: none;
+}
+
+.fileChooser {
+    display: block;
+    background-color: lightgoldenrodyellow;
+    cursor: pointer;
+    font-size: 25px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid grey;
+
+}
+
 .profileInfo {
-    grid-area: profileInfo;
+    width: 65%;
     margin-left: 5%;
     border-top: 2px solid lightgreen;
 }
@@ -71,132 +70,19 @@
     font-size: 24px;
 }
 
-.userInfo {
-    grid-area: userInfo;
-    display: grid;
-    margin: 0 auto;
-    width: 80%;
 
-    grid-template-areas:
-            'userAva userContacts'
-            'aboutUser aboutUser';
-
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-
-    justify-content: space-around;
-}
-
-.userAva {
-    grid-area: userAva;
-}
-
-.userAva img {
-    border-radius: 50%;
-}
-
-.userContacts {
-    grid-area: userContacts;
-}
-
-.aboutUser {
-    grid-area: aboutUser;
-    text-align: center;
-}
 
 .statusBlock {
     position: relative;
     height: 50px;
 }
 
-.modalWindow {
-    position: absolute;
-    height: 300px;
-    /*width: 800px;*/
-    width: 130%;
-    background-color: lightgoldenrodyellow;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    border-radius: 10px;
-    top: 40px;
-    right: 10px;
-    border: 1px solid black;
-}
-
-.statusTextArea {
-    width: 700px;
-    /*height: 40px;*/
-    outline: none;
-    font-size: 30px;
-    resize: none;
-    border-radius: 10px;
-
-    min-height: 40px;
-    /*height: auto !important;*/
-    height: 500px;
-    max-height: 150px
-
-}
-
-.twoBTNs {
-    width: 90%;
-    display: flex;
-    justify-content: space-evenly;
-}
-
-.twoBTNs button{
-    font-size: 30px;
-    width: 250px;
-    height: 40px;
-    border-radius: 10px;
-    outline: none;
-}
-
-.BTNChangeSaver {
-    background-color: lightgreen;
-}
-
-.BTNChangeSaver:hover {
-    cursor: pointer;
-}
-
-.BTNChangeReject {
-background-color: lightcoral;
-}
-.BTNChangeReject:hover {
-    cursor: pointer;
-}
-
-.statusWrapper {
-
-}
-
-.statusWrapper:hover {
-    background-color: lightgrey;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.statusField {
-
-}
-
-.wallContainer {
-    grid-area: wallContainer;
-    height: 200px;
-}
-
 .writePost {
     border-top: 2px solid lightgreen;
     width: 100%;
-
 }
 
 .writePost h2 {
-    grid-area: posts;
     width: 160px;
     text-align: center;
 }
@@ -215,9 +101,6 @@ background-color: lightcoral;
     font-size: 26px;
     outline: none;
     resize: none;
-
-    /*padding-left: 20px;*/
-    /*padding-right: 20px;*/
 }
 
 .writePost button {
@@ -228,7 +111,7 @@ background-color: lightcoral;
     outline: none;
     font-size: 26px;
     margin-top: 10px;
-    /*margin-left: 75%;*/
+    margin-bottom: 15px;
     background-color: wheat;
 
 }
