@@ -25,7 +25,7 @@ function Content(props) {
     let loginChecker = () => {
         if (props.isAuth) {         // ЗАЛОГИНЕН
             if (props.pathname.match (/^\/login$|^\/$/) ) return <Redirect to={`profile/${props.myId}`      }/>
-            if (!props.pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs$|^\/friends$|^\/users$|^\/$| ^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/))
+            if (!props.pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/friends$|^\/users$|^\/$| ^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/))
                 return <Redirect to='/404'/>
             return  <>
                 <Route exact path='/profile/:userId?' render={() => <ProfileComposer myId = {props.myId}/>  }/>

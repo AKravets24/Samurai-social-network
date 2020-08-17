@@ -1,9 +1,9 @@
-import Panorama from "./img/propfilePic/summer.jpg";
-import Avatar from "./img/propfilePic/avatar.jpg";
-import maleProfilePic from './img/defaultUserAvas/male.jpg'
-import userMale from './img/defaultUserAvas/userMale.jpg'
-import {userLoaderTheme} from "./backGroundSetter";
-import {usersApi} from "./app";
+import Panorama           from "./img/propfilePic/summer.jpg";
+import Avatar             from "./img/propfilePic/avatar.jpg";
+import maleProfilePic     from './img/defaultUserAvas/male.jpg'
+import userMale           from './img/defaultUserAvas/userMale.jpg'
+import {userLoaderTheme}  from "./backGroundSetter";
+import {usersApi}         from "./app";
 
 const ADD_POST                    = "ADD-POST";
 const SET_USER_PROFILE            = 'SET_USER_PROFILE';

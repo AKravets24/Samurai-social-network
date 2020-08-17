@@ -214,6 +214,9 @@
       <workItem from="1597224185909" duration="38013000" />
       <workItem from="1597313917426" duration="23611000" />
       <workItem from="1597415367017" duration="15057000" />
+      <workItem from="1597501119055" duration="11054000" />
+      <workItem from="1597530002505" duration="6319000" />
+      <workItem from="1597565203946" duration="30312000" />
     </task>
     <servers />
   </component>
@@ -233,10 +236,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="601" y="237" width="672" height="677" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1594040695202" />
-    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup" timestamp="1596120413870">
+    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup" timestamp="1597508240052">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596120413870" />
+    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1597508240052" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -250,6 +253,30 @@
           <url>file://$PROJECT_DIR$/components/header/header.js</url>
           <line>71</line>
           <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/app.js</url>
+          <line>35</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
+          <line>70</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
+          <line>25</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
+          <line>37</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

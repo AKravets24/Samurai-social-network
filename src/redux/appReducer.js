@@ -12,6 +12,7 @@ const getLogInThunkAC      = () => (dispatch)   =>  usersApi.getLogIn().then(dat
     if (data.resultCode === 0) { let {id, email, login} = data.data; dispatch(setUserDataAC(id, email, login))}
 });
 const setMeLoginThunkAC    = (email, password, rememberMe ) => (dispatch) => {
+    debugger
     usersApi.setMeLogin(email, password, rememberMe)
         .then( data => {
             console.log(data)
@@ -44,7 +45,7 @@ export const appAuthReducer = (state = initialState, action) => {
     switch (action.type) {
 
         case INITIALISED_SUCCESSFULLY:
-            console.log('INITIALISED_SUCCESSFULLY')
+            // console.log('INITIALISED_SUCCESSFULLY')
             return  {...state, appInitialized: true};
 
         case SET_USER_DATA:
