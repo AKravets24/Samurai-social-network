@@ -27,11 +27,11 @@
     display: flex;
 }
 
-.profilePic {
+.profilePicNBTN {
     width: 35%;
 }
 
-.profilePic img {
+.profilePicNBTN img {
     border-radius: 5px;
     width: 100%;
     vertical-align: center;
@@ -41,8 +41,10 @@
     display: none;
 }
 
-.fileChooser {
+.fileChooser,
+.writeMessage {
     display: block;
+    width: 100%;
     background-color: lightgoldenrodyellow;
     cursor: pointer;
     font-size: 25px;
@@ -113,5 +115,4 @@
     margin-top: 10px;
     margin-bottom: 15px;
     background-color: wheat;
-
 }

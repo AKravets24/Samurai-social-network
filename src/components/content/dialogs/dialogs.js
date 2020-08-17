@@ -1,22 +1,18 @@
-import React            from "react";
-import {connect}        from "react-redux";
-import { compose }      from 'redux';
-import {NavLink}        from 'react-router-dom';
-import {Formik}         from 'formik';
-import { withRouter }   from 'react-router-dom';
-import stl              from './dialogs.module.css';
+import React, {useState}      from "react";
+import {connect}              from "react-redux";
+import { compose }            from 'redux';
+import {withRouter, NavLink}  from 'react-router-dom';
+import {Formik}               from 'formik';
+import stl                    from './dialogs.module.css';
 
-function Dialogs(props) { console.log(props.state);
-    const DialogItem = (props) => { let path = `/dialogs/${props.id}`;
-        return <div>
-            {/*<img src={props.photos.large || props.defaultAvatar} alt="err"/>*/}
-            <img src={props.defaultAvatar} alt="err"/>
-            <NavLink to={path}> {props.name} </NavLink>
-        </div> };
+function Dialogs(props) {
+    // console.log(props.state);
+
+    let [dialogId, setDialogId] = useState(null)
 
     const sendMessageListener = (userId, msg)=> { props.sendMessageToUserThunk(userId, msg) };
 
-    const getTalk = (userId) => { props.getTalkWithUserThunk(userId)};
+    const getTalk = (userId) => { setDialogId(dialogId=userId); props.getTalkWithUserThunk(dialogId) };
 
     return <>
         <div className={stl.dialogsPage}>
@@ -28,7 +24,8 @@ function Dialogs(props) { console.log(props.state);
                                 <NavLink to={`/profile/${user.id}`}>
                                     <img  src={user.photos.large || props.state.defaultAvatar} alt="err"/>
                                 </NavLink>
-                                <button onClick={() => getTalk(user.id)} >{user.userName}</button>
+                                <NavLink to={`/dialogs/${user.id}`}  onClick={() => getTalk(user.id)} > {user.userName} </NavLink>
+                                {/*<button  >{user.userName}</button>*/}
                             </div>)}
                 </ul>
             </div>
@@ -44,7 +41,7 @@ function Dialogs(props) { console.log(props.state);
                 </div>
                 <div className={stl.sender}>
                     <Formik initialValues={{text:''}} validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
-                            onSubmit={(values,{setSubmitting})=>{sendMessageListener(7180, values.text);values.text='';setSubmitting(false);
+                            onSubmit={(values,{setSubmitting})=>{sendMessageListener(dialogId, values.text);values.text='';setSubmitting(false);
                             }}>
                         {({values, errors,handleChange, handleSubmit,  isSubmitting,}) => (
                             <form onSubmit={handleSubmit}>
@@ -59,12 +56,15 @@ function Dialogs(props) { console.log(props.state);
     </>
 };
 
-class DialogFuncContainer extends React.Component { constructor(props) {
-    super(props);
-    // console.log(props)
+class DialogFuncContainer extends React.Component { constructor(props) {super(props);
+    console.log(props)
 }
     componentDidMount() {
-        this.props.getMyNegotiatorsListThunk()
+        this.props.getMyNegotiatorsListThunk();
+        let userId = this.props.match.params.userId;
+        // if (userId) this.props.getTalkWithUserThunk(userId)
+        if (userId) this.props.talkedBeforeThunk(userId)
+        console.log(+userId)
     }
 
     render() {
@@ -90,6 +90,7 @@ let mergeProps = (stateProps, dispatchProps) => { const  state  = stateProps; co
     const getMyNegotiatorsListThunk = ()           => {dispatch(state.dialogACs.getMyNegotiatorsListThunkAC()         )};
     const getTalkWithUserThunk      = (userId)     => {dispatch(state.dialogACs.getTalkWithUserThunkAC(userId)        )};
     const sendMessageToUserThunk    = (userId,msg) => {dispatch(state.dialogACs.sendMessageToUserThunkAC(userId,msg)  )};
+    const talkedBeforeThunk         = (userId)     => {dispatch(state.dialogACs.talkedBeforeThunkAC (userId)          )}
 
     // const sendMessage = (msg) => {
     //     let date = new Date();
@@ -97,8 +98,11 @@ let mergeProps = (stateProps, dispatchProps) => { const  state  = stateProps; co
     //     let time=`${("0"+date.getHours()).slice(-2)}:${("0"+date.getMinutes()).slice(-2)}`;
     //     dispatch(state.dialogACs.sendMessageToUserAC(msg, data, time))
     // };
-    return {state, /*sendMessage,*/ getMyNegotiatorsListThunk, getTalkWithUserThunk, sendMessageToUserThunk }
+    return {state, /*sendMessage,*/ getMyNegotiatorsListThunk, getTalkWithUserThunk, sendMessageToUserThunk, talkedBeforeThunk }
 };
 
-export default compose( connect(mapStateToProps, null, mergeProps), )(DialogFuncContainer);
+export default compose (
+    connect(mapStateToProps, null, mergeProps),
+    withRouter
+    )(DialogFuncContainer);
 

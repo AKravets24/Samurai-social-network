@@ -217,6 +217,8 @@
       <workItem from="1597501119055" duration="11054000" />
       <workItem from="1597530002505" duration="6319000" />
       <workItem from="1597565203946" duration="30312000" />
+      <workItem from="1597655827677" duration="23177000" />
+      <workItem from="1597700763434" duration="6383000" />
     </task>
     <servers />
   </component>
@@ -255,28 +257,24 @@
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/redux/app.js</url>
-          <line>35</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
           <line>70</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
-          <line>25</line>
-          <properties lambdaOrdinal="-1" />
+          <line>21</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
-          <line>37</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="19" />
+          <line>32</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/dialogsReducer.js</url>
+          <line>65</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

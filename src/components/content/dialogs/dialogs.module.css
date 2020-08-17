@@ -12,7 +12,8 @@
 
 .dialogList {
     grid-area: dialogList;
-    width: 100%;
+    width: 95%;
+    margin: 0 auto;
 }
 
 .talkerBlock {
@@ -48,8 +49,8 @@
 .dialogList ul {
     list-style-type: none;
     /*height: 90%;*/
-    /*background-color: lightyellow;*/
-    width: 90%;
+    background-color: lightyellow;
+    width: 100%;
     margin: 0 auto;
     border-radius: 15px;
     padding: 0 0 0 15px;
@@ -80,14 +81,15 @@
 .dialogsAreaAndSender {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .dialogArea {
     grid-area: specificDialog;
-    width: 95%;
+    width: 90%;
     margin: 25px auto 1px auto;
     background-color: lightyellow;
-    border-radius: 20px 0 0 20px;
+    border-radius: 20px 20px 0 0;
     min-height: 500px;
     height: auto !important;
     max-height: 600px;
@@ -106,7 +108,6 @@
     height: 50px;
     background-color: lightskyblue;
     /*border-radius: 10% 0 0 10%;*/
-
 }
 
 .dialogArea::-webkit-scrollbar-button{
@@ -185,26 +186,38 @@
     /*border-top: 10px solid green; !* Добавляем треугольник *!*/
 }
 
-
 .sender {
-    height: 150px;
-    background-color: lightblue;
+    height: 180px;
+    /*background-color: lightblue;*/
     border-radius: 0 0 20px 0;
+    width: 100%;
+}
+
+.sender form {
+    width: 100%;
+    min-height: 150px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .sender textarea {
-    width: 90%;
-    resize: none;
-    margin: 10px 0 0 4%;
-    height: 70px;
-    border-radius: 5px;
+    /*text-indent: 25px;*/
+    width: 88%;
+    padding-left: 2%;
+    margin: 25px 0 0 0;
     outline: none;
+    resize: none;
+    height: 70px;
     border: none;
     font-size: 22px;
-    padding-left: 2%;
+    border-radius: 0 0 20px 20px;
+
 }
 
 .sender .sendBTN {
-    margin-left: 75%;
+    margin: 10px 0 0 0;
+    font-size: 25px;
 
 }

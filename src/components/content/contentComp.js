@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import stl from './content.module.css';
 import ProfileComposer from "./profile/profileContainer";
-import DialogsConnector from "./dialogs/dialogs";
+import DialogsComposer from "./dialogs/dialogs";
 import News from './news/News';
 import Music from './music/music';
 import Settings from "./settings/settings";
@@ -25,11 +25,14 @@ function Content(props) {
     let loginChecker = () => {
         if (props.isAuth) {         // ЗАЛОГИНЕН
             if (props.pathname.match (/^\/login$|^\/$/) ) return <Redirect to={`profile/${props.myId}`      }/>
-            if (!props.pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/friends$|^\/users$|^\/$| ^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/))
+            if (!props.pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/))
                 return <Redirect to='/404'/>
             return  <>
                 <Route exact path='/profile/:userId?' render={() => <ProfileComposer myId = {props.myId}/>  }/>
-                <Route exact path='/dialogs'          render={() => <DialogsConnector/>                     }/>
+
+                <Route exact path={`/dialogs/:userId?/:messages?` }
+                                                      render={() => <DialogsComposer/>                     }/>
+
                 <Route exact path='/friends'          render={() => <FriendsComposer />                     }/>
                 <Route exact path='/news'             render={() => <News />                                }/>
                 <Route exact path='/music'            render={() => <Music/>                                }/>
@@ -39,7 +42,7 @@ function Content(props) {
             </>
         }
         else {                      // НЕ ЗАЛОГИНЕН
-            if (props.pathname.match(/^\/profile\/\d{1,4}\b$|^\/dialogs$|^\/friends$|^\/users$|^\/$/))return <Redirect to='/login'/>
+            if (props.pathname.match(/^\/profile\/\d{1,4}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\b$|^\/friends$|^\/users$|^\/$/))return <Redirect to='/login'/>
             if (!props.pathname.match(/^\/news$|^\/music$|^\/settings$|^\/$|^\/login$|^\/404$/))return <Redirect to='/404'/>
             return <>
                 <Route exact path='/login'            render={() => <UnAuthorised />                        }/>

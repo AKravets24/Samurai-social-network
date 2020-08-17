@@ -1,5 +1,6 @@
 import React          from "react";
 import {Formik}       from 'formik';
+import {NavLink}      from 'react-router-dom';
 import stl            from './profile.module.css';
 import Post           from './post/post';
 import {StatusClass}  from "./statusBlock";
@@ -26,13 +27,15 @@ function Profile(props) {
             </div>
             <div className={stl.profileWrapper}>
                 <div className={stl.profileDetails}>
-                    <div className={stl.profilePic}>
-                        <img src={ props.state.profile.photos.large     ?
-                            props.state.profile.photos.large            :
-                            props.state.props.myAvatarLarge   } alt="Err"/>
+                    <div className={stl.profilePicNBTN}>
+                        <img src={ props.state.profile.photos.large || props.state.props.myAvatarLarge   } alt="Err"/>
                         <input type="file" name="image" id='file' onChange={photoSaver} className={stl.fileInput}/>
-                        { props.state.myId === props.state.profile.userId &&
-                        <label htmlFor="file" className={stl.fileChooser}>Choose your new picture...</label>}
+                        { props.state.myId === props.state.profile.userId       &&
+                        <label htmlFor="file" className={stl.fileChooser}>Choose your new picture...</label>
+                        }
+                        { props.state.myId !== props.state.profile.userId       &&
+                        <NavLink className={stl.writeMessage} to={`/dialogs/${props.state.profile.userId}` }> Write Message </NavLink>
+                        }
                     </div>
                     <div className={stl.profileInfo}>
                         <h2> {props.state.props.profile.fullName}</h2>
