@@ -1,10 +1,10 @@
-import { usersApi }     from './app'
-import maleProfilePic   from './img/defaultUserAvas/male.jpg'
+import { usersApi }                  from './app'
+import maleProfilePic                from './img/defaultUserAvas/male.jpg'
 
-const SEND_MESSAGE_TO_USER   =  "SEND-MESSAGE-TO-USER";
-const SET_MY_COMPANIONS_LIST =  'SET_MY_COMPANIONS_LIST';
-const SET_TALK_WITH_USER     =  'SET_TALK_WITH_USER';
-const CREATE_NEW_DIALOG      =  'CREATE_NEW_DIALOG';
+const SEND_MESSAGE_TO_USER        =  "SEND-MESSAGE-TO-USER";
+const SET_MY_COMPANIONS_LIST      =  'SET_MY_COMPANIONS_LIST';
+const SET_TALK_WITH_USER          =  'SET_TALK_WITH_USER';
+const CREATE_AND_SET_NEW_DIALOG   =  'CREATE_AND_SET_NEW_DIALOG';
 
 const setMyCompanions               = (data) =>                           ({type: SET_MY_COMPANIONS_LIST, data});
 const getMyNegotiatorsListThunkAC   = () =>                 (dispatch) => {
@@ -14,9 +14,7 @@ const getMyNegotiatorsListThunkAC   = () =>                 (dispatch) => {
 };
 const setTalkWithUser               = (data)=>                             ({type: SET_TALK_WITH_USER, data});
 const getTalkWithUserThunkAC        = (userId) =>           (dispatch) => {
-    usersApi.getTalkWithUser(userId)
-        .then(data=>
-        dispatch(setTalkWithUser(data)) )
+    usersApi.getTalkWithUser(userId) .then(data=> dispatch(setTalkWithUser(data)) )
 };
 const sendMsgAC                     = (data) =>                     ({type: SEND_MESSAGE_TO_USER, data: data.data.message})
 const sendMessageToUserThunkAC      = (userId, body) =>     (dispatch) => {
@@ -24,28 +22,19 @@ const sendMessageToUserThunkAC      = (userId, body) =>     (dispatch) => {
         .then(data => dispatch(sendMsgAC(data)))
         .catch(error => console.log(error))
 };
-const createNewDialogAC              = (userId, fullName, photos) => ({type: CREATE_NEW_DIALOG, userId, fullName, photos});
-
+const createNewDialogAC             = (userId, fullName, photos) => ({type: CREATE_AND_SET_NEW_DIALOG, userId, fullName, photos});
 const talkedBeforeThunkAC           = (userId) =>          (dispatch) => {
-    debugger;
     usersApi.getMyNegotiatorsList()
         .then(data => {
-            data.some(el => {
-                if (el.id === userId) {
-                    return getTalkWithUserThunkAC(userId)
-                } else {
-                    usersApi.getProfile(userId)
-                        .then(data => {
-                            let {fullName, photos} = data;
-                            return  dispatch( createNewDialogAC(userId, fullName, photos) )
-                    }   )
-                }
-            })
-            }
+            if  (data.find(el=> (el.id === +userId))) {
+                return  usersApi.getTalkWithUser(userId).then(data=> dispatch(setTalkWithUser(data)) )
+            } else {
+                return usersApi.getProfile(userId) .then(data => {
+                    let { fullName, photos} = data; dispatch( createNewDialogAC(+userId, fullName, photos))
+                    })
+            }}
         )
 };
-
-
 const dialogActions = {getMyNegotiatorsListThunkAC, getTalkWithUserThunkAC, sendMessageToUserThunkAC, createNewDialogAC,
     talkedBeforeThunkAC};
 
@@ -72,13 +61,13 @@ export const dialogsReducer = ( state = initialDialogsState, action, date, time 
             return {...state, dialogsList: action.data}
 
         case SET_TALK_WITH_USER:
-            console.log('SET_TALK_WITH_USER')
+            console.log(`SET_TALK_WITH_USER `)
+            console.log(action.data)
             return {...state, certainDialog: action.data}
 
-        case CREATE_NEW_DIALOG:
+        case CREATE_AND_SET_NEW_DIALOG:
             console.log('CREATE_NEW_DIALOG')
-            // debugger
-            let newDialog = {
+            let newDialogListItem = {
                 hasNewMessages: false,
                 id: action.userId,
                 lastDialogActivityDate: null,
@@ -86,8 +75,9 @@ export const dialogsReducer = ( state = initialDialogsState, action, date, time 
                 newMessagesCount: 0,
                 photos: { small: action.photos.small, large: action.photos.large },
                 userName: action.fullName,
-            }
-            stateCopy.dialogsList.push(newDialog);
+            };
+            stateCopy.dialogsList.unshift(newDialogListItem);
+            // stateCopy = {...state, certainDialog: {items: [] }}
             return stateCopy;
 
         default:

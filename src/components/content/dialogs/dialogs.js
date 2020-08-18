@@ -6,11 +6,11 @@ import {Formik}               from 'formik';
 import stl                    from './dialogs.module.css';
 
 function Dialogs(props) {
-    // console.log(props.state);
+    // console.log(props.userIdInURL);
 
-    let [dialogId, setDialogId] = useState(null)
+    let [dialogId, setDialogId] = useState(+props.userIdInURL)
 
-    const sendMessageListener = (userId, msg)=> { props.sendMessageToUserThunk(userId, msg) };
+    const sendMessageListener = (userId, msg)=> { setDialogId(dialogId=userId); props.sendMessageToUserThunk(userId, msg) };
 
     const getTalk = (userId) => { setDialogId(dialogId=userId); props.getTalkWithUserThunk(dialogId) };
 
@@ -64,7 +64,6 @@ class DialogFuncContainer extends React.Component { constructor(props) {super(pr
         let userId = this.props.match.params.userId;
         // if (userId) this.props.getTalkWithUserThunk(userId)
         if (userId) this.props.talkedBeforeThunk(userId)
-        console.log(+userId)
     }
 
     render() {
@@ -72,6 +71,7 @@ class DialogFuncContainer extends React.Component { constructor(props) {super(pr
                         sendMessage={this.props.sendMessage}
                         getTalkWithUserThunk={this.props.getTalkWithUserThunk}
                         sendMessageToUserThunk={this.props.sendMessageToUserThunk}
+                        userIdInURL={this.props.match.params.userId}
         />;
     }
 }
