@@ -1,0 +1,1 @@
+export const  getUsersInfo = (state) => { return state.usersReducer }

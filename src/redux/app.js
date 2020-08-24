@@ -38,8 +38,9 @@ export const usersApi = {
     // dialogs
     getMyNegotiatorsList ()      { return instance.get(`dialogs`)                    .then(response => response.data  )},
     getTalkWithUser (userId)     { return instance.get(`dialogs/${userId}/messages`) .then(response => response.data  )},
-    sendMsgToTalker (userId,body) {return instance.post(`dialogs/${userId}/messages`, {body})
+    sendMsgToTalker (userId,body){ return instance.post(`dialogs/${userId}/messages`, {body})
                                                                                      .then(response => response.data  )},
+    getNewMessages ()            { return instance.get(`dialogs/messages/new/count`) .then(response => response.data  )},
 };
 
 // ссылки для тестирования

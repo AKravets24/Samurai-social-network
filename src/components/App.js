@@ -7,9 +7,6 @@ import ContentComposer  from './content/contentComp';
 import StoreContext     from './storeContext';
 
 class App extends React.Component {
-constructor(props) {super(props);
-    // console.log(props.state.authData.appInitialized)
-}
 
     componentDidMount() {
         // this.props.getLogInThunk()

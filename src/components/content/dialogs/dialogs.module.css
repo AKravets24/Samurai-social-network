@@ -8,36 +8,133 @@
     background-color: lightblue;
     border-radius: 5px 5px 20px 5px;
     /*min-height: 500px;*/
+    /*outline: 2px solid black;*/
 }
 
 .dialogList {
     grid-area: dialogList;
-    width: 95%;
-    margin: 0 auto;
-}
-
-.talkerBlock {
     /*outline: 2px solid red;*/
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-
+    width: 100%;
+    height: 730px;
+    overflow-x: auto;
+    /*direction: rtl;*/
+    overflow-wrap: break-word;
 }
 
-.talkerBlock button {
+.dialogList::-webkit-scrollbar {
+    width:   5px;
+    height:  70%;
+    background-color: lightyellow;
+}
+
+.dialogList::-webkit-scrollbar-button {
+    height: 7%;
+    background-color: deepskyblue;
+    border-radius: 10px;
+}
+
+.dialogList::-webkit-scrollbar-thumb {
+    width: 20px;
+    background-color: deepskyblue;
+    border-radius: 4px;
+}
+
+.dialogList div {
+    margin-top: 25px;
+    padding-top: 10px;
+}
+
+.dialogList a {
     text-decoration: none;
     font-size: 25px;
     color: dodgerblue;
     font-weight: bold;
     font-family: Arial;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    outline: none;
+    margin-left: 15px;
 }
 
-.talkerBlock button:hover {
-    color: red;
+.dialogList a:last-child {
+    display: inline;
+}
+
+/*.dialogList a:last-child:hover {*/
+/*    visibility: visible;*/
+/*    position: absolute;*/
+/*}*/
+
+/*::-webkit-scrollbar { !*параметры скроллера внутри блока с сообщениями*!*/
+/*    width: 30px; height: 3px; background-color: green}*/
+/*::-webkit-scrollbar-button {  !*параметры кнопок скроллера (верх и низ)*!}*/
+/*::-webkit-scrollbar-track {  !*хер знает что за настройка*!}*/
+/*::-webkit-scrollbar-track-piece { !*параметры направляющих скроллера*! }*/
+/*::-webkit-scrollbar-thumb { !*параметры подвижного блока скроллера*!}*/
+/*::-webkit-scrollbar-corner { !* тоже хер знает что за настройка*!}*/
+/*::-webkit-resizer { !* тоже хер знает что за настройка*!}*/
+
+.talkerBlock {
+    width: 88%;
+    /*outline: 2px solid green;*/
+    display: flex;
+    /*flex-direction: row-reverse;*/
+    align-items: center;
+    /*margin-left: 10px;*/
+    background-color: lightyellow;
+    border-radius: 20px;
+    margin: 0 auto;
+    /*overflow-x: hidden;*/
+    /*overflow-x: scroll;*/
+    /*overflow-x: auto;*/
+    word-break: break-all;
+    padding-right: 2%;
+    hyphens: auto;
+
+}
+
+.talkerBlock:hover {
+    overflow-x: auto;
+}
+
+.talkerBlock::-webkit-scrollbar {
+    background-color: lightyellow;
+    height: 7px;
+    width: 90%;
+    padding-top: 50px;
+    -webkit-box-shadow: inset 0 0 6px grey;
+    top: 10px;
+}
+
+
+/*.talkerBlock::-webkit-scrollbar-track-piece:start {*/
+/*    background: transparent;*/
+/*    margin-right: 10px;*/
+/*}*/
+
+/*.talkerBlock::-webkit-scrollbar-track-piece:end {*/
+/*    background: transparent;*/
+/*    margin-right: 10px;*/
+/*}*/
+
+
+.talkerBlock::-webkit-scrollbar-thumb {
+    background-color: dodgerblue;
+
+}
+
+.talkerBlock::-webkit-scrollbar-thumb:horizontal {
+    width: 10px;
+}
+
+.talkerBlock::-webkit-scrollbar-button {
+    /*background-color: blue;*/
+}
+.talkerBlock::-webkit-scrollbar-track-piece {
+    /*background-color: blue;*/
+}
+
+
+
+.talkerBlock a:last-child:hover {
+    overflow: visible;
 }
 
 .talkerBlock img {
@@ -46,58 +143,27 @@
     border-radius: 50%;
 }
 
-.dialogList ul {
-    list-style-type: none;
-    /*height: 90%;*/
-    background-color: lightyellow;
-    width: 100%;
-    margin: 0 auto;
-    border-radius: 15px;
-    padding: 0 0 0 15px;
-    text-align: center;
-
-}
-
-.dialogList div {
-    margin-top: 25px;
-    padding-top: 10px;
-}
-
-
-.dialogList a {
-    text-decoration: none;
-    font-size: 25px;
-    color: dodgerblue;
-    font-weight: bold;
-    font-family: Arial;
-}
-
-
-
-.dialogList a:active {
-    color: blue;
-}
-
 .dialogsAreaAndSender {
     display: flex;
     flex-direction: column;
     width: 100%;
+    /*outline: 2px solid blue;*/
+    overflow: visible;
 }
 
-.dialogArea {
-    grid-area: specificDialog;
-    width: 90%;
-    margin: 25px auto 1px auto;
-    background-color: lightyellow;
-    border-radius: 20px 20px 0 0;
-    min-height: 500px;
-    height: auto !important;
-    max-height: 600px;
-    /*height: 650px;*/
-    /*overflow: auto;*/
-    overflow-x: hidden;
-}
-
+/*.dialogArea {*/
+/*    grid-area: specificDialog;*/
+/*    width: 90%;*/
+/*    margin: 25px auto 1px auto;*/
+/*    background-color: lightyellow;*/
+/*    border-radius: 20px 20px 0 0;*/
+/*    min-height: 500px;*/
+/*    height: auto !important;*/
+/*    max-height: 600px;*/
+/*    !*height: 650px;*!*/
+/*    !*overflow: auto;*!*/
+/*    overflow-x: hidden;*/
+/*}*/
 
 .dialogArea::-webkit-scrollbar {
     width: 5px;
@@ -120,46 +186,43 @@
     background-color: lightyellow;
 }
 
-
-
-
-
-/*
-::-webkit-scrollbar { !*параметры скроллера внутри блока с сообщениями*!
-    width: 30px; height: 3px;
+.dialogArea {
+    /*outline: 2px solid blue;*/
+    grid-area: specificDialog;
+    width: 95%;
+    margin: 25px auto 0 auto;
+    background-color: lightyellow;
+    border-radius: 20px 20px 0 0;
+    min-height: 500px;
+    height: auto !important;
+    max-height: 600px;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
 }
-::-webkit-scrollbar-button {  !*пареметры кнопок скроллера (верх и низ)*!
-    background-color: green
-}
-::-webkit-scrollbar-track {  !*хер знает что за настройка*!
-    background-color: yellow;
-}
-::-webkit-scrollbar-track-piece { !*параметры направляющих скроллера*!
-    background-color: orange;
-}
-::-webkit-scrollbar-thumb { !*параметры подвижного блока скроллера*!
-    height: 50px;
-    background-color: black;
-    border-radius: 3px;
-}
-::-webkit-scrollbar-corner { !* тоже хер знает что за настройка*!
-    background-color: saddlebrown;
-}
-::-webkit-resizer { !* тоже хер знает что за настройка*!
-    background-color: violet;
-}
-*/
 
-
-
-.messageBlock {
+.messageBlockMe {
     padding: 2px 15px 5px 15px;
     background-color: lightgreen;
-    border-radius: 15px;
+    border-radius: 15px 15px 5px 15px;
     min-width: 10%;
-    width: auto;
+    width: auto !important;;
     max-width: 70%;
     margin: 15px 25px 25px auto;
+    display: inline-block;
+    position: relative;
+}
+
+.messageBlockUser {
+    padding: 2px 15px 5px 15px;
+    background-color: #cef3ff;
+    border-radius: 15px 15px 15px 0;
+    min-width: 10%;
+    width: auto !important;
+    max-width: 70%;
+    margin: 15px auto 25px 20px;
+    display: inline-block;
+    position: relative;
 }
 
 .messageBody {
@@ -169,21 +232,42 @@
     text-align: left;
 }
 
-.messageBlockTime{
+.messageBlockTimeMe {
     color: green;
     font-size: 14px;
     margin: 0;
     text-align: right;
-    position: relative;
 }
 
-.messageBlockTime::after {
+.messageBlockTimeUser {
+    color: blue;
+    font-size: 14px;
+    margin: 0;
+    text-align: right;
+}
+
+.messageBlockMe::after {
     content: '';
-    border: 12px solid transparent;
+    border: 20px solid transparent;
     position: absolute; /* Абсолютное позиционирование */
-    right: -40px; bottom: -1px; /* Положение треугольника */
+    right: -15px; bottom: 0; /* Положение треугольника */
     border-left: 20px solid lightgreen; /* Прозрачные границы */
+    /*border-left: 20px solid red; !* Прозрачные границы *!*/
     /*border-top: 10px solid green; !* Добавляем треугольник *!*/
+    transform: rotate(-80deg)
+}
+
+.messageBlockUser::after {
+    content: '';
+    border: 20px solid transparent;
+    position: absolute;
+    left: -15px;
+    bottom: 0;
+    /*!*background-color: #cef3ff;*/
+    /*background-color: red;*/
+    /*border-top: 10px solid red;*/
+    border-top: 20px solid #cef3ff;
+    transform: rotate(-190deg)
 }
 
 .sender {
@@ -204,7 +288,7 @@
 
 .sender textarea {
     /*text-indent: 25px;*/
-    width: 88%;
+    width: 93%;
     padding-left: 2%;
     margin: 25px 0 0 0;
     outline: none;

@@ -12,7 +12,6 @@ const getLogInThunkAC      = () => (dispatch)   =>  usersApi.getLogIn().then(dat
     if (data.resultCode === 0) { let {id, email, login} = data.data; dispatch(setUserDataAC(id, email, login))}
 });
 const setMeLoginThunkAC    = (email, password, rememberMe ) => (dispatch) => {
-    debugger
     usersApi.setMeLogin(email, password, rememberMe)
         .then( data => {
             console.log(data)

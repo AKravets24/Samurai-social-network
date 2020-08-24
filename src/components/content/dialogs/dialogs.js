@@ -6,36 +6,39 @@ import {Formik}               from 'formik';
 import stl                    from './dialogs.module.css';
 
 function Dialogs(props) {
-    // console.log(props.userIdInURL);
+    // console.log(props.state.certainDialog.items);
+    console.log(props.state);
 
-    let [dialogId, setDialogId] = useState(+props.userIdInURL)
+    let [dialogId, setDialogId] = useState(+props.userIdInURL);
 
     const sendMessageListener = (userId, msg)=> { setDialogId(dialogId=userId); props.sendMessageToUserThunk(userId, msg) };
-
     const getTalk = (userId) => { setDialogId(dialogId=userId); props.getTalkWithUserThunk(dialogId) };
 
     return <>
         <div className={stl.dialogsPage}>
             <div className={stl.dialogList}>
-                <ul>
-                    {props.state.dialogsList && props.state.dialogsList
-                        .map((user,i) =>
-                            <div className={stl.talkerBlock} key={i} >
-                                <NavLink to={`/profile/${user.id}`}>
-                                    <img  src={user.photos.large || props.state.defaultAvatar} alt="err"/>
-                                </NavLink>
-                                <NavLink to={`/dialogs/${user.id}`}  onClick={() => getTalk(user.id)} > {user.userName} </NavLink>
-                                {/*<button  >{user.userName}</button>*/}
-                            </div>)}
-                </ul>
+                {props.state.dialogsList && props.state.dialogsList
+                    .map((user, i) =>
+                        <div className={stl.talkerBlock} key={i} >
+                            <NavLink to={`/profile/${user.id}`}>
+                                <img  src={user.photos.large || props.state.defaultAvatar} alt="err"/>
+                            </NavLink>
+                            <NavLink to={`/dialogs/${user.id}`}  onClick={() => getTalk(user.id)} >
+                                {user.userName}{user.hasNewMessages &&
+                            <span>({user.newMessagesCount})</span> }
+                            </NavLink>
+                        </div>)}
             </div>
             <div className={stl.dialogsAreaAndSender}>
                 <div className={stl.dialogArea}>
                     { props.state.certainDialog.items && props.state.certainDialog.items
                         .map(msg =>
-                            <div className={stl.messageBlock} key={msg.id}>
+                            <div className={+msg.senderId === +props.myId ?
+                                stl.messageBlockMe : stl.messageBlockUser } key={msg.id}>
                                 <p className={stl.messageBody}>{msg.body}</p>
-                                <p className={stl.messageBlockTime}>{msg.addedAt}, viewed: {msg.viewed?'yup':'nope'}</p>
+                                <p className={+msg.senderId === +props.myId ?
+                                    stl.messageBlockTimeMe : stl.messageBlockTimeUser}>{msg.addedAt}, {msg.viewed ? 'seen':'x'}</p>
+                                <h3>{msg.senderId}</h3>
                             </div>
                         )}
                 </div>
@@ -72,6 +75,7 @@ class DialogFuncContainer extends React.Component { constructor(props) {super(pr
                         getTalkWithUserThunk={this.props.getTalkWithUserThunk}
                         sendMessageToUserThunk={this.props.sendMessageToUserThunk}
                         userIdInURL={this.props.match.params.userId}
+                        myId={this.props.state.myId}
         />;
     }
 }
@@ -80,7 +84,8 @@ let mapStateToProps = (state) => {
     // console.log(state)
     return {
         props: state.dialogsReducer,
-        dialogACs: state.dialogACs
+        dialogACs: state.dialogACs,
+        myId: state.appAuthReducer.id,
     }
 };
 let mergeProps = (stateProps, dispatchProps) => { const  state  = stateProps; const { dispatch } = dispatchProps;
@@ -90,7 +95,7 @@ let mergeProps = (stateProps, dispatchProps) => { const  state  = stateProps; co
     const getMyNegotiatorsListThunk = ()           => {dispatch(state.dialogACs.getMyNegotiatorsListThunkAC()         )};
     const getTalkWithUserThunk      = (userId)     => {dispatch(state.dialogACs.getTalkWithUserThunkAC(userId)        )};
     const sendMessageToUserThunk    = (userId,msg) => {dispatch(state.dialogACs.sendMessageToUserThunkAC(userId,msg)  )};
-    const talkedBeforeThunk         = (userId)     => {dispatch(state.dialogACs.talkedBeforeThunkAC (userId)          )}
+    const talkedBeforeThunk         = (userId)     => {dispatch(state.dialogACs.talkedBeforeThunkAC (userId)          )};
 
     // const sendMessage = (msg) => {
     //     let date = new Date();

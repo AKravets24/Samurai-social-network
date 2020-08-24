@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {withAuthRedirect} from "../HOC/withAuthRedirect";
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
+import {getUsersInfo} from "../../../redux/users-selector";
 
 class UsersClassContainer extends React.Component {
     constructor(props) { super(props); /*console.log(props)*/};
@@ -40,7 +41,8 @@ class UsersClassContainer extends React.Component {
 const mapStateToProps = (state) => {
     // console.log(state.authReducer.isAuth);
     return {
-        usersInfo: state.usersReducer,
+        // usersInfo: state.usersReducer,
+        usersInfo: getUsersInfo(state),
         usersActionsCreators: state.usersActionCreators,
         pageSize: state.usersReducer.pageSize,
         totalCount: state.usersReducer.totalCount,

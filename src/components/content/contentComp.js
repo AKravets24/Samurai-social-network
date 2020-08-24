@@ -15,6 +15,13 @@ import NotFound from "./404/404";
 import {withAuthRedirect} from "./HOC/withAuthRedirect";  // ? нужен ли
 
 class contentCompContainer  extends React.Component { constructor(props) { super(props);  /*console.log(props)*/ }
+
+    componentDidUpdate() {
+    if (this.props.myId) {
+        console.log(this.props)
+    }
+}
+
     render() {
         return <Content myId={this.props.myId} isAuth={this.props.isAuth} pathname={this.props.location.pathname}/>}
 };
@@ -31,8 +38,7 @@ function Content(props) {
                 <Route exact path='/profile/:userId?' render={() => <ProfileComposer myId = {props.myId}/>  }/>
 
                 <Route exact path={`/dialogs/:userId?/:messages?` }
-                                                      render={() => <DialogsComposer/>                     }/>
-
+                                                      render={() => <DialogsComposer/>                      }/>
                 <Route exact path='/friends'          render={() => <FriendsComposer />                     }/>
                 <Route exact path='/news'             render={() => <News />                                }/>
                 <Route exact path='/music'            render={() => <Music/>                                }/>
@@ -51,7 +57,6 @@ function Content(props) {
                 <Route exact path='/settings'         render={() => <Settings/>                             }/>
                 <Route exact path='/404'              render={() => <NotFound/>                             }/>
             </>
-            // написать компоненту 404
         }
     };
     return  <div className={stl.content2}> { loginChecker () } </div>

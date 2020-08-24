@@ -57,16 +57,16 @@ export const dialogsReducer = ( state = initialDialogsState, action, date, time 
 
         case SET_MY_COMPANIONS_LIST:
             // console.log('SET_MY_COMPANIONS_LIST')
-            console.log(action.data)
+            // console.log(action.data)
             return {...state, dialogsList: action.data}
 
         case SET_TALK_WITH_USER:
-            console.log(`SET_TALK_WITH_USER `)
-            console.log(action.data)
+            // console.log(`SET_TALK_WITH_USER `)
+            // console.log(action.data)
             return {...state, certainDialog: action.data}
 
         case CREATE_AND_SET_NEW_DIALOG:
-            console.log('CREATE_NEW_DIALOG')
+            console.log('CREATE_AND_SET_NEW_DIALOG')
             let newDialogListItem = {
                 hasNewMessages: false,
                 id: action.userId,
@@ -77,7 +77,7 @@ export const dialogsReducer = ( state = initialDialogsState, action, date, time 
                 userName: action.fullName,
             };
             stateCopy.dialogsList.unshift(newDialogListItem);
-            // stateCopy = {...state, certainDialog: {items: [] }}
+            stateCopy = {...state, certainDialog: {items: []}}
             return stateCopy;
 
         default:
