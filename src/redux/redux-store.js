@@ -1,18 +1,18 @@
 import { createStore, combineReducers, applyMiddleware }  from "redux";
 import thunkMiddleWare                                    from 'redux-thunk';
 import { profileReducer, profileACs, profilePics}         from "./profileReducer";
-import { dialogsReducer, dialogACs}           from "./dialogsReducer";
-import { usersReducer, usersActionCreators}               from "./usersReducer";
+import { dialogsReducer, dialogACs}                       from "./dialogsReducer";
+import { usersReducer, usersACs}                          from "./usersReducer";
 import { backGroundSetter}                                from "./backGroundSetter";
 import { headerAC }                                       from "./headerReducer";
-import { friendsReducer, friendsACs}                      from './friendsReducer';
-import {appAC, appAuthReducer}                            from "./appReducer";
+import { friendsReducer, friendsACs }                     from './friendsReducer';
+import { appAC, appAuthReducer }                          from "./appReducer";
 
 
 let reducers = combineReducers({
     profileReducer,    profilePics,             profileACs,
     dialogsReducer,    dialogACs,
-    usersReducer,      usersActionCreators,
+    usersReducer,      usersACs,
     friendsReducer,    friendsACs,
     backGroundSetter,
     headerAC,

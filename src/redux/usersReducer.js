@@ -136,5 +136,4 @@ export const usersReducer = (state = initialUsersInfo, action) => {
 };
 const actionCreators = {getUsersThunkAC, setCurrentPageThunkAC, followThunkAC, unFollowThunkAC,setUsersThunkAC,
     getCertainUserThunkAC, toggleUserSearchModeAC, updateSearchFieldAC};
-export const usersActionCreators = (state = actionCreators) => {
-    return state };
+export const usersACs = (state = actionCreators) => { return state };

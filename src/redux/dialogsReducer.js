@@ -1,10 +1,15 @@
 import { usersApi }                  from './app'
 import maleProfilePic                from './img/defaultUserAvas/male.jpg'
+import certainDialogLoader           from './loader/dialogs/loader_green_spinner.gif'
+import allDialogsLoader              from './loader/dialogs/spinner_yellow.gif'
+
 
 const SEND_MESSAGE_TO_USER        =  "SEND-MESSAGE-TO-USER";
 const SET_MY_COMPANIONS_LIST      =  'SET_MY_COMPANIONS_LIST';
 const SET_TALK_WITH_USER          =  'SET_TALK_WITH_USER';
 const CREATE_AND_SET_NEW_DIALOG   =  'CREATE_AND_SET_NEW_DIALOG';
+const TOGGLE_IS_LOADING           =  'TOGGLE_IS_LOADING';
+const CLEAR_CERTAIN_USER_DIALOG   =  'CLEAR_CERTAIN_USER_DIALOG'
 
 const setMyCompanions               = (data) =>                           ({type: SET_MY_COMPANIONS_LIST, data});
 const getMyNegotiatorsListThunkAC   = () =>                 (dispatch) => {
@@ -13,8 +18,16 @@ const getMyNegotiatorsListThunkAC   = () =>                 (dispatch) => {
             dispatch(setMyCompanions(data)))
 };
 const setTalkWithUser               = (data)=>                             ({type: SET_TALK_WITH_USER, data});
-const getTalkWithUserThunkAC        = (userId) =>           (dispatch) => {
-    usersApi.getTalkWithUser(userId) .then(data=> dispatch(setTalkWithUser(data)) )
+const toggleIsLoadingAC             = (allDialogIsLoading) =>              ({type: TOGGLE_IS_LOADING, allDialogIsLoading});
+const setEmptyCertainUserDialog     = () =>                                ({type: CLEAR_CERTAIN_USER_DIALOG})
+const getTalkWithUserThunkAC        = (userId) =>           (dispatch) =>  {
+    dispatch(setEmptyCertainUserDialog())
+    dispatch(toggleIsLoadingAC(true))
+    usersApi.getTalkWithUser(userId) .then(data=> {
+        dispatch(setTalkWithUser(data))
+        dispatch(toggleIsLoadingAC(false))
+    })
+
 };
 const sendMsgAC                     = (data) =>                     ({type: SEND_MESSAGE_TO_USER, data: data.data.message})
 const sendMessageToUserThunkAC      = (userId, body) =>     (dispatch) => {
@@ -27,23 +40,35 @@ const talkedBeforeThunkAC           = (userId) =>          (dispatch) => {
     usersApi.getMyNegotiatorsList()
         .then(data => {
             if  (data.find(el=> (el.id === +userId))) {
-                return  usersApi.getTalkWithUser(userId).then(data=> dispatch(setTalkWithUser(data)) )
+                dispatch(toggleIsLoadingAC(true));
+                return  usersApi.getTalkWithUser(userId).then(data=> {
+                    dispatch(setTalkWithUser(data))
+                    dispatch(toggleIsLoadingAC(false));
+                })
+
             } else {
+                dispatch(toggleIsLoadingAC(true))
                 return usersApi.getProfile(userId) .then(data => {
                     let { fullName, photos} = data; dispatch( createNewDialogAC(+userId, fullName, photos))
+                    dispatch(toggleIsLoadingAC(false))
                     })
             }}
         )
 };
+
 const dialogActions = {getMyNegotiatorsListThunkAC, getTalkWithUserThunkAC, sendMessageToUserThunkAC, createNewDialogAC,
     talkedBeforeThunkAC};
 
 export const dialogACs = (state = dialogActions)=> { return state };
 
 let initialDialogsState = {
-    dialogsList:    [{photos: {small: null, large: null}}],
-    certainDialog:  {items: []},
-    defaultAvatar:  maleProfilePic,
+    dialogsList:          [],
+    certainDialog:        {},
+    allDialogsIsLoading:  false,
+    defaultAvatar:        maleProfilePic,
+    certainDialogLoader,
+    allDialogsLoader,
+    selectedMsgs:         [],
 };
 
 export const dialogsReducer = ( state = initialDialogsState, action, date, time ) => {
@@ -51,7 +76,7 @@ export const dialogsReducer = ( state = initialDialogsState, action, date, time 
     switch (action.type) {
 
         case SEND_MESSAGE_TO_USER:
-            console.log('SEND_MESSAGE_TO_USER')
+            // console.log('SEND_MESSAGE_TO_USER')
             stateCopy.certainDialog.items.push(action.data)
             return stateCopy;
 
@@ -60,13 +85,21 @@ export const dialogsReducer = ( state = initialDialogsState, action, date, time 
             // console.log(action.data)
             return {...state, dialogsList: action.data}
 
+        case CLEAR_CERTAIN_USER_DIALOG:
+            delete stateCopy.certainDialog['items']
+            return stateCopy;
+
         case SET_TALK_WITH_USER:
             // console.log(`SET_TALK_WITH_USER `)
             // console.log(action.data)
             return {...state, certainDialog: action.data}
 
+        case TOGGLE_IS_LOADING:
+            // console.log('TOGGLE_IS_LOADING')
+            return {...state, dialogIsLoading: action.dialogIsLoading}
+
         case CREATE_AND_SET_NEW_DIALOG:
-            console.log('CREATE_AND_SET_NEW_DIALOG')
+            // console.log('CREATE_AND_SET_NEW_DIALOG')
             let newDialogListItem = {
                 hasNewMessages: false,
                 id: action.userId,

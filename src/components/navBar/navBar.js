@@ -1,8 +1,8 @@
-import React from "react";
-import stl from './navBar.module.css';
-import {NavLink} from 'react-router-dom';
-import {connect} from 'react-redux';
-import {withAuthRedirect} from "../content/HOC/withAuthRedirect";
+import React               from "react";
+import stl                 from './navBar.module.css';
+import {NavLink}           from 'react-router-dom';
+import {connect}           from 'react-redux';
+import {withAuthRedirect}  from "../content/HOC/withAuthRedirect";
 
 class navBarContainer extends React.Component {
     constructor(props) {

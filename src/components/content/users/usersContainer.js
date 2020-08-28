@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {withAuthRedirect} from "../HOC/withAuthRedirect";
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
-import {getUsersInfo} from "../../../redux/users-selector";
+import {getCurrentPage, getHeaderAC, getPageSize, getTotalCount, getUsersACs, getUsersInfo } from "../../../redux/users-selector";
 
 class UsersClassContainer extends React.Component {
     constructor(props) { super(props); /*console.log(props)*/};
@@ -41,13 +41,12 @@ class UsersClassContainer extends React.Component {
 const mapStateToProps = (state) => {
     // console.log(state.authReducer.isAuth);
     return {
-        // usersInfo: state.usersReducer,
-        usersInfo: getUsersInfo(state),
-        usersActionsCreators: state.usersActionCreators,
-        pageSize: state.usersReducer.pageSize,
-        totalCount: state.usersReducer.totalCount,
-        currentPage: state.usersReducer.currentPage,
-        getLogIn: state.headerAC,
+        usersInfo:   getUsersInfo   (state),
+        usersACs:    getUsersACs    (state),
+        pageSize:    getPageSize    (state),
+        totalCount:  getTotalCount  (state),
+        currentPage: getCurrentPage (state),
+        getLogIn:    getHeaderAC    (state),
     }
 };
 const mergeProps = (stateProps, dispatchProps) => {
@@ -57,16 +56,16 @@ const mergeProps = (stateProps, dispatchProps) => {
     const {dispatch} = dispatchProps;
 
     const getUsersThunk        = (pageSize, currentPage) =>
-        dispatch ( state.usersActionsCreators.getUsersThunkAC(pageSize, currentPage));
+        dispatch ( state.usersACs.getUsersThunkAC(pageSize, currentPage));
     const setCurrentPageThunk  = (pageSize, currentPage) =>
-        dispatch ( state.usersActionsCreators.setCurrentPageThunkAC(pageSize, currentPage));
-    const followThunk          = (userId) =>   dispatch ( state.usersActionsCreators.followThunkAC(userId));
-    const unFollowThunk        = (userId) =>   dispatch ( state.usersActionsCreators.unFollowThunkAC(userId));
-    const setUsersThunk        = ()=>          dispatch(state.usersActionsCreators.setUsersThunkAC());
-    const getCertainUserThunk  = (userName) => dispatch(state.usersActionsCreators.getCertainUserThunkAC(userName));
+        dispatch ( state.usersACs.setCurrentPageThunkAC(pageSize, currentPage));
+    const followThunk          = (userId) =>   dispatch ( state.usersACs.followThunkAC(userId));
+    const unFollowThunk        = (userId) =>   dispatch ( state.usersACs.unFollowThunkAC(userId));
+    const setUsersThunk        = ()=>          dispatch(state.usersACs.setUsersThunkAC());
+    const getCertainUserThunk  = (userName) => dispatch(state.usersACs.getCertainUserThunkAC(userName));
     const toggleUserSearchMode = (userSearchMode) => {
-        dispatch(state.usersActionsCreators.toggleUserSearchModeAC(userSearchMode))};
-    const updateSearchField    = (text) =>     dispatch( state.usersActionsCreators.updateSearchFieldAC(text));
+        dispatch(state.usersACs.toggleUserSearchModeAC(userSearchMode))};
+    const updateSearchField    = (text) =>     dispatch( state.usersACs.updateSearchFieldAC(text));
 
     return { state, getUsersThunk, setUsersThunk, setCurrentPageThunk, followThunk, unFollowThunk, getCertainUserThunk,
         toggleUserSearchMode, updateSearchField};

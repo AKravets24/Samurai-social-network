@@ -25,6 +25,7 @@ const setMeLoginThunkAC    = (email, password, rememberMe ) => (dispatch) => {
         })
 };
 
+
 const initializeAppThunkAC = () => (dispatch) => {
     let appInitialisation = dispatch(getLogInThunkAC());
     appInitialisation.then( () => {

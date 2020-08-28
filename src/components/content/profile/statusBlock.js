@@ -16,10 +16,8 @@ export class StatusClass extends React.Component {
     };
 
     componentDidUpdate(prevProps, prevState,snapshot) {
-
         // console.log(this.props.statusField)
         // console.log(this.props.previousStatus)
-
         if (prevProps.statusField !== this.props.statusField) {
             this.setState({statusField: this.props.statusField})
         }
