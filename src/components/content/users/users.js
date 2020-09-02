@@ -16,40 +16,22 @@ function Users(props) {
     let paginatorDec = () => {
         setStartPage(startPage - scrollStep);
         setEndPage(endPage - scrollStep);
-        if (startPage <= 1) {
-            setDisableDec(disableDec = true);
-        } else {
-            setDisableDec(disableDec = false);
-        }
-
-        if (endPage >= pagesCount) {
-            setDisableInc(disableInc = true);
-        } else {
-            setDisableInc(disableInc = false)
-        }
-
+        startPage <= 1 ? setDisableDec(disableDec = true) : setDisableDec(disableDec = false);
+        endPage >= pagesCount ? setDisableInc(disableInc = true) : setDisableInc(disableInc = false)
     };
 
     let paginatorInc = () => {
         setStartPage(startPage + scrollStep);
         setEndPage(endPage + scrollStep);
-        if (startPage <= 1) {
-            setDisableDec(disableDec = true);
-        } else {
-            setDisableDec(disableDec = false);
-        }
-
-        if (endPage >= pagesCount) {
-            setDisableInc(disableInc = true);
-        } else {
-            setDisableInc(disableInc = false)
-        }
+        startPage <= 1 ? setDisableDec(disableDec = true) : setDisableDec(disableDec = false);
+        endPage >= pagesCount ? setDisableInc(disableInc = true) : setDisableInc(disableInc = false);
     };
 
     let paginator = () => {
         let pagesArr = [];
         // let pagesCount = Math.ceil(props.totalCount / props.pageSize);
         for (let i = startPage; i <= endPage; i++) {
+
             if (startPage < 1) {
                 setStartPage(startPage = 1);
                 setEndPage(endPage = scrollStep)

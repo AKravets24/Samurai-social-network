@@ -8,26 +8,34 @@
 /*::-webkit-resizer { !* тоже хер знает что за настройка*!}*/
 
 .dialogsPage {
+
+    background-color: lightblue;
+    border-radius: 5px 5px 20px 5px;
+}
+
+.dialogListAndArea {
     display: grid;
 
     grid-template-areas: 'dialogList specificDialog';
 
     grid-template-columns: 1fr 3fr;
 
-    background-color: lightblue;
-    border-radius: 5px 5px 20px 5px;
-    /*min-height: 500px;*/
-    /*outline: 2px solid black;*/
+    min-height: 500px;
+    height: auto!important;
+    max-height: calc(100vh - 120px);
 }
 
 .dialogList {
     grid-area: dialogList;
     /*outline: 2px solid red;*/
     width: 100%;
-    height: 730px;
-    overflow-x: auto;
+    overflow: auto;
     /*direction: rtl;*/
     overflow-wrap: break-word;
+
+    min-height: inherit;
+    height: inherit;
+    max-height: inherit;
 }
 
 .certainLoader {
@@ -146,6 +154,10 @@
     width: 100%;
     /*outline: 2px solid blue;*/
     overflow: visible;
+
+    min-height: 600px;
+    height: auto!important;
+    max-height: calc(100vh - 150px );
 }
 
 .editWrapper {
@@ -162,6 +174,7 @@
 
 .visibility {
     display: none;
+
 }
 
 .editBlock h4{
@@ -181,12 +194,14 @@
     margin: 0 auto 0 auto;
     background-color: lightyellow;
     border-radius: 20px 20px 0 0;
-    min-height: 500px;
-    height: auto !important;
-    max-height: 600px;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+
+    min-height: calc(500px - 150px);
+    /*height: auto!important;*/
+    height:  100vh;
+    /*max-height: 100vh;*/
 }
 
 .dialogArea img {
@@ -224,13 +239,44 @@
     filter: grayscale(.70);
 }
 
-.selectedMsg {
-    opacity: 0.5;
-    transition: 200ms;
-    /*padding: 0 50px 0 50px;*/
-    /*filter: blur(1px);*/
-    filter: grayscale(.50)
+.editWrapper {
+    height: 35px;
+}
 
+.editWrapper button {
+    font-size: 25px;
+    background-color: transparent;
+    border-radius: 5px;
+    outline: none;
+}
+
+.editWrapper button:first-child {
+    color: red;
+    margin-right: 10px;
+}
+
+.editWrapper button:nth-child(2n) {
+    color:  blue;
+    margin-left: 10px;
+}
+
+.editWrapper button:hover {
+    cursor: pointer;
+}
+
+
+
+
+.selectedMsg {
+    /*opacity: 0.5;*/
+    /*transition: 200ms;*/
+    /*!*padding: 0 50px 0 50px;*!*/
+    /*!*filter: blur(1px);*!*/
+    /*filter: grayscale(.50)*/
+
+    /*display: none;*/
+
+    outline: 2px solid red;
 }
 
 .messageBody {

@@ -41,6 +41,10 @@ export const usersApi = {
     sendMsgToTalker (userId,body){ return instance.post(`dialogs/${userId}/messages`, {body})
                                                                                      .then(response => response.data  )},
     getNewMessages ()            { return instance.get(`dialogs/messages/new/count`) .then(response => response.data  )},
+    deleteMessage  (messageId)   { return instance.delete(`dialogs/messages/${messageId}`)
+                                                                                     .then(response => response.data  )},
+    setAsSpamMessage(messageId)  { return instance.post(`dialogs/messages/${messageId}/spam`)
+                                                                                     .then(response => response.data  )},
 };
 
 // ссылки для тестирования
@@ -56,4 +60,4 @@ export const usersApi = {
 // https://social-network.samuraijs.com/api/1.0/users?term=Stas9n
 // https://social-network.samuraijs.com/api/1.0/users?friend
 // https://social-network.samuraijs.com/api/1.0/dialogs
-// https://social-network.samuraijs.com/api/1.0/dialogs/7180/messages
+// https://social-network.samuraijs.com/api/1.0/dialogs/messages/new/count

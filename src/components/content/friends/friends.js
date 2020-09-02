@@ -4,7 +4,11 @@ import stlHeader from './friends.module.css'
 import stl from './../users/users.module.css'
 
 export function Friends(props) {
-    // console.log(props.defaultAvatar)
+    console.log(props)
+
+    const followListener   = (userId) => { props.followThunk(userId)   };
+    const unFollowListener = (userId) => { props.unFollowThunk(userId) };
+
     return (
         <div className={stl.friendsGeneral}>
             <h2 className={stl.userHeader}>Friends</h2>
@@ -19,19 +23,19 @@ export function Friends(props) {
                                 {user.followed
                                     ?
                                     <button
-                                        // disabled={props.usersInfo.followingInProgress.some(id =>
-                                        //     id == user.id)}
+                                        disabled={props.followingInProgress.some(id =>
+                                            id == user.id)}
                                         id={user.id}
                                         className={stl.followBTN}
-                                        onClick={props.unFollowListener}>unFollow
+                                        onClick={()=>unFollowListener(user.id)}>unFollow
                                     </button>
                                     :
                                     <button
-                                        // disabled={props.usersInfo.followingInProgress.some(id =>
-                                        //     id == user.id)}
+                                        disabled={props.followingInProgress.some(id =>
+                                            id == user.id)}
                                         id={user.id}
                                         className={stl.followBTN}
-                                        onClick={props.followListener}>Follow
+                                        onClick={()=>followListener(user.id)}>Follow
                                     </button>
                                 }
                             </div>

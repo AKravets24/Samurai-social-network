@@ -61,8 +61,8 @@ const mergeProps = (stateProps, dispatchProps) => {
         dispatch ( state.usersACs.setCurrentPageThunkAC(pageSize, currentPage));
     const followThunk          = (userId) =>   dispatch ( state.usersACs.followThunkAC(userId));
     const unFollowThunk        = (userId) =>   dispatch ( state.usersACs.unFollowThunkAC(userId));
-    const setUsersThunk        = ()=>          dispatch(state.usersACs.setUsersThunkAC());
-    const getCertainUserThunk  = (userName) => dispatch(state.usersACs.getCertainUserThunkAC(userName));
+    const setUsersThunk        = ()=>          dispatch ( state.usersACs.setUsersThunkAC());
+    const getCertainUserThunk  = (userName) => dispatch ( state.usersACs.getCertainUserThunkAC(userName));
     const toggleUserSearchMode = (userSearchMode) => {
         dispatch(state.usersACs.toggleUserSearchModeAC(userSearchMode))};
     const updateSearchField    = (text) =>     dispatch( state.usersACs.updateSearchFieldAC(text));

@@ -5,21 +5,20 @@ import {compose} from 'redux';
 import {withRouter} from 'react-router-dom';
 
 
-class friendsClassContainer extends React.Component {
-    constructor(props) {
-        super(props);
-        // console.log(props.state.friendsList)
+class friendsClassContainer extends React.Component { constructor(props) { super(props);
+        // console.log(props)
     }
 
-    componentDidMount() {
-        this.props.getMyFriendsListThunk()
-    }
+    componentDidMount() { this.props.getMyFriendsListThunk() }
 
     render() {
         return (
             <Friends
-            friendsList   = { this.props.state.friendsList   }
-            defaultAvatar = { this.props.state.defaultAvatar }
+            friendsList         = { this.props.state.friendsList         }
+            defaultAvatar       = { this.props.state.defaultAvatar       }
+            followThunk         = { this.props.followThunk               }
+            unFollowThunk       = { this.props.unFollowThunk             }
+            followingInProgress = { this.props.state.followingInProgress }
             />
         )
     }
@@ -27,11 +26,12 @@ class friendsClassContainer extends React.Component {
 
 
 const mapStateToProps = (state) => {
-    // console.log(state.friendsReducer.fiendsList);
+    // console.log(state.friendsReducer.followingInProgress);
     return {
-        friendsList: state.friendsReducer.fiendsList,
-        defaultAvatar: state.friendsReducer.defaultAvatar,
-        friendsACs: state.friendsACs,
+        friendsList:          state.friendsReducer.fiendsList,
+        defaultAvatar:        state.friendsReducer.defaultAvatar,
+        friendsACs:           state.friendsACs,
+        followingInProgress:  state.friendsReducer.followingInProgress,
     }
 };
 
@@ -40,9 +40,11 @@ const mergeProps = (stateProps, dispatchProps) => {
     const {dispatch} = dispatchProps;
     // console.log( stateProps );
 
-    const getMyFriendsListThunk = () => { dispatch(state.friendsACs.getMyFriendsListThunkAC()) };
+    const getMyFriendsListThunk = () =>        dispatch (state.friendsACs.getMyFriendsListThunkAC() );
+    const followThunk           = (userId) =>  dispatch (state.friendsACs.followThunkAC(userId)     )
+    const unFollowThunk         = (userId) =>  dispatch (state.friendsACs.unFollowThunkAC(userId)   )
 
-    return { state, getMyFriendsListThunk  }
+    return { state, getMyFriendsListThunk, followThunk, unFollowThunk,  }
 };
 
 

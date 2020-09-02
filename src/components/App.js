@@ -7,47 +7,53 @@ import ContentComposer  from './content/contentComp';
 import StoreContext     from './storeContext';
 
 class App extends React.Component {
+    constructor(props) { super(props)
+        /*console.log(props.state.authData.funnyLoader)*/ }
 
     componentDidMount() {
         // this.props.getLogInThunk()
         this.props.getInitializeAppThunk()
+
     }
 
     render() {
+
         return <>
             <StoreContext.Consumer>
-                {
-                    () => {
-                        if (!this.props.state.authData.appInitialized) {
-                            return 'NOT INITIALISED'
-                        }
-                            return (
-                                <div className={stl.container}>
-                                    <div className={stl.header}>
-                                        <HeaderConnector/>
-                                    </div>
-                                    <div className= {stl.navBar}>
-                                        <NavBarConnector/>
-                                    </div>
-                                    <div className={stl.content1}>
-                                        <ContentComposer/>
-                                    </div>
-                                </div>
-                            )
+                {() => {
+                    if (!this.props.state.authData.appInitialized) {
+                        return <div className={stl.loaderBlock}>
+                            <img src={this.props.state.initLoader} alt="err"/>
+                            <h1>Client: Synchronization...</h1>
+                        </div>
                     }
-                }
+                        return (
+                            <div className={stl.container}>
+                                <div className={stl.header}>
+                                    <HeaderConnector/>
+                                </div>
+                                <div className= {stl.navBar}>
+                                    <NavBarConnector/>
+                                </div>
+                                <div className={stl.content1}>
+                                    <ContentComposer/>
+                                </div>
+                            </div>
+                        )
+                }}
             </StoreContext.Consumer>
         </>
     }
 }
 
 const mapStateToProps = (state) =>{
-    // console.log(state)
+    // console.log(state.profileReducer.loader)
 
     return {
         authData: state.appAuthReducer,
         appAC: state.appAC,
         backGroundSetter: state.backGroundSetter,
+        initLoader: state.profileReducer.loader
     }
 };
 
