@@ -9,7 +9,7 @@ const instance = axios.create({
 // отрефакторить до объекта с разделением по компонентам, так как шас в нем каша
 
 export const usersApi = {
-    // инициализация
+    // initialization
     setMeLogin (email = null, password = null, rememberMe = false)
                                  { return instance.post(`/auth/login`, {email, password, rememberMe}) .then(response =>
                                      response.data                                                                  ) },
@@ -34,10 +34,13 @@ export const usersApi = {
         })                                                                           .then(response => response.data  )},
     getProfile(userId)           { return instance.get(`profile/${userId}`)          .then(response => response.data  )},
     getMyProfile(myId)           { return instance.get(`profile/${myId}`)            .then(response => response.data  )},
+    // friends
     getMyFriends()               { return instance.get(`users?friend=true`)          .then(response => response.data  )},
     // dialogs
     getMyNegotiatorsList ()      { return instance.get(`dialogs`)                    .then(response => response.data  )},
-    getTalkWithUser (userId)     { return instance.get(`dialogs/${userId}/messages`) .then(response => response.data  )},
+    getTalkWithUser (userId, msgCount=4, pageNumber=1)
+                                 { return instance.get(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`)
+                                                                                     .then(response => response.data  )},
     sendMsgToTalker (userId,body){ return instance.post(`dialogs/${userId}/messages`, {body})
                                                                                      .then(response => response.data  )},
     getNewMessages ()            { return instance.get(`dialogs/messages/new/count`) .then(response => response.data  )},
@@ -61,3 +64,4 @@ export const usersApi = {
 // https://social-network.samuraijs.com/api/1.0/users?friend
 // https://social-network.samuraijs.com/api/1.0/dialogs
 // https://social-network.samuraijs.com/api/1.0/dialogs/messages/new/count
+// https://social-network.samuraijs.com/api/1.0/dialogs/7180/messages?count=5&page=3

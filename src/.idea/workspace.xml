@@ -240,7 +240,13 @@
       <workItem from="1598899409354" duration="15841000" />
       <workItem from="1598953633329" duration="24648000" />
       <workItem from="1598999626602" duration="3462000" />
-      <workItem from="1599036770734" duration="5619000" />
+      <workItem from="1599036770734" duration="11771000" />
+      <workItem from="1599148913710" duration="4761000" />
+      <workItem from="1599216493499" duration="19822000" />
+      <workItem from="1599305390081" duration="4831000" />
+      <workItem from="1599386436879" duration="1064000" />
+      <workItem from="1599388186553" duration="13501000" />
+      <workItem from="1599500203738" duration="15073000" />
     </task>
     <servers />
   </component>
@@ -284,7 +290,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/redux/dialogsReducer.js</url>
-          <line>46</line>
+          <line>55</line>
           <option name="timeStamp" value="67" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -296,6 +302,21 @@
           <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
           <line>67</line>
           <option name="timeStamp" value="71" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
+          <line>90</line>
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
+          <line>102</line>
+          <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
+          <line>64</line>
+          <option name="timeStamp" value="76" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

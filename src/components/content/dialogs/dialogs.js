@@ -1,20 +1,33 @@
-import React, {useState}      from "react";
-import {connect}              from "react-redux";
-import { compose }            from 'redux';
-import {withRouter, NavLink}  from 'react-router-dom';
-import {Formik}               from 'formik';
-import stl                    from './dialogs.module.css';
+import React, {useState, useEffect, useRef}  from "react";
+import {connect}                             from "react-redux";
+import { compose }                           from 'redux';
+import {withRouter, NavLink}                 from 'react-router-dom';
+import {Formik}                              from 'formik';
+import stl                                   from './dialogs.module.css';
 
 function Dialogs(props) {
     // console.log(props.userIdInURL);
 
-    let [dialogId, setDialogId]            = useState(+props.userIdInURL);
-    let [visibility,  setVisibility]       = useState(stl.visibility); // !!!normally must be  stl.visibility !! else - null
-    let selectedMsg = null;
-    selectedMsg ? selectedMsg = null : selectedMsg = stl.selectedMsg;
+    let [dialogId, setDialogId]               = useState(+props.userIdInURL);
+    let [visibility,  setVisibility]          = useState(stl.visibility); // !!!normally must be  stl.visibility !! else - null
+    let [pageNumber, setPageNumber]           = useState(2);
+    let [msgsMapDone, setMsgsMapDone]         = useState(false);
+
+    const dialogArea  = useRef(null);
+    const booferBlock = useRef(null);
 
     const sendMessageListener = (userId, msg)=> { setDialogId(dialogId=userId); props.sendMessageToUserThunk(userId, msg)};
     const getTalk = (userId) => { setDialogId(dialogId=userId); props.getTalkWithUserThunk(dialogId) };
+    const scrollToDown = (booferBlock) => {/*debugger;*/ booferBlock.current.scrollIntoView({behavior: "auto"}) };
+
+    const oldMsgLazyLoader = () => {
+        let msgCount = 4;
+        props.addPrevMessagesThunk(dialogId, msgCount, pageNumber);
+        setPageNumber(pageNumber+1);
+        console.log(pageNumber);
+    };
+
+    useEffect( ()=> { msgsMapDone && scrollToDown(booferBlock) },[msgsMapDone])
 
     return <>
         <div className={stl.dialogsPage}>
@@ -43,28 +56,35 @@ function Dialogs(props) {
                     </div>
                 </div>
 
-                <div className={stl.dialogArea} >
+                <div className={stl.dialogArea}
+                     ref={dialogArea}
+                     onScroll={()=>!dialogArea.current.scrollTop && oldMsgLazyLoader() }>
                     {Object.keys(props.state.certainDialog).length === 0 && props.userIdInURL ||
                     !props.state.certainDialog.items && props.userIdInURL ?
                     <img src={props.state.certainDialogLoader} alt="err"/>  :
                     props.state.certainDialog.items && props.state.certainDialog.items
-                        .map((msg, i) =>
-                            <div  key={i} className={+msg.senderId === +props.myId ?
-                                `${stl.messageBlockMe} ` : `${stl.messageBlockUser}` }
-                                 id={msg.id}
-                                 onDoubleClick={()=> visibility ? setVisibility(null) : setVisibility(stl.visibility) }
-                            >
-                                <p className={stl.messageBody} >{msg.body}</p>
-                                <p className={+msg.senderId === +props.myId ?
-                                    stl.messageBlockTimeMe : stl.messageBlockTimeUser} >{msg.addedAt}, {msg.viewed ? 'seen':'x'}</p>
-                                <div className={stl.editWrapper}>
-                                    <div className={visibility}>
-                                        <button onClick={()=> props.deleteMessageThunk(msg.id, i)} > Delete now! </button>
-                                        {+msg.senderId !== +props.myId &&
-                                        <button onClick={()=>props.setSpamMessagesThunk(msg.id, i)}> To spam now!</button>}
-                                </div></div>
-                            </div>
-                        )}
+                        .map((msg, i,arr) =>{
+                           if(msgsMapDone===false&&i===arr.length-1){return setMsgsMapDone(msgsMapDone=true)}
+                           return <div
+                                key={i} className={+msg.senderId === +props.myId ?
+                                `${stl.messageBlockMe} ` : `${stl.messageBlockUser}`}
+                                id={msg.id}
+                                // onClick={()=> scroller(booferBlock)}
+                                onDoubleClick={()=> visibility ? setVisibility(null) : setVisibility(stl.visibility) }
+                           >
+                               <p className={stl.messageBody} >{msg.body}</p>
+                               <p className={+msg.senderId === +props.myId ?
+                                   stl.messageBlockTimeMe : stl.messageBlockTimeUser} >{msg.addedAt}, {msg.viewed ? 'seen':'x'}</p>
+                               <div className={stl.editWrapper}>
+                                   <div className={visibility}>
+                                       <button onClick={()=> props.deleteMessageThunk(msg.id, i)} > Delete now! </button>
+                                       {+msg.senderId !== +props.myId &&
+                                       <button onClick={()=>props.setSpamMessagesThunk(msg.id, i)}> To spam now!</button>}
+                                   </div>
+                               </div>
+                           </div>
+                    })}
+                    <div ref={booferBlock}/>
                 </div>
                 <div className={stl.sender}>
                     <Formik initialValues={{text:''}} validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
@@ -108,6 +128,7 @@ class DialogFuncContainer extends React.Component { constructor(props) {super(pr
                         setSelectedMessages     =  { this.props.setSelectedMessages    }
                         setSpamMessagesThunk    =  { this.props.setSpamMessagesThunk   }
                         deleteMessageThunk      =  { this.props.deleteMessageThunk     }
+                        addPrevMessagesThunk    =  { this.props.addPrevMessagesThunk   }
         />;
     }
 }
@@ -129,9 +150,11 @@ let mergeProps = (stateProps, dispatchProps) => { const  state  = stateProps; co
     const setSelectedMessages       = (messageId)  => dispatch(state.dialogACs.setSelectedMessagesAC       (messageId) );
     const setSpamMessagesThunk      = (messageId)  => dispatch(state.dialogACs.setSpamMessagesThunkAC      (messageId) );
     const deleteMessageThunk        = (messageId)  => dispatch(state.dialogACs.deleteMessageThunkAC        (messageId) );
+    const addPrevMessagesThunk      = (dialogId, msgCount, pageNumber) =>
+                                       dispatch(state.dialogACs.addPrevMessagesThunkAC(dialogId, msgCount, pageNumber) );
 
     return {state, getMyNegotiatorsListThunk, getTalkWithUserThunk, sendMessageToUserThunk,
-        talkedBeforeThunk, setSelectedMessages, setSpamMessagesThunk, deleteMessageThunk }
+        talkedBeforeThunk, setSelectedMessages, setSpamMessagesThunk, deleteMessageThunk, addPrevMessagesThunk }
 };
 
 export default compose (

@@ -15,6 +15,7 @@ const SET_SPAM_MESSAGE              = 'SET_SPAM_MESSAGE';
 const DELETE_MESSAGE                = 'DELETE_MESSAGE';
 const GET_NEW_MESSAGES_UPDATE       = 'GET_NEW_MESSAGES_UPDATE';
 const BTN_STATE_TOGGLER             = 'BTN_STATE_TOGGLER';
+const ADDED_PREVIOUS_MSGS           = 'ADDED_PREVIOUS_MSGS';
 
 const setMyCompanions               = (data) =>                      ({type: SET_MY_COMPANIONS_LIST, data});
 const getMyNegotiatorsListThunkAC   = () =>                          (dispatch) => {
@@ -25,7 +26,7 @@ const getMyNegotiatorsListThunkAC   = () =>                          (dispatch) 
 const setTalkWithUser               = (data)=>                       ({type: SET_TALK_WITH_USER, data});
 const toggleIsLoadingAC             = (allDialogIsLoading) =>        ({type: TOGGLE_IS_LOADING, allDialogIsLoading});
 const setEmptyCertainUserDialog     = () =>                          ({type: CLEAR_CERTAIN_USER_DIALOG})
-const getTalkWithUserThunkAC        = (userId) =>                    (dispatch) => {
+const getTalkWithUserThunkAC        =(userId) =>                     (dispatch) => {
     dispatch(setEmptyCertainUserDialog())
     dispatch(toggleIsLoadingAC(true))
     usersApi.getTalkWithUser(userId) .then(data=> {
@@ -34,6 +35,14 @@ const getTalkWithUserThunkAC        = (userId) =>                    (dispatch) 
     })
 
 };
+const addPrevMSGS                   = (prevMsgs) =>                  ({ type: ADDED_PREVIOUS_MSGS, prevMsgs })
+const addPrevMessagesThunkAC        = (userId,msgCount,pageNumber) =>(dispatch) => {
+    usersApi.getTalkWithUser(userId,  msgCount, pageNumber )
+        .then(data =>  {
+            dispatch(addPrevMSGS(data))
+        })
+}
+
 const sendMsgAC                     = (data) =>                      ({type: SEND_MESSAGE_TO_USER, data: data.data.message})
 const sendMessageToUserThunkAC      = (userId, body) =>              (dispatch) => {
     usersApi.sendMsgToTalker(userId,body)
@@ -93,7 +102,8 @@ const getNewMessagesRequestThunkAC  = () =>                          (dispatch) 
 
 
 const dialogActions = {getMyNegotiatorsListThunkAC, getTalkWithUserThunkAC, sendMessageToUserThunkAC, createNewDialogAC,
-    talkedBeforeThunkAC, setSelectedMessagesAC, setSpamMessagesThunkAC, deleteMessageThunkAC, getNewMessagesRequestThunkAC };
+    talkedBeforeThunkAC, setSelectedMessagesAC, setSpamMessagesThunkAC, deleteMessageThunkAC, getNewMessagesRequestThunkAC,
+    addPrevMessagesThunkAC};
 
 export const dialogACs = (state = dialogActions)=> { return state };
 
@@ -145,7 +155,16 @@ export const dialogsReducer = ( state = initialDialogsState, action, date, time 
             item ===-1 ? state.selectedMsgs.push(action.messageId) : state.selectedMsgs.splice(item, 1);
             return stateCopy;
 
-        case DELETE_MESSAGE: state.certainDialog.items.splice(action.index, 1); return stateCopy
+        case DELETE_MESSAGE: state.certainDialog.items.splice(action.index, 1); return stateCopy;
+
+        case ADDED_PREVIOUS_MSGS:
+            // debugger
+            // console.log('ADDED_PREVIOUS_MSGS')
+            let reverseItems = action.prevMsgs.items.reverse();
+            reverseItems.forEach(el=>  state.certainDialog.items.unshift(el))
+            // state.certainDialog.items.unshift(action.prevMsgs.items)
+            return  stateCopy;
+
 
         default:
             return stateCopy;

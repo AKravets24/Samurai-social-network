@@ -210,6 +210,10 @@
     margin: 25% auto;
 }
 
+.dialogArea:last-child {
+    background-color: red;
+}
+
 .messageBlockMe,
 .messageBlockUser {
     padding: 2px 15px 5px 15px;
@@ -219,12 +223,18 @@
     display: inline-block;
     position: relative;
     cursor: pointer;
+
 }
+
 
 .messageBlockMe {
     background-color: lightgreen;
     border-radius: 15px 15px 5px 15px;
     margin: 15px 25px 25px auto;
+}
+
+.messageBlockMe:focus {
+    outline: 4px solid red;
 }
 
 .messageBlockUser {
@@ -263,8 +273,6 @@
 .editWrapper button:hover {
     cursor: pointer;
 }
-
-
 
 
 .selectedMsg {
@@ -325,7 +333,7 @@
 }
 
 .dialogArea::-webkit-scrollbar {
-    width: 5px;
+    width: 25px;
     background-color: lightyellow;
 }
 
@@ -379,5 +387,7 @@
 .sender .sendBTN {
     margin: 10px 0 0 0;
     font-size: 25px;
+
+
 
 }

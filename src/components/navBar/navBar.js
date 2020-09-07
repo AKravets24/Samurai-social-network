@@ -38,7 +38,7 @@ function NavBar(props) {
                          </button>
                     <NavLink to={'/dialogs'} style={props.navBarThemes.menuA} activeClassName={stl.activeLink}>
                         Dialogs </NavLink>
-                    <p hidden={!props.newMSGSCounter}>{props.newMSGSCounter}</p>
+                    <p hidden={!props.newMSGSCounter}>({props.newMSGSCounter})</p>
                 </li>}
 
 

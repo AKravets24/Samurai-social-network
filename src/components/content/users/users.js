@@ -82,8 +82,6 @@ function Users(props) {
         props.setCurrentPage(props.usersInfo.currentPage);
     };
 
-    let x = React.lazy()
-
     return <>
         <div className={stl.usersPage}>
             <div className={stl.userInfo}>
