@@ -38,7 +38,7 @@ export const usersApi = {
     getMyFriends()               { return instance.get(`users?friend=true`)          .then(response => response.data  )},
     // dialogs
     getMyNegotiatorsList ()      { return instance.get(`dialogs`)                    .then(response => response.data  )},
-    getTalkWithUser (userId, msgCount=4, pageNumber=1)
+    getTalkWithUser (userId, msgCount=20, pageNumber=1)
                                  { return instance.get(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`)
                                                                                      .then(response => response.data  )},
     sendMsgToTalker (userId,body){ return instance.post(`dialogs/${userId}/messages`, {body})

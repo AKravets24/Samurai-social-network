@@ -157,6 +157,7 @@
 
     min-height: 600px;
     height: auto!important;
+    /*max-height: calc(100vh - 150px );*/
     max-height: calc(100vh - 150px );
 }
 
@@ -200,8 +201,8 @@
 
     min-height: calc(500px - 150px);
     /*height: auto!important;*/
-    height:  100vh;
-    /*max-height: 100vh;*/
+    height: 100vh;
+    /*max-height: 1500px;*/
 }
 
 .dialogArea img {
@@ -214,6 +215,19 @@
     background-color: red;
 }
 
+.oldMsgsLoader {
+    /*outline: 2px solid red;*/
+    display: flex;
+    height: 20px;
+}
+
+.oldMsgsLoader img {
+    margin: 0 auto;
+    width: 100%;
+    height: 20px;
+    /*outline: 2px solid red;*/
+}
+
 .messageBlockMe,
 .messageBlockUser {
     padding: 2px 15px 5px 15px;
@@ -223,9 +237,7 @@
     display: inline-block;
     position: relative;
     cursor: pointer;
-
 }
-
 
 .messageBlockMe {
     background-color: lightgreen;
@@ -233,9 +245,9 @@
     margin: 15px 25px 25px auto;
 }
 
-.messageBlockMe:focus {
-    outline: 4px solid red;
-}
+/*.messageBlockMe:focus {*/
+/*    outline: 4px solid red;*/
+/*}*/
 
 .messageBlockUser {
     background-color: #cef3ff;
@@ -333,8 +345,12 @@
 }
 
 .dialogArea::-webkit-scrollbar {
-    width: 25px;
-    background-color: lightyellow;
+    width: 15px;
+    background-color: transparent;
+}
+
+.dialogArea::-webkit-scrollbar:disabled {
+    background-color: red;
 }
 
 .dialogArea::-webkit-scrollbar-thumb {
@@ -343,19 +359,15 @@
     /*border-radius: 10% 0 0 10%;*/
 }
 
-.dialogArea::-webkit-scrollbar-button{
+.dialogArea::-webkit-scrollbar-button:single-button{
     background-color: lightskyblue;
     height: 20px;
     border-radius: 12%;
 }
 
-.dialogArea::-webkit-scrollbar-track-piece {
-    background-color: lightyellow;
-}
-
 .sender {
     height: 180px;
-    /*background-color: lightblue;*/
+    /*background-color: red;*/
     border-radius: 0 0 20px 0;
     width: 100%;
 }

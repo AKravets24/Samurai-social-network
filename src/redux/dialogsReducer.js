@@ -3,6 +3,7 @@ import maleProfilePic               from './img/defaultUserAvas/male.jpg'
 import certainDialogLoader          from './loader/dialogs/loader_green_spinner.gif'
 import allDialogsLoader             from './loader/dialogs/spinner_yellow.gif'
 import envelope                     from './loader/dialogs/envelope.gif'
+import meetLines                    from './loader/dialogs/lGreenMeetLines.gif'
 
 const SEND_MESSAGE_TO_USER          = "SEND-MESSAGE-TO-USER";
 const SET_MY_COMPANIONS_LIST        = 'SET_MY_COMPANIONS_LIST';
@@ -16,6 +17,7 @@ const DELETE_MESSAGE                = 'DELETE_MESSAGE';
 const GET_NEW_MESSAGES_UPDATE       = 'GET_NEW_MESSAGES_UPDATE';
 const BTN_STATE_TOGGLER             = 'BTN_STATE_TOGGLER';
 const ADDED_PREVIOUS_MSGS           = 'ADDED_PREVIOUS_MSGS';
+const PREV_MSGS_LOADING_TOGGLER     = 'PREV_MSGS_LOADING_TOGGLER';
 
 const setMyCompanions               = (data) =>                      ({type: SET_MY_COMPANIONS_LIST, data});
 const getMyNegotiatorsListThunkAC   = () =>                          (dispatch) => {
@@ -26,7 +28,7 @@ const getMyNegotiatorsListThunkAC   = () =>                          (dispatch) 
 const setTalkWithUser               = (data)=>                       ({type: SET_TALK_WITH_USER, data});
 const toggleIsLoadingAC             = (allDialogIsLoading) =>        ({type: TOGGLE_IS_LOADING, allDialogIsLoading});
 const setEmptyCertainUserDialog     = () =>                          ({type: CLEAR_CERTAIN_USER_DIALOG})
-const getTalkWithUserThunkAC        =(userId) =>                     (dispatch) => {
+const getTalkWithUserThunkAC        = (userId) =>                    (dispatch) => {
     dispatch(setEmptyCertainUserDialog())
     dispatch(toggleIsLoadingAC(true))
     usersApi.getTalkWithUser(userId) .then(data=> {
@@ -35,13 +37,17 @@ const getTalkWithUserThunkAC        =(userId) =>                     (dispatch) 
     })
 
 };
-const addPrevMSGS                   = (prevMsgs) =>                  ({ type: ADDED_PREVIOUS_MSGS, prevMsgs })
+const addPrevMSGS                   = (prevMsgs) =>                  ({ type: ADDED_PREVIOUS_MSGS, prevMsgs });
+const prevMsgsloadingTogglerAC      = (prevMsgsIsLoading)  =>        ({type: PREV_MSGS_LOADING_TOGGLER, prevMsgsIsLoading});
+
 const addPrevMessagesThunkAC        = (userId,msgCount,pageNumber) =>(dispatch) => {
+    dispatch(prevMsgsloadingTogglerAC(true));
     usersApi.getTalkWithUser(userId,  msgCount, pageNumber )
         .then(data =>  {
             dispatch(addPrevMSGS(data))
+            dispatch(prevMsgsloadingTogglerAC(false));
         })
-}
+};
 
 const sendMsgAC                     = (data) =>                      ({type: SEND_MESSAGE_TO_USER, data: data.data.message})
 const sendMessageToUserThunkAC      = (userId, body) =>              (dispatch) => {
@@ -117,6 +123,8 @@ let initialDialogsState = {
     newMessagesCounter:    0,
     newMessageBTNDisabled: false,
     msgLoader:             envelope,
+    prevMsgsIsLoading:     false,
+    prevMsgsLoader:        meetLines,
 };
 
 export const dialogsReducer = ( state = initialDialogsState, action, date, time ) => {
@@ -164,6 +172,10 @@ export const dialogsReducer = ( state = initialDialogsState, action, date, time 
             reverseItems.forEach(el=>  state.certainDialog.items.unshift(el))
             // state.certainDialog.items.unshift(action.prevMsgs.items)
             return  stateCopy;
+
+        case PREV_MSGS_LOADING_TOGGLER :
+            // console.log('PREV_MSGS_LOADING_TOGGLER')
+            return {...state, prevMsgsIsLoading: action.prevMsgsIsLoading}
 
 
         default:

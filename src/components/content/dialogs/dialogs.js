@@ -1,33 +1,36 @@
 import React, {useState, useEffect, useRef}  from "react";
 import {connect}                             from "react-redux";
-import { compose }                           from 'redux';
+import {compose}                             from 'redux';
 import {withRouter, NavLink}                 from 'react-router-dom';
 import {Formik}                              from 'formik';
 import stl                                   from './dialogs.module.css';
 
 function Dialogs(props) {
-    // console.log(props.userIdInURL);
-
-    let [dialogId, setDialogId]               = useState(+props.userIdInURL);
-    let [visibility,  setVisibility]          = useState(stl.visibility); // !!!normally must be  stl.visibility !! else - null
-    let [pageNumber, setPageNumber]           = useState(2);
-    let [msgsMapDone, setMsgsMapDone]         = useState(false);
+    // console.log(props.state.prevMsgsLoader);
 
     const dialogArea  = useRef(null);
-    const booferBlock = useRef(null);
+    const bufferBlock = useRef(null);
 
-    const sendMessageListener = (userId, msg)=> { setDialogId(dialogId=userId); props.sendMessageToUserThunk(userId, msg)};
-    const getTalk = (userId) => { setDialogId(dialogId=userId); props.getTalkWithUserThunk(dialogId) };
-    const scrollToDown = (booferBlock) => {/*debugger;*/ booferBlock.current.scrollIntoView({behavior: "auto"}) };
+    let [dialogId, setDialogId]                 = useState(+props.userIdInURL);
+    let [visibility,  setVisibility]            = useState(stl.visibility); // !!!normally must be  stl.visibility !! else - null
+    let [pageNumber, setPageNumber]             = useState(2);
+    let [msgsMapDone, setMsgsMapDone]           = useState(false);
+    let [dialogAreaHeight, setDialogAreaHeight] = useState(0);
 
-    const oldMsgLazyLoader = () => {
-        let msgCount = 4;
-        props.addPrevMessagesThunk(dialogId, msgCount, pageNumber);
-        setPageNumber(pageNumber+1);
-        console.log(pageNumber);
-    };
+    let usePrevious=(value)=> {let ref=useRef();useEffect(()=>{ref.current=value;});return ref.current;}
+    let prevCount = usePrevious(dialogAreaHeight);
+    let sendMessageListener = (userId,msg)=>{setDialogId(dialogId=userId);props.sendMessageToUserThunk(userId,msg)};
+    let getTalk = (userId) => {setDialogId(dialogId=userId); props.getTalkWithUserThunk(dialogId)};
+    let scrollToDown = (bufferBlock) => {bufferBlock.current.scrollIntoView({behavior: "auto"})};
+    let oldMsgLazyLoader=()=>{let msgCount=20;props.addPrevMessagesThunk(dialogId,msgCount,pageNumber);setPageNumber(pageNumber+1);};
 
-    useEffect( ()=> { msgsMapDone && scrollToDown(booferBlock) },[msgsMapDone])
+    useEffect( ()=> {!props.state.prevMsgsIsLoading && dialogArea.current.scrollTo(0,dialogAreaHeight-prevCount)
+    },[props.state.prevMsgsIsLoading] )
+
+    useEffect( ()=>{setDialogAreaHeight(dialogAreaHeight=dialogArea.current.scrollHeight);return ()=>setDialogAreaHeight(0);
+    }, [props.state] );
+
+    useEffect( ()=> { msgsMapDone && scrollToDown(bufferBlock) },[msgsMapDone])
 
     return <>
         <div className={stl.dialogsPage}>
@@ -50,26 +53,25 @@ function Dialogs(props) {
                         </div>)}
             </div>
                 <div className={stl.dialogsAreaAndSender}>
-                <div className={stl.editWrapper}>
+                    <div className={stl.editWrapper}>
                     <div className={ `${stl.editBlock} ${visibility}` } >
                         <h3>On button click makes immediate action</h3>
                     </div>
                 </div>
-
-                <div className={stl.dialogArea}
-                     ref={dialogArea}
-                     onScroll={()=>!dialogArea.current.scrollTop && oldMsgLazyLoader() }>
-                    {Object.keys(props.state.certainDialog).length === 0 && props.userIdInURL ||
-                    !props.state.certainDialog.items && props.userIdInURL ?
-                    <img src={props.state.certainDialogLoader} alt="err"/>  :
-                    props.state.certainDialog.items && props.state.certainDialog.items
+                    <div className={stl.dialogArea} ref={dialogArea} onScroll={()=>!dialogArea.current.scrollTop && oldMsgLazyLoader()}>
+                     <div className={stl.oldMsgsLoader}>
+                         {props.state.prevMsgsIsLoading && <img src={props.state.prevMsgsLoader} alt=""/>}
+                     </div>
+                     {Object.keys(props.state.certainDialog).length === 0 && props.userIdInURL ||
+                     !props.state.certainDialog.items && props.userIdInURL ?
+                     <img src={props.state.certainDialogLoader} alt="err"/>  :
+                     props.state.certainDialog.items && props.state.certainDialog.items
                         .map((msg, i,arr) =>{
                            if(msgsMapDone===false&&i===arr.length-1){return setMsgsMapDone(msgsMapDone=true)}
                            return <div
                                 key={i} className={+msg.senderId === +props.myId ?
                                 `${stl.messageBlockMe} ` : `${stl.messageBlockUser}`}
                                 id={msg.id}
-                                // onClick={()=> scroller(booferBlock)}
                                 onDoubleClick={()=> visibility ? setVisibility(null) : setVisibility(stl.visibility) }
                            >
                                <p className={stl.messageBody} >{msg.body}</p>
@@ -84,24 +86,22 @@ function Dialogs(props) {
                                </div>
                            </div>
                     })}
-                    <div ref={booferBlock}/>
+                    <div ref={bufferBlock}/>
                 </div>
-                <div className={stl.sender}>
+                    <div className={stl.sender}>
                     <Formik initialValues={{text:''}} validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
                             onSubmit={(values,{setSubmitting})=>{sendMessageListener(dialogId, values.text);values.text='';setSubmitting(false);
                             }}>
-                        {({values, errors,handleChange, handleSubmit, isSubmitting,}) => (
+                        {({values, errors,handleChange,handleSubmit,isSubmitting,}) => (
                             <form onSubmit={handleSubmit}>
                                 <textarea name="text" onChange={handleChange} value={values.text} placeholder={errors.text}
-                                onKeyUp={ (e)=>{ e.keyCode === 13
-                                    &&  sendMessageListener(dialogId, values.text); values.text=''; }}
-                                />
+                                onKeyUp={e=>{e.keyCode===13&&sendMessageListener(dialogId,values.text);values.text=''}}/>
                                 <button type="submit" disabled={isSubmitting} className={stl.sendBTN}> Send </button>
                             </form>
                         )}
                     </Formik>
                 </div>
-            </div>
+                </div>
             </div>
         </div>
     </>
@@ -134,15 +134,14 @@ class DialogFuncContainer extends React.Component { constructor(props) {super(pr
 }
 
 let mapStateToProps = (state) => {
-    //     // console.log(state)
     return {
-        props: state.dialogsReducer,
-        dialogACs: state.dialogACs,
-        myId: state.appAuthReducer.id,
+        props:      state.dialogsReducer,
+        dialogACs:  state.dialogACs,
+        myId:       state.appAuthReducer.id,
     }
 };
+
 let mergeProps = (stateProps, dispatchProps) => { const  state  = stateProps; const { dispatch } = dispatchProps;
-    // console.log(state)
     const getMyNegotiatorsListThunk = ()           => dispatch(state.dialogACs.getMyNegotiatorsListThunkAC ()          );
     const getTalkWithUserThunk      = (userId)     => dispatch(state.dialogACs.getTalkWithUserThunkAC      (userId)    );
     const sendMessageToUserThunk    = (userId,msg) => dispatch(state.dialogACs.sendMessageToUserThunkAC    (userId,msg));
