@@ -19,7 +19,7 @@ function Dialogs(props) {
 
     let usePrevious=(value)=> {let ref=useRef();useEffect(()=>{ref.current=value;});return ref.current;}
     let prevCount = usePrevious(dialogAreaHeight);
-    let sendMessageListener = (userId,msg)=>{setDialogId(dialogId=userId);props.sendMessageToUserThunk(userId,msg)};
+    let sendMessageListener = (userId,msg)=>{setDialogId(dialogId=userId);props.sendMessageToUserThunk(userId,msg.substring(0, msg.length-1))};
     let getTalk = (userId) => {setDialogId(dialogId=userId); props.getTalkWithUserThunk(dialogId)};
     let scrollToDown = (bufferBlock) => {bufferBlock.current.scrollIntoView({behavior: "auto"})};
     let oldMsgLazyLoader=()=>{let msgCount=20;props.addPrevMessagesThunk(dialogId,msgCount,pageNumber);setPageNumber(pageNumber+1);};
@@ -58,35 +58,35 @@ function Dialogs(props) {
                         <h3>On button click makes immediate action</h3>
                     </div>
                 </div>
-                    <div className={stl.dialogArea} ref={dialogArea} onScroll={()=>!dialogArea.current.scrollTop && oldMsgLazyLoader()}>
-                     <div className={stl.oldMsgsLoader}>
-                         {props.state.prevMsgsIsLoading && <img src={props.state.prevMsgsLoader} alt=""/>}
-                     </div>
-                     {Object.keys(props.state.certainDialog).length === 0 && props.userIdInURL ||
-                     !props.state.certainDialog.items && props.userIdInURL ?
-                     <img src={props.state.certainDialogLoader} alt="err"/>  :
-                     props.state.certainDialog.items && props.state.certainDialog.items
-                        .map((msg, i,arr) =>{
-                           if(msgsMapDone===false&&i===arr.length-1){return setMsgsMapDone(msgsMapDone=true)}
-                           return <div
-                                key={i} className={+msg.senderId === +props.myId ?
-                                `${stl.messageBlockMe} ` : `${stl.messageBlockUser}`}
-                                id={msg.id}
-                                onDoubleClick={()=> visibility ? setVisibility(null) : setVisibility(stl.visibility) }
-                           >
-                               <p className={stl.messageBody} >{msg.body}</p>
-                               <p className={+msg.senderId === +props.myId ?
-                                   stl.messageBlockTimeMe : stl.messageBlockTimeUser} >{msg.addedAt}, {msg.viewed ? 'seen':'x'}</p>
-                               <div className={stl.editWrapper}>
-                                   <div className={visibility}>
-                                       <button onClick={()=> props.deleteMessageThunk(msg.id, i)} > Delete now! </button>
-                                       {+msg.senderId !== +props.myId &&
-                                       <button onClick={()=>props.setSpamMessagesThunk(msg.id, i)}> To spam now!</button>}
-                                   </div>
-                               </div>
-                           </div>
-                    })}
-                    <div ref={bufferBlock}/>
+                <div className={stl.dialogArea} ref={dialogArea} onScroll={()=>!dialogArea.current.scrollTop && oldMsgLazyLoader()}>
+                <div className={stl.oldMsgsLoader}>
+                    {props.state.prevMsgsIsLoading && <img src={props.state.prevMsgsLoader} alt=""/>}
+                </div>
+                {Object.keys(props.state.certainDialog).length === 0 && props.userIdInURL ||
+                !props.state.certainDialog.items && props.userIdInURL ?
+                <img src={props.state.certainDialogLoader} alt="err"/>  :
+                props.state.certainDialog.items && props.state.certainDialog.items
+                   .map((msg, i,arr) =>{
+                      if(msgsMapDone===false&&i===arr.length-1){return setMsgsMapDone(msgsMapDone=true)}
+                      return <div
+                           key={i} className={+msg.senderId === +props.myId ?
+                           `${stl.messageBlockMe} ` : `${stl.messageBlockUser}`}
+                           id={msg.id}
+                           onDoubleClick={()=> visibility ? setVisibility(null) : setVisibility(stl.visibility) }
+                      >
+                          <p className={stl.messageBody} >{msg.body}</p>
+                          <p className={+msg.senderId === +props.myId ?
+                              stl.messageBlockTimeMe : stl.messageBlockTimeUser} >{msg.addedAt}, {msg.viewed ? 'seen':'x'}</p>
+                          <div className={stl.editWrapper}>
+                              <div className={visibility}>
+                                  <button onClick={()=> props.deleteMessageThunk(msg.id, i)} > Delete now! </button>
+                                  {+msg.senderId !== +props.myId &&
+                                  <button onClick={()=>props.setSpamMessagesThunk(msg.id, i)}> To spam now!</button>}
+                              </div>
+                          </div>
+                      </div>
+                   })}
+                <div ref={bufferBlock}/>
                 </div>
                     <div className={stl.sender}>
                     <Formik initialValues={{text:''}} validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
@@ -95,8 +95,14 @@ function Dialogs(props) {
                         {({values, errors,handleChange,handleSubmit,isSubmitting,}) => (
                             <form onSubmit={handleSubmit}>
                                 <textarea name="text" onChange={handleChange} value={values.text} placeholder={errors.text}
-                                onKeyUp={e=>{e.keyCode===13&&sendMessageListener(dialogId,values.text);values.text=''}}/>
-                                <button type="submit" disabled={isSubmitting} className={stl.sendBTN}> Send </button>
+
+                                onKeyUp={e=>{e.keyCode===13&&sendMessageListener(dialogId,values.text);values.text=''
+
+                                }}
+                                    />
+                                <button type="submit" disabled={isSubmitting} className={stl.sendBTN}
+                                // onClick={()=>sendMessageListener(dialogId,values.text)}
+                                > Send </button>
                             </form>
                         )}
                     </Formik>

@@ -14,9 +14,8 @@ let userLoaderTheme = '';
 let timeToChangeTheme = 0; // Время до смены картинки
 let timer = 0; //Цифра в минутах с начала открытия сайта от нуля времени
 
-
 let initialState = {
-    nightThemesPack: {
+    nightThemesPack:   {
         header: {
             header: {backgroundColor: 'midnightblue'},
             logotypeH1: {color: 'lightyellow'},
@@ -42,7 +41,7 @@ let initialState = {
         navBar: {},
         content: {},
     },
-    dayThemesPack: {
+    dayThemesPack:     {
         header: {
             header: {backgroundColor: 'lightskyblue'},
             logotypeH1: {color: 'white'},
@@ -52,7 +51,7 @@ let initialState = {
         navBar: {},
         content: {},
     },
-    eveningThemesPack:  {
+    eveningThemesPack: {
         header: {
             header: {backgroundColor: 'tomato'},
             logotypeH1: {color: 'blue'},
@@ -62,8 +61,7 @@ let initialState = {
         navBar: {},
         content: {},
     },
-}
-
+};
 
 function backgroundThemeSelector(state = initialState) {
     let stateCopy = {...state};
@@ -101,6 +99,8 @@ function setTheme() {
     document.body.style.backgroundImage = `url(${theme})`;
 }
 
+
+
 setTheme();
 
 export {userLoaderTheme};
@@ -111,19 +111,17 @@ export const backGroundChanger = {
     timeToChangeTheme: timeToChangeTheme,
     funcSetTheme: setTheme,
     themes : themesPack,
+    backgroundThemeSelector,
 };
 
 
 // console.log(timeToChangeTheme)
 
-export const backGroundSetter = (state = backGroundChanger) => {
-    return backGroundChanger
-};
+export const backGroundSetter = (state = backGroundChanger) => { return backGroundChanger };
 
 
 
 
-//
 //
 // let theme = ''; // Ссылка на адрес активной в данный момент картинки-фона
 // let themesPack = {};
@@ -131,78 +129,83 @@ export const backGroundSetter = (state = backGroundChanger) => {
 // let timeToChangeTheme = 0; // Время до смены картинки
 // let timer = 0; //Цифра в минутах с начала открытия сайта от нуля времени
 //
-// const nightThemesPack = {
-//     header: {
-//         header: {backgroundColor: 'midnightblue'},
-//         logotypeH1: {color: 'lightyellow'},
-//         loginH4: {color: 'lightyellow'},
-//         loginHref: {color: 'lightyellow'}
-//     },
-//     navBar: {
-//         blockMenu: {backgroundColor: 'lightskyblue'},
-//         menuA: {color: 'blue'},
-//         ['menu a:hover']:{color: 'blue'},
-//         ['menu a:active']:{color: 'tomato'},
-//         ['menu a.activeLink']:{color: 'tomato'},
-//     },
-//     content: {},
-// };
-// const morningThemesPack = {
-//     header: {
-//         header: {backgroundColor: 'orange'},
-//         logotypeH1: {color: 'green'},
-//         loginH4: {color: 'green'},
-//         loginHref: {color: 'green'}
-//     },
-//     navBar: {},
-//     content: {},
-// };
-// const dayThemesPack = {
-//     header: {
-//         header: {backgroundColor: 'lightskyblue'},
-//         logotypeH1: {color: 'white'},
-//         loginH4: {color: 'white'},
-//         loginHref: {color: 'white'}
-//     },
-//     navBar: {},
-//     content: {},
-// };
-// const eveningThemesPack = {
-//     header: {
-//         header: {backgroundColor: 'tomato'},
-//         logotypeH1: {color: 'blue'},
-//         loginH4: {color: 'blue'},
-//         loginHref: {color: 'blue'}
-//     },
-//     navBar: {},
-//     content: {},
-// };
 //
-// function backgroundThemeSelector() {
+// let initialState = {
+//     nightThemesPack: {
+//         header: {
+//             header: {backgroundColor: 'midnightblue'},
+//             logotypeH1: {color: 'lightyellow'},
+//             loginH4: {color: 'lightyellow'},
+//             loginHref: {color: 'lightyellow'}
+//         },
+//         navBar: {
+//             blockMenu: {backgroundColor: 'lightskyblue'},
+//             menuA: {color: 'blue'},
+//             ['menu a:hover']:{color: 'blue'},
+//             ['menu a:active']:{color: 'tomato'},
+//             ['menu a.activeLink']:{color: 'tomato'},
+//         },
+//         content: {},
+//     },
+//     morningThemesPack: {
+//         header: {
+//             header: {backgroundColor: 'orange'},
+//             logotypeH1: {color: 'green'},
+//             loginH4: {color: 'green'},
+//             loginHref: {color: 'green'}
+//         },
+//         navBar: {},
+//         content: {},
+//     },
+//     dayThemesPack: {
+//         header: {
+//             header: {backgroundColor: 'lightskyblue'},
+//             logotypeH1: {color: 'white'},
+//             loginH4: {color: 'white'},
+//             loginHref: {color: 'white'}
+//         },
+//         navBar: {},
+//         content: {},
+//     },
+//     eveningThemesPack:  {
+//         header: {
+//             header: {backgroundColor: 'tomato'},
+//             logotypeH1: {color: 'blue'},
+//             loginH4: {color: 'blue'},
+//             loginHref: {color: 'blue'}
+//         },
+//         navBar: {},
+//         content: {},
+//     },
+// }
+//
+//
+// function backgroundThemeSelector(state = initialState) {
+//     let stateCopy = {...state};
 //     timer = new Date().getHours() * 60 + new Date().getMinutes();
 //     if (timer >= 1440 || timer < 180) {
 //         timeToChangeTheme = 180 - timer;
 //         theme = imgNight;
 //         userLoaderTheme = userNightLoader;
-//         themesPack = nightThemesPack;
+//         themesPack = {...state.nightThemesPack};
 //         return {theme, userLoaderTheme, themesPack};
 //     } else if (timer >= 180 && timer < 660) {
 //         timeToChangeTheme = 660 - timer;
 //         theme = imgMorning;
 //         userLoaderTheme = userMorningLoader;
-//         themesPack = morningThemesPack;
+//         themesPack = {...state.morningThemesPack};
 //         return {theme, userLoaderTheme, themesPack};
 //     } else if (timer >= 660 && timer < 1080) { /*1080 = 18*/
 //         timeToChangeTheme = 1080 - timer;
 //         theme = imgDay;
 //         userLoaderTheme = userDayLoader;
-//         themesPack = dayThemesPack;
+//         themesPack = {...state.dayThemesPack};
 //         return {theme, userLoaderTheme, themesPack};
 //     } else if (timer >= 1080 && timer < 1440) {
 //         timeToChangeTheme = 1440 - timer;
 //         theme = imgEvening;
 //         userLoaderTheme = userEveningLoader;
-//         themesPack = eveningThemesPack;
+//         themesPack = {...state.eveningThemesPack};
 //         return {theme, userLoaderTheme, themesPack};
 //     }
 // }
@@ -231,4 +234,3 @@ export const backGroundSetter = (state = backGroundChanger) => {
 // export const backGroundSetter = (state = backGroundChanger) => {
 //     return backGroundChanger
 // };
-

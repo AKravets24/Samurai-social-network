@@ -18,7 +18,7 @@ class contentCompContainer  extends React.Component { constructor(props) { super
 
     componentDidUpdate() {
     if (this.props.myId) {
-        console.log(this.props)
+        // console.log(this.props)
     }
 }
 

@@ -23,7 +23,6 @@ function Header(props) {
                     style={props.state.headerThemes.logotypeH1}
                 >Rocket Network</h1>
             </div>
-
             <div className={stl.login}>
                 {props.state.authData.isAuth ?
                     <div className={stl.loginTrue}>
@@ -44,11 +43,11 @@ function Header(props) {
 
 function HeaderContainer(props) {
     // console.log(props)
-    useEffect( ()=> {
-        let themeRebootTimer = props.state.backGroundSetter.timeToChangeTheme * 60 * 1000;
-        setInterval(props.state.backGroundSetter.funcSetTheme , themeRebootTimer);
-        // console.log(themeRebootTimer)
-    }, [] );
+    // useEffect( ()=> {
+    //     let themeRebootTimer = props.state.backGroundSetter.timeToChangeTheme * 60 * 1000;
+    //     setInterval(props.state.backGroundSetter.funcSetTheme , themeRebootTimer);
+    //     // console.log(themeRebootTimer)
+    // }, [] );
 
     return <>
             <Header {...props}/>
