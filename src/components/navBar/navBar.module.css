@@ -44,9 +44,25 @@
     color: red
 }
 
-.menu a.activeLink {
-    color: red
+/*.menu a.activeLink {*/
+/*    color: red*/
+/*}*/
+
+.menu a.activeLinkNight {
+    color: sandybrown;
 }
+
+.menu a.activeLinkMorning {
+    color: tomato;
+}
+.menu a.activeLinkDay {
+    color: black
+}
+
+.menu a.activeLinkEvening {
+    color: deepskyblue;
+}
+
 
 .dialogsSpan {
 

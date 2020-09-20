@@ -1,9 +1,9 @@
-import Panorama           from "./img/propfilePic/summer.jpg";
-import Avatar             from "./img/propfilePic/avatar.jpg";
-import maleProfilePic     from './img/defaultUserAvas/male.jpg'
-import userMale           from './img/defaultUserAvas/userMale.jpg'
-import {userLoaderTheme}  from "./backGroundSetter";
-import {usersApi}         from "./app";
+import Avatar                     from "./img/propfilePic/avatar.jpg";
+import maleProfilePic             from './img/defaultUserAvas/male.jpg'
+import userMale                   from './img/defaultUserAvas/userMale.jpg'
+// import {userLoaderTheme}  from "./backGroundSetter";
+import {userMorningLoader}        from "./backGroundSetter";
+import {usersApi}                 from "./app";
 
 const ADD_POST                    = "ADD-POST";
 const SET_USER_PROFILE            = 'SET_USER_PROFILE';
@@ -39,7 +39,7 @@ const updateMyAvatarThunkAC       = (file)                  => (dispatch) => {
             dispatch(updateMyAvatarAC(data.data.photos.large))
         })
 };
-const getMyAvatarAC               = (myAva)                 => ({type: GET_MY_AVATAR, myAva })
+const getMyAvatarAC               = (myAva)                 => ({type: GET_MY_AVATAR, myAva });
 const getProfileThUnkAC           = (userId)                => (dispatch) => {
     dispatch(toggleIsLoadingAC(true));
     if (!userId) userId = 2;
@@ -70,7 +70,7 @@ const getUserStatusThunkAC        = (userId)                => (dispatch) => {
 };
 
 
-const profilePictures = { panoramaPic: Panorama, avatarPic: Avatar, };
+const profilePictures = { avatarPic: Avatar, };
 export const profilePics = (state = profilePictures)=> { return state };
 
 const actionsCreators = { addPostAC, setUserProfileAC, toggleIsLoadingAC, getProfileThUnkAC,
@@ -94,7 +94,7 @@ let initialProfileState = {
             }
         },
     isLoading:        false,
-    loader:           userLoaderTheme,
+    loader:           userMorningLoader,
     statusEdit:       false,
     statusField:      '',
     previousStatus:   '',

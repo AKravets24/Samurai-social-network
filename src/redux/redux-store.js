@@ -3,7 +3,7 @@ import thunkMiddleWare                                    from 'redux-thunk';
 import { profileReducer, profileACs, profilePics}         from "./profileReducer";
 import { dialogsReducer, dialogACs}                       from "./dialogsReducer";
 import { usersReducer, usersACs}                          from "./usersReducer";
-import { backGroundSetter}                                from "./backGroundSetter";
+import { backgroundReducer, backGroundSetterACs}          from "./backGroundSetter";
 import { headerAC }                                       from "./headerReducer";
 import { friendsReducer, friendsACs }                     from './friendsReducer';
 import { appAC, appAuthReducer }                          from "./appReducer";
@@ -14,7 +14,7 @@ let reducers = combineReducers({
     dialogsReducer,    dialogACs,
     usersReducer,      usersACs,
     friendsReducer,    friendsACs,
-    backGroundSetter,
+    backgroundReducer, backGroundSetterACs,
     headerAC,
     appAC,  appAuthReducer,
 });

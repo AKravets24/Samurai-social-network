@@ -1,17 +1,18 @@
 import {usersApi} from "./app";
+import {timerAC} from './backGroundSetter'
 
 const SET_USER_DATA             =  'SET_USER_DATA';
 const SET_LOGOUT_USER_DATA      =  'SET_LOGOUT_USER_DATA';
 const AUTH_ERR_CATCHER          =  'AUTH_ERR_CATCHER';
 const INITIALISED_SUCCESSFULLY  =  'INITIALISED_SUCCESSFULLY';
 
-const initialisedSuccessAC = ()                 =>  ({ type: INITIALISED_SUCCESSFULLY});
-const setUserDataAC        = (id, email, login) =>  ({ type: SET_USER_DATA, data: {id, email, login}});
-const authErrCatcherAC     = (authErr)          =>  ({ type: AUTH_ERR_CATCHER, authErr });
-const getLogInThunkAC      = () => (dispatch)   =>  usersApi.getLogIn().then(data => {
+const initialisedSuccessAC      = ()                 =>  ({ type: INITIALISED_SUCCESSFULLY});
+const setUserDataAC             = (id, email, login) =>  ({ type: SET_USER_DATA, data: {id, email, login}});
+const authErrCatcherAC          = (authErr)          =>  ({ type: AUTH_ERR_CATCHER, authErr });
+const getLogInThunkAC           = () => (dispatch)   =>  usersApi.getLogIn().then(data => {
     if (data.resultCode === 0) { let {id, email, login} = data.data; dispatch(setUserDataAC(id, email, login))}
 });
-const setMeLoginThunkAC    = (email, password, rememberMe ) => (dispatch) => {
+const setMeLoginThunkAC         = (email, password, rememberMe ) => (dispatch) => {
     usersApi.setMeLogin(email, password, rememberMe)
         .then( data => {
             console.log(data)
@@ -25,10 +26,10 @@ const setMeLoginThunkAC    = (email, password, rememberMe ) => (dispatch) => {
         })
 };
 
-
-const initializeAppThunkAC = () => (dispatch) => {
-    let appInitialisation = dispatch(getLogInThunkAC());
-    appInitialisation.then( () => {
+const initializeAppThunkAC      = () => (dispatch)   => {
+    dispatch(timerAC())
+    dispatch(getLogInThunkAC())
+    .then( () => {
         dispatch(initialisedSuccessAC());
     })
 };
@@ -51,7 +52,7 @@ export const appAuthReducer = (state = initialState, action) => {
     switch (action.type) {
         case INITIALISED_SUCCESSFULLY:
             // console.log('INITIALISED_SUCCESSFULLY')
-            return  {...state, appInitialized: true};
+            return {...state, appInitialized: true};
 
         case SET_USER_DATA:
             // console.log('SET_USER_DATA')
@@ -60,11 +61,11 @@ export const appAuthReducer = (state = initialState, action) => {
 
         case SET_LOGOUT_USER_DATA:
             // console.log('SET_LOGOUT_USER_DATA')
-            return  {...state, ...action.data };
+            return {...state, ...action.data };
 
         case AUTH_ERR_CATCHER:
             // console.log(AUTH_ERR_CATCHER)
-            return {...state, authErr : action.authErr }
+            return {...state, authErr : action.authErr };
 
         default:               return state;
     }

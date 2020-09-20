@@ -251,7 +251,11 @@
       <workItem from="1599986556699" duration="22032000" />
       <workItem from="1600182134875" duration="7960000" />
       <workItem from="1600211328006" duration="3236000" />
-      <workItem from="1600275523041" duration="1361000" />
+      <workItem from="1600275523041" duration="17503000" />
+      <workItem from="1600335319151" duration="23976000" />
+      <workItem from="1600385263326" duration="753000" />
+      <workItem from="1600418006859" duration="6975000" />
+      <workItem from="1600536692676" duration="17888000" />
     </task>
     <servers />
   </component>
@@ -275,10 +279,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="601" y="237" width="672" height="677" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1594040695202" />
-    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup" timestamp="1597508240052">
+    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup" timestamp="1600547714516">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1597508240052" />
+    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1600547714516" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -287,11 +291,6 @@
           <url>file://$PROJECT_DIR$/components/content/unAuthorised/unAuthorised.js</url>
           <line>47</line>
           <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/components/header/header.js</url>
-          <line>71</line>
-          <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/redux/dialogsReducer.js</url>
@@ -317,6 +316,12 @@
           <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
           <line>102</line>
           <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
+          <line>54</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="76" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

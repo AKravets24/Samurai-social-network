@@ -6,7 +6,7 @@ import Post           from './post/post';
 import {StatusClass}  from "./statusBlock";
 
 function Profile(props) {
-    // console.log(props)
+    // console.log(props.panoramaPic)
 
     const addPostListener = (finalPost) => { props.addPost(finalPost) };
     const getContacts     = (obj)       => { const result = [];
@@ -23,7 +23,8 @@ function Profile(props) {
         {props.state.profile &&
         <div className={stl.profile}>
             <div className={stl.panorama}>
-                <img src={props.state.profilePics.panoramaPic} alt="Err"/>
+                {/*<img src={props.state.profilePics.panoramaPic} alt="Err"/>*/}
+                <img src={props.panoramaPic} alt="Err"/>
             </div>
             <div className={stl.profileWrapper}>
                 <div className={stl.profileDetails}>

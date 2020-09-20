@@ -6,7 +6,7 @@ import { withAuthRedirect } from "../HOC/withAuthRedirect";
 import { compose } from 'redux';
 
 class profileClassContainer extends React.Component {
-    constructor(props) { super(props); /*console.log(props);*/
+    constructor(props) { super(props);  /*console.log(props.state.dynamicPanoramaPic);*/
         this.state = { myId: this.props.state.myId, comparativeId: +this.props.match.params.userId, }
     };
 
@@ -38,26 +38,30 @@ class profileClassContainer extends React.Component {
     render() {
         // console.log(this.props.match.params)
         return <Profile
-            addPost              = { this.props.addPost              }
-            onPostChange         = { this.props.onPostChange         }
-            state                = { this.props.state                }
-            match                = { this.props.match                }
-            stateChanger         = { this.props.stateChanger         }
-            updateStatusThunk    = { this.props.updateStatusThunk    }
-            updateMyAvatarThunk  = { this.props.updateMyAvatarThunk  }
-            getMyStatusThunk     = { this.props.getMyStatusThunk     }
+            addPost              = { this.props.addPost                 }
+            onPostChange         = { this.props.onPostChange            }
+            state                = { this.props.state                   }
+            match                = { this.props.match                   }
+            stateChanger         = { this.props.stateChanger            }
+            updateStatusThunk    = { this.props.updateStatusThunk       }
+            updateMyAvatarThunk  = { this.props.updateMyAvatarThunk     }
+            getMyStatusThunk     = { this.props.getMyStatusThunk        }
+            loader               = { this.props.state.loader            }
+            panoramaPic          = {this.props.state.dynamicPanoramaPic }
         />
     }
 }
 
 let mapStateToProps = (state)=> {
-    // console.log(state);
+    // console.log(state.backgroundReducer.profilePanoramaPic);
     return {
-        myId: state.appAuthReducer.id,
-        profilePics: state.profilePics,
-        props: state.profileReducer,
-        profileACs: state.profileACs,
-        profile: state.profileReducer.profile,
+        myId:               state.appAuthReducer.id,
+        profilePics:        state.profilePics,
+        dynamicPanoramaPic: state.backgroundReducer.profilePanoramaPic,
+        props:              state.profileReducer,
+        profileACs:         state.profileACs,
+        profile:            state.profileReducer.profile,
+        loader:             state.backgroundReducer.userLoaderTheme,
     }
 };
 let mergeProps = (stateProps, dispatchProps)=>{

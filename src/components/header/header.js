@@ -26,14 +26,17 @@ function Header(props) {
             <div className={stl.login}>
                 {props.state.authData.isAuth ?
                     <div className={stl.loginTrue}>
-                        <h4 style={props.state.headerThemes.loginH4}>
+                        <h4
+                            style={props.state.headerThemes.loginH4}
+                        >
                             {props.state.authData.login} (It's you) </h4>
                         <button className={stl.logOutBTN}
                             onClick={() => logOutListener()}
                         >X</button>
                     </div>
                     :
-                    <NavLink to={'login'}><h3 style={props.state.headerThemes.loginHref}
+                    <NavLink to={'login'}><h3
+                        style={props.state.headerThemes.loginHref}
                         className={stl.loginHref}>Login</h3></NavLink>
                 }
             </div>
@@ -42,25 +45,18 @@ function Header(props) {
 }
 
 function HeaderContainer(props) {
-    // console.log(props)
-    // useEffect( ()=> {
-    //     let themeRebootTimer = props.state.backGroundSetter.timeToChangeTheme * 60 * 1000;
-    //     setInterval(props.state.backGroundSetter.funcSetTheme , themeRebootTimer);
-    //     // console.log(themeRebootTimer)
-    // }, [] );
-
-    return <>
+        return <>
             <Header {...props}/>
         </>
 }
 
 const mapStateToProps = (state) => {
-    // console.log(state);
+    // console.log(state.backgroundReducer);
     return {
         authData: state.appAuthReducer,
         headerAC: state.headerAC,
-        backGroundSetter: state.backGroundSetter,
-        headerThemes: state.backGroundSetter.themes.header,
+        backgroundReducer: state.backgroundReducer,
+        headerThemes: state.backgroundReducer.themesPack.header,
     }
 };
 
