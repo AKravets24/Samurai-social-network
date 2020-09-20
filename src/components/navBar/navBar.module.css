@@ -31,22 +31,57 @@
     padding: 20px 0 20px 32%;
 }
 
-.menu a {
+.linkNight{
+    color: white;
+    text-decoration: none;
+}
+.linkEvening:hover {
+    color: wheat;
+}
+.linkEvening:active {
+    color: lightblue;
+}
+
+
+.linkMorning {
+    color: orangered;
+    text-decoration: none;
+}
+.linkEvening:hover {
+     color: darkgoldenrod;
+}
+.linkEvening:active {
+    color: gold;
+}
+
+
+.linkDay {
     color: darkgreen;
     text-decoration: none;
 }
-
-.menu a:hover {
-    color: dodgerblue;
+.linkEvening:hover {
+    color: orangered;
+}
+.linkEvening:active {
+    color: red;
 }
 
-.menu a:active {
-    color: red
+
+.linkEvening {
+    color: purple;
+    text-decoration: none;
+}
+.linkEvening:hover {
+    color: lightcoral;
+}
+.linkEvening:active {
+    color: red;
 }
 
-/*.menu a.activeLink {*/
+/*.menu a:active {*/
 /*    color: red*/
 /*}*/
+
 
 .menu a.activeLinkNight {
     color: sandybrown;
@@ -55,14 +90,14 @@
 .menu a.activeLinkMorning {
     color: tomato;
 }
+
 .menu a.activeLinkDay {
     color: black
 }
 
 .menu a.activeLinkEvening {
-    color: deepskyblue;
+    color: darkred;
 }
-
 
 .dialogsSpan {
 

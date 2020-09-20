@@ -2,34 +2,34 @@ import React,{useEffect, useState} from "react";
 import stl                        from './navBar.module.css';
 import {NavLink}                  from 'react-router-dom';
 import {connect}                  from 'react-redux';
+
 import {withAuthRedirect}         from "../content/HOC/withAuthRedirect";
+import {dialogsReducer} from "../../redux/dialogsReducer";
 
 function NavBarContainer(props) {
     // console.log(props)
     useEffect(()=>{props.getNewMessagesRequestThunk(); },[])
 
-    return <NavBar navBarThemes    = { props.state.navBarThemes} myId={props.state.myId}
-                   colorTheme      = { props.state.colorTheme}
-                   getNewMessages  = { props.getNewMessagesRequestThunk}
-                   btnIsDisabled   = { props.state.btnNewMessagesState}
-                   newMSGSCounter  = { props.state.newMSGSCounter}
-                   msgLoader       = { props.state.msgLoader}
+    return <NavBar
+        navBarThemes    = { props.state.navBarThemes} myId={props.state.myId}
+        colorTheme      = { props.state.colorTheme}
+        getNewMessages  = { props.getNewMessagesRequestThunk}
+        btnIsDisabled   = { props.state.btnNewMessagesState}
+        newMSGSCounter  = { props.state.newMSGSCounter}
+        msgLoader       = { props.state.msgLoader}
     />
 }
-
 function NavBar(props) {
-    // console.log(props.colorTheme)
+    console.log(props)
 
-    const style = {color:'blue', ':hover': { color: 'blue' }
-    };
+    let [dynamicActiveClass, setDynamicActiveClass] = useState('');
+    let [dynamicClass, setDynamicClass]             = useState('');
 
-    let [dynamicClass, setDynamicClass] = useState('')
     useEffect(()=> {
-        if      ( props.colorTheme==='NIGHT'   ) {setDynamicClass(stl.activeLinkNight   )}
-        else if ( props.colorTheme==='MORNING' ) {setDynamicClass(stl.activeLinkMorning )}
-        else if ( props.colorTheme==='DAY'     ) {setDynamicClass(stl.activeLinkDay     )}
-        else if ( props.colorTheme==='EVENING' ) {setDynamicClass(stl.activeLinkEvening )}
-
+        if     (props.colorTheme==='NIGHT'  ){setDynamicActiveClass(stl.activeLinkNight);setDynamicClass(stl.linkNight)}
+        else if(props.colorTheme==='MORNING'){setDynamicActiveClass(stl.activeLinkMorning);setDynamicClass(stl.linkMorning)}
+        else if(props.colorTheme==='DAY'    ){setDynamicActiveClass(stl.activeLinkDay);setDynamicClass(stl.linkDay)}
+        else if(props.colorTheme==='EVENING'){setDynamicActiveClass(stl.activeLinkEvening);setDynamicClass(stl.linkEvening)}
     },[props.colorTheme])
 
     return <>
@@ -37,44 +37,40 @@ function NavBar(props) {
             style={props.navBarThemes.blockMenu}
             className={stl.blockMenu}>
             <ul className={stl.menu}>
-                {!props.myId && <li><NavLink to={`/login`}
-                                             style={props.navBarThemes.menuA}
+                {!props.myId && <li><NavLink to={`/login`} className={dynamicClass} activeClassName={dynamicActiveClass}
                 >Get Login</NavLink></li>}
-                { props.myId && <li><NavLink to={`/profile/${props.myId}`}
-                                             style={style}
-                                             activeClassName={dynamicClass}
-
+                { props.myId && <li><NavLink to={`/profile/${props.myId}`} className={dynamicClass} activeClassName={dynamicActiveClass}
                 > Profile </NavLink></li>}
-                { props.myId && <li><NavLink to={'/friends'}
-                                             // style={styles.menuA}
-                                             // activeClassName={stl.activeLink}
-                                             activeClassName={dynamicClass}
+                { props.myId && <li><NavLink to={'/friends'} className={dynamicClass} activeClassName={dynamicActiveClass}
                 > Friends </NavLink></li>}
 
                 { props.myId && <li className={stl.dialogsSpan}>
                     <button disabled={props.btnIsDisabled} onClick={props.getNewMessages}>
                         { props.btnIsDisabled ?
                             <img src={props.msgLoader} alt="err"/>
-                             : '+1?'}
+                            : <span
+                                className={dynamicClass}
+                                activeClassName={dynamicActiveClass}>
+                            '+1?'</span>}
                          </button>
                     <NavLink to={'/dialogs'}
-                             style={props.navBarThemes.menuA}
-                             activeClassName={dynamicClass}>
+                             className={dynamicClass}
+                             activeClassName={dynamicActiveClass}>
                         Dialogs </NavLink>
                     <p hidden={!props.newMSGSCounter}>({props.newMSGSCounter})</p>
                 </li>}
                 { props.myId && <li><NavLink to={'/users'}
-                                             style={props.navBarThemes.menuA}
-                                            activeClassName={dynamicClass}> Users </NavLink></li>}
+                                             className={dynamicClass}
+                                             activeClassName={dynamicActiveClass}> Users </NavLink></li>}
                 <li><NavLink to='/news'
-                             style={props.navBarThemes.menuA}
-                             activeClassName={dynamicClass}> News </NavLink></li>
+                             className={dynamicClass}
+                             activeClassName={dynamicActiveClass}> News </NavLink></li>
                 <li><NavLink to='/music'
-                             style={props.navBarThemes.menuA}
-                             activeClassName={dynamicClass}> Music </NavLink></li>
+                             className={dynamicClass}
+                             activeClassName={dynamicActiveClass}> Music </NavLink></li>
                 <li><NavLink to='/settings'
-                             style={props.navBarThemes.menuA}
-                             activeClassName={dynamicClass}> Settings </NavLink></li>
+                             className={dynamicClass}
+                             activeClassName={dynamicActiveClass}> Settings </NavLink></li>
             </ul>
         </div>
     </>
