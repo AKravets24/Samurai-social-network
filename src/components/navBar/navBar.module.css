@@ -1,11 +1,13 @@
 
 .blockMenu {
-    /*background-color: lightgreen;*/
-    background-color: lightgreen;
     height: 100%;
     display: grid;
     border-radius: 4px 4px 4px 20px;
 }
+.blockMenuNight{background-color: lightskyblue;}
+.blockMenuMorning{background-color: #ff8151;}
+.blockMenuDay{background-color: lightgreen;}
+.blockMenuEvening{background-color: #dd527e;}
 
 .menu {
     margin: 0 0 0 0;
@@ -31,73 +33,29 @@
     padding: 20px 0 20px 32%;
 }
 
-.linkNight{
-    color: white;
-    text-decoration: none;
-}
-.linkEvening:hover {
-    color: wheat;
-}
-.linkEvening:active {
-    color: lightblue;
-}
+.linkNight{color: blue;text-decoration: none;}
+.linkNight:hover {color: #cefdff;}
+.linkNight:active {color: white;}
+.menu a.activeLinkNight {color: white;}
 
 
-.linkMorning {
-    color: orangered;
-    text-decoration: none;
-}
-.linkEvening:hover {
-     color: darkgoldenrod;
-}
-.linkEvening:active {
-    color: gold;
-}
+.linkMorning {color: #f6fff6;text-decoration: none;}
+.linkMorning:hover {color: darkgreen;}
+.linkMorning:active {color: green;}
+.menu a.activeLinkMorning {color: green;}
 
 
-.linkDay {
-    color: darkgreen;
-    text-decoration: none;
-}
-.linkEvening:hover {
-    color: orangered;
-}
-.linkEvening:active {
-    color: red;
-}
+.linkDay {color: darkgreen;text-decoration: none;}
+.linkDay:hover {color: orangered;}
+.linkDay:active {color: red;}
+.menu a.activeLinkDay {color: red}
 
 
-.linkEvening {
-    color: purple;
-    text-decoration: none;
-}
-.linkEvening:hover {
-    color: lightcoral;
-}
-.linkEvening:active {
-    color: red;
-}
+.linkEvening {color: purple;text-decoration: none;}
+.linkEvening:hover {color: lightcoral;}
+.linkEvening:active {color: red;}
+.menu a.activeLinkEvening {color: darkred;}
 
-/*.menu a:active {*/
-/*    color: red*/
-/*}*/
-
-
-.menu a.activeLinkNight {
-    color: sandybrown;
-}
-
-.menu a.activeLinkMorning {
-    color: tomato;
-}
-
-.menu a.activeLinkDay {
-    color: black
-}
-
-.menu a.activeLinkEvening {
-    color: darkred;
-}
 
 .dialogsSpan {
 
@@ -111,15 +69,14 @@
 
 .dialogsSpan a {
     position: relative;
-
 }
 
-.dialogsSpan button {
+.dialogsSpan button  {
     /*display: none;*/
     width: 50px;
     height: 50px;
     transition: 750ms;
-    opacity: 0;
+    /*opacity: 0;*/
     /*height: 50px;*/
     position: absolute;
     margin-left: -70px;
@@ -134,9 +91,16 @@
     color: green;
 }
 
+.hidden {
+    opacity: 0;
+}
+.showed {
+    opacity: 1;
+}
+
 .dialogsSpan button img {
     position: absolute;
-    margin-top: -30px;
+    margin-top: -25px;
     margin-left: -25px;
 }
 
@@ -148,8 +112,16 @@
 .dialogsSpan button:disabled {
     opacity: 1;
     color: gray;
-
 }
+
+.errorImg {
+    /*opacity: 1;*/
+    /*background-color: red;*/
+    position: absolute;
+    width: 30px;
+    margin-top: 15px;
+}
+
 
 .dialogsSpan p {
     opacity: 1;

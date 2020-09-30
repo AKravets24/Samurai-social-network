@@ -30,7 +30,7 @@ function Dialogs(props) {
     useEffect( ()=>{setDialogAreaHeight(dialogAreaHeight=dialogArea.current.scrollHeight);return ()=>setDialogAreaHeight(0);
     }, [props.state] );
 
-    useEffect( ()=> { msgsMapDone && scrollToDown(bufferBlock) },[msgsMapDone])
+    useEffect( ()=> { msgsMapDone && bufferBlock && scrollToDown(bufferBlock) },[msgsMapDone])
 
     return <>
         <div className={stl.dialogsPage}>
@@ -67,7 +67,8 @@ function Dialogs(props) {
                 <img src={props.state.certainDialogLoader} alt="err"/>  :
                 props.state.certainDialog.items && props.state.certainDialog.items
                    .map((msg, i,arr) =>{
-                      if(msgsMapDone===false&&i===arr.length-1){return setMsgsMapDone(msgsMapDone=true)}
+                      if(msgsMapDone===false&&i===arr.length-1){return setMsgsMapDone(true)}
+                      if(i===arr.length-1){scrollToDown(bufferBlock)}
                       return <div
                            key={i} className={+msg.senderId === +props.myId ?
                            `${stl.messageBlockMe} ` : `${stl.messageBlockUser}`}
@@ -113,7 +114,29 @@ function Dialogs(props) {
     </>
 };
 
-class DialogFuncContainer extends React.Component { constructor(props) {super(props);
+function DialogFuncContainer (props) {
+    useEffect(()=> {
+        props.getMyNegotiatorsListThunk();
+        let userId = props.match.params.userId;
+        if (userId) props.talkedBeforeThunk(userId)
+    },[])
+
+    let setSelectedMessages = (messageId) => { props.state.dialogACs.setSelectedMessagesAC(messageId) };
+
+    return <Dialogs state                   =  { props.state.props            }
+                    getTalkWithUserThunk    =  { props.getTalkWithUserThunk   }
+                    sendMessageToUserThunk  =  { props.sendMessageToUserThunk }
+                    userIdInURL             =  { props.match.params.userId    }
+                    myId                    =  { props.state.myId             }
+                    dialogIsLoading         =  { props.state.dialogIsLoading  }
+                    setSelectedMessages     =  { props.setSelectedMessages    }
+                    setSpamMessagesThunk    =  { props.setSpamMessagesThunk   }
+                    deleteMessageThunk      =  { props.deleteMessageThunk     }
+                    addPrevMessagesThunk    =  { props.addPrevMessagesThunk   }
+    />;
+}
+
+class DialogFuncContainer1 extends React.Component { constructor(props) {super(props);
     // console.log(props.state.dialogACs)
 }
     componentDidMount() {

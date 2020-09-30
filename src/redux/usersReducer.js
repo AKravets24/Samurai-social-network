@@ -1,5 +1,5 @@
 import userLoader from './loader/users/24.gif'
-import maleProfilePic from './img/defaultUserAvas/male.jpg'
+import maleProfilePic from './img/dialogs/male.jpg'
 import { usersApi } from "./app";
 
 const FOLLOW                        = 'FOLLOW';

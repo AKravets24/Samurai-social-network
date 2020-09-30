@@ -15,12 +15,12 @@ const getLogInThunkAC           = () => (dispatch)   =>  usersApi.getLogIn().the
 const setMeLoginThunkAC         = (email, password, rememberMe ) => (dispatch) => {
     usersApi.setMeLogin(email, password, rememberMe)
         .then( data => {
-            console.log(data)
+            // console.log(data)
             if (data.resultCode === 0){
                 dispatch(getLogInThunkAC())
             }
             else  {
-                console.log('someTestError', data)
+                // console.log('someTestError', data)
                 dispatch(authErrCatcherAC (data.messages))
             }
         })

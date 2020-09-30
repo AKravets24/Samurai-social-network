@@ -6,7 +6,7 @@ import { withAuthRedirect } from "../HOC/withAuthRedirect";
 import { compose } from 'redux';
 
 class profileClassContainer extends React.Component {
-    constructor(props) { super(props);  /*console.log(props.state.dynamicPanoramaPic);*/
+    constructor(props) { super(props);  /*console.log(props.state.colorTheme);*/
         this.state = { myId: this.props.state.myId, comparativeId: +this.props.match.params.userId, }
     };
 
@@ -38,22 +38,23 @@ class profileClassContainer extends React.Component {
     render() {
         // console.log(this.props.match.params)
         return <Profile
-            addPost              = { this.props.addPost                 }
-            onPostChange         = { this.props.onPostChange            }
-            state                = { this.props.state                   }
-            match                = { this.props.match                   }
-            stateChanger         = { this.props.stateChanger            }
-            updateStatusThunk    = { this.props.updateStatusThunk       }
-            updateMyAvatarThunk  = { this.props.updateMyAvatarThunk     }
-            getMyStatusThunk     = { this.props.getMyStatusThunk        }
-            loader               = { this.props.state.loader            }
-            panoramaPic          = {this.props.state.dynamicPanoramaPic }
+            addPost             = { this.props.addPost                  }
+            onPostChange        = { this.props.onPostChange             }
+            state               = { this.props.state                    }
+            match               = { this.props.match                    }
+            stateChanger        = { this.props.stateChanger             }
+            updateStatusThunk   = { this.props.updateStatusThunk        }
+            updateMyAvatarThunk = { this.props.updateMyAvatarThunk      }
+            getMyStatusThunk    = { this.props.getMyStatusThunk         }
+            loader              = { this.props.state.loader             }
+            panoramaPic         = { this.props.state.dynamicPanoramaPic }
+            colorTheme          = { this.props.state.colorTheme         }
         />
     }
 }
 
 let mapStateToProps = (state)=> {
-    // console.log(state.backgroundReducer.profilePanoramaPic);
+    // console.log(state.backgroundReducer.theme);
     return {
         myId:               state.appAuthReducer.id,
         profilePics:        state.profilePics,
@@ -62,6 +63,7 @@ let mapStateToProps = (state)=> {
         profileACs:         state.profileACs,
         profile:            state.profileReducer.profile,
         loader:             state.backgroundReducer.userLoaderTheme,
+        colorTheme:         state.backgroundReducer.theme,
     }
 };
 let mergeProps = (stateProps, dispatchProps)=>{

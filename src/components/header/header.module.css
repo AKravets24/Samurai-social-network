@@ -7,8 +7,12 @@
     grid-template-columns: 1fr 3fr 1fr;
     vertical-align: center;
 }
+.headerNight {background-color: midnightblue;}
+.headerMorning {background-color: #ffc150;}
+.headerDay {background-color: lightskyblue;}
+.headerEvening {background-color: darkred;}
 
-.boofer {
+.buffer {
     grid-area: boofer;
 }
 
@@ -33,26 +37,32 @@
 .logotype h1 {
     width: 280px;
     /*color: white;*/
-    color: lightyellow;
+    /*color: lightyellow;*/
     text-align: center;
 }
+.logoTypeH1Night {color: lightyellow;}
+.logoTypeH1Morning {color: green;}
+.logoTypeH1Day {color: white;}
+.logoTypeH1Evening {color: lightyellow;}
 
 .login {
     grid-area: login;
     /*margin: 45px auto 0 auto;*/
     margin-top: 45px;
-
 }
 
 .logOutBTN {
     background-color: transparent;
-    border-radius: 50%;
     cursor: pointer;
-    color: red;
     width: 30px;
     height: 30px;
-    border: 2px solid red;
+    border: none;
+    outline: none;
+}
 
+.logOutBTN img {
+    width: 30px;
+    /*height: 30px;*/
 }
 
 .loginTrue {
@@ -61,18 +71,31 @@
     height: 30px;
 }
 
+.loginTrue img {
+    width: 30px;
+    cursor: pointer;
+    /*height: 30px;*/
+}
+
 .login h4  {
     text-align: center;
     margin: 0 15px 0  0;
-    color: white;
 }
+.loginH4Night {color: lightyellow;}
+.loginH4Morning {color: green;}
+.loginH4Day {color: white;}
+.loginH4Evening {color: lightyellow;}
+
 
 .loginHref {
     text-align: center;
     margin: 0;
-    color: white;
-
 }
+.loginHrefNight{color: lightyellow;}
+.loginHrefMorning{color: green;}
+.loginHrefDay{color: white;}
+.loginHrefEvening{color: lightyellow;}
+
 
 .login a {
     text-decoration: none;

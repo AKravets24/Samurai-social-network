@@ -256,6 +256,17 @@
       <workItem from="1600385263326" duration="753000" />
       <workItem from="1600418006859" duration="6975000" />
       <workItem from="1600536692676" duration="17888000" />
+      <workItem from="1600778910259" duration="15977000" />
+      <workItem from="1600816150982" duration="3473000" />
+      <workItem from="1600937970598" duration="7659000" />
+      <workItem from="1600947580133" duration="19796000" />
+      <workItem from="1601023789192" duration="14026000" />
+      <workItem from="1601061427784" duration="13729000" />
+      <workItem from="1601109183883" duration="3218000" />
+      <workItem from="1601316364923" duration="10130000" />
+      <workItem from="1601367988489" duration="15864000" />
+      <workItem from="1601392177486" duration="9080000" />
+      <workItem from="1601457028073" duration="16351000" />
     </task>
     <servers />
   </component>
@@ -263,10 +274,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="649" y="200" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598356075779">
+    <state x="649" y="200" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1601072213366">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="649" y="200" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598356075779" />
+    <state x="649" y="200" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1601072213366" />
     <state x="611" y="365" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1595929015534">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -275,14 +286,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="667" y="228" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1597417209308" />
-    <state x="601" y="237" width="672" height="677" key="run.anything.popup" timestamp="1594040695202">
+    <state x="601" y="237" width="672" height="677" key="run.anything.popup" timestamp="1601401391266">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="601" y="237" width="672" height="677" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1594040695202" />
-    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup" timestamp="1600547714516">
+    <state x="601" y="237" width="672" height="677" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1601401391266" />
+    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup" timestamp="1601464897670">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1600547714516" />
+    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1601464897670" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -293,35 +304,45 @@
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/redux/dialogsReducer.js</url>
-          <line>61</line>
-          <option name="timeStamp" value="67" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
           <line>31</line>
           <option name="timeStamp" value="70" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
-          <line>67</line>
+          <line>68</line>
           <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
-          <line>90</line>
-          <option name="timeStamp" value="72" />
+          <url>file://$PROJECT_DIR$/redux/profileReducer.js</url>
+          <line>96</line>
+          <option name="timeStamp" value="76" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
-          <line>102</line>
-          <option name="timeStamp" value="73" />
+          <url>file://$PROJECT_DIR$/redux/appReducer.js</url>
+          <line>14</line>
+          <option name="timeStamp" value="80" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
-          <line>54</line>
+          <line>64</line>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
+          <line>70</line>
+          <option name="timeStamp" value="82" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
+          <line>175</line>
+          <option name="timeStamp" value="83" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
+          <line>138</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="76" />
+          <option name="timeStamp" value="85" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

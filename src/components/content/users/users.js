@@ -1,17 +1,17 @@
-import React, {useState} from "react";
-import stl from './users.module.css';
-import {NavLink} from 'react-router-dom';
-// import UnAuthorised from "../unAuthorised/unAuthorised";
-
+import React, {useState, useEffect  } from "react";
+import stl                            from './users.module.css';
+import {NavLink}                      from 'react-router-dom';
+// import UnAuthorised                from "../unAuthorised/unAuthorised";
 
 function Users(props) {
-    // console.log(props);
+    // console.log(props.sendingMSGStat);
     const pagesCount = Math.ceil(props.totalCount / props.pageSize);
-    let [startPage, setStartPage] = useState(1);
-    let [endPage, setEndPage] = useState(10);
-    let [scrollStep, setScrollStep] = useState(10);
-    let [disableDec, setDisableDec] = useState(true);
-    let [disableInc, setDisableInc] = useState(false);
+    let [startPage,  setStartPage]   = useState(1);
+    let [endPage,    setEndPage]     = useState(10);
+    let [scrollStep, setScrollStep]  = useState(10);
+    let [disableDec, setDisableDec]  = useState(true);
+    let [disableInc, setDisableInc]  = useState(false);
+    let [modalWindow,setModalWindow] = useState(false) // false normal
 
     let paginatorDec = () => {
         setStartPage(startPage - scrollStep);
@@ -19,19 +19,16 @@ function Users(props) {
         startPage <= 1 ? setDisableDec(disableDec = true) : setDisableDec(disableDec = false);
         endPage >= pagesCount ? setDisableInc(disableInc = true) : setDisableInc(disableInc = false)
     };
-
     let paginatorInc = () => {
         setStartPage(startPage + scrollStep);
         setEndPage(endPage + scrollStep);
         startPage <= 1 ? setDisableDec(disableDec = true) : setDisableDec(disableDec = false);
         endPage >= pagesCount ? setDisableInc(disableInc = true) : setDisableInc(disableInc = false);
     };
-
-    let paginator = () => {
+    let paginator    = () => {
         let pagesArr = [];
         // let pagesCount = Math.ceil(props.totalCount / props.pageSize);
         for (let i = startPage; i <= endPage; i++) {
-
             if (startPage < 1) {
                 setStartPage(startPage = 1);
                 setEndPage(endPage = scrollStep)
@@ -55,31 +52,43 @@ function Users(props) {
         );
     };
 
+    let setPageListener = (page) => {props.setCurrentPage(page)};
+    let onChangeListener = ({target}) => {let {value} = target;props.updateSearchField(value)};
+    let keyUpListener=(e)=>{if(e.keyCode === 13){let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName);} };
+    let searchListener=()=>{let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName);};
+    let searchModeCloseListener = () => {props.toggleUserSearchMode(false);props.setCurrentPage(props.usersInfo.currentPage); };
 
-    let setPageListener = (page) => {
-        props.setCurrentPage(page)
-    };
+    let [userId, setUserId]               = useState('');
+    let [userName, setUserName]           = useState('');
+    let [textAreaValue, setTextareaValue] = useState('');
+    let [msgStat, setMsgStat]             = useState(null);
+    let [feedBack,setFeedBack]            = useState(false)
+    let [feedBackClass, setFeedBackClass] = useState(stl.feedBackVisible); // false normal
 
-    let onChangeListener = ({target}) => {
-        let {value} = target;
-        props.updateSearchField(value)
-    };
-
-    let keyUpListener = (e) => {
-        if (e.keyCode === 13) {
-            let userName = props.usersInfo.userSearchField;
-            props.getCertainUserThunk(userName);
+    useEffect(()=>{
+        switch (props.sendingMSGStat) {
+            case 0: setFeedBack(true); setFeedBackClass(stl.feedBackVisible); setMsgStat('Sending message...');
+                return;
+            case 1:
+                setMsgStat(`Message delivered to ${userName}`);
+                setTimeout(()=>{setFeedBackClass(stl.feedbackHidden)},5000) //через 5 сек анимация плавного убирания на 3 секунды
+                setTimeout(()=>{setFeedBack(false)},8000)  // через 8 секунд объект удаляется из DOM
+                return;
+            case 2:
+                setMsgStat(`Failed to deliver message!`)
+                setTimeout(() => {setFeedBackClass(stl.feedbackHidden)},5000) // то же самое
+                setTimeout(() => {setFeedBack(false)},8000)  // то же самое
+                return;
         }
-    };
+    },[props.sendingMSGStat]);
 
-    let searchListener = () => {
-        let userName = props.usersInfo.userSearchField;
-        props.getCertainUserThunk(userName);
-    };
-
-    let searchModeCloseListener = () => {
-        props.toggleUserSearchMode(false);
-        props.setCurrentPage(props.usersInfo.currentPage);
+    let modalWindowSetter=(userId,userName)=>{setUserId(userId);setUserName(userName);setModalWindow(true);};
+    let writeMsg = (userId)=> {
+        props.sendMessageToUserThunk(userId, textAreaValue);
+        setTextareaValue('');
+        setModalWindow(false);
+        // console.log(`your message was send to ${userName}` )
+        // if (props.dialogsErrs === true){console.log(`Cannot send your message`) }
     };
 
     return <>
@@ -111,16 +120,28 @@ function Users(props) {
                     </div>
 
                 </div>
+                {modalWindow &&
+                    <div className={stl.modalWindow}>
+                        <div className={stl.miniHeader}>
+                            <button>To dialog with {userName} </button>
+                            <button onClick={()=>{setModalWindow(false)}} > X </button>
+                        </div>
+                        <div className={stl.textNBTN}>
+                            <textarea className={stl.windowTextarea}
+                                      value={textAreaValue}
+                                      onChange={e=>setTextareaValue(e.target.value)}
+                            />
+                            <button onClick={(body)=>writeMsg(userId,body)}>Send</button>
+                        </div>
 
-                {/*<div className={stl.paginationBlockOutside}>*/}
-                {/*    {!props.usersInfo.userSearchMode && pagesCount !== 0 &&*/}
-                {/*    <>*/}
-                {/*        <button onClick={paginatorDec} disabled={disableDec}> Prev 5</button>*/}
-                {/*        { paginator()}*/}
-                {/*        <button onClick={paginatorInc} disabled={disableInc}> Next 5</button>*/}
-                {/*    </> */}
-                {/*    }*/}
-                {/*</div>*/}
+                    </div>
+                }
+                {feedBack &&
+                    <div className={`${stl.feedbackWindow} ${feedBackClass}`}>
+                        <button onClick={()=>setFeedBack(false)}>X</button>
+                        <p>{msgStat}</p>
+                    </div>
+                }
                 <ul>
                     {props.usersInfo.isLoading ?
                         <div className={stl.loaderDiv}>
@@ -152,6 +173,9 @@ function Users(props) {
                                                     onClick={props.followListener}>Follow
                                                 </button>
                                             }
+                                            <button className={stl.followBTN}
+                                                    onClick={()=>modalWindowSetter(user.id,user.name)}
+                                            > Write message </button>
                                         </div>
                                         <div className={stl.userBlockInfo}>
                                             <div className={stl.nameAndState}>
@@ -166,6 +190,7 @@ function Users(props) {
                             )
                     }
                 </ul>
+
             </div>
             <div className={stl.moreUserUnits}>
                 <button className={stl.moreUsersShower}

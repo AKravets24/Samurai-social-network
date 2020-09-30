@@ -41,9 +41,13 @@ export const usersApi = {
     getTalkWithUser (userId, msgCount=20, pageNumber=1)
                                  { return instance.get(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`)
                                                                                      .then(response => response.data  )},
+
     sendMsgToTalker (userId,body){ return instance.post(`dialogs/${userId}/messages`, {body})
-                                                                                     .then(response => response.data  )},
-    getNewMessages ()            { return instance.get(`dialogs/messages/new/count`) .then(response => response.data  )},
+                                                                                     .then(response => response  )
+                                                                                     .catch(error   => error)
+    },
+    getNewMessages ()            { return instance.get(`dialogs/messages/new/count`) .then(response => response )
+                                                                                     .catch(error   => error)          },
     deleteMessage  (messageId)   { return instance.delete(`dialogs/messages/${messageId}`)
                                                                                      .then(response => response.data  )},
     setAsSpamMessage(messageId)  { return instance.post(`dialogs/messages/${messageId}/spam`)

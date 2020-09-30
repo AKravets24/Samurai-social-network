@@ -13,8 +13,6 @@ import userMorningLoader from './loader/profile/morningLoader.gif';
 import userDayLoader     from './loader/profile/dayLoader.gif';
 import userEveningLoader from './loader/profile/eveningLoader.gif';
 
-
-
 const TIMER   = 'TIMER';
 export const timerAC = (timer) => ({type: TIMER, timer});
 
@@ -28,62 +26,11 @@ export const timerAC = (timer) => ({type: TIMER, timer});
 let initialState = {
     theme:              '',
     backgroundPic:      '',
-    themesPack:         {},
     userNightLoader:    '',
     timeToChangeTheme:  0,
     timer:              0,
     userLoaderTheme:    '',
     profilePanoramaPic: '',
-    nightThemesPack:    {
-        header: {
-            header: {backgroundColor: 'midnightblue'},
-            logotypeH1: {color: 'lightyellow'},
-            loginH4: {color: 'lightyellow'},
-            loginHref: {color: 'lightyellow'}
-        },
-        navBar: {
-            blockMenu: {backgroundColor: 'lightskyblue'},
-            menuA: {color: 'blue'},
-            ['menu a:hover']: {color: 'blue'},
-            ['menu a:active']: {color: 'tomato'},
-            ['menu a.activeLink']: {color: 'tomato'},
-        },
-        content: {},
-    },
-    morningThemesPack:  {
-        header: {
-            header: {backgroundColor: 'orange'},
-            logotypeH1: {color: 'green'},
-            loginH4: {color: 'green'},
-            loginHref: {color: 'green'}
-        },
-        navBar: {},
-        content: {},
-    },
-    dayThemesPack:      {
-        header: {
-            header: {backgroundColor: 'lightskyblue'},
-            logotypeH1: {color: 'white'},
-            loginH4: {color: 'white'},
-            loginHref: {color: 'white'}
-        },
-        navBar: {},
-        content: {},
-    },
-    eveningThemesPack:  {
-        header: {
-            // header: {backgroundColor: 'dodgerblue'},
-            header: {backgroundColor: 'darkred'},
-            logotypeH1: {color: 'lightyellow'},
-            loginH4: {color: 'lightyellow'},
-            loginHref: {color: 'lightyellow'}
-        },
-        navBar: {
-            // blockMenu: {backgroundColor: 'orchid'},
-            blockMenu: {backgroundColor: '#dd527e'},
-        },
-        content: {},
-    },
 };
 
 export const backgroundReducer = (state = initialState, action) => {
@@ -92,29 +39,24 @@ export const backgroundReducer = (state = initialState, action) => {
             // console.log('TIMER');
             if (action.timer >= 1440 || action.timer < 180) {
                 // console.log('NIGHT_THEME')
-                return {...state, theme: 'NIGHT',
-                    backgroundPic: imgNight, timeToChangeTheme: 180 - action.timer,
-                    userLoaderTheme: userNightLoader, themesPack: state.nightThemesPack,
-                    profilePanoramaPic: nightPanorama,
-
+                return {...state, theme: 'NIGHT', backgroundPic: imgNight, timeToChangeTheme: 180 - action.timer,
+                    userLoaderTheme: userNightLoader, profilePanoramaPic: nightPanorama,
                 }
             } else if (action.timer >= 180 && action.timer < 660) {
                 // console.log('MORNING_THEME')
                 return {...state,theme: 'MORNING', backgroundPic: imgMorning, timeToChangeTheme: 660 - action.timer,
-                    userLoaderTheme: userMorningLoader, themesPack: state.morningThemesPack,
-                    profilePanoramaPic: morningPanorama,
+                    userLoaderTheme: userMorningLoader, profilePanoramaPic: morningPanorama,
                 }
             } else if (action.timer >= 660 && action.timer < 1080) {//1080
                 // console.log('DAY_THEME')
                 return {...state, theme: 'DAY', backgroundPic: imgDay, timeToChangeTheme: 1080 - action.timer,
-                    userLoaderTheme: userDayLoader, themesPack: state.dayThemesPack,
-                    profilePanoramaPic: dayPanorama,
+                    userLoaderTheme: userDayLoader, profilePanoramaPic: dayPanorama,
                 }
+
             } else if (action.timer >= 1080 && action.timer < 1440) {//1440
                 // console.log('EVENING_THEME')
                 return {...state, theme: 'EVENING', backgroundPic: imgEvening, timeToChangeTheme: 1440 - action.timer,
-                    userLoaderTheme: userEveningLoader, themesPack: state.eveningThemesPack,
-                    profilePanoramaPic: eveningPanorama,
+                    userLoaderTheme: userEveningLoader,  profilePanoramaPic: eveningPanorama,
                 }
             }
         default: return state;

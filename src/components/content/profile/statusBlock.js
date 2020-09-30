@@ -65,7 +65,7 @@ export class StatusClass extends React.Component {
         };
 
         return(
-            !this.state.statusEdit
+                !this.state.statusEdit
                 ? <div className={stl.statusWrapper}>
                     <h2 className={stl.statusField}
                         id='statusField'

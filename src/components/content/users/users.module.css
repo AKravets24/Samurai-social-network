@@ -120,6 +120,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+    /*position:  relative;*/
 }
 
 .picAndButton img {
@@ -150,6 +151,97 @@
     color: blue;
     border: 2px solid blue;
 }
+
+
+
+.modalWindow {
+    position: absolute;
+    height: 300px;
+    width: 800px;
+    border: 2px solid red;
+    border-radius: 10px;
+    background-color: #cef3ff;
+    margin-left: 200px;
+    margin-top: 200px;
+}
+.miniHeader {
+    height: 50px;
+    border-radius: 10px 10px 0 0;
+    background-color: lightgreen;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.miniHeader button {
+    margin: 0 25px;
+    height: 35px;
+    min-width: 40px;
+}
+.miniHeader button:hover {
+   background-color: red;
+}
+.textNBTN {
+    display: flex;
+    flex-direction: column;
+}
+.textNBTN textarea {
+    width: 90%;
+    margin: 5px auto;
+    height: 200px;
+    outline: none;
+    border: none;
+    font-size: 25px;
+}
+.textNBTN button {
+    width: 10%;
+    margin: 0 auto;
+}
+.windowTextarea {
+    resize: none;
+}
+
+
+
+.feedbackWindow {
+    position: absolute;
+    height: 110px;
+    width: 300px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #4f4f4f;
+    left: 10px;
+    bottom: 10px;
+
+}
+.feedBackVisible{
+    opacity: 1;
+    transition:  3s;
+}
+.feedbackHidden{
+    opacity: 0;
+    transition:  3s;
+}
+.feedbackWindow:hover {
+    /*background-color: black;*/
+}
+.feedbackWindow button {
+    width: 25px;
+    border-radius: 5px;
+    display: flex;
+    margin: 5px 0 0 270px;
+}
+.feedbackWindow button:hover {
+    background-color: #613233;
+    cursor: pointer;
+}
+.feedbackWindow p {
+    text-align: center;
+    margin-top: 5px;
+    color: white;
+    font-size: 22px;
+}
+
+
 
 .userBlockInfo {
     width: 80%;

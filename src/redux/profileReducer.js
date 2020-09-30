@@ -1,7 +1,7 @@
 import Avatar                     from "./img/propfilePic/avatar.jpg";
-import maleProfilePic             from './img/defaultUserAvas/male.jpg'
-import userMale                   from './img/defaultUserAvas/userMale.jpg'
-// import {userLoaderTheme}  from "./backGroundSetter";
+import maleProfilePic             from './img/dialogs/male.jpg'
+import userMale                   from './img/dialogs/userMale.jpg'
+// import {userLoaderTheme}       from "./backGroundSetter";
 import {userMorningLoader}        from "./backGroundSetter";
 import {usersApi}                 from "./app";
 
