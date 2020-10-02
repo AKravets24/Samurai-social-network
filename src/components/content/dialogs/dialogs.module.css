@@ -8,10 +8,14 @@
 /*::-webkit-resizer { !* тоже хер знает что за настройка*!}*/
 
 .dialogsPage {
-
-    background-color: lightblue;
     border-radius: 5px 5px 20px 5px;
 }
+.dialogNight{background-color:#bee3fa}
+.dialogMorning{background-color:#ffc150;}
+.dialogDay{background-color: lightblue;}
+.dialogEvening{background-color: #ff6969;}
+
+
 
 .dialogListAndArea {
     display: grid;
@@ -38,6 +42,22 @@
     max-height: inherit;
 }
 
+.dialogListNight::-webkit-scrollbar                                                                      {background-color: lightyellow; }
+.dialogListNight::-webkit-scrollbar-button,.dialogAreaNight ::-webkit-scrollbar-button:single-button     {background-color: deepskyblue; }
+.dialogListNight::-webkit-scrollbar-thumb,.dialogAreaNight ::-webkit-scrollbar-thumb                     {background-color: deepskyblue; }
+
+.dialogListMorning::-webkit-scrollbar                                                                    {background-color: lightyellow; }
+.dialogListMorning::-webkit-scrollbar-button,.dialogAreaMorning::-webkit-scrollbar-button:single-button  {background-color: orangered;   }
+.dialogListMorning::-webkit-scrollbar-thumb,.dialogAreaMorning::-webkit-scrollbar-thumb                  {background-color: orangered;   }
+
+.dialogListDay::-webkit-scrollbar                                                                        {background-color: lightyellow; }
+.dialogListDay::-webkit-scrollbar-button,.dialogAreaDay::-webkit-scrollbar-button:single-button          {background-color: lightskyblue;}
+.dialogListDay::-webkit-scrollbar-thumb,.dialogAreaDay::-webkit-scrollbar-thumb                          {background-color: lightskyblue;}
+
+.dialogListEvening ::-webkit-scrollbar                                                                   {background-color: lightyellow; }
+.dialogListEvening ::-webkit-scrollbar-button,.dialogAreaEvening::-webkit-scrollbar-button:single-button {background-color: darkred;     }
+.dialogListEvening ::-webkit-scrollbar-thumb,.dialogAreaEvening::-webkit-scrollbar-thumb                 {background-color: darkred;     }
+
 .certainLoader {
     margin: 110% 0 0 25%;
 }
@@ -45,20 +65,18 @@
 .dialogList::-webkit-scrollbar {
     width:   5px;
     height:  70%;
-    background-color: lightyellow;
 }
 
 .dialogList::-webkit-scrollbar-button {
     height: 7%;
-    background-color: deepskyblue;
     border-radius: 10px;
 }
 
 .dialogList::-webkit-scrollbar-thumb {
     width: 20px;
-    background-color: deepskyblue;
     border-radius: 4px;
 }
+
 
 .dialogList div {
     margin-top: 25px;
@@ -77,41 +95,59 @@
     display: inline;
     text-decoration: none;
     font-size: 25px;
-    color: dodgerblue;
+    /*color: dodgerblue;*/
     font-weight: bold;
     font-family: Arial;
 }
 
-.dialogList a:last-child:hover {
-    color: blue;
-}
+/*.dialogList a:last-child:hover {*/
+/*    color: blue;*/
+/*}*/
 
-.dialogList a:last-child:active {
-    color: red;
-}
+/*.dialogList a:last-child:active {*/
+/*    color: red;*/
+/*}*/
 
-.dialogList a.activeLink:last-child  {
-    color: red;
-}
+/*.dialogList a.activeLink:last-child  {*/
+/*    color: red;*/
+/*}*/
 
 .talkerBlock {
     width: 88%;
-    /*outline: 2px solid green;*/
     display: flex;
-    /*flex-direction: row-reverse;*/
     align-items: center;
-    /*margin-left: 10px;*/
-    background-color: lightyellow;
     border-radius: 20px;
     margin: 0 auto;
-    /*overflow-x: hidden;*/
-    /*overflow-x: scroll;*/
-    /*overflow-x: auto;*/
     word-break: break-all;
     padding-right: 2%;
     hyphens: auto;
-
 }
+.talkerBlockNight   {background-color: #a9c2ff;}
+.talkerBlockMorning {background-color: #ffffef;}
+.talkerBlockDay     {background-color: lightyellow;}
+.talkerBlockEvening {background-color: #ffddec;}
+
+
+
+.talkerBlockANight          {color: blue;}
+.talkerBlockANight:hover    {color: #606069;}
+.talkerBlockANight:active   {color: white}
+.activeLinkNight            {color: white}
+
+.talkerBlockAMorning        {color: #f46c05;}
+.talkerBlockAMorning:hover  {color: #3d3030;}
+.talkerBlockAMorning:active {color: black}
+.activeLinkMorning          {color: black}
+
+.talkerBlockADay            {color: deepskyblue;}
+.talkerBlockADay:hover      {color: royalblue;}
+.talkerBlockADay:active     {color: red;}
+.activeLinkDay              {color: red;}
+
+.talkerBlockAEvening        {color: blueviolet}
+.talkerBlockAEvening:hover  {color: blue}
+.talkerBlockAEvening:active {color: darkred}
+.activeLinkEvening          {color: darkred}
 
 .talkerBlock:hover {
     overflow-x: auto;
@@ -128,7 +164,6 @@
 
 .talkerBlock::-webkit-scrollbar-thumb {
     background-color: dodgerblue;
-
 }
 
 .talkerBlock::-webkit-scrollbar-thumb:horizontal {
@@ -170,12 +205,10 @@
 
 .editBlock{
     display: flex;
-
 }
 
 .visibility {
     display: none;
-
 }
 
 .editBlock h4{
@@ -193,17 +226,20 @@
     grid-area: specificDialog;
     width: 95%;
     margin: 0 auto 0 auto;
-    background-color: lightyellow;
     border-radius: 20px 20px 0 0;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-
     min-height: calc(500px - 150px);
     /*height: auto!important;*/
     height: 100vh;
     /*max-height: 1500px;*/
 }
+.dialogAreaNight  ,.textareaNight   {background-color: #fdfdfd}
+.dialogAreaMorning,.textareaMorning {background-color: #faffd3}
+.dialogAreaDay    ,.textareaDay     {background-color: lightyellow}
+.dialogAreaEvening,.textareaEvening {background-color: #ffe1e1;}
+
 
 .dialogArea img {
     /*height: 20%;*/
@@ -240,17 +276,61 @@
 }
 
 .messageBlockMe {
-    background-color: lightgreen;
     border-radius: 15px 15px 5px 15px;
     margin: 15px 25px 25px auto;
 }
 
-/*.messageBlockMe:focus {*/
-/*    outline: 4px solid red;*/
-/*}*/
+.messageBlockMe::after {
+    content: '';
+    border: 20px solid transparent;
+    position: absolute; /* Абсолютное позиционирование */
+    right: -15px; bottom: 0; /* Положение треугольника */
+    /*border-left: 20px solid lightgreen; !* Прозрачные границы *!*/
+    /*border-left: 20px solid red; !* Прозрачные границы *!*/
+    /*border-top: 10px solid green; !* Добавляем треугольник *!*/
+    transform: rotate(-80deg)
+}
+
+.messageBlockUser::after {
+    content: '';
+    border: 20px solid transparent;
+    position: absolute;
+    left: -15px;
+    bottom: 0;
+    /*background-color: #cef3ff;
+    /*background-color: red;*/
+    /*border-top: 10px solid red;*/
+    border-top: 20px solid #cef3ff;
+    transform: rotate(-190deg)
+}
+
+.myMsgNight            {background-color: #b8e9b8}
+.myMsgNight::after     {content:'';border-left: 20px solid #b8e9b8; }
+
+.myMsgMorning          {background-color: #abffab;}
+.myMsgMorning::after   {content:''; border-left: 20px solid #abffab;}
+
+.myMsgDay              {background-color: lightgreen;}
+.myMsgDay::after       {content:'';  border-left: 20px solid lightgreen;}
+
+.myMsgEvening          {background-color: #6fd76f;}
+.myMsgEvening::after   {content:''; border-left: 20px solid #6fd76f;}
+
+
+.userMsgNight          {background-color: #a6ebff}
+.userMsgNight::after   {content:''; border-top: 20px solid #a6ebff;}
+
+.userMsgMorning        {background-color: #c7eef9}
+.userMsgDay::after     {content:'';border-left: 20px solid #dbf7ff; }
+
+.userMsgDay            {background-color: #cef3ff;}
+.userMsgDay::after     {content:''; border-top: 20px solid #cef3ff;}
+
+.userMsgEvening        {background-color:  #cef3ff;}
+.userMsgEvening::after {content:''; border-top: 20px solid #cef3ff;}
+
 
 .messageBlockUser {
-    background-color: #cef3ff;
     border-radius: 15px 15px 15px 0;
     margin: 15px auto 25px 20px;
 }
@@ -320,50 +400,28 @@
     text-align: right;
 }
 
-.messageBlockMe::after {
-    content: '';
-    border: 20px solid transparent;
-    position: absolute; /* Абсолютное позиционирование */
-    right: -15px; bottom: 0; /* Положение треугольника */
-    border-left: 20px solid lightgreen; /* Прозрачные границы */
-    /*border-left: 20px solid red; !* Прозрачные границы *!*/
-    /*border-top: 10px solid green; !* Добавляем треугольник *!*/
-    transform: rotate(-80deg)
-}
-
-.messageBlockUser::after {
-    content: '';
-    border: 20px solid transparent;
-    position: absolute;
-    left: -15px;
-    bottom: 0;
-    /*!*background-color: #cef3ff;*/
-    /*background-color: red;*/
-    /*border-top: 10px solid red;*/
-    border-top: 20px solid #cef3ff;
-    transform: rotate(-190deg)
-}
-
 .dialogArea::-webkit-scrollbar {
     width: 15px;
     background-color: transparent;
 }
 
-.dialogArea::-webkit-scrollbar:disabled {
-    background-color: red;
-}
-
 .dialogArea::-webkit-scrollbar-thumb {
     height: 50px;
-    background-color: lightskyblue;
-    /*border-radius: 10% 0 0 10%;*/
 }
 
-.dialogArea::-webkit-scrollbar-button:single-button{
-    background-color: lightskyblue;
+.dialogArea::-webkit-scrollbar-button:single-button {
     height: 20px;
     border-radius: 12%;
 }
+/*.dialogAreaNight::-webkit-scrollbar-thumb {background-color: deepskyblue;}*/
+/*.dialogAreaNight::-webkit-scrollbar-button:single-button {background-color: deepskyblue;}*/
+
+/*.dialogAreaMorning {}*/
+/*.dialogAreaDay::-webkit-scrollbar-thumb { background-color: lightskyblue;}*/
+/*.dialogAreaDay::-webkit-scrollbar-button:single-button { background-color: lightskyblue;}*/
+
+/*.dialogAreaEvening::-webkit-scrollbar-thumb {background-color: darkred;}*/
+/*.dialogAreaEvening::-webkit-scrollbar-button:single-button  {background-color: darkred;}*/
 
 .sender {
     height: 180px;
@@ -383,7 +441,6 @@
 
 .sender textarea {
     /*text-indent: 25px;*/
-    background-color: lightyellow;
     width: 93%;
     padding-left: 2%;
     margin: 25px 0 0 0;
@@ -393,13 +450,32 @@
     border: none;
     font-size: 22px;
     border-radius: 0 0 20px 20px;
-
 }
+
 
 .sender .sendBTN {
     margin: 10px 0 0 0;
     font-size: 25px;
-
-
-
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    outline: none;
 }
+.sendBTNNight          {background-color: #4967ff;}
+.sendBTNNight:hover    {background-color: midnightblue;color:white}
+.sendBTNNight:active   {background-color: darkblue;color:white}
+
+
+.sendBTNMorning        {background-color: #ff652a;}
+.sendBTNMorning:hover  {background-color: #ff5b1d;color:white}
+.sendBTNMorning:active {background-color:#ff4700;color:white}
+
+
+.sendBTNDay            {background-color: #98eaff;}
+.sendBTNDay:hover      {background-color: #6ad3ff;color:black }
+.sendBTNDay:active     {background-color: #3ad7ff;color:black}
+
+
+.sendBTNEvening        {background-color: indianred;}
+.sendBTNEvening:hover  {background-color: darkred; color:white}
+.sendBTNEvening:active {background-color: red; color:white}

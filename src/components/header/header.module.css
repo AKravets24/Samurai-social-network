@@ -7,9 +7,9 @@
     grid-template-columns: 1fr 3fr 1fr;
     vertical-align: center;
 }
-.headerNight {background-color: midnightblue;}
-.headerMorning {background-color: #ffc150;}
-.headerDay {background-color: lightskyblue;}
+.headerNight   {background-color: midnightblue;}
+.headerMorning {background-color: #ffffa3;}
+.headerDay     {background-color: lightskyblue;}
 .headerEvening {background-color: darkred;}
 
 .buffer {
@@ -40,9 +40,9 @@
     /*color: lightyellow;*/
     text-align: center;
 }
-.logoTypeH1Night {color: lightyellow;}
-.logoTypeH1Morning {color: green;}
-.logoTypeH1Day {color: white;}
+.logoTypeH1Night   {color: lightyellow;}
+.logoTypeH1Morning {color: black;}
+.logoTypeH1Day     {color: white;}
 .logoTypeH1Evening {color: lightyellow;}
 
 .login {
@@ -82,7 +82,7 @@
     margin: 0 15px 0  0;
 }
 .loginH4Night {color: lightyellow;}
-.loginH4Morning {color: green;}
+.loginH4Morning {color: black;}
 .loginH4Day {color: white;}
 .loginH4Evening {color: lightyellow;}
 
@@ -92,7 +92,7 @@
     margin: 0;
 }
 .loginHrefNight{color: lightyellow;}
-.loginHrefMorning{color: green;}
+.loginHrefMorning{color: black;}
 .loginHrefDay{color: white;}
 .loginHrefEvening{color: lightyellow;}
 

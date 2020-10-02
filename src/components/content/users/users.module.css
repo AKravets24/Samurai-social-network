@@ -5,10 +5,15 @@
 
     grid-template-rows: 1fr;
 
-    background-color: lightyellow;
+    /*background-color: lightyellow;*/
     opacity: 0.9;
     border-radius: 0 0 25px 0;
 }
+
+.usersPageNight   {}
+.usersPageMorning {}
+.usersPageDay     {background-color: lightyellow;}
+.usersPageEvening {background-color: #eba0a0;}
 
 .userInfo ul {
     min-height: 500px;
@@ -37,6 +42,22 @@
     border-radius: 4px;
 }
 
+.scrollerNight ul::-webkit-scrollbar          {background-color: lightyellow; }
+.scrollerNight ul::-webkit-scrollbar-button   {background-color: deepskyblue; }
+.scrollerNight ul::-webkit-scrollbar-thumb    {background-color: deepskyblue; }
+
+.scrollerMorning ul::-webkit-scrollbar        {background-color: lightyellow; }
+.scrollerMorning ul::-webkit-scrollbar-button {background-color: orangered;   }
+.scrollerMorning ul::-webkit-scrollbar-thumb  {background-color: orangered;   }
+
+.scrollerDay ul::-webkit-scrollbar            {background-color: lightyellow; }
+.scrollerDay ul::-webkit-scrollbar-button     {background-color: lightskyblue;}
+.scrollerDay ul::-webkit-scrollbar-thumb      {background-color: lightskyblue;}
+
+.scrollerEvening ul::-webkit-scrollbar        {background-color: lightyellow; }
+.scrollerEvening ul::-webkit-scrollbar-button {background-color: darkred;     }
+.scrollerEvening ul::-webkit-scrollbar-thumb  {background-color: darkred;     }
+
 .userInfo {
     /*overflow: auto;*/
 }
@@ -49,6 +70,11 @@
     border-bottom: 1px solid green;
     height: 50px;
 }
+
+.generalHeaderNight   {border-bottom: 1px solid blue;}
+.generalHeaderMorning {border-bottom: 1px solid orangered;}
+.generalHeaderDay     {border-bottom: 1px solid green;}
+.generalHeaderEvening {border-bottom: 1px solid darkred;}
 
 .userHeader {
     color: red;
@@ -65,10 +91,29 @@
 }
 
 .pagBTN {
-    background-color: lightgreen;
+    /*background-color: lightgreen;*/
+    height: 40px;
+    cursor: pointer;
     border-radius: 10px;
     outline: none;
 }
+.pagBTNNight          {background-color: #4967ff;}
+.pagBTNNight:hover    {background-color: midnightblue;color:white}
+.pagBTNNight:active   {background-color: darkblue;color:white}
+
+.pagBTNMorning        {background-color: #ff652a;}
+.pagBTNMorning:hover  {background-color: #ff5b1d;color:white}
+.pagBTNMorning:active {background-color:#ff4700;color:white}
+
+.pagBTNDay            {background-color: #98eaff;}
+.pagBTNDay:hover      {background-color: #6ad3ff;color:black }
+.pagBTNDay:active     {background-color: #3ad7ff;color:black}
+
+.pagBTNEvening        {background-color: indianred;}
+.pagBTNEvening:hover  {background-color: darkred; color:white}
+.pagBTNEvening:active {background-color: red; color:white}
+
+
 
 .paginationBlockInside {
     width: 45px;
@@ -78,19 +123,56 @@
     margin-left: -10px;
 }
 
+.paginationSelected {
+    font-size: 25px;
+
+}
+.paginationSelectedNight   {}
+.paginationSelectedMorning {}
+.paginationSelectedDay     {color: red}
+.paginationSelectedEvening {color: red}
+
+
+
 .pagination {
     cursor: pointer;
-    color: green;
     margin-left: 4px;
+    font-size: 25px;
+}
+.paginationNight          {}
+.paginationNight:hover    {}
+.paginationNight:active   {}
+
+
+.paginationMorning        {}
+.paginationMorning:hover  {}
+.paginationMorning:active {}
+
+
+.paginationDay            {color: green;}
+.paginationDay:hover      {}
+.paginationDay:active     {}
+
+.paginationEvening        {color: lightyellow;}
+.paginationEvening:hover  {color: orangered;}
+.paginationEvening:active {color: red}
+
+
+.searchBlock {}
+.searchInput {
+    cursor: text;
+    border-radius: 10px;
+    outline: none;
+    height: 40px;
+    font-size: 20px;
 }
 
-.paginationSelected {
-    color: red;
-}
+.searchInputNight         {background-color: #fdfdfd}
+.searchInputMorning       {background-color: #faffd3}
+.searchInputDay           {background-color: lightyellow}
+.searchInputEvening       {background-color: #ffe1e1;}
 
-.searchBlock {
 
-}
 .friendsGeneral li,
 .userInfo ul {
     list-style-type: none;
@@ -126,32 +208,58 @@
 .picAndButton img {
     width: 150px;
     border-radius: 50%;
-    border: 1px solid green;
-
+    /*border: 1px solid green;*/
 }
+
+.userAvaNight   {}
+.userAvaMorning {}
+.userAvaDay       {border: 3px solid transparent;}
+.userAvaDay:hover {border: 3px solid green;}
+
+.userAvaEvening {border: 3px solid transparent; }
+.userAvaEvening:hover {border: 3px solid darkred;}
+
 
 .followBTN {
     width: 150px;
     height: 30px;
     margin-top: 10px;
-    background-color: lightgreen;
+    /*background-color: lightgreen;*/
     outline: none;
     border-radius: 10px;
-    border: 2px solid green;
+    /*border: 2px solid green;*/
     cursor: pointer;
     font-size: 17px;
 }
 
-.followBTN:hover {
-    color: dodgerblue;
-    border: 2px solid dodgerblue;
-}
+/*.followBTN:hover {*/
+/*    color: dodgerblue;*/
+/*    border: 2px solid dodgerblue;*/
+/*}*/
 
-.followBTN:active {
-    color: blue;
-    border: 2px solid blue;
-}
+/*.followBTN:active {*/
+/*    color: blue;*/
+/*    border: 2px solid blue;*/
+/*}*/
 
+.followBTNNight          {background-color: #4967ff;}
+.followBTNNight:hover    {background-color: midnightblue;color:white}
+.followBTNNight:active   {background-color: darkblue;color:white}
+
+
+.followBTNMorning        {background-color: #ff652a;}
+.followBTNMorning:hover  {background-color: #ff5b1d;}
+.followBTNMorning:active {background-color:#ff4700;}
+
+
+.followBTNDay            {background-color: lightgreen;  border: 2px solid green;}
+.followBTNDay:hover      {background-color: #fdfd69;color:black }
+.followBTNDay:active     {background-color: #f1f14f;color:black}
+
+
+.followBTNEvening        {background-color: indianred;}
+.followBTNEvening:hover  {background-color: darkred; color:white}
+.followBTNEvening:active {background-color: red; color:white}
 
 
 .modalWindow {
@@ -249,15 +357,43 @@
     border-radius: 15px;
     display: flex;
 }
+.userBlockInfoNight   {border: 4px solid blue;}
+.userBlockInfoMorning {border: 4px solid orangered;}
+.userBlockInfoDay     {border: 4px solid green;}
+.userBlockInfoEvening {border: 4px solid darkred;}
 
 .nameAndState {
     width: 70%;
     margin-left: 15px;
 }
 
+.nameAndState a {
+  text-decoration: none;
+}
+
 .nameAndState h2{
     margin-top: 35px;
 }
+
+.userNameNight          {color: #4967ff;}
+.userNameNight:hover    {color: midnightblue;}
+.userNameNight:active   {color: darkblue;}
+
+
+.userNameMorning        {color: #ff652a;}
+.userNameMorning:hover  {color: #ff5b1d;}
+.userNameMorning:active {color:#ff4700;}
+
+
+.userNameDay            {color: lightgreen;}
+.userNameDay:hover      {color: #fdfd69; }
+.userNameDay:active     {color: #f1f14f;}
+
+
+.userNameEvening        {color: darkred;}
+.userNameEvening:hover  {color: indianred; }
+.userNameEvening:active {color: red; }
+
 
 .nameAndState p {
     margin-top: 60px;
@@ -282,14 +418,17 @@
     justify-content: center;
 }
 
+.moreUserUnitsNight   { border-top: 1px solid blue;     }
+.moreUserUnitsMorning { border-top: 1px solid orangered;}
+.moreUserUnitsDay     { border-top: 1px solid green;    }
+.moreUserUnitsEvening { border-top: 1px solid darkred;  }
+
 .moreUsersShower {
     width: 200px;
     height: 50px;
     margin-top: 10px;
     border-radius: 10px;
     outline: none;
-    border: 2px solid green;
-    background-color: lightgreen;
     font-size: 20px ;
     cursor: pointer;
 }

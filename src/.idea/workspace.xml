@@ -266,7 +266,7 @@
       <workItem from="1601316364923" duration="10130000" />
       <workItem from="1601367988489" duration="15864000" />
       <workItem from="1601392177486" duration="9080000" />
-      <workItem from="1601457028073" duration="16351000" />
+      <workItem from="1601457028073" duration="35815000" />
     </task>
     <servers />
   </component>
@@ -330,7 +330,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
-          <line>70</line>
+          <line>102</line>
           <option name="timeStamp" value="82" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -343,6 +343,18 @@
           <line>138</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="85" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
+          <line>105</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="87" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
+          <line>79</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="89" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

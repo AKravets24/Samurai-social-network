@@ -6,7 +6,41 @@ import {Formik}                              from 'formik';
 import stl                                   from './dialogs.module.css';
 
 function Dialogs(props) {
-    // console.log(props.state.prevMsgsLoader);
+    console.log(props.colorTheme);
+
+    let [themes, setThemes] = useState({dialogDynamic:'',firstScroller:'',talkerBlockTheme:'',activeLink:'', talkerBlockA:'',
+        msgMeDynamic:'',msgUserDynamic:'',dialogAreaBackgroundNSecondScroll:'', textAreaDynamic:'',sendBTNDynamic:''})
+    useEffect(()=> {
+        switch (props.colorTheme) {
+            case 'NIGHT':
+                setThemes({...themes,dialogDynamic:stl.dialogNight, firstScroller:stl.dialogListNight,
+                talkerBlockTheme:stl.talkerBlockNight, activeLink:stl.activeLinkNight, talkerBlockA: stl.talkerBlockANight,msgMeDynamic:stl.myMsgNight,
+                    msgUserDynamic:stl.userMsgNight,dialogAreaBackgroundNSecondScroll:stl.dialogAreaNight,textAreaDynamic:stl.textareaNight,
+                    sendBTNDynamic: stl.sendBTNNight,
+                })
+                return;
+            case 'MORNING':
+                setThemes({...themes,dialogDynamic:stl.dialogMorning, firstScroller:stl.dialogListMorning,
+            talkerBlockTheme:stl.talkerBlockMorning,activeLink:stl.activeLinkMorning, talkerBlockA: stl.talkerBlockAMorning,msgMeDynamic:stl.myMsgMorning,
+                    msgUserDynamic:stl.userMsgMorning,dialogAreaBackgroundNSecondScroll:stl.dialogAreaMorning,textAreaDynamic:stl.textareaMorning,
+                    sendBTNDynamic: stl.sendBTNMorning,
+                })
+                return;
+            case 'DAY':
+                setThemes({...themes,dialogDynamic:stl.dialogDay,firstScroller:stl.dialogListDay,
+            talkerBlockTheme:stl.talkerBlockDay,activeLink:stl.activeLinkDay, talkerBlockA: stl.talkerBlockADay,msgMeDynamic:stl.myMsgDay,
+                    msgUserDynamic:stl.userMsgDay,dialogAreaBackgroundNSecondScroll:stl.dialogAreaDay,textAreaDynamic:stl.textareaDay,
+                    sendBTNDynamic: stl.sendBTNDay,
+                })
+                return;
+            case'EVENING':
+                setThemes({...themes,dialogDynamic:stl.dialogEvening,firstScroller: stl.dialogListEvening,
+            talkerBlockTheme:stl.talkerBlockEvening,activeLink:stl.activeLinkEvening, talkerBlockA: stl.talkerBlockAEvening,msgMeDynamic:stl.myMsgEvening,
+                    msgUserDynamic:stl.userMsgEvening, dialogAreaBackgroundNSecondScroll:stl.dialogAreaEvening,textAreaDynamic:stl.textareaEvening,
+                    sendBTNDynamic: stl.sendBTNEvening
+                })
+                return;
+        }},[props.colorTheme])
 
     const dialogArea  = useRef(null);
     const bufferBlock = useRef(null);
@@ -33,20 +67,21 @@ function Dialogs(props) {
     useEffect( ()=> { msgsMapDone && bufferBlock && scrollToDown(bufferBlock) },[msgsMapDone])
 
     return <>
-        <div className={stl.dialogsPage}>
+        <div className={`${stl.dialogsPage} ${themes.dialogDynamic}`}>
             <div className={stl.dialogListAndArea}>
-                <div className={stl.dialogList}>
+                <div className={`${stl.dialogList} ${themes.firstScroller}`}>
                 {props.state.dialogsList.length === 0 ?
                     <img className={stl.certainLoader} src={props.state.allDialogsLoader} alt="Err"/> :
                      props.state.dialogsList
                     .map((user, i) =>
-                        <div className={stl.talkerBlock} key={i} >
-                            <NavLink to={`/profile/${user.id}`}>
+                        <div className={`${stl.talkerBlock} ${themes.talkerBlockTheme}`} key={i} >
+                            <NavLink to={`/profile/${user.id}`} >
                                 <img  src={user.photos.large || props.state.defaultAvatar} alt="err"/>
                             </NavLink>
                             <NavLink to={`/dialogs/${user.id}`}
                                      onClick={() => {getTalk(user.id); setVisibility(stl.visibility)}}
-                                     activeClassName={stl.activeLink}>
+                                     className={themes.talkerBlockA}
+                                     activeClassName={themes.activeLink}>
                                 {user.userName}{user.hasNewMessages &&
                             <span>({user.newMessagesCount})</span> }
                             </NavLink>
@@ -58,7 +93,8 @@ function Dialogs(props) {
                         <h3>On button click makes immediate action</h3>
                     </div>
                 </div>
-                <div className={stl.dialogArea} ref={dialogArea} onScroll={()=>!dialogArea.current.scrollTop && oldMsgLazyLoader()}>
+                <div className={`${stl.dialogArea} ${themes.dialogAreaBackgroundNSecondScroll}`}
+                     ref={dialogArea} onScroll={()=>!dialogArea.current.scrollTop && oldMsgLazyLoader()}>
                 <div className={stl.oldMsgsLoader}>
                     {props.state.prevMsgsIsLoading && <img src={props.state.prevMsgsLoader} alt=""/>}
                 </div>
@@ -71,7 +107,7 @@ function Dialogs(props) {
                       if(i===arr.length-1){scrollToDown(bufferBlock)}
                       return <div
                            key={i} className={+msg.senderId === +props.myId ?
-                           `${stl.messageBlockMe} ` : `${stl.messageBlockUser}`}
+                           `${stl.messageBlockMe} ${themes.msgMeDynamic} ` : `${stl.messageBlockUser} ${themes.msgUserDynamic}`}
                            id={msg.id}
                            onDoubleClick={()=> visibility ? setVisibility(null) : setVisibility(stl.visibility) }
                       >
@@ -96,12 +132,11 @@ function Dialogs(props) {
                         {({values, errors,handleChange,handleSubmit,isSubmitting,}) => (
                             <form onSubmit={handleSubmit}>
                                 <textarea name="text" onChange={handleChange} value={values.text} placeholder={errors.text}
-
+                                className={`${themes.textAreaDynamic}`}
                                 onKeyUp={e=>{e.keyCode===13&&sendMessageListener(dialogId,values.text);values.text=''
-
                                 }}
                                     />
-                                <button type="submit" disabled={isSubmitting} className={stl.sendBTN}
+                                <button type="submit" disabled={isSubmitting} className={`${stl.sendBTN} ${themes.sendBTNDynamic}` }
                                 // onClick={()=>sendMessageListener(dialogId,values.text)}
                                 > Send </button>
                             </form>
@@ -115,6 +150,7 @@ function Dialogs(props) {
 };
 
 function DialogFuncContainer (props) {
+    // console.log(props)
     useEffect(()=> {
         props.getMyNegotiatorsListThunk();
         let userId = props.match.params.userId;
@@ -133,33 +169,8 @@ function DialogFuncContainer (props) {
                     setSpamMessagesThunk    =  { props.setSpamMessagesThunk   }
                     deleteMessageThunk      =  { props.deleteMessageThunk     }
                     addPrevMessagesThunk    =  { props.addPrevMessagesThunk   }
+                    colorTheme              =  { props.state.colorTheme       }
     />;
-}
-
-class DialogFuncContainer1 extends React.Component { constructor(props) {super(props);
-    // console.log(props.state.dialogACs)
-}
-    componentDidMount() {
-        this.props.getMyNegotiatorsListThunk();
-        let userId = this.props.match.params.userId;
-        // if (userId) this.props.getTalkWithUserThunk(userId)
-        if (userId) this.props.talkedBeforeThunk(userId)
-    }
-    setSelectedMessages = (messageId) => { this.props.state.dialogACs.setSelectedMessagesAC(messageId) };
-
-    render() {
-        return <Dialogs state                   =  { this.props.state.props            }
-                        getTalkWithUserThunk    =  { this.props.getTalkWithUserThunk   }
-                        sendMessageToUserThunk  =  { this.props.sendMessageToUserThunk }
-                        userIdInURL             =  { this.props.match.params.userId    }
-                        myId                    =  { this.props.state.myId             }
-                        dialogIsLoading         =  { this.props.state.dialogIsLoading  }
-                        setSelectedMessages     =  { this.props.setSelectedMessages    }
-                        setSpamMessagesThunk    =  { this.props.setSpamMessagesThunk   }
-                        deleteMessageThunk      =  { this.props.deleteMessageThunk     }
-                        addPrevMessagesThunk    =  { this.props.addPrevMessagesThunk   }
-        />;
-    }
 }
 
 let mapStateToProps = (state) => {
@@ -167,6 +178,7 @@ let mapStateToProps = (state) => {
         props:      state.dialogsReducer,
         dialogACs:  state.dialogACs,
         myId:       state.appAuthReducer.id,
+        colorTheme: state.backgroundReducer.theme,
     }
 };
 

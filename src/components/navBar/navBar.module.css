@@ -1,4 +1,3 @@
-
 .blockMenu {
     height: 100%;
     display: grid;
@@ -40,9 +39,9 @@
 
 
 .linkMorning {color: #f6fff6;text-decoration: none;}
-.linkMorning:hover {color: darkgreen;}
-.linkMorning:active {color: green;}
-.menu a.activeLinkMorning {color: green;}
+.linkMorning:hover {color: #3d3030;}
+.linkMorning:active {color: black;}
+.menu a.activeLinkMorning {color: black;}
 
 
 .linkDay {color: darkgreen;text-decoration: none;}

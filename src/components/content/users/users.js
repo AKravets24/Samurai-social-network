@@ -4,7 +4,7 @@ import {NavLink}                      from 'react-router-dom';
 // import UnAuthorised                from "../unAuthorised/unAuthorised";
 
 function Users(props) {
-    // console.log(props.sendingMSGStat);
+    // console.log(props.colorTheme);
     const pagesCount = Math.ceil(props.totalCount / props.pageSize);
     let [startPage,  setStartPage]   = useState(1);
     let [endPage,    setEndPage]     = useState(10);
@@ -29,24 +29,16 @@ function Users(props) {
         let pagesArr = [];
         // let pagesCount = Math.ceil(props.totalCount / props.pageSize);
         for (let i = startPage; i <= endPage; i++) {
-            if (startPage < 1) {
-                setStartPage(startPage = 1);
-                setEndPage(endPage = scrollStep)
-            }
-            if (endPage > pagesCount) {
-                setStartPage(startPage = pagesCount - scrollStep);
-                setEndPage(endPage = pagesCount)
-            }
+            if (startPage < 1) {setStartPage(startPage = 1); setEndPage(endPage = scrollStep)}
+            if (endPage > pagesCount) {setStartPage(startPage = pagesCount - scrollStep);setEndPage(endPage = pagesCount)}
             pagesArr.push(i)
         }
 
         return pagesArr.map((page, index) =>
             <div key={index} className={stl.paginationBlockInside}>
-                {
-                    props.currentPage === page ?
-                        <span className={stl.paginationSelected}> {page} </span> :
-                        <span className={stl.pagination} onClick={() => {
-                            setPageListener(page);
+                {props.currentPage === page ?
+                        <span className={ `${stl.paginationSelected} ${themes.paginationSelectedDnmc}`}> {page} </span> :
+                        <span className={`${stl.pagination} ${themes.paginationDnmc}`} onClick={() => {setPageListener(page);
                         }}> {page} </span>}
             </div>
         );
@@ -91,19 +83,58 @@ function Users(props) {
         // if (props.dialogsErrs === true){console.log(`Cannot send your message`) }
     };
 
+    let [themes, setThemes] = useState({userPageDynamic:"",scroller:'',generalHeaderDnmc:'',pagBTNDnmc:'',
+        paginationSelectedDnmc:'',paginationDnmc:'', searchInputDnmc:'',userAvaDnmc:'',followBTNDnmc:'',userNameDnmc:'',
+        userBlockInfoDnmc:'',moreUserUnitsDnmc:'',
+    });
+
+    useEffect(()=> {
+        switch (props.colorTheme) {
+            case 'NIGHT':
+                setThemes({...themes,userPageDnmc: stl.usersPageNight,scroller:stl.scrollerNight,generalHeaderDnmc:stl.generalHeaderNight,
+                    pagBTNDnmc:stl.pagBTNNight, paginationSelectedDnmc:stl.paginationSelectedNight,paginationDnmc:stl.paginationNight,
+                    searchInputDnmc:stl.searchInputNight,userAvaDnmc:stl.userAvaNight,followBTNDnmc:stl.followBTNNight,
+                    userNameDnmc:stl.userNameNight,userBlockInfoDnmc:stl.userBlockInfoNight,moreUserUnitsDnmc:stl.moreUserUnitsNight,
+                });
+                return;
+            case 'MORNING':
+                setThemes({...themes,userPageDnmc: stl.usersPageMorning,scroller:stl.scrollerMorning,generalHeaderDnmc:stl.generalHeaderMorning,
+                    pagBTNDnmc:stl.pagBTNMorning,paginationSelectedDnmc:stl.paginationSelectedMorning,paginationDnmc:stl.paginationMorning,
+                    searchInputDnmc:stl.searchInputMorning,userAvaDnmc:stl.userAvaMorning,followBTNDnmc:stl.followBTNMorning,
+                    userNameDnmc:stl.userNameMorning,userBlockInfoDnmc:stl.userBlockInfoMorning,moreUserUnitsDnmc:stl.moreUserUnitsMorning,
+                });
+                return;
+            case 'DAY':
+                setThemes({...themes,userPageDnmc: stl.usersPageDay,scroller:stl.scrollerDay,generalHeaderDnmc:stl.generalHeaderDay,
+                    pagBTNDnmc:stl.pagBTNDay,paginationSelectedDnmc:stl.paginationSelectedDay,paginationDnmc:stl.paginationDay,
+                    searchInputDnmc:stl.searchInputDay,userAvaDnmc:stl.userAvaDay,followBTNDnmc:stl.followBTNDay,
+                    userNameDnmc:stl.userNameDay,userBlockInfoDnmc:stl.userBlockInfoDay,moreUserUnitsDnmc:stl.moreUserUnitsDay
+                });
+                return;
+            case 'EVENING':
+                setThemes({...themes,userPageDnmc: stl.usersPageEvening,scroller:stl.scrollerEvening,generalHeaderDnmc:stl.generalHeaderEvening,
+                    pagBTNDnmc:stl.pagBTNEvening,paginationSelectedDnmc:stl.paginationSelectedEvening,paginationDnmc:stl.paginationEvening,
+                    searchInputDnmc:stl.searchInputEvening,userAvaDnmc:stl.userAvaEvening,followBTNDnmc:stl.followBTNEvening,
+                    userNameDnmc:stl.userNameEvening,userBlockInfoDnmc:stl.userBlockInfoEvening,moreUserUnitsDnmc:stl.moreUserUnitsEvening,
+                });
+                return;
+            default: return {...themes}
+        }
+    },[props.colorTheme]);
+
     return <>
-        <div className={stl.usersPage}>
-            <div className={stl.userInfo}>
-                <div className={stl.generalHeader}>
+        <div className={`${stl.usersPage} ${themes.userPageDnmc}`}>
+            <div className={`${stl.userInfo} ${themes.scroller}`}>
+                <div className={`${stl.generalHeader} ${themes.generalHeaderDnmc}`}>
                     <h2 className={stl.userHeader}>Users</h2>
 
                     <div className={stl.paginationBlockOutside}>
                         {!props.usersInfo.userSearchMode && pagesCount !== 0 &&
                         <>
-                            <button className={stl.pagBTN} onClick={paginatorDec}
+                            <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={paginatorDec}
                                     disabled={disableDec}> &#171; 5 </button>
                             { paginator() }
-                            <button className={stl.pagBTN} onClick={paginatorInc}
+                            <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={paginatorInc}
                                     disabled={disableInc}> 5 &#187;  </button>
                         </>
                         }
@@ -114,9 +145,9 @@ function Users(props) {
                                value={props.usersInfo.userSearchField}
                                onChange={onChangeListener}
                                onKeyUp={keyUpListener}
-                               className={stl.pagBTN}     />
-                        <button className={stl.pagBTN} onClick={searchListener}>Find!</button>
-                        <button className={stl.pagBTN} onClick={searchModeCloseListener}>X</button>
+                               className={`${stl.searchInput} ${themes.searchInputDnmc}`}     />
+                        <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchListener}>Find!</button>
+                        <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchModeCloseListener}>X</button>
                     </div>
 
                 </div>
@@ -145,7 +176,7 @@ function Users(props) {
                 <ul>
                     {props.usersInfo.isLoading ?
                         <div className={stl.loaderDiv}>
-                            <img className={stl.loader} src={props.usersInfo.loader} alt="Err"/>
+                            <img className={stl.loader} src={props.usersInfo.loader} alt="Err"/>  {/*ЛОДЫРЯ ПРОКИНУТЬ*/}
                         </div> :
                         props.usersInfo.initialUsersList
                             .map(user =>
@@ -153,7 +184,8 @@ function Users(props) {
                                     <div className={stl.userUnit}>
                                         <div className={stl.picAndButton}>
                                             <NavLink to={`/profile/${user.id}`}>
-                                                    <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'/>
+                                                    <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
+                                                    className={`${themes.userAvaDnmc}`}/>
                                             </NavLink>
                                             {user.followed
                                                 ?
@@ -161,7 +193,7 @@ function Users(props) {
                                                     disabled={props.usersInfo.followingInProgress.some(id =>
                                                         id == user.id)}
                                                     id={user.id}
-                                                    className={stl.followBTN}
+                                                    className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                                                     onClick={props.unFollowListener}>unFollow
                                                 </button>
                                                 :
@@ -169,18 +201,18 @@ function Users(props) {
                                                     disabled={props.usersInfo.followingInProgress.some(id =>
                                                         id == user.id)}
                                                     id={user.id}
-                                                    className={stl.followBTN}
+                                                    className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                                                     onClick={props.followListener}>Follow
                                                 </button>
                                             }
-                                            <button className={stl.followBTN}
+                                            <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                                                     onClick={()=>modalWindowSetter(user.id,user.name)}
                                             > Write message </button>
                                         </div>
-                                        <div className={stl.userBlockInfo}>
+                                        <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
                                             <div className={stl.nameAndState}>
                                                 <NavLink to={`/profile/${user.id}`}>
-                                                    <h2>{user.name} </h2>
+                                                    <h2 className={`${themes.userNameDnmc}`}>{user.name} </h2>
                                                 </NavLink>
                                                 <p>{user.status} </p>
                                             </div>
@@ -192,8 +224,8 @@ function Users(props) {
                 </ul>
 
             </div>
-            <div className={stl.moreUserUnits}>
-                <button className={stl.moreUsersShower}
+            <div className={ `${stl.moreUserUnits}  ${themes.moreUserUnitsDnmc}`}>
+                <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
                         onClick={props.showMoreListener}>Show More
                 </button>
             </div>

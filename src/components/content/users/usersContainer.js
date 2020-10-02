@@ -8,7 +8,7 @@ import {getCurrentPage, getHeaderAC, getPageSize, getTotalCount, getUsersACs, ge
     getDialogsACs,getMSGStat}
                                     from "../../../redux/users-selector";
 
-function UsersFuncContainer (props) { /*console.log(props)*/
+function UsersFuncContainer (props) { /*console.log(props.state.colorTheme  )*/
 
     useEffect( ()=>{ props.getUsersThunk(props.state.pageSize, props.state.currentPage)},[] );
 
@@ -26,6 +26,7 @@ function UsersFuncContainer (props) { /*console.log(props)*/
         pageSize                              = { props.state.pageSize       }
         currentPage                           = { props.state.currentPage    }
         sendingMSGStat                        = { props.state.sendingMSGStat }
+        colorTheme                            = { props.state.colorTheme     }
 
         followListener                        = { followListener             }
         unFollowListener                      = { unFollowListener           }
