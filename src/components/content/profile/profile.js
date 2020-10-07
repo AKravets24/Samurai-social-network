@@ -6,7 +6,7 @@ import Post                       from './post/post';
 import {StatusClass}              from "./statusBlock";
 
 function Profile(props) {
-    // console.log(props.colorTheme)
+    // console.log(props)
 
     let [themes, setThemes] = useState({profileDynamic:'',BTNs: '',textInput:''})
 
@@ -50,11 +50,10 @@ function Profile(props) {
                         <input type="file" name="image" id='file' onChange={photoSaver} className={stl.fileInput}/>
                         { props.state.myId === props.state.profile.userId       &&
                         <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`} onMouseEnter={funnyHover} onMouseLeave={funnyUnHover}
-                        >Choose your {funnyText}</label>
-                        }
+                        >Choose your {funnyText}</label>}
                         { props.state.myId !== props.state.profile.userId       &&
-                        <NavLink className={stl.writeMessage} to={`/dialogs/${props.state.profile.userId}` }> Write Message </NavLink>
-                        }
+                        <NavLink className={stl.writeMessage} to={`/dialogs/${props.state.profile.userId}` }
+                        > Write Message </NavLink> }
                     </div>
                     <div className={stl.profileInfo}>
                         <h2> {props.state.props.profile.fullName}</h2>

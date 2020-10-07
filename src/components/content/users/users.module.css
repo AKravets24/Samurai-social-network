@@ -10,10 +10,10 @@
     border-radius: 0 0 25px 0;
 }
 
-.usersPageNight   {}
-.usersPageMorning {}
-.usersPageDay     {background-color: lightyellow;}
-.usersPageEvening {background-color: #eba0a0;}
+.usersPageNight  ,.friendsGeneralN {background-color: #bee3fa;     }
+.usersPageMorning,.friendsGeneralM {background-color: #ffd9ba;     }
+.usersPageDay    ,.friendsGeneralD {background-color: lightyellow; }
+.usersPageEvening,.friendsGeneralE {background-color: #eba0a0;     }
 
 .userInfo ul {
     min-height: 500px;
@@ -51,8 +51,8 @@
 .scrollerMorning ul::-webkit-scrollbar-thumb  {background-color: orangered;   }
 
 .scrollerDay ul::-webkit-scrollbar            {background-color: lightyellow; }
-.scrollerDay ul::-webkit-scrollbar-button     {background-color: lightskyblue;}
-.scrollerDay ul::-webkit-scrollbar-thumb      {background-color: lightskyblue;}
+.scrollerDay ul::-webkit-scrollbar-button     {background-color: lightgreen;}
+.scrollerDay ul::-webkit-scrollbar-thumb      {background-color: lightgreen;}
 
 .scrollerEvening ul::-webkit-scrollbar        {background-color: lightyellow; }
 .scrollerEvening ul::-webkit-scrollbar-button {background-color: darkred;     }
@@ -71,10 +71,10 @@
     height: 50px;
 }
 
-.generalHeaderNight   {border-bottom: 1px solid blue;}
+.generalHeaderNight   {border-bottom: 1px solid blue;     }
 .generalHeaderMorning {border-bottom: 1px solid orangered;}
-.generalHeaderDay     {border-bottom: 1px solid green;}
-.generalHeaderEvening {border-bottom: 1px solid darkred;}
+.generalHeaderDay     {border-bottom: 1px solid green;    }
+.generalHeaderEvening {border-bottom: 1px solid darkred;  }
 
 .userHeader {
     color: red;
@@ -85,7 +85,7 @@
 
 .paginationBlockOutside {
     display: flex;
-    width: 50%;
+    width: 52%;
     height: 45px;
     margin: 0 auto;
 }
@@ -97,21 +97,21 @@
     border-radius: 10px;
     outline: none;
 }
-.pagBTNNight          {background-color: #4967ff;}
+.pagBTNNight          {background-color: #4967ff;                }
 .pagBTNNight:hover    {background-color: midnightblue;color:white}
-.pagBTNNight:active   {background-color: darkblue;color:white}
+.pagBTNNight:active   {background-color: darkblue;color:white    }
 
-.pagBTNMorning        {background-color: #ff652a;}
-.pagBTNMorning:hover  {background-color: #ff5b1d;color:white}
-.pagBTNMorning:active {background-color:#ff4700;color:white}
+.pagBTNMorning        {background-color: #ff8151;                }
+.pagBTNMorning:hover  {background-color: #ff5818;color:white     }
+.pagBTNMorning:active {background-color: #f12a11;color:white     }
 
-.pagBTNDay            {background-color: #98eaff;}
-.pagBTNDay:hover      {background-color: #6ad3ff;color:black }
-.pagBTNDay:active     {background-color: #3ad7ff;color:black}
+.pagBTNDay            {background-color: lightgreen;             }
+.pagBTNDay:hover      {background-color: #4dd14d;    color:black }
+.pagBTNDay:active     {background-color: #08ac08;    color:black }
 
-.pagBTNEvening        {background-color: indianred;}
-.pagBTNEvening:hover  {background-color: darkred; color:white}
-.pagBTNEvening:active {background-color: red; color:white}
+.pagBTNEvening        {background-color: indianred;              }
+.pagBTNEvening:hover  {background-color: darkred; color:white    }
+.pagBTNEvening:active {background-color: red; color:white        }
 
 
 
@@ -121,41 +121,57 @@
     font-size: 25px;
     text-align: center;
     margin-left: -10px;
+    /*background-color: white;*/
+    border-radius: 50%;
 }
+
+.paginationBlockInsideNight:hover    {background-color: white}
+.paginationBlockInsideNight:active   {background-color: white}
+
+.paginationBlockInsideMorning:hover  {background-color: white}
+.paginationBlockInsideMorning:active {background-color: white}
+
+.paginationBlockInsideDay:hover      {background-color: white}
+.paginationBlockInsideDay:active     {background-color: white}
+
+.paginationBlockInsideEvening:hover  {background-color: white}
+.paginationBlockInsideEvening:active {background-color: white}
 
 .paginationSelected {
     font-size: 25px;
 
 }
-.paginationSelectedNight   {}
-.paginationSelectedMorning {}
-.paginationSelectedDay     {color: red}
-.paginationSelectedEvening {color: red}
-
-
 
 .pagination {
     cursor: pointer;
     margin-left: 4px;
     font-size: 25px;
 }
-.paginationNight          {}
-.paginationNight:hover    {}
-.paginationNight:active   {}
+
+.paginationNight           {}
+.paginationNight:hover     {}
+.paginationNight:active    {}
+.paginationSelectedNight   {color: red}
 
 
-.paginationMorning        {}
-.paginationMorning:hover  {}
-.paginationMorning:active {}
+.paginationMorning         {color: black;}
+.paginationMorning:hover   {color: saddlebrown;}
+.paginationMorning:active  {color: red;}
+.paginationSelectedMorning {color: red}
 
 
-.paginationDay            {color: green;}
-.paginationDay:hover      {}
-.paginationDay:active     {}
+.paginationDay             {color: green;}
+.paginationDay:hover       {}
+.paginationDay:active      {}
+.paginationSelectedDay     {color: red}
 
-.paginationEvening        {color: lightyellow;}
-.paginationEvening:hover  {color: orangered;}
-.paginationEvening:active {color: red}
+
+.paginationEvening         {color: lightyellow;}
+.paginationEvening:hover   {color: orangered;}
+.paginationEvening:active  {color: red}
+.paginationSelectedEvening {color: red}
+
+
 
 
 .searchBlock {}
@@ -212,12 +228,17 @@
 }
 
 .userAvaNight   {}
-.userAvaMorning {}
-.userAvaDay       {border: 3px solid transparent;}
-.userAvaDay:hover {border: 3px solid green;}
+.userAvaMorning        {border: 6px solid transparent; }
+.userAvaMorning:hover  {border: 6px solid #ff8151;     }
+.userAvaMorning:active {border: 6px solid #f12a11;     }
 
-.userAvaEvening {border: 3px solid transparent; }
-.userAvaEvening:hover {border: 3px solid darkred;}
+.userAvaDay           {border: 6px solid transparent;  }
+.userAvaDay:hover     {border: 6px solid green;        }
+.userAvaDay:active    {border: 6px solid darkgreen;    }
+
+.userAvaEvening       {border: 6px solid transparent; }
+.userAvaEvening:hover {border: 6px solid darkred;     }
+.userAvaEvening:hover {border: 6px solid red;         }
 
 
 .followBTN {
@@ -242,24 +263,24 @@
 /*    border: 2px solid blue;*/
 /*}*/
 
-.followBTNNight          {background-color: #4967ff;}
-.followBTNNight:hover    {background-color: midnightblue;color:white}
-.followBTNNight:active   {background-color: darkblue;color:white}
+.followBTNNight          {background-color: #4967ff;                              }
+.followBTNNight:hover    {background-color: midnightblue; color:white;            }
+.followBTNNight:active   {background-color: darkblue;     color:white;            }
 
 
-.followBTNMorning        {background-color: #ff652a;}
-.followBTNMorning:hover  {background-color: #ff5b1d;}
-.followBTNMorning:active {background-color:#ff4700;}
+.followBTNMorning        {background-color: #ff8151;                              }
+.followBTNMorning:hover  {background-color: #ff5818; color:white;                 }
+.followBTNMorning:active {background-color: #f12a11; color:white;                 }
 
 
-.followBTNDay            {background-color: lightgreen;  border: 2px solid green;}
-.followBTNDay:hover      {background-color: #fdfd69;color:black }
-.followBTNDay:active     {background-color: #f1f14f;color:black}
+.followBTNDay            {background-color: lightgreen; border: 2px solid green;  }
+.followBTNDay:hover      {background-color: #4dd14d;    color:black               }
+.followBTNDay:active     {background-color: #08ac08;    color:black               }
 
 
-.followBTNEvening        {background-color: indianred;}
-.followBTNEvening:hover  {background-color: darkred; color:white}
-.followBTNEvening:active {background-color: red; color:white}
+.followBTNEvening        {background-color: indianred;                            }
+.followBTNEvening:hover  {background-color: darkred; color:white                  }
+.followBTNEvening:active {background-color: red; color:white                      }
 
 
 .modalWindow {
@@ -375,24 +396,24 @@
     margin-top: 35px;
 }
 
-.userNameNight          {color: #4967ff;}
-.userNameNight:hover    {color: midnightblue;}
-.userNameNight:active   {color: darkblue;}
+.userNameNight          {color: #4967ff;      }
+.userNameNight:hover    {color: midnightblue; }
+.userNameNight:active   {color: darkblue;     }
 
 
-.userNameMorning        {color: #ff652a;}
-.userNameMorning:hover  {color: #ff5b1d;}
-.userNameMorning:active {color:#ff4700;}
+.userNameMorning        {color: #ff652a;      }
+.userNameMorning:hover  {color: #ff5b1d;      }
+.userNameMorning:active {color :#ff4700;      }
 
 
-.userNameDay            {color: lightgreen;}
-.userNameDay:hover      {color: #fdfd69; }
-.userNameDay:active     {color: #f1f14f;}
+.userNameDay            {color: green;        }
+.userNameDay:hover      {color: #4dd14d;      }
+.userNameDay:active     {color: #08ac08;      }
 
 
-.userNameEvening        {color: darkred;}
-.userNameEvening:hover  {color: indianred; }
-.userNameEvening:active {color: red; }
+.userNameEvening        {color: darkred;      }
+.userNameEvening:hover  {color: indianred;    }
+.userNameEvening:active {color: red;          }
 
 
 .nameAndState p {

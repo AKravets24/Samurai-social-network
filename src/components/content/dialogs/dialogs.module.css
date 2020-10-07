@@ -87,9 +87,7 @@
     margin-left: 15px;
 }
 
-.dialogList a:first-child {
-
-}
+.dialogList a:first-child {}
 
 .dialogList a:last-child {
     display: inline;
@@ -122,10 +120,10 @@
     padding-right: 2%;
     hyphens: auto;
 }
-.talkerBlockNight   {background-color: #a9c2ff;}
-.talkerBlockMorning {background-color: #ffffef;}
-.talkerBlockDay     {background-color: lightyellow;}
-.talkerBlockEvening {background-color: #ffddec;}
+.talkerBlockNight           {background-color: #a9c2ff;}
+.talkerBlockMorning         {background-color: #ffffef;}
+.talkerBlockDay             {background-color: lightyellow;}
+.talkerBlockEvening         {background-color: #ffddec;}
 
 
 

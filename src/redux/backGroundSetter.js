@@ -57,9 +57,6 @@ export const backgroundReducer = (state = initialState, action) => {
                 return {...state, theme: 'EVENING', backgroundPic: imgEvening, timeToChangeTheme: 1440 - action.timer,
                     userLoaderTheme: userEveningLoader,  profilePanoramaPic: eveningPanorama,
                 }
-                // return {...state, theme: 'DAY', backgroundPic: imgDay, timeToChangeTheme: 1080 - action.timer,
-                //     userLoaderTheme: userDayLoader, profilePanoramaPic: dayPanorama,
-                // }
             }
         default: return state;
     }

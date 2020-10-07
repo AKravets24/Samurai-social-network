@@ -2,10 +2,10 @@
     /*background-color: lightyellow;*/
     opacity: 0.9;
 }
-.profileNight {background-color: #72c6e1;}
-.profileMorning {background-color: #ffad6c;}
-.profileDay {background-color: lightyellow;}
-.profileEvening {background-color: #eba0a0;}
+.profileNight   {background-color: #72c6e1;    }
+.profileMorning {background-color: #ffad6c;    }
+.profileDay     {background-color: lightyellow;}
+.profileEvening {background-color: #eba0a0;    }
 
 .loaderDiv {
     width: 100%;

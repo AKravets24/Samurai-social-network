@@ -12,18 +12,10 @@ import UsersContainer from "./users/usersContainer";
 import UnAuthorised from "./unAuthorised/unAuthorised";
 import FriendsComposer from "./friends/friendsContainer";
 import NotFound from "./404/404";
-import {withAuthRedirect} from "./HOC/withAuthRedirect";  // ? нужен ли
+// import {withAuthRedirect} from "./HOC/withAuthRedirect";  // ? нужен ли
 
-class contentCompContainer  extends React.Component { constructor(props) { super(props);  /*console.log(props)*/ }
-
-    componentDidUpdate() {
-    if (this.props.myId) {
-        // console.log(this.props)
-    }
-}
-
-    render() {
-        return <Content myId={this.props.myId} isAuth={this.props.isAuth} pathname={this.props.location.pathname}/>}
+function ContentCompContainer (props){ /*console.log(props)*/
+        return <Content myId={props.myId} isAuth={props.isAuth} pathname={props.location.pathname}/>
 };
 
 function Content(props) {
@@ -72,11 +64,14 @@ let mapStateToProps = (state)=> {  /*console.log(state)*/
 export default compose (
     connect(mapStateToProps),
     withRouter,
-)(contentCompContainer);
+)(ContentCompContainer);
 
 
 // export default connect(mapStateToProps) (contentCompContainer)
 
+// class contentCompContainer extends React.Component { constructor(props) { super(props);  console.log(props) }
+//     render(){return<Content myId={this.props.myId} isAuth={this.props.isAuth} pathname={this.props.location.pathname}/>}
+// };
 
 
 

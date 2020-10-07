@@ -26,19 +26,16 @@ function Users(props) {
         endPage >= pagesCount ? setDisableInc(disableInc = true) : setDisableInc(disableInc = false);
     };
     let paginator    = () => {
-        let pagesArr = [];
+        let pagesArr=[];
         // let pagesCount = Math.ceil(props.totalCount / props.pageSize);
-        for (let i = startPage; i <= endPage; i++) {
-            if (startPage < 1) {setStartPage(startPage = 1); setEndPage(endPage = scrollStep)}
-            if (endPage > pagesCount) {setStartPage(startPage = pagesCount - scrollStep);setEndPage(endPage = pagesCount)}
-            pagesArr.push(i)
+        for (let i=startPage;i<=endPage;i++){if(startPage<1){setStartPage(1);setEndPage(endPage=scrollStep)}
+            if(endPage>pagesCount){setStartPage(pagesCount-scrollStep);setEndPage(pagesCount)}; pagesArr.push(i)
         }
-
-        return pagesArr.map((page, index) =>
-            <div key={index} className={stl.paginationBlockInside}>
+        return pagesArr.map((page, i) =>
+            <div key={i} className={`${stl.paginationBlockInside} ${themes.paginationBlockDnmc}` }>
                 {props.currentPage === page ?
-                        <span className={ `${stl.paginationSelected} ${themes.paginationSelectedDnmc}`}> {page} </span> :
-                        <span className={`${stl.pagination} ${themes.paginationDnmc}`} onClick={() => {setPageListener(page);
+                    <span className={ `${stl.paginationSelected} ${themes.paginationSelectedDnmc}`}> {page} </span> :
+                    <span className={`${stl.pagination} ${themes.paginationDnmc}`} onClick={()=>{setPageListener(page);
                         }}> {page} </span>}
             </div>
         );
@@ -84,8 +81,8 @@ function Users(props) {
     };
 
     let [themes, setThemes] = useState({userPageDynamic:"",scroller:'',generalHeaderDnmc:'',pagBTNDnmc:'',
-        paginationSelectedDnmc:'',paginationDnmc:'', searchInputDnmc:'',userAvaDnmc:'',followBTNDnmc:'',userNameDnmc:'',
-        userBlockInfoDnmc:'',moreUserUnitsDnmc:'',
+        paginationSelectedDnmc:'',paginationDnmc:'', paginationBlockDnmc:'', searchInputDnmc:'',userAvaDnmc:'',
+        followBTNDnmc:'',userNameDnmc:'', userBlockInfoDnmc:'',moreUserUnitsDnmc:'',
     });
 
     useEffect(()=> {
@@ -93,6 +90,7 @@ function Users(props) {
             case 'NIGHT':
                 setThemes({...themes,userPageDnmc: stl.usersPageNight,scroller:stl.scrollerNight,generalHeaderDnmc:stl.generalHeaderNight,
                     pagBTNDnmc:stl.pagBTNNight, paginationSelectedDnmc:stl.paginationSelectedNight,paginationDnmc:stl.paginationNight,
+                    paginationBlockDnmc:stl.paginationBlockInsideNight,
                     searchInputDnmc:stl.searchInputNight,userAvaDnmc:stl.userAvaNight,followBTNDnmc:stl.followBTNNight,
                     userNameDnmc:stl.userNameNight,userBlockInfoDnmc:stl.userBlockInfoNight,moreUserUnitsDnmc:stl.moreUserUnitsNight,
                 });
@@ -100,6 +98,7 @@ function Users(props) {
             case 'MORNING':
                 setThemes({...themes,userPageDnmc: stl.usersPageMorning,scroller:stl.scrollerMorning,generalHeaderDnmc:stl.generalHeaderMorning,
                     pagBTNDnmc:stl.pagBTNMorning,paginationSelectedDnmc:stl.paginationSelectedMorning,paginationDnmc:stl.paginationMorning,
+                    paginationBlockDnmc:stl.paginationBlockInsideMorning,
                     searchInputDnmc:stl.searchInputMorning,userAvaDnmc:stl.userAvaMorning,followBTNDnmc:stl.followBTNMorning,
                     userNameDnmc:stl.userNameMorning,userBlockInfoDnmc:stl.userBlockInfoMorning,moreUserUnitsDnmc:stl.moreUserUnitsMorning,
                 });
@@ -107,6 +106,7 @@ function Users(props) {
             case 'DAY':
                 setThemes({...themes,userPageDnmc: stl.usersPageDay,scroller:stl.scrollerDay,generalHeaderDnmc:stl.generalHeaderDay,
                     pagBTNDnmc:stl.pagBTNDay,paginationSelectedDnmc:stl.paginationSelectedDay,paginationDnmc:stl.paginationDay,
+                    paginationBlockDnmc:stl.paginationBlockInsideDay,
                     searchInputDnmc:stl.searchInputDay,userAvaDnmc:stl.userAvaDay,followBTNDnmc:stl.followBTNDay,
                     userNameDnmc:stl.userNameDay,userBlockInfoDnmc:stl.userBlockInfoDay,moreUserUnitsDnmc:stl.moreUserUnitsDay
                 });
@@ -114,6 +114,7 @@ function Users(props) {
             case 'EVENING':
                 setThemes({...themes,userPageDnmc: stl.usersPageEvening,scroller:stl.scrollerEvening,generalHeaderDnmc:stl.generalHeaderEvening,
                     pagBTNDnmc:stl.pagBTNEvening,paginationSelectedDnmc:stl.paginationSelectedEvening,paginationDnmc:stl.paginationEvening,
+                    paginationBlockDnmc:stl.paginationBlockInsideEvening,
                     searchInputDnmc:stl.searchInputEvening,userAvaDnmc:stl.userAvaEvening,followBTNDnmc:stl.followBTNEvening,
                     userNameDnmc:stl.userNameEvening,userBlockInfoDnmc:stl.userBlockInfoEvening,moreUserUnitsDnmc:stl.moreUserUnitsEvening,
                 });
@@ -139,7 +140,6 @@ function Users(props) {
                         </>
                         }
                     </div>
-
                     <div className={stl.searchBlock} >
                         <input type="text"
                                value={props.usersInfo.userSearchField}
@@ -149,7 +149,6 @@ function Users(props) {
                         <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchListener}>Find!</button>
                         <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchModeCloseListener}>X</button>
                     </div>
-
                 </div>
                 {modalWindow &&
                     <div className={stl.modalWindow}>
@@ -187,24 +186,13 @@ function Users(props) {
                                                     <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
                                                     className={`${themes.userAvaDnmc}`}/>
                                             </NavLink>
-                                            {user.followed
-                                                ?
-                                                <button
-                                                    disabled={props.usersInfo.followingInProgress.some(id =>
-                                                        id == user.id)}
-                                                    id={user.id}
-                                                    className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                                    onClick={props.unFollowListener}>unFollow
-                                                </button>
-                                                :
-                                                <button
-                                                    disabled={props.usersInfo.followingInProgress.some(id =>
-                                                        id == user.id)}
-                                                    id={user.id}
-                                                    className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                                    onClick={props.followListener}>Follow
-                                                </button>
-                                            }
+                                            <button
+                                                disabled={props.usersInfo.followingInProgress.some(id=>id==user.id)}
+                                                id={user.id}
+                                                className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                onClick={user.followed?props.unFollowListener:props.followListener}>
+                                                {user.followed?'unFollow':'Follow'}
+                                            </button>
                                             <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                                                     onClick={()=>modalWindowSetter(user.id,user.name)}
                                             > Write message </button>
@@ -222,7 +210,6 @@ function Users(props) {
                             )
                     }
                 </ul>
-
             </div>
             <div className={ `${stl.moreUserUnits}  ${themes.moreUserUnitsDnmc}`}>
                 <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}

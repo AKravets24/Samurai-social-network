@@ -6,7 +6,7 @@ import {Formik}                              from 'formik';
 import stl                                   from './dialogs.module.css';
 
 function Dialogs(props) {
-    console.log(props.colorTheme);
+    // console.log(props.colorTheme);
 
     let [themes, setThemes] = useState({dialogDynamic:'',firstScroller:'',talkerBlockTheme:'',activeLink:'', talkerBlockA:'',
         msgMeDynamic:'',msgUserDynamic:'',dialogAreaBackgroundNSecondScroll:'', textAreaDynamic:'',sendBTNDynamic:''})
@@ -43,28 +43,30 @@ function Dialogs(props) {
         }},[props.colorTheme])
 
     const dialogArea  = useRef(null);
-    const bufferBlock = useRef(null);
+    const bufferBlock = useRef('');
 
-    let [dialogId, setDialogId]                 = useState(+props.userIdInURL);
-    let [visibility,  setVisibility]            = useState(stl.visibility); // !!!normally must be  stl.visibility !! else - null
-    let [pageNumber, setPageNumber]             = useState(2);
-    let [msgsMapDone, setMsgsMapDone]           = useState(false);
-    let [dialogAreaHeight, setDialogAreaHeight] = useState(0);
+    let [dialogId,         setDialogId]          = useState(+props.userIdInURL);
+    let [visibility,       setVisibility]        = useState(stl.visibility); // !!!normally must be  stl.visibility !! else - null
+    let [pageNumber,       setPageNumber]        = useState(2);
+    let [msgsMapDone,      setMsgsMapDone]       = useState(false);
+    let [dialogAreaHeight, setDialogAreaHeight]  = useState(0);
 
-    let usePrevious=(value)=> {let ref=useRef();useEffect(()=>{ref.current=value;});return ref.current;}
+    let usePrevious=(value)=> {let ref=useRef();useEffect(()=>{ref.current=value});return ref.current;};
     let prevCount = usePrevious(dialogAreaHeight);
     let sendMessageListener = (userId,msg)=>{setDialogId(dialogId=userId);props.sendMessageToUserThunk(userId,msg.substring(0, msg.length-1))};
     let getTalk = (userId) => {setDialogId(dialogId=userId); props.getTalkWithUserThunk(dialogId)};
-    let scrollToDown = (bufferBlock) => {bufferBlock.current.scrollIntoView({behavior: "auto"})};
-    let oldMsgLazyLoader=()=>{let msgCount=20;props.addPrevMessagesThunk(dialogId,msgCount,pageNumber);setPageNumber(pageNumber+1);};
+    let scrollToDown = (bufferBlock) => {bufferBlock.current&&bufferBlock.current.scrollIntoView({behavior: "auto"})};
 
-    useEffect( ()=> {!props.state.prevMsgsIsLoading && dialogArea.current.scrollTo(0,dialogAreaHeight-prevCount)
-    },[props.state.prevMsgsIsLoading] )
+    let oldMsgLazyLoader=()=>{let msgCount=20;props.addPrevMessagesThunk(dialogId,msgCount,pageNumber);setPageNumber(pageNumber+1)};
 
-    useEffect( ()=>{setDialogAreaHeight(dialogAreaHeight=dialogArea.current.scrollHeight);return ()=>setDialogAreaHeight(0);
+    useEffect(()=> {!props.state.prevMsgsIsLoading && dialogArea.current.scrollTo(0,dialogAreaHeight-prevCount)
+    },[props.state.prevMsgsIsLoading])
+
+    useEffect( ()=>{setDialogAreaHeight(dialogAreaHeight=dialogArea.current.scrollHeight);
+    return setDialogAreaHeight(0);
     }, [props.state] );
 
-    useEffect( ()=> { msgsMapDone && bufferBlock && scrollToDown(bufferBlock) },[msgsMapDone])
+    useEffect( ()=>{ /*msgsMapDone &&*/ scrollToDown(bufferBlock)},[msgsMapDone])
 
     return <>
         <div className={`${stl.dialogsPage} ${themes.dialogDynamic}`}>
@@ -123,11 +125,11 @@ function Dialogs(props) {
                           </div>
                       </div>
                    })}
-                <div ref={bufferBlock}/>
+                    <div ref={bufferBlock}/>
                 </div>
                     <div className={stl.sender}>
                     <Formik initialValues={{text:''}} validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
-                            onSubmit={(values,{setSubmitting})=>{sendMessageListener(dialogId, values.text);values.text='';setSubmitting(false);
+                            onSubmit={(values,{setSubmitting})=>{sendMessageListener(dialogId,values.text);values.text='';setSubmitting(false);
                             }}>
                         {({values, errors,handleChange,handleSubmit,isSubmitting,}) => (
                             <form onSubmit={handleSubmit}>

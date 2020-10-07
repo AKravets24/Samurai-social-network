@@ -1,29 +1,24 @@
-import React from "react";
-import {connect} from 'react-redux';
-import {Friends} from './friends'
-import {compose} from 'redux';
-import {withRouter} from 'react-router-dom';
+import React,{useEffect,useMemo}  from "react";
+import {connect}                  from 'react-redux';
+import {Friends}                  from './friends'
+import {compose}                  from 'redux';
+import {withRouter}               from 'react-router-dom';
 
 
-class friendsClassContainer extends React.Component { constructor(props) { super(props);
-        // console.log(props)
-    }
+function FriendsFuncContainer (props) {
+    console.log(props)
 
-    componentDidMount() { this.props.getMyFriendsListThunk() }
+    useEffect(()=> {props.getMyFriendsListThunk()},[]);
 
-    render() {
-        return (
-            <Friends
-            friendsList         = { this.props.state.friendsList         }
-            defaultAvatar       = { this.props.state.defaultAvatar       }
-            followThunk         = { this.props.followThunk               }
-            unFollowThunk       = { this.props.unFollowThunk             }
-            followingInProgress = { this.props.state.followingInProgress }
-            />
-        )
-    }
-};
-
+    return <Friends
+        friendsList         = { props.state.friendsList         }
+        defaultAvatar       = { props.state.defaultAvatar       }
+        followThunk         = { props.followThunk               }
+        unFollowThunk       = { props.unFollowThunk             }
+        followingInProgress = { props.state.followingInProgress }
+        colorTheme          = { props.state.colorTheme          }
+    />
+}
 
 const mapStateToProps = (state) => {
     // console.log(state.friendsReducer.followingInProgress);
@@ -32,6 +27,7 @@ const mapStateToProps = (state) => {
         defaultAvatar:        state.friendsReducer.defaultAvatar,
         friendsACs:           state.friendsACs,
         followingInProgress:  state.friendsReducer.followingInProgress,
+        colorTheme:           state.backgroundReducer.theme,
     }
 };
 
@@ -41,16 +37,15 @@ const mergeProps = (stateProps, dispatchProps) => {
     // console.log( stateProps );
 
     const getMyFriendsListThunk = () =>        dispatch (state.friendsACs.getMyFriendsListThunkAC() );
-    const followThunk           = (userId) =>  dispatch (state.friendsACs.followThunkAC(userId)     )
-    const unFollowThunk         = (userId) =>  dispatch (state.friendsACs.unFollowThunkAC(userId)   )
+    const followThunk           = (userId) =>  dispatch (state.friendsACs.followThunkAC(userId)     );
+    const unFollowThunk         = (userId) =>  dispatch (state.friendsACs.unFollowThunkAC(userId)   );
 
     return { state, getMyFriendsListThunk, followThunk, unFollowThunk,  }
 };
-
 
 export default compose(
     connect(mapStateToProps ,null, mergeProps),
     withRouter,
     // withAuthRedirect,
-)(friendsClassContainer);
+)(FriendsFuncContainer);
 
