@@ -2,10 +2,10 @@
     /*background-color: lightyellow;*/
     opacity: 0.9;
 }
-.profileNight   {background-color: #72c6e1;    }
-.profileMorning {background-color: #ffad6c;    }
-.profileDay     {background-color: lightyellow;}
-.profileEvening {background-color: #eba0a0;    }
+.profileN { background-color: #cfedff;     }
+.profileM { background-color: #fbc498;     }
+.profileD { background-color: lightyellow; }
+.profileE { background-color: #fef0f0;     }
 
 .loaderDiv {
     width: 100%;
@@ -16,10 +16,20 @@
     margin: 100px auto;
 }
 
-.panorama img {
+.panorama {
+    width: 100%;
+    min-height: 376px;
+}
+
+.panoramaPic {
     width: 100%;
     border-radius: 4px;
     margin-bottom: 5px;
+}
+
+.panoramaGIF {
+    /*width: 10%;*/
+    width: 100px;
 }
 
 .profileWrapper {
@@ -35,10 +45,14 @@
     width: 35%;
 }
 
+.profilePicNBTN div:first-child {
+    height: 342px;
+}
 
 .profilePicNBTN img {
     border-radius: 5px;
     width: 100%;
+    /*height: 90%;*/
     vertical-align: center;
 }
 
@@ -50,6 +64,7 @@
 .writeMessage {
     display: block;
     width: 100%;
+    height: 33px;
     cursor: pointer;
     font-size: 25px;
     text-align: center;
@@ -57,30 +72,57 @@
     border: 1px solid grey;
 }
 
-.BTNsNight{background-color: #4967ff;}
-.BTNsNight:hover{background-color: midnightblue;color:white}
-.BTNsNight:active{background-color: darkblue;color:white}
+.fileChooser img {
+    height: 20px;
+    width:  70px;
+}
+
+.fileChooser div:first-child {
+    height: 33px;
+}
+
+.fileChooser div:nth-child(2) {
+    display: none;
+}
+
+.fileChooser:hover  div:nth-child(1) {
+    display: none;
+}
+
+.fileChooser:hover  div:nth-child(2) {
+    height: 33px;
+    display: block;
+}
+
+/*.fileChooser:hover {*/
+/*    font-size: 30px;*/
+/*}*/
+
+.BTNsN          {background-color: #4967ff;}
+.BTNsN:hover    {background-color: midnightblue;color:white}
+.BTNsN:active   {background-color: darkblue;color:white}
 
 
-.BTNsMorning{background-color: #ff652a;}
-.BTNsMorning:hover{background-color: #ff5b1d;}
-.BTNsMorning:active{background-color:#ff4700;}
+.BTNsM          {background-color: #ff652a;}
+.BTNsM:hover    {background-color: #ff5b1d;}
+.BTNsM:active   {background-color:#ff4700;}
 
 
-.BTNsDay{background-color: #ffff92;}
-.BTNsDay:hover{background-color: #fdfd69;color:black }
-.BTNsDay:active{background-color: #f1f14f;color:black}
+.BTNsD          {background-color: #ffff92;}
+.BTNsD:hover    {background-color: #fdfd69;color:black }
+.BTNsD:active   {background-color: #f1f14f;color:black}
 
 
-.BTNsEvening{background-color: indianred;}
-.BTNsEvening:hover{background-color: darkred; color:white}
-.BTNsEvening:active{background-color: red; color:white}
+.BTNsE          {background-color: indianred;}
+.BTNsE:hover    {background-color: darkred; color:white}
+.BTNsE:active   {background-color: red; color:white}
 
 
 .profileInfo {
     width: 65%;
     margin-left: 5%;
     border-top: 2px solid lightgreen;
+    height: 370px;
 }
 
 .profileInfo h2 {
@@ -93,6 +135,7 @@
     list-style-type: none;
     padding-left: 0;
     font-size: 24px;
+    height: 74%;
 }
 
 
@@ -126,12 +169,13 @@
     font-size: 26px;
     outline: none;
     resize: none;
+    border: 2px solid black;
 }
 
-.inputNight{background-color: #b9ebff}
-.inputMorning{background-color: #fff2eb}
-.inputDay{background-color: #feffeb}
-.inputEvening{background-color: #ffc8d9}
+.inputN   {background-color: #b9ebff}
+.inputM   {background-color: #fff2eb}
+.inputD   {background-color: #feffeb}
+.inputE   {background-color: #faebeb}
 
 .writePost button {
     grid-area: snd;

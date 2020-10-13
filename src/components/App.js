@@ -48,7 +48,7 @@ function AppContainer(props) {
     // console.log(props.timeKeeper)
     useEffect(()=>{props.getInitializeAppThunk();/*this.props.getLogInThunk()*/},[]);
     setInterval(()=>{props.themeUpdater()}, props.timeKeeper); // РАБОТАЕТ(?) НЕОПТИМАЛЬНО
-    return <App appInitialized={props.state.appInitialized} initLoader={props.state.backgroundReducer.userLoaderTheme}/>
+    return <App appInitialized={props.state.appInitialized} initLoader={props.state.backgroundReducer.auth_LDR_GIF}/>
 
 }
 

@@ -1,6 +1,6 @@
-import userLoader from './loader/users/24.gif'
+import userLoader     from './loader/users/24.gif'
 import maleProfilePic from './img/dialogs/male.jpg'
-import { usersApi } from "./app";
+import { usersApi }   from "./app";
 
 const FOLLOW                        = 'FOLLOW';
 const UNFOLLOW                      = 'UNFOLLOW';

@@ -1,34 +1,27 @@
-import Avatar                     from "./img/propfilePic/avatar.jpg";
+import Avatar                     from "./img/profilePic/avatar.jpg";
 import maleProfilePic             from './img/dialogs/male.jpg'
 import userMale                   from './img/dialogs/userMale.jpg'
-// import {userLoaderTheme}       from "./backGroundSetter";
-import {userMorningLoader}        from "./backGroundSetter";
+
 import {usersApi}                 from "./app";
 
 const ADD_POST                    = "ADD-POST";
 const SET_USER_PROFILE            = 'SET_USER_PROFILE';
 const TOGGLE_IS_LOADING           = 'TOGGLE_IS_LOADING';
-const STATUS_CHANGER              = 'STATUS_CHANGER';
 const MY_STATUS_SETTER            = 'MY_STATUS_SETTER';
 const UPDATE_MY_AVATAR            = 'UPDATE_MY_AVATAR';
 const GET_MY_AVATAR               = 'GET_MY_AVATAR';
 const USER_STATUS_SETTER          = 'USER_STATUS_SETTER';
 
 const addPostAC                   = (finalPost, date, time) => ({type: ADD_POST, txt: finalPost, date, time});
-const setUserProfileAC            = (profile)               => ({type: SET_USER_PROFILE, profile });
+const setUserProfileAC            = (profileData)               => ({type: SET_USER_PROFILE, profileData });
 const toggleIsLoadingAC           = (isLoading)             => ({type: TOGGLE_IS_LOADING, isLoading});
 const myStatusSetterAC            = (status)                => ({type: MY_STATUS_SETTER, status});
-const statusChangeAC              = (text)                  => ({type: STATUS_CHANGER, text: text});
 const updateStatusThunkAC         = (text)                  => (dispatch) => {
     usersApi.updateMyStatus(text)
         .then(data =>{
             let finalStatus = JSON.parse(data);
-            dispatch(statusChangeAC(finalStatus.status))
             dispatch(myStatusSetterAC(finalStatus.status))
         })
-};
-const getMyStatusThunkAC          = ()                      => (dispatch) =>             {
-    usersApi.getMyStatus().then(data => { dispatch(myStatusSetterAC(data))})
 };
 const updateMyAvatarAC            = (file)                  => ({type: UPDATE_MY_AVATAR, file });
 const updateMyAvatarThunkAC       = (file)                  => (dispatch) => {
@@ -57,7 +50,7 @@ const getMyProfileThunkAC         = (myId)                  => (dispatch) => {
             .then( (data) => {
                 dispatch(setUserProfileAC(data));
                 // console.log(data)
-                dispatch(getMyAvatarAC(data.photos.large))
+                // dispatch(getMyAvatarAC(data.photos.large))
                 dispatch(toggleIsLoadingAC(false));
             });
     }
@@ -68,13 +61,15 @@ const getUserStatusThunkAC        = (userId)                => (dispatch) => {
         // console.log(data)
         dispatch(UserStatusSetterAC(data))}  )
 };
-
+const getMyStatusThunkAC          = ()                      => (dispatch) => {
+    usersApi.getMyStatus().then(data => { dispatch(myStatusSetterAC(data))})
+};
 
 const profilePictures = { avatarPic: Avatar, };
 export const profilePics = (state = profilePictures)=> { return state };
 
 const actionsCreators = { addPostAC, setUserProfileAC, toggleIsLoadingAC, getProfileThUnkAC,
-    statusChangeAC, updateStatusThunkAC, getMyStatusThunkAC, updateMyAvatarThunkAC,
+    updateStatusThunkAC, getMyStatusThunkAC, updateMyAvatarThunkAC,
     getMyProfileThunkAC, getUserStatusThunkAC, };
 
 export const profileACs = (state= actionsCreators)=> { return state };
@@ -87,17 +82,14 @@ let initialProfileState = {
         {"id": 2, "likesCount": 25, "date": "28.04.20", "time": "14:30", "message": "how are you?"},
         {"id": 1, "likesCount": 12, "date": "28.04.20", "time": "14:00", "message": "hey"},
     ],
-    profile:          {
+    profileData:      {
         photos: {
             small: null,
             large: null,
             }
         },
     isLoading:        false,
-    loader:           userMorningLoader,
-    statusEdit:       false,
     statusField:      '',
-    previousStatus:   '',
     myAvatarSmall:    maleProfilePic,
     myAvatarLarge:    maleProfilePic,
 };
@@ -119,13 +111,9 @@ export const profileReducer = (state = initialProfileState, action,  date, time)
 
         case SET_USER_PROFILE:
             // console.log('SET_USER_PROFILE');
-            return {...state, profile: action.profile, myId: action.profile.id };
+            return {...state, profileData: action.profileData,/* myId: action.profileData.id*/ };
 
         case TOGGLE_IS_LOADING: return {...state, isLoading: action.isLoading};
-
-        case STATUS_CHANGER:
-            // console.log('STATUS_CHANGER')
-            stateCopy.statusField = action.text; return stateCopy;
 
         case MY_STATUS_SETTER:
             // console.log('MY_STATUS_SETTER');
@@ -139,7 +127,7 @@ export const profileReducer = (state = initialProfileState, action,  date, time)
             return {...state, myAvatarLarge: action.file, myAvatarSmall: action.file };
 
         case GET_MY_AVATAR:
-            return {...state, ...state.profile.photos.large = action.myAva, ...state.profile.photos.small = action.myAva };
+            return {...state, ...state.profileData.photos.large = action.myAva, ...state.profileData.photos.small = action.myAva };
 
         case USER_STATUS_SETTER:
             // console.log('USER_STATUS_SETTER')

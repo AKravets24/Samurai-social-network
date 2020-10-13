@@ -5,13 +5,11 @@ import { withRouter } from 'react-router-dom';
 import { withAuthRedirect } from "../HOC/withAuthRedirect";
 import { compose } from 'redux';
 
-function ProfileFuncContainer (props) {
-     console.log(props);
+const ProfileFuncContainer = React.memo( props => {
+// function ProfileFuncContainer (props) {
+//      console.log(props);
 
-    // const [myId]          = useState(props.state.myId)
-    // const [comparativeId] = useState(+props.match.params.userId)
-
-    let myId = props.state.myId;
+    let myId = props.profileState.myId;
     let comparativeId = +props.match.params.userId;
 
     useEffect( ()=> {
@@ -25,34 +23,34 @@ function ProfileFuncContainer (props) {
     },[myId, comparativeId] );
 
     return <Profile
-        addPost             = { props.addPost                  }
-        state               = { props.state                    }
-        match               = { props.match                    }
-        stateChanger        = { props.stateChanger             }
-        updateStatusThunk   = { props.updateStatusThunk        }
-        updateMyAvatarThunk = { props.updateMyAvatarThunk      }
-        getMyStatusThunk    = { props.getMyStatusThunk         }
-        loader              = { props.state.loader             }
-        panoramaPic         = { props.state.dynamicPanoramaPic }
-        colorTheme          = { props.state.colorTheme         }
+        addPost             = { props.addPost                       }
+        state               = { props.profileState                      } // нужен рефактор
+        match               = { props.match                         }
+        updateStatusThunk   = { props.updateStatusThunk             }
+        updateMyAvatarThunk = { props.updateMyAvatarThunk           }
+        getMyStatusThunk    = { props.getMyStatusThunk              }
     />
-}
+})
 
 let mapStateToProps = (state)=> {
-    // console.log(state.backgroundReducer.theme);
+    // console.log(state.backgroundReducer);
     return {
         myId:               state.appAuthReducer.id,
         profilePics:        state.profilePics,
-        dynamicPanoramaPic: state.backgroundReducer.profilePanoramaPic,
-        props:              state.profileReducer,
+        profileMedia:       state.profileReducer,
         profileACs:         state.profileACs,
-        profile:            state.profileReducer.profile,
-        loader:             state.backgroundReducer.userLoaderTheme,
+
         colorTheme:         state.backgroundReducer.theme,
+        auth_LDR_GIF:       state.backgroundReducer.auth_LDR_GIF,
+        ava_LDR_GIF:        state.backgroundReducer.profileThemes.ava_LDR_GIF,
+        BTN_LDR_GIF:        state.backgroundReducer.profileThemes.BTN_LDR_GIF,
+        status_LDR_GIF:     state.backgroundReducer.profileThemes.status_LDR_GIF,
+        panoramaPic:        state.backgroundReducer.profileThemes.panoramaPic,
+        panorama_LDR_GIF:   state.backgroundReducer.profileThemes.panorama_LDR_GIF,
     }
 };
 let mergeProps = (stateProps, dispatchProps)=>{
-    const  state  = stateProps;
+    const  profileState  = stateProps;
     const { dispatch } = dispatchProps;
     // console.log(state);
 
@@ -60,17 +58,17 @@ let mergeProps = (stateProps, dispatchProps)=>{
         let date = new Date();
         let data=`${("0"+date.getDate()).slice(-2)}.${("0"+(date.getMonth()+1)).slice(-2)}.${(date.getFullYear()-2000)}`;
         let time=`${("0"+date.getHours()).slice(-2)}:${("0"+date.getMinutes()).slice(-2)}`;
-        dispatch(state.profileACs.addPostAC(finalPost, data, time));
+        dispatch(profileState.profileACs.addPostAC(finalPost, data, time));
     };
-    const getProfileThunk       = (userId) =>      { dispatch (state.profileACs.getProfileThUnkAC      (userId)      )};
-    const stateChanger          = (text) =>        { dispatch (state.profileACs.statusChangeAC         (text)        )};
-    const updateStatusThunk     = (text)=>         { dispatch (state.profileACs.updateStatusThunkAC    (text)        )};
-    const getMyStatusThunk      = (status, myId)=> { dispatch (state.profileACs.getMyStatusThunkAC     (status,myId) )};
-    const updateMyAvatarThunk   = (image)=>        { dispatch (state.profileACs.updateMyAvatarThunkAC  (image)       )};
-    const getMyProfileThunk     = (myId) =>        { dispatch (state.profileACs.getMyProfileThunkAC    (myId)        )};
-    const getUserStatusThunk    = (userId)=>       { dispatch (state.profileACs.getUserStatusThunkAC   (userId)      )};
+    const getProfileThunk       = (userId) =>      { dispatch (profileState.profileACs.getProfileThUnkAC      (userId)      )};
+    // const stateChanger          = (text) =>        { dispatch (state.profileACs.statusChangeAC         (text)        )};
+    const updateStatusThunk     = (text)=>         { dispatch (profileState.profileACs.updateStatusThunkAC    (text)        )};
+    const getMyStatusThunk      = (status, myId)=> { dispatch (profileState.profileACs.getMyStatusThunkAC     (status,myId) )};
+    const updateMyAvatarThunk   = (image)=>        { dispatch (profileState.profileACs.updateMyAvatarThunkAC  (image)       )};
+    const getMyProfileThunk     = (myId) =>        { dispatch (profileState.profileACs.getMyProfileThunkAC    (myId)        )};
+    const getUserStatusThunk    = (userId)=>       { dispatch (profileState.profileACs.getUserStatusThunkAC   (userId)      )};
 
-    return { state, addPost, getProfileThunk, stateChanger, updateStatusThunk,
+    return { profileState, addPost, getProfileThunk, /*stateChanger,*/ updateStatusThunk,
             getMyStatusThunk, updateMyAvatarThunk, getMyProfileThunk, getUserStatusThunk}
 };
 

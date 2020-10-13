@@ -270,7 +270,12 @@
       <workItem from="1601717665415" duration="16615000" />
       <workItem from="1601927774142" duration="3730000" />
       <workItem from="1601981164656" duration="17703000" />
-      <workItem from="1602067074797" duration="9043000" />
+      <workItem from="1602067074797" duration="33292000" />
+      <workItem from="1602152595883" duration="21325000" />
+      <workItem from="1602198596429" duration="673000" />
+      <workItem from="1602238336327" duration="18036000" />
+      <workItem from="1602286247688" duration="4684000" />
+      <workItem from="1602582591653" duration="6553000" />
     </task>
     <servers />
   </component>
@@ -294,10 +299,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="601" y="237" width="672" height="677" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1601401391266" />
-    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup" timestamp="1601720494911">
+    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup" timestamp="1602586199524">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1601720494911" />
+    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1602586199524" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -316,11 +321,6 @@
           <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
           <line>68</line>
           <option name="timeStamp" value="71" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/redux/profileReducer.js</url>
-          <line>96</line>
-          <option name="timeStamp" value="76" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/redux/appReducer.js</url>
@@ -351,6 +351,31 @@
           <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
           <line>127</line>
           <option name="timeStamp" value="93" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/profile/statusBlock.js</url>
+          <line>51</line>
+          <option name="timeStamp" value="95" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/profileReducer.js</url>
+          <line>58</line>
+          <option name="timeStamp" value="99" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/profileReducer.js</url>
+          <line>45</line>
+          <option name="timeStamp" value="101" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/profileReducer.js</url>
+          <line>63</line>
+          <option name="timeStamp" value="102" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/profileReducer.js</url>
+          <line>35</line>
+          <option name="timeStamp" value="103" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

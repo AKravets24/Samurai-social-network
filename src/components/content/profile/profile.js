@@ -3,73 +3,91 @@ import {Formik}                   from 'formik';
 import {NavLink}                  from 'react-router-dom';
 import stl                        from './profile.module.css';
 import Post                       from './post/post';
-import {StatusClass}              from "./statusBlock";
+import {StatusCompFunc}              from "./statusBlock";
 
-function Profile(props) {
-    // console.log(props)
+
+const Profile = React.memo( props => {
+    console.log(props.state.profileMedia)
+    // console.log(props.state.profileMedia)
+    // props.state.profile, props.state.props.loader, props.state.props.myAvatarLarge, props.state.myId,
+    // props.state.props
+    let userId = props.state.profileMedia.profileData.userId;
 
     let [themes, setThemes] = useState({profileDynamic:'',BTNs: '',textInput:''})
-
     useEffect(()=> {
-        if     (props.colorTheme==='NIGHT'  ){ setThemes({...themes,profileDynamic:stl.profileNight,BTNs:stl.BTNsNight,
-            textInput: stl.inputNight,})}
-        else if(props.colorTheme==='MORNING'){ setThemes({...themes,profileDynamic:stl.profileMorning,BTNs:stl.BTNsMorning,
-            textInput: stl.inputMorning,})}
-        else if(props.colorTheme==='DAY'    ){ setThemes({...themes,profileDynamic:stl.profileDay,BTNs:stl.BTNsDay,
-            textInput: stl.inputDay,})}
-        else if(props.colorTheme==='EVENING'){ setThemes({...themes,profileDynamic:stl.profileEvening,BTNs:stl.BTNsEvening,
-            textInput: stl.inputEvening,})}
+        if     (props.state.colorTheme==='NIGHT'  ){ setThemes({...themes,profileDynamic:stl.profileN,
+            BTNs:stl.BTNsN, textInput: stl.inputN,})}
+        else if(props.state.colorTheme==='MORNING'){ setThemes({...themes,profileDynamic:stl.profileM,
+            BTNs:stl.BTNsM, textInput: stl.inputM,})}
+        else if(props.state.colorTheme==='DAY'    ){ setThemes({...themes,profileDynamic:stl.profileD,
+            BTNs:stl.BTNsD, textInput: stl.inputD,})}
+        else if(props.state.colorTheme==='EVENING'){ setThemes({...themes,profileDynamic:stl.profileE,
+            BTNs:stl.BTNsE, textInput: stl.inputE,})}
     },[props.colorTheme])
 
     const addPostListener = (finalPost) => { props.addPost(finalPost) };
     const getContacts     = (obj)       => { const result = [];
         for (let key in obj) { if (!obj[key]) { obj[key] = 'nope' } result.push({title: key, value: obj[key]}) }
         return ( result.map((el, i) =>  <li key={i}> {el.title} : {el.value} </li> ) ) };
-    const photoSaver = (e) => { props.updateMyAvatarThunk(e.target.files[0]) };
+    const photoSaver      = (e)         => { props.updateMyAvatarThunk(e.target.files[0]) };
 
-    let [funnyText, setFunnyText] = useState('new picture');
-    const funnyHover=()=>{setFunnyText(<s>destiny</s>)};
-    const funnyUnHover=()=>{setFunnyText('new picture')};
+    // const [panorama, setPanorama] = useState({panoramaClass:stl.panoramaGIF,panoramaSrc:props.state.panorama_LDR_GIF})
+    const [panorama, setPanorama] = useState({panoramaClass:stl.panoramaPic,panoramaSrc:props.state.panoramaPic})
+
 
     return <>
-        {!props.state.profile &&
+       {/* {!userId &&
         <div className={stl.loaderDiv}>
-            <img className={stl.loader} src={props.state.props.loader} alt="Err"/>
+            <img className={stl.loader} src={props.state.auth_LDR_GIF} alt="Err"/>
         </div>
-        }
-        {props.state.profile &&
+        }*/}
+        {userId &&
         <div className={`${stl.profile} ${themes.profileDynamic}`}>
             <div className={stl.panorama}>
-                {/*<img src={props.state.profilePics.panoramaPic} alt="Err"/>*/}
-                <img src={props.panoramaPic} alt="Err"/>
+                    <img
+                        // onLoad={()=>{setPanorama({panoramaClass:stl.panoramaPic,panoramaSrc:props.state.panoramaPic})}}
+                         className={panorama.panoramaClass}
+                         src={panorama.panoramaSrc} alt="Err"
+                    />
             </div>
             <div className={stl.profileWrapper}>
                 <div className={stl.profileDetails}>
                     <div className={stl.profilePicNBTN}>
-                        <img src={ props.state.profile.photos.large || props.state.props.myAvatarLarge   } alt="Err"/>
-                        <input type="file" name="image" id='file' onChange={photoSaver} className={stl.fileInput}/>
-                        { props.state.myId === props.state.profile.userId       &&
-                        <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`} onMouseEnter={funnyHover} onMouseLeave={funnyUnHover}
-                        >Choose your {funnyText}</label>}
-                        { props.state.myId !== props.state.profile.userId       &&
-                        <NavLink className={stl.writeMessage} to={`/dialogs/${props.state.profile.userId}` }
-                        > Write Message </NavLink> }
+                        <div>
+                            <img src={!userId?props.ava_LDR_GIF:props.state.profileMedia.profileData.photos.large||props.state.profileMedia.myAvatarLarge} alt="Err"/>
+                        </div>
+                        <input disabled={!userId} type="file" name="image" id='file' onChange={photoSaver} className={stl.fileInput}/>
+                        {!userId                                                                        ?
+                            <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`}
+                            ><img src={props.BTN_LDR_GIF} alt="err"/></label>                           :
+                            props.state.myId === userId                                                 ?
+                            <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`}
+                            >   <div> Choose your new picture</div>
+                                <div> Choose your <s>destiny!</s></div>
+                            </label>                                                                    :
+                            <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`}>
+                            <NavLink className={stl.writeMessage} to={`/dialogs/${userId}` }
+                            > Write Message
+                            </NavLink>
+                        </label>
+                        }
                     </div>
                     <div className={stl.profileInfo}>
-                        <h2> {props.state.props.profile.fullName}</h2>
+                        <h2> {props.state.profileMedia.profileData.fullName}</h2>
                         <ul>
-                            {props.state.profile.contacts && getContacts(props.state.profile.contacts)}
+                            {props.state.profileMedia.profileData.contacts && getContacts(props.state.profileMedia.profileData.contacts)}
                         </ul>
                         <div className={stl.statusBlock}>
-                            <StatusClass
-                                isMe = {props.state.myId === props.state.profile.userId}
-                                statusField={props.state.props.statusField}
-                                previousStatus={props.state.props.previousStatus}
-                                updateStatusThunk={props.updateStatusThunk}
-                                stateChanger={props.stateChanger}
-                                letterBalanceCounter={props.letterBalanceCounter}
-                                statusFieldMaxLength={props.state.props.statusFieldMaxLength}
-                                statusFieldBalanceLength={props.state.props.statusFieldBalanceLength}
+                            <StatusCompFunc
+                                isMe                     = { props.state.myId === userId                       }
+                                isLoading                = { !userId                                           }
+                                loader                   = { props.status_LDR_GIF                              }
+                                statusField              = { props.state.profileMedia.statusField              }
+                                previousStatus           = { props.state.profileMedia.previousStatus           }
+                                updateStatusThunk        = { props.updateStatusThunk                           }
+                                letterBalanceCounter     = { props.letterBalanceCounter                        }
+                                statusFieldMaxLength     = { props.state.profileMedia.statusFieldMaxLength     }
+                                statusFieldBalanceLength = { props.state.profileMedia.statusFieldBalanceLength }
                             />
                         </div>
                     </div>
@@ -92,11 +110,27 @@ function Profile(props) {
                         </div>
                     </div>
                 </div>
-                <Post props={props.state.props.wallPosts}/>
+                <Post props={props.state.profileMedia.wallPosts}/>
             </div>
         </div>
         }
     </>
-}
+},
+    function areEqual (prevProps, nextProps) {
+        // console.log(prevProps)
+        // console.log(nextProps)
+    if ( prevProps.state.profileMedia !== nextProps.state.profileMedia ) {
+        return false
+    } else return true
+
+})
 export default Profile;
 
+// {!props.state.profileMedia.profileData.userId ?
+//     <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`} onMouseEnter={funnyHover} onMouseLeave={funnyUnHover}
+//     > {props.BTN_LDR_GIF} </label> :
+//     props.state.myId === props.state.profileMedia.profileData.userId       ?
+//         <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`} onMouseEnter={funnyHover} onMouseLeave={funnyUnHover}
+//         >Choose your {funnyText}</label> :
+//         <NavLink className={stl.writeMessage} to={`/dialogs/${props.state.profileMedia.profileData.userId}` }
+//         > Write Message </NavLink> }

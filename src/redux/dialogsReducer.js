@@ -1,8 +1,8 @@
 import { usersApi }                 from './app'
 import maleProfilePic               from './img/dialogs/male.jpg'
 import errorPic                     from './img/dialogs/error.png'
-import certainDialogLoader          from './loader/dialogs/loader_green_spinner.gif'
-import allDialogsLoader             from './loader/dialogs/spinner_yellow.gif'
+import certainDialogLoaderGIF       from './loader/dialogs/loader_green_spinner.gif'
+import allDialogsLoadeGIF           from './loader/dialogs/spinner_yellow.gif'
 import envelopeGIF                  from './loader/dialogs/envelope.gif'
 import meetLinesGIF                 from './loader/dialogs/lGreenMeetLines.gif'
 
@@ -137,8 +137,8 @@ let initialDialogsState = {
     certainDialog:          {items:[]},
     allDialogsIsLoading:    false,
     defaultAvatar:          maleProfilePic,
-    certainDialogLoader,
-    allDialogsLoader,
+    certainDialogLoader:    certainDialogLoaderGIF,
+    allDialogsLoader:       allDialogsLoadeGIF,
     newMessagesCounter:     0,
     newMessageBTNDisabled:  false,
     msgLoader:              envelopeGIF,

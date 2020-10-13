@@ -26,12 +26,13 @@ export const usersApi = {
     //profile
     updateMyStatus(status)       { return instance.put(`profile/status`, {status: status} ).then(response =>
          response.config.data)},
-    getMyStatus(myId)            { return instance.get(`profile/status/8856`)        .then(response => response.data  )},
-    getUserStatus(userId)        { return instance.get(`profile/status/${userId}`)   .then(response => response.data  )},
     updateMyAvatar(file)         {
         const formData = new FormData(); formData.append('image', file);
         return instance.put(`profile/photo`, formData, { headers: { 'Content-Type': 'multipart/form-data' }
         })                                                                           .then(response => response.data  )},
+
+    getMyStatus(myId)            { return instance.get(`profile/status/8856`)        .then(response => response.data  )},
+    getUserStatus(userId)        { return instance.get(`profile/status/${userId}`)   .then(response => response.data  )},
     getProfile(userId)           { return instance.get(`profile/${userId}`)          .then(response => response.data  )},
     getMyProfile(myId)           { return instance.get(`profile/${myId}`)            .then(response => response.data  )},
     // friends
