@@ -1,5 +1,5 @@
 import userLoader     from './loader/users/24.gif'
-import maleProfilePic from './img/dialogs/male.jpg'
+import maleProfilePic from './img/dialogs/male.png'
 import { usersApi }   from "./app";
 
 const FOLLOW                        = 'FOLLOW';
@@ -81,7 +81,7 @@ const updateSearchFieldAC       = (text)                  =>  ({type: UPDATE_SEA
 
 const initialUsersInfo = {
     initialUsersList: [],
-    pageSize: 100,
+    pageSize: 50,
     totalCount: 0,
     currentPage: 1,
     isLoading: false,

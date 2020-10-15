@@ -35,15 +35,15 @@
     <property name="ts.external.directory.path" value="D:\Soft\WebStorm 2019.2.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\02_socialNetwork\my-app\src\components\content\profile" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\07_socialNetwork thunk\my-app\src\components\content\profile\modalWindowStatus" />
       <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\07_socialNetwork thunk\my-app\src\components\content\HOC" />
       <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\07_socialNetwork thunk\my-app\src\components\content\unAuthorised" />
       <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\02_socialNetwork\my-app\src\components" />
       <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\02_socialNetwork\my-app\src\components\content\news" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\02_socialNetwork\my-app\src\components\content\profile" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -275,7 +275,11 @@
       <workItem from="1602198596429" duration="673000" />
       <workItem from="1602238336327" duration="18036000" />
       <workItem from="1602286247688" duration="4684000" />
-      <workItem from="1602582591653" duration="6553000" />
+      <workItem from="1602582591653" duration="35145000" />
+      <workItem from="1602668745863" duration="24852000" />
+      <workItem from="1602706507795" duration="3754000" />
+      <workItem from="1602710859323" duration="2935000" />
+      <workItem from="1602755735688" duration="22955000" />
     </task>
     <servers />
   </component>
@@ -329,18 +333,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
-          <line>64</line>
+          <line>72</line>
           <option name="timeStamp" value="81" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
-          <line>175</line>
-          <option name="timeStamp" value="83" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
-          <line>138</line>
-          <option name="timeStamp" value="85" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
@@ -358,24 +352,25 @@
           <option name="timeStamp" value="95" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/redux/profileReducer.js</url>
-          <line>58</line>
-          <option name="timeStamp" value="99" />
+          <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
+          <line>82</line>
+          <option name="timeStamp" value="107" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/redux/profileReducer.js</url>
-          <line>45</line>
-          <option name="timeStamp" value="101" />
+          <url>file://$PROJECT_DIR$/components/content/profile/profile.js</url>
+          <line>94</line>
+          <option name="timeStamp" value="108" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/redux/profileReducer.js</url>
-          <line>63</line>
-          <option name="timeStamp" value="102" />
+          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
+          <line>268</line>
+          <option name="timeStamp" value="110" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/redux/profileReducer.js</url>
-          <line>35</line>
-          <option name="timeStamp" value="103" />
+          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
+          <line>213</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="120" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

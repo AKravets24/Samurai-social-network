@@ -11,7 +11,6 @@ function Users(props) {
     let [scrollStep, setScrollStep]  = useState(10);
     let [disableDec, setDisableDec]  = useState(true);
     let [disableInc, setDisableInc]  = useState(false);
-    let [modalWindow,setModalWindow] = useState(false) // false normal
 
     let paginatorDec = () => {
         setStartPage(startPage - scrollStep);
@@ -47,12 +46,12 @@ function Users(props) {
     let searchListener=()=>{let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName);};
     let searchModeCloseListener = () => {props.toggleUserSearchMode(false);props.setCurrentPage(props.usersInfo.currentPage); };
 
-    let [userId, setUserId]               = useState('');
     let [userName, setUserName]           = useState('');
     let [textAreaValue, setTextareaValue] = useState('');
     let [msgStat, setMsgStat]             = useState(null);
     let [feedBack,setFeedBack]            = useState(false)
     let [feedBackClass, setFeedBackClass] = useState(stl.feedBackVisible); // false normal
+    let [wrapperLocker, setWrapperLocker] = useState('')
 
     useEffect(()=>{
         switch (props.sendingMSGStat) {
@@ -70,62 +69,110 @@ function Users(props) {
                 return;
         }
     },[props.sendingMSGStat]);
-
-    let modalWindowSetter=(userId,userName)=>{setUserId(userId);setUserName(userName);setModalWindow(true);};
-    let writeMsg = (userId)=> {
+    let writeMsg = (userId,userName)=> {
+        setUserName(userName)
         props.sendMessageToUserThunk(userId, textAreaValue);
         setTextareaValue('');
-        setModalWindow(false);
+        setWrapperLocker('');
         // console.log(`your message was send to ${userName}` )
         // if (props.dialogsErrs === true){console.log(`Cannot send your message`) }
     };
 
-    let [themes, setThemes] = useState({userPageDynamic:"",scroller:'',generalHeaderDnmc:'',pagBTNDnmc:'',
+    let [themes, setThemes] = useState({userPageDnmc:"",generalHeaderDnmc:'',pagBTNDnmc:'',
         paginationSelectedDnmc:'',paginationDnmc:'', paginationBlockDnmc:'', searchInputDnmc:'',userAvaDnmc:'',
-        followBTNDnmc:'',userNameDnmc:'', userBlockInfoDnmc:'',moreUserUnitsDnmc:'',
+        followBTNDnmc:'',userNameDnmc:'',mapWrapperDnmc:'', userUnitDnmc:'',moreUserUnitsDnmc:'',
     });
-
     useEffect(()=> {
         switch (props.colorTheme) {
             case 'NIGHT':
-                setThemes({...themes,userPageDnmc: stl.usersPageNight,scroller:stl.scrollerNight,generalHeaderDnmc:stl.generalHeaderNight,
-                    pagBTNDnmc:stl.pagBTNNight, paginationSelectedDnmc:stl.paginationSelectedNight,paginationDnmc:stl.paginationNight,
-                    paginationBlockDnmc:stl.paginationBlockInsideNight,
-                    searchInputDnmc:stl.searchInputNight,userAvaDnmc:stl.userAvaNight,followBTNDnmc:stl.followBTNNight,
-                    userNameDnmc:stl.userNameNight,userBlockInfoDnmc:stl.userBlockInfoNight,moreUserUnitsDnmc:stl.moreUserUnitsNight,
+                setThemes({...themes,
+                    userPageDnmc: stl.usersPageN,
+                    generalHeaderDnmc:stl.generalHeaderN,
+                    pagBTNDnmc:stl.pagBTN_N,
+                    paginationSelectedDnmc:stl.paginationSelectedN,
+                    paginationDnmc:stl.paginationN,
+                    paginationBlockDnmc:stl.paginationBlockInsideN,
+                    searchInputDnmc:stl.searchInputN,
+                    userAvaDnmc:stl.userAvaN,
+                    followBTNDnmc:stl.followBTN_N,
+                    userNameDnmc:stl.userNameN,
+                    mapWrapperDnmc:stl.mapWrapperN,
+                    userUnitDnmc:stl.userUnitN,
+                    moreUserUnitsDnmc:stl.moreUserUnitsN,
                 });
                 return;
             case 'MORNING':
-                setThemes({...themes,userPageDnmc: stl.usersPageMorning,scroller:stl.scrollerMorning,generalHeaderDnmc:stl.generalHeaderMorning,
-                    pagBTNDnmc:stl.pagBTNMorning,paginationSelectedDnmc:stl.paginationSelectedMorning,paginationDnmc:stl.paginationMorning,
-                    paginationBlockDnmc:stl.paginationBlockInsideMorning,
-                    searchInputDnmc:stl.searchInputMorning,userAvaDnmc:stl.userAvaMorning,followBTNDnmc:stl.followBTNMorning,
-                    userNameDnmc:stl.userNameMorning,userBlockInfoDnmc:stl.userBlockInfoMorning,moreUserUnitsDnmc:stl.moreUserUnitsMorning,
+                setThemes({...themes,
+                    userPageDnmc: stl.usersPageM,
+                    generalHeaderDnmc:stl.generalHeaderM,
+                    pagBTNDnmc:stl.pagBTN_M,
+                    paginationSelectedDnmc:stl.paginationSelectedM,
+                    paginationDnmc:stl.paginationM,
+                    paginationBlockDnmc:stl.paginationBlockInsideM,
+                    searchInputDnmc:stl.searchInputM,
+                    userAvaDnmc:stl.userAvaM,
+                    followBTNDnmc:stl.followBTN_M,
+                    userNameDnmc:stl.userNameM,
+                    mapWrapperDnmc:stl.mapWrapperM,
+                    userUnitDnmc:stl.userUnitM,
+                    moreUserUnitsDnmc:stl.moreUserUnitsM,
                 });
                 return;
             case 'DAY':
-                setThemes({...themes,userPageDnmc: stl.usersPageDay,scroller:stl.scrollerDay,generalHeaderDnmc:stl.generalHeaderDay,
-                    pagBTNDnmc:stl.pagBTNDay,paginationSelectedDnmc:stl.paginationSelectedDay,paginationDnmc:stl.paginationDay,
-                    paginationBlockDnmc:stl.paginationBlockInsideDay,
-                    searchInputDnmc:stl.searchInputDay,userAvaDnmc:stl.userAvaDay,followBTNDnmc:stl.followBTNDay,
-                    userNameDnmc:stl.userNameDay,userBlockInfoDnmc:stl.userBlockInfoDay,moreUserUnitsDnmc:stl.moreUserUnitsDay
+                setThemes({...themes,
+                    userPageDnmc: stl.usersPageD,
+                    generalHeaderDnmc:stl.generalHeaderD,
+                    pagBTNDnmc:stl.pagBTN_D,
+                    paginationSelectedDnmc:stl.paginationSelectedD,
+                    paginationDnmc:stl.paginationD,
+                    paginationBlockDnmc:stl.paginationBlockInsideD,
+                    searchInputDnmc:stl.searchInputD,
+                    userAvaDnmc:stl.userAvaD,
+                    followBTNDnmc:stl.followBTN_D,
+                    userNameDnmc:stl.userNameD,
+                    mapWrapperDnmc:stl.mapWrapperD,
+                    userUnitDnmc:stl.userUnitD,
+                    moreUserUnitsDnmc:stl.moreUserUnitsD
                 });
                 return;
             case 'EVENING':
-                setThemes({...themes,userPageDnmc: stl.usersPageEvening,scroller:stl.scrollerEvening,generalHeaderDnmc:stl.generalHeaderEvening,
-                    pagBTNDnmc:stl.pagBTNEvening,paginationSelectedDnmc:stl.paginationSelectedEvening,paginationDnmc:stl.paginationEvening,
-                    paginationBlockDnmc:stl.paginationBlockInsideEvening,
-                    searchInputDnmc:stl.searchInputEvening,userAvaDnmc:stl.userAvaEvening,followBTNDnmc:stl.followBTNEvening,
-                    userNameDnmc:stl.userNameEvening,userBlockInfoDnmc:stl.userBlockInfoEvening,moreUserUnitsDnmc:stl.moreUserUnitsEvening,
+                setThemes({...themes,
+                    userPageDnmc: stl.usersPageE,
+                    generalHeaderDnmc:stl.generalHeaderE,
+                    pagBTNDnmc:stl.pagBTN_E,
+                    paginationSelectedDnmc:stl.paginationSelectedE,
+                    paginationDnmc:stl.paginationE,
+                    paginationBlockDnmc:stl.paginationBlockInsideE,
+                    searchInputDnmc:stl.searchInputE,
+                    userAvaDnmc:stl.userAvaE,
+                    followBTNDnmc:stl.followBTN_E,
+                    userNameDnmc:stl.userNameE,
+                    mapWrapperDnmc:stl.mapWrapperE,
+                    userUnitDnmc:stl.userUnitE,
+                    moreUserUnitsDnmc:stl.moreUserUnitsE,
                 });
                 return;
             default: return {...themes}
         }
     },[props.colorTheme]);
 
+    let [primaryClassName, setPrimaryClassName]=useState('');
+    let userIdTalkModeOn =e=>{
+        setWrapperLocker(stl.wrapperLocked);
+        setPrimaryClassName(e.target.parentElement.parentElement.parentElement.parentElement.children[0].className)  // кладем класс в переменную
+        e.target.parentElement.parentElement.parentElement.parentElement.children[0].className=stl.userUnitHidden;
+        e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=stl.userUnitShowed;
+    };
+    let userIdTalkModeOff=e=>{
+        setWrapperLocker('');
+        setTextareaValue('');
+        e.target.parentElement.parentElement.parentElement.parentElement.children[0].className=primaryClassName;
+        e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=stl.userUnitHidden;
+    };
+
     return <>
         <div className={`${stl.usersPage} ${themes.userPageDnmc}`}>
-            <div className={`${stl.userInfo} ${themes.scroller}`}>
+            <div className={stl.userInfo}>
                 <div className={`${stl.generalHeader} ${themes.generalHeaderDnmc}`}>
                     <h2 className={stl.userHeader}>Users</h2>
 
@@ -150,42 +197,35 @@ function Users(props) {
                         <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchModeCloseListener}>X</button>
                     </div>
                 </div>
-                {modalWindow &&
-                    <div className={stl.modalWindow}>
-                        <div className={stl.miniHeader}>
-                            <button>To dialog with {userName} </button>
-                            <button onClick={()=>{setModalWindow(false)}} > X </button>
-                        </div>
-                        <div className={stl.textNBTN}>
-                            <textarea className={stl.windowTextarea}
-                                      value={textAreaValue}
-                                      onChange={e=>setTextareaValue(e.target.value)}
-                            />
-                            <button onClick={(body)=>writeMsg(userId,body)}>Send</button>
-                        </div>
-
-                    </div>
-                }
                 {feedBack &&
                     <div className={`${stl.feedbackWindow} ${feedBackClass}`}>
                         <button onClick={()=>setFeedBack(false)}>X</button>
                         <p>{msgStat}</p>
                     </div>
                 }
-                <ul>
-                    {props.usersInfo.isLoading ?
-                        <div className={stl.loaderDiv}>
-                            <img className={stl.loader} src={props.usersInfo.loader} alt="Err"/>  {/*ЛОДЫРЯ ПРОКИНУТЬ*/}
-                        </div> :
-                        props.usersInfo.initialUsersList
-                            .map(user =>
-                                <li key={user.id} >
-                                    <div className={stl.userUnit}>
-                                        <div className={stl.picAndButton}>
+                {props.usersInfo.isLoading ?
+                    <div className={stl.loaderDiv}>
+                        <img className={stl.loader} src={props.usersInfo.loader} alt="Err"/>  {/*ЛОДЫРЯ ПРОКИНУТЬ*/}
+                    </div> :
+                <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
+                    {props.usersInfo.initialUsersList
+                        .map(user =>
+                            <div className={stl.userUnitContainer} key={user.id}>
+                                <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`} >
+                                    <div className={stl.avaDiv}>
+                                        <NavLink to={`/profile/${user.id}`}>
+                                                <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
+                                                className={`${themes.userAvaDnmc}`}/>
+                                        </NavLink>
+                                    </div>
+                                    <div className={stl.nameStateBTNs}>
+                                        <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
                                             <NavLink to={`/profile/${user.id}`}>
-                                                    <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
-                                                    className={`${themes.userAvaDnmc}`}/>
+                                                <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
                                             </NavLink>
+                                            <p className={`${themes.userNameDnmc}`} >{user.status}</p>
+                                        </div>
+                                        <div className={stl.followNWriteBTNS}>
                                             <button
                                                 disabled={props.usersInfo.followingInProgress.some(id=>id==user.id)}
                                                 id={user.id}
@@ -194,22 +234,42 @@ function Users(props) {
                                                 {user.followed?'unFollow':'Follow'}
                                             </button>
                                             <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                                    onClick={()=>modalWindowSetter(user.id,user.name)}
-                                            > Write message </button>
-                                        </div>
-                                        <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
-                                            <div className={stl.nameAndState}>
-                                                <NavLink to={`/profile/${user.id}`}>
-                                                    <h2 className={`${themes.userNameDnmc}`}>{user.name} </h2>
-                                                </NavLink>
-                                                <p>{user.status} </p>
-                                            </div>
+                                                    onClick={e=>userIdTalkModeOn(e,user.id)}
+                                                    >
+                                                Write message
+                                            </button>
                                         </div>
                                     </div>
-                                </li>
-                            )
-                    }
-                </ul>
+                                </div>
+                                <div className={stl.userUnitHidden}>
+                                    <div  className={`${stl.userUnit} ${themes.userUnitDnmc}`}>
+                                        <div className={stl.miniHeadWrapper}>
+                                            <h2 className={`${stl.userName} ${themes.userNameDnmc}`}> To {user.name}</h2>
+                                            <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
+                                        </div>
+                                        <div className={stl.textAreaWrapper}>
+                                            <textarea className={stl.talkTextarea}
+                                                      // value={textAreaValue}
+                                                      // onChange={e=>setTextareaValue(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className={stl.miniFooterWrapper}>
+                                            <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                    onClick={()=>writeMsg(user.id,user.name)}
+                                            >Send message
+                                            </button>
+                                            <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                    onClick={e=>{userIdTalkModeOff(e)}}
+                                            >Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div >
+                        )}
+                 </div>
+                }
+
             </div>
             <div className={ `${stl.moreUserUnits}  ${themes.moreUserUnitsDnmc}`}>
                 <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
@@ -238,3 +298,31 @@ export default Users;
 //             </div>
 //     );
 // };
+
+
+// <div className={stl.userUnit} key={user.id}>
+//     <div className={stl.picAndButton}>
+//         <NavLink to={`/profile/${user.id}`}>
+//             <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
+//                  className={`${themes.userAvaDnmc}`}/>
+//         </NavLink>
+//         <button
+//             disabled={props.usersInfo.followingInProgress.some(id=>id==user.id)}
+//             id={user.id}
+//             className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+//             onClick={user.followed?props.unFollowListener:props.followListener}>
+//             {user.followed?'unFollow':'Follow'}
+//         </button>
+//         <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+//                 onClick={()=>modalWindowSetter(user.id,user.name)}
+//         > Write message </button>
+//     </div>
+//     <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
+//         <div className={stl.nameAndState}>
+//             <NavLink to={`/profile/${user.id}`}>
+//                 <h2 className={`${themes.userNameDnmc}`}>{user.name} </h2>
+//             </NavLink>
+//             <p>{user.status} </p>
+//         </div>
+//     </div>
+// </div>

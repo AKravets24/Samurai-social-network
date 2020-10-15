@@ -1,5 +1,5 @@
 import { usersApi }                 from './app'
-import maleProfilePic               from './img/dialogs/male.jpg'
+import maleProfilePic               from './img/dialogs/male.png'
 import errorPic                     from './img/dialogs/error.png'
 import certainDialogLoaderGIF       from './loader/dialogs/loader_green_spinner.gif'
 import allDialogsLoadeGIF           from './loader/dialogs/spinner_yellow.gif'

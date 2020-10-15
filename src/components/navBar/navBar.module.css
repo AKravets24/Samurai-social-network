@@ -125,9 +125,13 @@
 .dialogsSpan p {
     opacity: 1;
     /*position: absolute;*/
-    color: green;
+    /*color: green;*/
     margin-left: 120px;
     margin-top: -30px;
     margin-bottom: 0;
 
 }
+.counterN    {color: blue}
+.counterM    {color: #f6fff6}
+.counterD    {color: darkgreen}
+.counterE    {color: white}

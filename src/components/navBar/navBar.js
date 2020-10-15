@@ -23,13 +23,21 @@ function NavBarContainer(props) {
 function NavBar(props) {
     // console.log(props.errGettingNewMSGSCount)
 
-    let [themes, setThemes] = useState({dynamicActiveClass:'',dynamicClass:'stl.linkNight  ',blockMenu:''});
+    let [themes, setThemes] = useState({dynamicActiveClass:'',dynamicClass:'stl.linkNight  ',blockMenu:'',counter:'',});
 
     useEffect(()=> {
-             if(props.colorTheme==='NIGHT'  ){setThemes({...themes,dynamicActiveClass:stl.activeLinkNight  ,dynamicClass:stl.linkNight  ,blockMenu:stl.blockMenuNight   })}
-        else if(props.colorTheme==='MORNING'){setThemes({...themes,dynamicActiveClass:stl.activeLinkMorning,dynamicClass:stl.linkMorning,blockMenu:stl.blockMenuMorning })}
-        else if(props.colorTheme==='DAY'    ){setThemes({...themes,dynamicActiveClass:stl.activeLinkDay    ,dynamicClass:stl.linkDay    ,blockMenu:stl.blockMenuDay     })}
-        else if(props.colorTheme==='EVENING'){setThemes({...themes,dynamicActiveClass:stl.activeLinkEvening,dynamicClass:stl.linkEvening,blockMenu:stl.blockMenuEvening })}
+             if(props.colorTheme==='NIGHT'  ){setThemes({...themes,dynamicActiveClass:stl.activeLinkNight  ,dynamicClass:stl.linkNight  ,blockMenu:stl.blockMenuNight,
+                 counter:stl.counterN,
+             })}
+        else if(props.colorTheme==='MORNING'){setThemes({...themes,dynamicActiveClass:stl.activeLinkMorning,dynamicClass:stl.linkMorning,blockMenu:stl.blockMenuMorning,
+                 counter:stl.counterM,
+        })}
+        else if(props.colorTheme==='DAY'    ){setThemes({...themes,dynamicActiveClass:stl.activeLinkDay    ,dynamicClass:stl.linkDay    ,blockMenu:stl.blockMenuDay,
+                 counter:stl.counterD,
+        })}
+        else if(props.colorTheme==='EVENING'){setThemes({...themes,dynamicActiveClass:stl.activeLinkEvening,dynamicClass:stl.linkEvening,blockMenu:stl.blockMenuEvening,
+                 counter:stl.counterE,
+        })}
     },[props.colorTheme]);
 
     let [isHiddenBTN, setIsHiddenBTN] = useState(stl.hidden);
@@ -72,7 +80,7 @@ function NavBar(props) {
                              className={themes.dynamicClass}
                              activeClassName={themes.dynamicActiveClass}>
                         Dialogs </NavLink>
-                    <p hidden={!props.newMSGSCounter}>({props.newMSGSCounter})</p>
+                    <p className={`${themes.counter}`} hidden={!props.newMSGSCounter}>({props.newMSGSCounter})</p>
                 </li>}
                 { props.myId && <li><NavLink to={'/users'}
                                              className={themes.dynamicClass}

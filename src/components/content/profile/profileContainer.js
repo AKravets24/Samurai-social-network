@@ -7,30 +7,28 @@ import { compose } from 'redux';
 
 const ProfileFuncContainer = React.memo( props => {
 // function ProfileFuncContainer (props) {
-//      console.log(props);
+     console.log(props.profileState);
 
-    let myId = props.profileState.myId;
-    let comparativeId = +props.match.params.userId;
+    let myId=props.profileState.myId;
+    let comparativeId=+props.match.params.userId;
 
-    useEffect( ()=> {
-        if(myId ===comparativeId||!comparativeId){
-            props.getMyProfileThunk(myId);
-            props.getMyStatusThunk(myId);
-            props.history.push(`/profile/${myId}`);
-        } else if (+comparativeId && +comparativeId !== myId){
-            props.getProfileThunk(comparativeId);
-            props.getUserStatusThunk(comparativeId);}
-    },[myId, comparativeId] );
+    useEffect(()=> {
+        if(myId===comparativeId||!comparativeId){props.getProfileThunk(myId);props.history.push(`/profile/${myId}`);
+        } else if (+comparativeId&&+comparativeId!==myId){props.getProfileThunk(comparativeId);}
+    },[myId, comparativeId]);
 
     return <Profile
         addPost             = { props.addPost                       }
-        state               = { props.profileState                      } // нужен рефактор
+        state               = { props.profileState                  } // нужен рефактор
         match               = { props.match                         }
         updateStatusThunk   = { props.updateStatusThunk             }
         updateMyAvatarThunk = { props.updateMyAvatarThunk           }
-        getMyStatusThunk    = { props.getMyStatusThunk              }
     />
-})
+}, function areEqual (prevProps, nextProps) {
+        return prevProps.profileState.profileMedia.isLoading === nextProps.profileState.profileMedia.isLoading;
+    }
+
+);
 
 let mapStateToProps = (state)=> {
     // console.log(state.backgroundReducer);
@@ -60,16 +58,12 @@ let mergeProps = (stateProps, dispatchProps)=>{
         let time=`${("0"+date.getHours()).slice(-2)}:${("0"+date.getMinutes()).slice(-2)}`;
         dispatch(profileState.profileACs.addPostAC(finalPost, data, time));
     };
-    const getProfileThunk       = (userId) =>      { dispatch (profileState.profileACs.getProfileThUnkAC      (userId)      )};
-    // const stateChanger          = (text) =>        { dispatch (state.profileACs.statusChangeAC         (text)        )};
-    const updateStatusThunk     = (text)=>         { dispatch (profileState.profileACs.updateStatusThunkAC    (text)        )};
-    const getMyStatusThunk      = (status, myId)=> { dispatch (profileState.profileACs.getMyStatusThunkAC     (status,myId) )};
-    const updateMyAvatarThunk   = (image)=>        { dispatch (profileState.profileACs.updateMyAvatarThunkAC  (image)       )};
-    const getMyProfileThunk     = (myId) =>        { dispatch (profileState.profileACs.getMyProfileThunkAC    (myId)        )};
-    const getUserStatusThunk    = (userId)=>       { dispatch (profileState.profileACs.getUserStatusThunkAC   (userId)      )};
+    const getProfileThunk       = (userId) => { dispatch (profileState.profileACs.getProfileThUnkAC      (userId)  )};
+    const updateStatusThunk     = (text)=>    { dispatch (profileState.profileACs.updateStatusThunkAC    (text)    )};
+    const updateMyAvatarThunk   = (image)=>   { dispatch (profileState.profileACs.updateMyAvatarThunkAC  (image)   )};
 
-    return { profileState, addPost, getProfileThunk, /*stateChanger,*/ updateStatusThunk,
-            getMyStatusThunk, updateMyAvatarThunk, getMyProfileThunk, getUserStatusThunk}
+
+    return { profileState, addPost, getProfileThunk,  updateStatusThunk, updateMyAvatarThunk,}
 };
 
 export default compose (

@@ -23,18 +23,16 @@ export const usersApi = {
         return instance.get(`users?term=${userName}`)                                .then(response => response.data  )},
     followRequest(userId)        { return instance.post(`follow/${userId}`)          .then(response => response.data  )},
     unFollowRequest(userId)      { return instance.delete(`follow/${userId}`)        .then(response => response.data  )},
-    //profile
+    // PROFILE
     updateMyStatus(status)       { return instance.put(`profile/status`, {status: status} ).then(response =>
          response.config.data)},
     updateMyAvatar(file)         {
         const formData = new FormData(); formData.append('image', file);
         return instance.put(`profile/photo`, formData, { headers: { 'Content-Type': 'multipart/form-data' }
         })                                                                           .then(response => response.data  )},
-
-    getMyStatus(myId)            { return instance.get(`profile/status/8856`)        .then(response => response.data  )},
-    getUserStatus(userId)        { return instance.get(`profile/status/${userId}`)   .then(response => response.data  )},
     getProfile(userId)           { return instance.get(`profile/${userId}`)          .then(response => response.data  )},
-    getMyProfile(myId)           { return instance.get(`profile/${myId}`)            .then(response => response.data  )},
+    getStatus(userId)            { return instance.get(`profile/status/${userId}`)   .then(response => response.data  )},
+
     // friends
     getMyFriends()               { return instance.get(`users?friend=true`)          .then(response => response.data  )},
     // dialogs

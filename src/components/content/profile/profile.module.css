@@ -1,5 +1,4 @@
 .profile {
-    /*background-color: lightyellow;*/
     opacity: 0.9;
 }
 .profileN { background-color: #cfedff;     }
@@ -98,32 +97,36 @@
 /*    font-size: 30px;*/
 /*}*/
 
-.BTNsN          {background-color: #4967ff;}
-.BTNsN:hover    {background-color: midnightblue;color:white}
-.BTNsN:active   {background-color: darkblue;color:white}
+.BTNsN          {background-color: #4967ff;                 }
+.BTNsN:hover    {background-color: midnightblue;color:white }
+.BTNsN:active   {background-color: darkblue;color:white     }
 
 
-.BTNsM          {background-color: #ff652a;}
-.BTNsM:hover    {background-color: #ff5b1d;}
-.BTNsM:active   {background-color:#ff4700;}
+.BTNsM          {background-color: #ff652a;                 }
+.BTNsM:hover    {background-color: #ff5b1d;                 }
+.BTNsM:active   {background-color:#ff4700;                  }
 
 
-.BTNsD          {background-color: #ffff92;}
-.BTNsD:hover    {background-color: #fdfd69;color:black }
-.BTNsD:active   {background-color: #f1f14f;color:black}
+.BTNsD          {background-color: #ffff92;                 }
+.BTNsD:hover    {background-color: #fdfd69;color:black      }
+.BTNsD:active   {background-color: #f1f14f;color:black      }
 
 
-.BTNsE          {background-color: indianred;}
-.BTNsE:hover    {background-color: darkred; color:white}
-.BTNsE:active   {background-color: red; color:white}
+.BTNsE          {background-color: indianred;               }
+.BTNsE:hover    {background-color: darkred; color:white     }
+.BTNsE:active   {background-color: red; color:white         }
 
 
 .profileInfo {
     width: 65%;
     margin-left: 5%;
-    border-top: 2px solid lightgreen;
     height: 370px;
 }
+
+.profileInfoN { border-top: 2px solid midnightblue; }
+.profileInfoM { border-top: 2px solid #ff5b1d;      }
+.profileInfoD { border-top: 2px solid lightgreen;   }
+.profileInfoE { border-top: 2px solid darkred;      }
 
 .profileInfo h2 {
     font-size: 35px;
@@ -146,9 +149,15 @@
 }
 
 .writePost {
-    border-top: 2px solid lightgreen;
     width: 100%;
+    margin-top: 10px;
+
 }
+.writePostN { border-top: 2px solid midnightblue; }
+.writePostM { border-top: 2px solid #ff5b1d;      }
+.writePostD { border-top: 2px solid lightgreen;   }
+.writePostE { border-top: 2px solid darkred;      }
+
 
 .writePost h2 {
     width: 160px;
@@ -169,13 +178,13 @@
     font-size: 26px;
     outline: none;
     resize: none;
-    border: 2px solid black;
+    /*border: 2px solid black;*/
 }
 
-.inputN   {background-color: #b9ebff}
-.inputM   {background-color: #fff2eb}
-.inputD   {background-color: #feffeb}
-.inputE   {background-color: #faebeb}
+.inputN   {background-color: #b9ebff; border: 2px solid midnightblue;  }
+.inputM   {background-color: #fff2eb; border: 2px solid #ff5b1d;       }
+.inputD   {background-color: #feffeb; border: 2px solid lightgreen;    }
+.inputE   {background-color: #faebeb; border: 2px solid darkred;       }
 
 .writePost button {
     grid-area: snd;

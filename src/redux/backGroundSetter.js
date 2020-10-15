@@ -117,6 +117,7 @@ export const backgroundReducer = (state = initialState, action) => {
                         status_LDR_GIF:    status_LDR_GIF_E,
                     }
                 }
+
             }
         default: return state;
     }
