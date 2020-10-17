@@ -1,6 +1,7 @@
 import React, {useState, useEffect  } from "react";
 import stl                            from './users.module.css';
 import {NavLink}                      from 'react-router-dom';
+import {Formik}                       from 'formik';
 // import UnAuthorised                from "../unAuthorised/unAuthorised";
 
 function Users(props) {
@@ -11,6 +12,7 @@ function Users(props) {
     let [scrollStep, setScrollStep]  = useState(10);
     let [disableDec, setDisableDec]  = useState(true);
     let [disableInc, setDisableInc]  = useState(false);
+    let [isDisabled, setIsDisabled]  = useState(false);
 
     let paginatorDec = () => {
         setStartPage(startPage - scrollStep);
@@ -26,61 +28,31 @@ function Users(props) {
     };
     let paginator    = () => {
         let pagesArr=[];
-        // let pagesCount = Math.ceil(props.totalCount / props.pageSize);
         for (let i=startPage;i<=endPage;i++){if(startPage<1){setStartPage(1);setEndPage(endPage=scrollStep)}
-            if(endPage>pagesCount){setStartPage(pagesCount-scrollStep);setEndPage(pagesCount)}; pagesArr.push(i)
-        }
-        return pagesArr.map((page, i) =>
-            <div key={i} className={`${stl.paginationBlockInside} ${themes.paginationBlockDnmc}` }>
-                {props.currentPage === page ?
-                    <span className={ `${stl.paginationSelected} ${themes.paginationSelectedDnmc}`}> {page} </span> :
-                    <span className={`${stl.pagination} ${themes.paginationDnmc}`} onClick={()=>{setPageListener(page);
-                        }}> {page} </span>}
-            </div>
+            if(endPage>pagesCount){setStartPage(pagesCount-scrollStep);setEndPage(pagesCount)};pagesArr.push(i)}
+        return pagesArr.map((page,i) =>
+                <span key={i} className={props.currentPage===page?`${stl.paginationSelected} ${themes.paginationSelectedDnmc}`:
+                      `${stl.pagination} ${themes.paginationDnmc}`} onClick={()=>props.currentPage!==page&&setPageListener(page)}
+                >{page}</span>
         );
     };
 
-    let setPageListener = (page) => {props.setCurrentPage(page)};
+    let setPageListener = (page) => {props.setCurrentPage(page);setWrapperLocker('');setIsDisabled(false);};
     let onChangeListener = ({target}) => {let {value} = target;props.updateSearchField(value)};
     let keyUpListener=(e)=>{if(e.keyCode === 13){let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName);} };
     let searchListener=()=>{let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName);};
     let searchModeCloseListener = () => {props.toggleUserSearchMode(false);props.setCurrentPage(props.usersInfo.currentPage); };
 
     let [userName, setUserName]           = useState('');
-    let [textAreaValue, setTextareaValue] = useState('');
     let [msgStat, setMsgStat]             = useState(null);
-    let [feedBack,setFeedBack]            = useState(false)
+    let [feedBack,setFeedBack]            = useState(false);
     let [feedBackClass, setFeedBackClass] = useState(stl.feedBackVisible); // false normal
-    let [wrapperLocker, setWrapperLocker] = useState('')
+    let [wrapperLocker, setWrapperLocker] = useState('');
 
-    useEffect(()=>{
-        switch (props.sendingMSGStat) {
-            case 0: setFeedBack(true); setFeedBackClass(stl.feedBackVisible); setMsgStat('Sending message...');
-                return;
-            case 1:
-                setMsgStat(`Message delivered to ${userName}`);
-                setTimeout(()=>{setFeedBackClass(stl.feedbackHidden)},5000) //через 5 сек анимация плавного убирания на 3 секунды
-                setTimeout(()=>{setFeedBack(false)},8000)  // через 8 секунд объект удаляется из DOM
-                return;
-            case 2:
-                setMsgStat(`Failed to deliver message!`)
-                setTimeout(() => {setFeedBackClass(stl.feedbackHidden)},5000) // то же самое
-                setTimeout(() => {setFeedBack(false)},8000)  // то же самое
-                return;
-        }
-    },[props.sendingMSGStat]);
-    let writeMsg = (userId,userName)=> {
-        setUserName(userName)
-        props.sendMessageToUserThunk(userId, textAreaValue);
-        setTextareaValue('');
-        setWrapperLocker('');
-        // console.log(`your message was send to ${userName}` )
-        // if (props.dialogsErrs === true){console.log(`Cannot send your message`) }
-    };
 
     let [themes, setThemes] = useState({userPageDnmc:"",generalHeaderDnmc:'',pagBTNDnmc:'',
         paginationSelectedDnmc:'',paginationDnmc:'', paginationBlockDnmc:'', searchInputDnmc:'',userAvaDnmc:'',
-        followBTNDnmc:'',userNameDnmc:'',mapWrapperDnmc:'', userUnitDnmc:'',moreUserUnitsDnmc:'',
+        followBTNDnmc:'',userNameDnmc:'',mapWrapperDnmc:'', userUnitDnmc:'',userWriteModeDnmc:'', moreUserUnitsDnmc:'',
     });
     useEffect(()=> {
         switch (props.colorTheme) {
@@ -98,6 +70,7 @@ function Users(props) {
                     userNameDnmc:stl.userNameN,
                     mapWrapperDnmc:stl.mapWrapperN,
                     userUnitDnmc:stl.userUnitN,
+                    userWriteModeDnmc:stl.userWriteModeN,
                     moreUserUnitsDnmc:stl.moreUserUnitsN,
                 });
                 return;
@@ -115,6 +88,7 @@ function Users(props) {
                     userNameDnmc:stl.userNameM,
                     mapWrapperDnmc:stl.mapWrapperM,
                     userUnitDnmc:stl.userUnitM,
+                    userWriteModeDnmc:stl.userWriteModeM,
                     moreUserUnitsDnmc:stl.moreUserUnitsM,
                 });
                 return;
@@ -132,6 +106,7 @@ function Users(props) {
                     userNameDnmc:stl.userNameD,
                     mapWrapperDnmc:stl.mapWrapperD,
                     userUnitDnmc:stl.userUnitD,
+                    userWriteModeDnmc:stl.userWriteModeD,
                     moreUserUnitsDnmc:stl.moreUserUnitsD
                 });
                 return;
@@ -149,6 +124,7 @@ function Users(props) {
                     userNameDnmc:stl.userNameE,
                     mapWrapperDnmc:stl.mapWrapperE,
                     userUnitDnmc:stl.userUnitE,
+                    userWriteModeDnmc:stl.userWriteModeE,
                     moreUserUnitsDnmc:stl.moreUserUnitsE,
                 });
                 return;
@@ -156,18 +132,45 @@ function Users(props) {
         }
     },[props.colorTheme]);
 
-    let [primaryClassName, setPrimaryClassName]=useState('');
-    let userIdTalkModeOn =e=>{
-        setWrapperLocker(stl.wrapperLocked);
-        setPrimaryClassName(e.target.parentElement.parentElement.parentElement.parentElement.children[0].className)  // кладем класс в переменную
-        e.target.parentElement.parentElement.parentElement.parentElement.children[0].className=stl.userUnitHidden;
-        e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=stl.userUnitShowed;
-    };
-    let userIdTalkModeOff=e=>{
+    useEffect(()=>{
+        switch (props.sendingMSGStat) {
+            case 0: setFeedBack(true); setFeedBackClass(stl.feedBackVisible);
+            setMsgStat('Sending message...');
+
+                return;
+            case 1:
+                setMsgStat(`Message delivered to ${userName}`);
+                setTimeout(()=>{setFeedBackClass(stl.feedbackHidden)},5000) //через 5 сек анимация плавного убирания на 3 секунды
+                setTimeout(()=>{setFeedBack(false)},8000)  // через 8 секунд объект удаляется из DOM
+                return;
+            case 2:
+                setMsgStat(`Failed to deliver message!`)
+                setTimeout(() => {setFeedBackClass(stl.feedbackHidden)},5000) // то же самое
+                setTimeout(() => {setFeedBack(false)},8000)  // то же самое
+                return;
+        }
+    },[props.sendingMSGStat]);
+
+    let firstBlockClass  = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
+    let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
+
+    let writeMsg = (userId,text,userName)=> {
+        setUserName(userName)
+        props.sendMessageToUserThunk(userId, text);
         setWrapperLocker('');
-        setTextareaValue('');
-        e.target.parentElement.parentElement.parentElement.parentElement.children[0].className=primaryClassName;
-        e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=stl.userUnitHidden;
+        setIsDisabled(false);
+    };
+    let userIdTalkModeOn  =e=> {
+        setWrapperLocker(stl.wrapperLocked);
+        setIsDisabled(true);
+        e.target.parentElement.parentElement.parentElement.parentElement.children[0].className=stl.userUnitHidden;
+        e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=secondBlockClass;
+    };
+    let userIdTalkModeOff =e=> {
+        setWrapperLocker('');
+        setIsDisabled(false);
+        e.target.parentElement.parentElement.parentElement.children[0].className=firstBlockClass;
+        e.target.parentElement.parentElement.parentElement.children[1].className=stl.userUnitHidden;
     };
 
     return <>
@@ -223,7 +226,7 @@ function Users(props) {
                                             <NavLink to={`/profile/${user.id}`}>
                                                 <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
                                             </NavLink>
-                                            <p className={`${themes.userNameDnmc}`} >{user.status}</p>
+                                            <p className={`${themes.userNameDnmc}`}>{user.status}</p>
                                         </div>
                                         <div className={stl.followNWriteBTNS}>
                                             <button
@@ -234,6 +237,7 @@ function Users(props) {
                                                 {user.followed?'unFollow':'Follow'}
                                             </button>
                                             <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                    disabled={isDisabled}
                                                     onClick={e=>userIdTalkModeOn(e,user.id)}
                                                     >
                                                 Write message
@@ -241,28 +245,27 @@ function Users(props) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className={stl.userUnitHidden}>
-                                    <div  className={`${stl.userUnit} ${themes.userUnitDnmc}`}>
-                                        <div className={stl.miniHeadWrapper}>
-                                            <h2 className={`${stl.userName} ${themes.userNameDnmc}`}> To {user.name}</h2>
-                                            <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
-                                        </div>
-                                        <div className={stl.textAreaWrapper}>
-                                            <textarea className={stl.talkTextarea}
-                                                      // value={textAreaValue}
-                                                      // onChange={e=>setTextareaValue(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className={stl.miniFooterWrapper}>
-                                            <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                                    onClick={()=>writeMsg(user.id,user.name)}
-                                            >Send message
-                                            </button>
-                                            <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                                    onClick={e=>{userIdTalkModeOff(e)}}
-                                            >Close
-                                            </button>
-                                        </div>
+                                <div  className={`${stl.userUnitHidden}`}>
+                                    <div className={stl.miniHeadWrapper}>
+                                        <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
+                                        <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
+                                        <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                onClick={e=>{userIdTalkModeOff(e)}}
+                                        >X</button>
+                                    </div>
+                                    <div className={stl.textAreaWrapper}>
+                                        <Formik initialValues={{text:''}}validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
+                                                onSubmit={(values,{setSubmitting})=>{writeMsg(user.id,values.text,user.name);values.text='';setSubmitting(false);
+                                                }}>
+                                            {({values,errors,handleChange,handleSubmit,isSubmitting})=>(
+                                                <form onSubmit={handleSubmit}>
+                                                <textarea name="text" className={stl.talkTextarea}
+                                                onChange={handleChange} value={values.text} placeholder={errors.text} />
+                                                    <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                    > Send Msg </button>
+                                                </form>
+                                            )}
+                                        </Formik>
                                     </div>
                                 </div>
                             </div >
@@ -283,6 +286,8 @@ function Users(props) {
 
 export default Users;
 
+
+// <div  className={`${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitHidden}
 
 // let paginator = () => {
 //     let pagesArr = [];

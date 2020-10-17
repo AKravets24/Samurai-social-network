@@ -39,6 +39,7 @@ export const Friends = React.memo(function MyComponent(props) {
     return <div className={`${stl.friendsGeneral} ${themes.friendsGeneralDnmc}`}>
         <h2 className={stl.userHeader}>Friends</h2>
         {props.friendsList.map((user, i) =>
+
             <div key={i} className={stl.userUnit}>
                 <div className={stl.picAndButton}>
                     <NavLink to={`/profile/${user.id}`}>
@@ -55,6 +56,7 @@ export const Friends = React.memo(function MyComponent(props) {
                     </div>
                 </div>
             </div>
+
         )}
     </div>
 });
