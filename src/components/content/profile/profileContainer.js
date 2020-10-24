@@ -7,7 +7,7 @@ import { compose } from 'redux';
 
 const ProfileFuncContainer = React.memo( props => {
 // function ProfileFuncContainer (props) {
-     console.log(props.profileState);
+//      console.log(props.profileState);
 
     let myId=props.profileState.myId;
     let comparativeId=+props.match.params.userId;

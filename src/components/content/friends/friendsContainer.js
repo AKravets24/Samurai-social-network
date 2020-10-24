@@ -3,6 +3,7 @@ import {connect}                  from 'react-redux';
 import {Friends}                  from './friends'
 import {compose}                  from 'redux';
 import {withRouter}               from 'react-router-dom';
+import {getUsersInfo} from "../../../redux/users-selector";
 
 
 function FriendsFuncContainer (props) {
@@ -12,6 +13,7 @@ function FriendsFuncContainer (props) {
 
     return <Friends
         friendsList         = { props.state.friendsList         }
+        usersInfo           = { props.state.usersInfo           }
         defaultAvatar       = { props.state.defaultAvatar       }
         followThunk         = { props.followThunk               }
         unFollowThunk       = { props.unFollowThunk             }
@@ -28,6 +30,7 @@ const mapStateToProps = (state) => {
         friendsACs:           state.friendsACs,
         followingInProgress:  state.friendsReducer.followingInProgress,
         colorTheme:           state.backgroundReducer.theme,
+        usersInfo:            state.friendsReducer,
     }
 };
 

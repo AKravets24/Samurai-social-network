@@ -1,18 +1,24 @@
-import React, {useState, useEffect  } from "react";
-import stl                            from './users.module.css';
-import {NavLink}                      from 'react-router-dom';
-import {Formik}                       from 'formik';
-// import UnAuthorised                from "../unAuthorised/unAuthorised";
+import React, {useState, useEffect,useRef  } from "react";
+import stl                                   from './users.module.css';
+import {NavLink}                             from 'react-router-dom';
+import {Formik}                              from 'formik';
+import { v4 as uuidv4 }                      from 'uuid';
+// import UnAuthorised                       from "../unAuthorised/unAuthorised";
 
 function Users(props) {
-    // console.log(props.colorTheme);
-    const pagesCount = Math.ceil(props.totalCount / props.pageSize);
-    let [startPage,  setStartPage]   = useState(1);
-    let [endPage,    setEndPage]     = useState(10);
-    let [scrollStep, setScrollStep]  = useState(10);
-    let [disableDec, setDisableDec]  = useState(true);
-    let [disableInc, setDisableInc]  = useState(false);
-    let [isDisabled, setIsDisabled]  = useState(false);
+    let pagesCount = Math.ceil(props.totalCount / props.pageSize);
+    let [startPage,  setStartPage]        = useState(1);
+    let [endPage,    setEndPage]          = useState(10);
+    let [scrollStep, setScrollStep]       = useState(10);
+    let [disableDec, setDisableDec]       = useState(true);
+    let [disableInc, setDisableInc]       = useState(false);
+    let [isDisabled, setIsDisabled]       = useState(false);
+    let [userName, setUserName]           = useState('');
+    let [msgStat, setMsgStat]             = useState(null);
+    let [feedBackClass, setFeedBackClass] = useState(stl.feedBackVisible);
+    let [wrapperLocker, setWrapperLocker] = useState('');
+    let [feedBack,setFeedBack]            = useState(true); // false normal
+
 
     let paginatorDec = () => {
         setStartPage(startPage - scrollStep);
@@ -31,9 +37,9 @@ function Users(props) {
         for (let i=startPage;i<=endPage;i++){if(startPage<1){setStartPage(1);setEndPage(endPage=scrollStep)}
             if(endPage>pagesCount){setStartPage(pagesCount-scrollStep);setEndPage(pagesCount)};pagesArr.push(i)}
         return pagesArr.map((page,i) =>
-                <span key={i} className={props.currentPage===page?`${stl.paginationSelected} ${themes.paginationSelectedDnmc}`:
-                      `${stl.pagination} ${themes.paginationDnmc}`} onClick={()=>props.currentPage!==page&&setPageListener(page)}
-                >{page}</span>
+            <span key={i} className={props.currentPage===page?`${stl.paginationSelected} ${themes.paginationSelectedDnmc}`:
+                `${stl.pagination} ${themes.paginationDnmc}`} onClick={()=>props.currentPage!==page&&setPageListener(page)}
+            >{page}</span>
         );
     };
 
@@ -43,18 +49,11 @@ function Users(props) {
     let searchListener=()=>{let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName);};
     let searchModeCloseListener = () => {props.toggleUserSearchMode(false);props.setCurrentPage(props.usersInfo.currentPage); };
 
-    let [userName, setUserName]           = useState('');
-    let [msgStat, setMsgStat]             = useState(null);
-    let [feedBack,setFeedBack]            = useState(false);
-    let [feedBackClass, setFeedBackClass] = useState(stl.feedBackVisible); // false normal
-    let [wrapperLocker, setWrapperLocker] = useState('');
-
-
     let [themes, setThemes] = useState({userPageDnmc:"",generalHeaderDnmc:'',pagBTNDnmc:'',
-        paginationSelectedDnmc:'',paginationDnmc:'', paginationBlockDnmc:'', searchInputDnmc:'',userAvaDnmc:'',
+        paginationSelectedDnmc:'',paginationDnmc:'', searchInputDnmc:'',userAvaDnmc:'',
         followBTNDnmc:'',userNameDnmc:'',mapWrapperDnmc:'', userUnitDnmc:'',userWriteModeDnmc:'', moreUserUnitsDnmc:'',
     });
-    useEffect(()=> {
+    useEffect(()=>{
         switch (props.colorTheme) {
             case 'NIGHT':
                 setThemes({...themes,
@@ -63,7 +62,6 @@ function Users(props) {
                     pagBTNDnmc:stl.pagBTN_N,
                     paginationSelectedDnmc:stl.paginationSelectedN,
                     paginationDnmc:stl.paginationN,
-                    paginationBlockDnmc:stl.paginationBlockInsideN,
                     searchInputDnmc:stl.searchInputN,
                     userAvaDnmc:stl.userAvaN,
                     followBTNDnmc:stl.followBTN_N,
@@ -81,7 +79,6 @@ function Users(props) {
                     pagBTNDnmc:stl.pagBTN_M,
                     paginationSelectedDnmc:stl.paginationSelectedM,
                     paginationDnmc:stl.paginationM,
-                    paginationBlockDnmc:stl.paginationBlockInsideM,
                     searchInputDnmc:stl.searchInputM,
                     userAvaDnmc:stl.userAvaM,
                     followBTNDnmc:stl.followBTN_M,
@@ -99,7 +96,6 @@ function Users(props) {
                     pagBTNDnmc:stl.pagBTN_D,
                     paginationSelectedDnmc:stl.paginationSelectedD,
                     paginationDnmc:stl.paginationD,
-                    paginationBlockDnmc:stl.paginationBlockInsideD,
                     searchInputDnmc:stl.searchInputD,
                     userAvaDnmc:stl.userAvaD,
                     followBTNDnmc:stl.followBTN_D,
@@ -117,7 +113,6 @@ function Users(props) {
                     pagBTNDnmc:stl.pagBTN_E,
                     paginationSelectedDnmc:stl.paginationSelectedE,
                     paginationDnmc:stl.paginationE,
-                    paginationBlockDnmc:stl.paginationBlockInsideE,
                     searchInputDnmc:stl.searchInputE,
                     userAvaDnmc:stl.userAvaE,
                     followBTNDnmc:stl.followBTN_E,
@@ -132,11 +127,28 @@ function Users(props) {
         }
     },[props.colorTheme]);
 
-    useEffect(()=>{
-        switch (props.sendingMSGStat) {
-            case 0: setFeedBack(true); setFeedBackClass(stl.feedBackVisible);
-            setMsgStat('Sending message...');
+    // useEffect(()=>{
+    //     switch (props.sendingMSGStat) {
+    //         case 0: setFeedBack(true); setFeedBackClass(stl.feedBackVisible);
+    //             setMsgStat('Sending message...');
+    //             return;
+    //         case 1:
+    //             setMsgStat(`Message delivered to ${userName}`);
+    //             setTimeout(()=>{setFeedBackClass(stl.feedbackHidden)},5000) //через 5 сек анимация плавного убирания на 3 секунды
+    //             setTimeout(()=>{setFeedBack(false)},8000)  // через 8 секунд объект удаляется из DOM
+    //             return;
+    //         case 2:
+    //             setMsgStat(`Failed to deliver message!`)
+    //             setTimeout(() => {setFeedBackClass(stl.feedbackHidden)},5000) // то же самое
+    //             setTimeout(() => {setFeedBack(false)},8000)  // то же самое
+    //             return;
+    //     }
+    // },[props.sendingMSGStat]);
 
+    useEffect(()=>{
+        switch (props.sendingMSGStatArr) {
+            case 0: setFeedBack(true); setFeedBackClass(stl.feedBackVisible);
+                setMsgStat('Sending message...');
                 return;
             case 1:
                 setMsgStat(`Message delivered to ${userName}`);
@@ -155,16 +167,11 @@ function Users(props) {
     let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
 
     let writeMsg = (userId,text,userName)=> {
-        setUserName(userName)
-        props.sendMessageToUserThunk(userId, text);
+        let actionKey = uuidv4()
+        setUserName(userName);
+        props.sendMessageToUserThunk(userId, text, actionKey, userName);
         setWrapperLocker('');
         setIsDisabled(false);
-    };
-    let userIdTalkModeOn  =e=> {
-        setWrapperLocker(stl.wrapperLocked);
-        setIsDisabled(true);
-        e.target.parentElement.parentElement.parentElement.parentElement.children[0].className=stl.userUnitHidden;
-        e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=secondBlockClass;
     };
     let userIdTalkModeOff =e=> {
         setWrapperLocker('');
@@ -172,6 +179,18 @@ function Users(props) {
         e.target.parentElement.parentElement.parentElement.children[0].className=firstBlockClass;
         e.target.parentElement.parentElement.parentElement.children[1].className=stl.userUnitHidden;
     };
+    let userIdTalkModeOn  =e=> {
+        setWrapperLocker(stl.wrapperLocked);
+        setIsDisabled(true);
+        e.target.parentElement.parentElement.parentElement.parentElement.children[0].className=stl.userUnitHidden;
+        e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=secondBlockClass;
+    };
+
+    // console.log(props.sendingMSGStatArr);
+
+    let feedBackCloser=(i)=>{
+        props.feedBackWindowCloser(i)
+    }
 
     return <>
         <div className={`${stl.usersPage} ${themes.userPageDnmc}`}>
@@ -200,52 +219,47 @@ function Users(props) {
                         <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchModeCloseListener}>X</button>
                     </div>
                 </div>
-                {feedBack &&
-                    <div className={`${stl.feedbackWindow} ${feedBackClass}`}>
-                        <button onClick={()=>setFeedBack(false)}>X</button>
-                        <p>{msgStat}</p>
-                    </div>
-                }
+
                 {props.usersInfo.isLoading ?
                     <div className={stl.loaderDiv}>
                         <img className={stl.loader} src={props.usersInfo.loader} alt="Err"/>  {/*ЛОДЫРЯ ПРОКИНУТЬ*/}
                     </div> :
-                <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
-                    {props.usersInfo.initialUsersList
-                        .map(user =>
-                            <div className={stl.userUnitContainer} key={user.id}>
-                                <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`} >
-                                    <div className={stl.avaDiv}>
-                                        <NavLink to={`/profile/${user.id}`}>
-                                                <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
-                                                className={`${themes.userAvaDnmc}`}/>
-                                        </NavLink>
-                                    </div>
-                                    <div className={stl.nameStateBTNs}>
-                                        <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
+                    <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
+                        {props.usersInfo.initialUsersList
+                            .map(user =>
+                                <div className={stl.userUnitContainer} key={user.id}>
+                                    <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`} >
+                                        <div className={stl.avaDiv}>
                                             <NavLink to={`/profile/${user.id}`}>
-                                                <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
+                                                <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
+                                                     className={`${themes.userAvaDnmc}`}/>
                                             </NavLink>
-                                            <p className={`${themes.userNameDnmc}`}>{user.status}</p>
                                         </div>
-                                        <div className={stl.followNWriteBTNS}>
-                                            <button
-                                                disabled={props.usersInfo.followingInProgress.some(id=>id==user.id)}
-                                                id={user.id}
-                                                className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                                onClick={user.followed?props.unFollowListener:props.followListener}>
-                                                {user.followed?'unFollow':'Follow'}
-                                            </button>
-                                            <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                                    disabled={isDisabled}
-                                                    onClick={e=>userIdTalkModeOn(e,user.id)}
-                                                    >
-                                                Write message
-                                            </button>
+                                        <div className={stl.nameStateBTNs}>
+                                            <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
+                                                <NavLink to={`/profile/${user.id}`}>
+                                                    <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
+                                                </NavLink>
+                                                <p className={`${themes.userNameDnmc}`}>{user.status}</p>
+                                            </div>
+                                            <div className={stl.followNWriteBTNS}>
+                                                <button
+                                                    disabled={props.usersInfo.followingInProgress.some(id=>id==user.id)}
+                                                    id={user.id}
+                                                    className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                    onClick={user.followed?props.unFollowListener:props.followListener}>
+                                                    {user.followed?'unFollow':'Follow'}
+                                                </button>
+                                                <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                        disabled={isDisabled}
+                                                        onClick={e=>userIdTalkModeOn(e,user.id, user.name)}
+                                                >
+                                                    Write message
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div  className={`${stl.userUnitHidden}`}>
+                                    <div  className={`${stl.userUnitHidden}`}>
                                     <div className={stl.miniHeadWrapper}>
                                         <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
                                         <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
@@ -255,24 +269,23 @@ function Users(props) {
                                     </div>
                                     <div className={stl.textAreaWrapper}>
                                         <Formik initialValues={{text:''}}validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
-                                                onSubmit={(values,{setSubmitting})=>{writeMsg(user.id,values.text,user.name);values.text='';setSubmitting(false);
-                                                }}>
-                                            {({values,errors,handleChange,handleSubmit,isSubmitting})=>(
-                                                <form onSubmit={handleSubmit}>
+                                        onSubmit={(values,{setSubmitting})=>{writeMsg(user.id,values.text,user.name,);values.text='';setSubmitting(false);
+                                        }}>
+                                        {({values,errors,handleChange,handleSubmit,isSubmitting})=>(
+                                            <form onSubmit={handleSubmit}>
                                                 <textarea name="text" className={stl.talkTextarea}
                                                 onChange={handleChange} value={values.text} placeholder={errors.text} />
-                                                    <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                                    > Send Msg </button>
-                                                </form>
-                                            )}
+                                                <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                > Send Msg </button>
+                                            </form>
+                                        )}
                                         </Formik>
                                     </div>
                                 </div>
-                            </div >
-                        )}
-                 </div>
+                                </div >
+                            )}
+                    </div>
                 }
-
             </div>
             <div className={ `${stl.moreUserUnits}  ${themes.moreUserUnitsDnmc}`}>
                 <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
@@ -281,10 +294,34 @@ function Users(props) {
             </div>
         </div>
 
+        { props.sendingMSGStatArr
+            .map((el,i)=>
+                <div key={i} className={`${stl.feedbackWindow} ${feedBackClass}`}>
+                    <button onClick={()=>feedBackCloser(i)} >X</button>
+                    <p>{msgStat}</p>
+                </div>
+            )}
+
+        {/*{feedBack &&*/}
+        {/*<div className={`${stl.feedbackWindow} ${feedBackClass}`}>*/}
+        {/*    <button onClick={()=>setFeedBack(false)}>X</button>*/}
+        {/*    <p>{msgStat}</p>*/}
+        {/*</div>*/}
+        {/*}*/}
+
+        {/*{feedBackArr.map((el,i)=>*/}
+        {/*    <div key={i} className={`${stl.feedbackWindow} ${feedBackClass}`}>*/}
+        {/*    <button onClick={()=>setFeedBack(false)}>X</button>*/}
+        {/*    <p>{msgStat}</p>*/}
+        {/*    </div>*/}
+        {/*)}*/}
+
+
+
     </>
 }
-
 export default Users;
+
 
 
 // <div  className={`${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitHidden}
@@ -331,3 +368,391 @@ export default Users;
 //         </div>
 //     </div>
 // </div>
+
+
+
+
+
+
+// import React, {useState, useEffect,useRef  } from "react";
+// import stl                            from './users.module.css';
+// import {NavLink}                      from 'react-router-dom';
+// import {Formik}                       from 'formik';
+// // import UnAuthorised                from "../unAuthorised/unAuthorised";
+//
+// function Users(props) {
+//     // console.log(props.colorTheme);
+//     const pagesCount = Math.ceil(props.totalCount / props.pageSize);
+//     let [startPage,  setStartPage]   = useState(1);
+//     let [endPage,    setEndPage]     = useState(10);
+//     let [scrollStep, setScrollStep]  = useState(10);
+//     let [disableDec, setDisableDec]  = useState(true);
+//     let [disableInc, setDisableInc]  = useState(false);
+//     let [isDisabled, setIsDisabled]  = useState(false);
+//
+//     let paginatorDec = () => {
+//         setStartPage(startPage - scrollStep);
+//         setEndPage(endPage - scrollStep);
+//         startPage <= 1 ? setDisableDec(disableDec = true) : setDisableDec(disableDec = false);
+//         endPage >= pagesCount ? setDisableInc(disableInc = true) : setDisableInc(disableInc = false)
+//     };
+//     let paginatorInc = () => {
+//         setStartPage(startPage + scrollStep);
+//         setEndPage(endPage + scrollStep);
+//         startPage <= 1 ? setDisableDec(disableDec = true) : setDisableDec(disableDec = false);
+//         endPage >= pagesCount ? setDisableInc(disableInc = true) : setDisableInc(disableInc = false);
+//     };
+//     let paginator    = () => {
+//         let pagesArr=[];
+//         for (let i=startPage;i<=endPage;i++){if(startPage<1){setStartPage(1);setEndPage(endPage=scrollStep)}
+//             if(endPage>pagesCount){setStartPage(pagesCount-scrollStep);setEndPage(pagesCount)};pagesArr.push(i)}
+//         return pagesArr.map((page,i) =>
+//             <span key={i} className={props.currentPage===page?`${stl.paginationSelected} ${themes.paginationSelectedDnmc}`:
+//                 `${stl.pagination} ${themes.paginationDnmc}`} onClick={()=>props.currentPage!==page&&setPageListener(page)}
+//             >{page}</span>
+//         );
+//     };
+//
+//     let setPageListener = (page) => {props.setCurrentPage(page);setWrapperLocker('');setIsDisabled(false);};
+//     let onChangeListener = ({target}) => {let {value} = target;props.updateSearchField(value)};
+//     let keyUpListener=(e)=>{if(e.keyCode === 13){let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName);} };
+//     let searchListener=()=>{let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName);};
+//     let searchModeCloseListener = () => {props.toggleUserSearchMode(false);props.setCurrentPage(props.usersInfo.currentPage); };
+//
+//     let [userName, setUserName]           = useState('');
+//     let [msgStat, setMsgStat]             = useState(null);
+//     let [feedBack,setFeedBack]            = useState(false);
+//     let [feedBackClass, setFeedBackClass] = useState(stl.feedBackVisible); // false normal
+//     let [wrapperLocker, setWrapperLocker] = useState('');
+//
+//
+//     let [themes, setThemes] = useState({userPageDnmc:"",generalHeaderDnmc:'',pagBTNDnmc:'',
+//         paginationSelectedDnmc:'',paginationDnmc:'', paginationBlockDnmc:'', searchInputDnmc:'',userAvaDnmc:'',
+//         followBTNDnmc:'',userNameDnmc:'',mapWrapperDnmc:'', userUnitDnmc:'',userWriteModeDnmc:'', moreUserUnitsDnmc:'',
+//     });
+//     useEffect(()=> {
+//         switch (props.colorTheme) {
+//             case 'NIGHT':
+//                 setThemes({...themes,
+//                     userPageDnmc: stl.usersPageN,
+//                     generalHeaderDnmc:stl.generalHeaderN,
+//                     pagBTNDnmc:stl.pagBTN_N,
+//                     paginationSelectedDnmc:stl.paginationSelectedN,
+//                     paginationDnmc:stl.paginationN,
+//                     paginationBlockDnmc:stl.paginationBlockInsideN,
+//                     searchInputDnmc:stl.searchInputN,
+//                     userAvaDnmc:stl.userAvaN,
+//                     followBTNDnmc:stl.followBTN_N,
+//                     userNameDnmc:stl.userNameN,
+//                     mapWrapperDnmc:stl.mapWrapperN,
+//                     userUnitDnmc:stl.userUnitN,
+//                     userWriteModeDnmc:stl.userWriteModeN,
+//                     moreUserUnitsDnmc:stl.moreUserUnitsN,
+//                 });
+//                 return;
+//             case 'MORNING':
+//                 setThemes({...themes,
+//                     userPageDnmc: stl.usersPageM,
+//                     generalHeaderDnmc:stl.generalHeaderM,
+//                     pagBTNDnmc:stl.pagBTN_M,
+//                     paginationSelectedDnmc:stl.paginationSelectedM,
+//                     paginationDnmc:stl.paginationM,
+//                     paginationBlockDnmc:stl.paginationBlockInsideM,
+//                     searchInputDnmc:stl.searchInputM,
+//                     userAvaDnmc:stl.userAvaM,
+//                     followBTNDnmc:stl.followBTN_M,
+//                     userNameDnmc:stl.userNameM,
+//                     mapWrapperDnmc:stl.mapWrapperM,
+//                     userUnitDnmc:stl.userUnitM,
+//                     userWriteModeDnmc:stl.userWriteModeM,
+//                     moreUserUnitsDnmc:stl.moreUserUnitsM,
+//                 });
+//                 return;
+//             case 'DAY':
+//                 setThemes({...themes,
+//                     userPageDnmc: stl.usersPageD,
+//                     generalHeaderDnmc:stl.generalHeaderD,
+//                     pagBTNDnmc:stl.pagBTN_D,
+//                     paginationSelectedDnmc:stl.paginationSelectedD,
+//                     paginationDnmc:stl.paginationD,
+//                     paginationBlockDnmc:stl.paginationBlockInsideD,
+//                     searchInputDnmc:stl.searchInputD,
+//                     userAvaDnmc:stl.userAvaD,
+//                     followBTNDnmc:stl.followBTN_D,
+//                     userNameDnmc:stl.userNameD,
+//                     mapWrapperDnmc:stl.mapWrapperD,
+//                     userUnitDnmc:stl.userUnitD,
+//                     userWriteModeDnmc:stl.userWriteModeD,
+//                     moreUserUnitsDnmc:stl.moreUserUnitsD
+//                 });
+//                 return;
+//             case 'EVENING':
+//                 setThemes({...themes,
+//                     userPageDnmc: stl.usersPageE,
+//                     generalHeaderDnmc:stl.generalHeaderE,
+//                     pagBTNDnmc:stl.pagBTN_E,
+//                     paginationSelectedDnmc:stl.paginationSelectedE,
+//                     paginationDnmc:stl.paginationE,
+//                     paginationBlockDnmc:stl.paginationBlockInsideE,
+//                     searchInputDnmc:stl.searchInputE,
+//                     userAvaDnmc:stl.userAvaE,
+//                     followBTNDnmc:stl.followBTN_E,
+//                     userNameDnmc:stl.userNameE,
+//                     mapWrapperDnmc:stl.mapWrapperE,
+//                     userUnitDnmc:stl.userUnitE,
+//                     userWriteModeDnmc:stl.userWriteModeE,
+//                     moreUserUnitsDnmc:stl.moreUserUnitsE,
+//                 });
+//                 return;
+//             default: return {...themes}
+//         }
+//     },[props.colorTheme]);
+//
+//     useEffect(()=>{
+//         switch (props.sendingMSGStat) {
+//             case 0: setFeedBack(true); setFeedBackClass(stl.feedBackVisible);
+//                 setMsgStat('Sending message...');
+//
+//                 return;
+//             case 1:
+//                 setMsgStat(`Message delivered to ${userName}`);
+//                 setTimeout(()=>{setFeedBackClass(stl.feedbackHidden)},5000) //через 5 сек анимация плавного убирания на 3 секунды
+//                 setTimeout(()=>{setFeedBack(false)},8000)  // через 8 секунд объект удаляется из DOM
+//                 return;
+//             case 2:
+//                 setMsgStat(`Failed to deliver message!`)
+//                 setTimeout(() => {setFeedBackClass(stl.feedbackHidden)},5000) // то же самое
+//                 setTimeout(() => {setFeedBack(false)},8000)  // то же самое
+//                 return;
+//         }
+//     },[props.sendingMSGStat]);
+//
+//     let firstBlockClass  = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
+//     let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
+//
+//     const containerRef= useRef(null)
+//
+//     let writeMsg = (userId,text,userName)=> {
+//         setUserName(userName)
+//         props.sendMessageToUserThunk(userId, text);
+//         setWrapperLocker('');
+//         setIsDisabled(false);
+//     };
+//     let writeToUser = `<div class='${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}'>
+//                            <div class='stl.miniHeadWrapper'>
+//                                <h2 class='${stl.userName} ${themes.userNameDnmc}'>**user.name**</h2>
+//                                <button class='${stl.followBTN} ${themes.followBTNDnmc}'>Go to chat</button>
+//                                <button class='${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}'
+//                                        onClick={e=>{userIdTalkModeOff(e)}}
+//                                >X</button>
+//                            </div>
+//                            <div class='stl.textAreaWrapper'>
+//                                <Formik initialValues={{text:''}}validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
+// <!--                                       onSubmit={(values,{setSubmitting})=>{writeMsg(/*user.id,values.text,user.name*/);values.text='';setSubmitting(false);-->
+//                                        onSubmit={(values,{setSubmitting})=>{writeMsg();values.text='';setSubmitting(false);
+//                                        }}>
+//                                    {({values,errors,handleChange,handleSubmit,isSubmitting})=>(
+//                                        <form onSubmit={handleSubmit}>
+//                                        <textarea name="text" class='${stl.talkTextarea}'
+//                                        onChange={handleChange} value={values.text} placeholder={errors.text} />
+//                                            <button type="submit" disabled={isSubmitting} class='${stl.followBTN} ${themes.followBTNDnmc}'
+//                                            > Send Msg </button>
+//                                        </form>
+//                                    )}
+//                                </Formik>
+//                            </div>
+//                        </div>
+//                        `;
+//
+//     let userIdTalkModeOff =e=> {
+//         console.log(this)
+//         // setWrapperLocker('');
+//         // setIsDisabled(false);
+//         // e.target.parentElement.parentElement.parentElement.children[0].className=firstBlockClass;
+//         // e.target.parentElement.parentElement.parentElement.children[1].className=stl.userUnitHidden;
+//     };
+//
+//     let testContent = (e,userId,userName) => {
+//         // console.log(e)
+//         let a = {x:123};
+//         // console.log(a)
+//
+//         let replacer = () => {
+//             console.log(5)
+//         }
+//
+//         return (
+//             `<div  class='${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}'>
+//             <div class='{stl.miniHeadWrapper}'>
+//                 <h2 class='${stl.userName} ${themes.userNameDnmc}'>**user.name**</h2>
+//                 <button class='${stl.followBTN} ${themes.followBTNDnmc}'>Go to chat</button>
+//                 <button class='${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}'
+//                       onclick='{${replacer}}'
+//                 >X</button>
+//
+//             </div>
+//             <div class='stl.textAreaWrapper'>
+//
+//                 <Formik initialValues={{text:''}} validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
+//                         onSubmit={(values,{setSubmitting})=>{writeMsg(user.id,values.text,user.name);values.text='';setSubmitting(false);
+//                         }}>
+//                            {({values,errors,handleChange,handleSubmit,isSubmitting})=>(
+//                                <form onSubmit={handleSubmit}>
+//                                <textarea name="text" class='${stl.talkTextarea}'
+//                                onChange={handleChange} value={values.text} placeholder={errors.text}> </textarea>
+//                                    <button type="submit" disabled={isSubmitting} class='${stl.followBTN} ${themes.followBTNDnmc}'
+//                                    > Send Msg </button>
+//                                </form>
+//                            )}
+//                 </Formik>
+//             </div>
+//          </div>
+// `
+//         )
+//     }
+//
+//     // onclick="console.log(1)"
+//     // onClick=(e)=>{userIdTalkModeOff(e)
+//     //onClick='console.log(this.parentElement.parentElement)'
+//     //onClick='console.log(${userId})'
+//     //onClick='this.parentElement.parentElement.parentElement.removeChild(this.parentElement.parentElement)'
+//     //onClick='${function() {return userIdTalkModeOff(e)}}'
+//     //onclick="{console.log(${a})}"
+//
+//
+//     let userIdTalkModeOn=(e,userId,userName)=> {
+//
+//         console.log(containerRef)
+//         setWrapperLocker(stl.wrapperLocked);
+//         setIsDisabled(true);
+//         // console.log( e.target.parentElement.parentElement.parentElement.parentElement.children[0] )
+//         e.target.parentElement.parentElement.parentElement.parentElement.children[0].className=stl.userUnitHidden;
+//
+//         // e.target.parentElement.parentElement.parentElement.parentElement.insertAdjacentHTML('afterBegin',testContent(e,userId,userName))
+//         e.target.parentElement.parentElement.parentElement.parentElement.innerHTML=testContent(e,userId,userName)
+//
+//
+//         // e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=secondBlockClass;
+//     };
+//
+//     // let userIdTalkModeOn  =e=> {
+//     //     setWrapperLocker(stl.wrapperLocked);
+//     //     setIsDisabled(true);
+//     //     e.target.parentElement.parentElement.parentElement.parentElement.children[0].className=stl.userUnitHidden;
+//     //     e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=secondBlockClass;
+//     // };
+//
+//
+//     return <>
+//         <div className={`${stl.usersPage} ${themes.userPageDnmc}`}>
+//             <div className={stl.userInfo}>
+//                 <div className={`${stl.generalHeader} ${themes.generalHeaderDnmc}`}>
+//                     <h2 className={stl.userHeader}>Users</h2>
+//
+//                     <div className={stl.paginationBlockOutside}>
+//                         {!props.usersInfo.userSearchMode && pagesCount !== 0 &&
+//                         <>
+//                             <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={paginatorDec}
+//                                     disabled={disableDec}> &#171; 5 </button>
+//                             { paginator() }
+//                             <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={paginatorInc}
+//                                     disabled={disableInc}> 5 &#187;  </button>
+//                         </>
+//                         }
+//                     </div>
+//                     <div className={stl.searchBlock} >
+//                         <input type="text"
+//                                value={props.usersInfo.userSearchField}
+//                                onChange={onChangeListener}
+//                                onKeyUp={keyUpListener}
+//                                className={`${stl.searchInput} ${themes.searchInputDnmc}`}     />
+//                         <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchListener}>Find!</button>
+//                         <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchModeCloseListener}>X</button>
+//                     </div>
+//                 </div>
+//                 {feedBack &&
+//                 <div className={`${stl.feedbackWindow} ${feedBackClass}`}>
+//                     <button onClick={()=>setFeedBack(false)}>X</button>
+//                     <p>{msgStat}</p>
+//                 </div>
+//                 }
+//                 {props.usersInfo.isLoading ?
+//                     <div className={stl.loaderDiv}>
+//                         <img className={stl.loader} src={props.usersInfo.loader} alt="Err"/>  {/*ЛОДЫРЯ ПРОКИНУТЬ*/}
+//                     </div> :
+//                     <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
+//                         {props.usersInfo.initialUsersList
+//                             .map(user =>
+//                                 <div className={stl.userUnitContainer} key={user.id} ref={containerRef}>
+//                                     <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`} >
+//                                         <div className={stl.avaDiv}>
+//                                             <NavLink to={`/profile/${user.id}`}>
+//                                                 <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
+//                                                      className={`${themes.userAvaDnmc}`}/>
+//                                             </NavLink>
+//                                         </div>
+//                                         <div className={stl.nameStateBTNs}>
+//                                             <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
+//                                                 <NavLink to={`/profile/${user.id}`}>
+//                                                     <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
+//                                                 </NavLink>
+//                                                 <p className={`${themes.userNameDnmc}`}>{user.status}</p>
+//                                             </div>
+//                                             <div className={stl.followNWriteBTNS}>
+//                                                 <button
+//                                                     disabled={props.usersInfo.followingInProgress.some(id=>id==user.id)}
+//                                                     id={user.id}
+//                                                     className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+//                                                     onClick={user.followed?props.unFollowListener:props.followListener}>
+//                                                     {user.followed?'unFollow':'Follow'}
+//                                                 </button>
+//                                                 <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+//                                                         disabled={isDisabled}
+//                                                         onClick={e=>userIdTalkModeOn(e,user.id, user.name)}
+//                                                 >
+//                                                     Write message
+//                                                 </button>
+//                                             </div>
+//                                         </div>
+//                                     </div>
+//
+//                                     {/*<div  className={`${stl.userUnitHidden}`}>
+//                                     <div className={stl.miniHeadWrapper}>
+//                                         <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
+//                                         <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
+//                                         <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
+//                                                 onClick={e=>{userIdTalkModeOff(e)}}
+//                                         >X</button>
+//                                     </div>
+//                                     <div className={stl.textAreaWrapper}>
+//                                         <Formik initialValues={{text:''}}validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
+//                                                 onSubmit={(values,{setSubmitting})=>{writeMsg(user.id,values.text,user.name);values.text='';setSubmitting(false);
+//                                                 }}>
+//                                             {({values,errors,handleChange,handleSubmit,isSubmitting})=>(
+//                                                 <form onSubmit={handleSubmit}>
+//                                                 <textarea name="text" className={stl.talkTextarea}
+//                                                 onChange={handleChange} value={values.text} placeholder={errors.text} />
+//                                                     <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+//                                                     > Send Msg </button>
+//                                                 </form>
+//                                             )}
+//                                         </Formik>
+//                                     </div>
+//                                 </div>*/}
+//                                 </div >
+//                             )}
+//                     </div>
+//                 }
+//
+//             </div>
+//             <div className={ `${stl.moreUserUnits}  ${themes.moreUserUnitsDnmc}`}>
+//                 <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
+//                         onClick={props.showMoreListener}>Show More
+//                 </button>
+//             </div>
+//         </div>
+//
+//     </>
+// }
+//
+// export default Users;

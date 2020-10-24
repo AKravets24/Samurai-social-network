@@ -35,15 +35,15 @@
     <property name="ts.external.directory.path" value="D:\Soft\WebStorm 2019.2.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\02_socialNetwork\my-app\src\components\content\profile" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\07_socialNetwork thunk\my-app\src\components\content\profile\modalWindowStatus" />
       <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\07_socialNetwork thunk\my-app\src\components\content\HOC" />
       <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\07_socialNetwork thunk\my-app\src\components\content\unAuthorised" />
       <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\02_socialNetwork\my-app\src\components" />
       <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\02_socialNetwork\my-app\src\components\content\news" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\frontend\I\IT-KAMASUTRA\React\projects\02_socialNetwork\my-app\src\components\content\profile" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -282,7 +282,14 @@
       <workItem from="1602755735688" duration="22955000" />
       <workItem from="1602805611387" duration="3488000" />
       <workItem from="1602846128317" duration="20259000" />
-      <workItem from="1602927568565" duration="8345000" />
+      <workItem from="1602927568565" duration="9934000" />
+      <workItem from="1603118763181" duration="13095000" />
+      <workItem from="1603142107228" duration="1429000" />
+      <workItem from="1603187958398" duration="20101000" />
+      <workItem from="1603277245039" duration="14739000" />
+      <workItem from="1603358643735" duration="27916000" />
+      <workItem from="1603446573664" duration="36848000" />
+      <workItem from="1603533794564" duration="10358000" />
     </task>
     <servers />
   </component>
@@ -321,12 +328,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
-          <line>31</line>
+          <line>33</line>
           <option name="timeStamp" value="70" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
-          <line>68</line>
+          <line>71</line>
           <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -365,26 +372,30 @@
           <option name="timeStamp" value="108" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
-          <line>216</line>
-          <option name="timeStamp" value="120" />
+          <url>file://$PROJECT_DIR$/redux/app.js</url>
+          <line>36</line>
+          <option name="timeStamp" value="109" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
-          <line>247</line>
-          <option name="timeStamp" value="126" />
+          <line>226</line>
+          <option name="timeStamp" value="112" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/dialogsReducer.js</url>
+          <line>152</line>
+          <option name="timeStamp" value="113" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/dialogsReducer.js</url>
+          <line>59</line>
+          <option name="timeStamp" value="114" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
-          <line>134</line>
+          <line>296</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="127" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
-          <line>205</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="128" />
+          <option name="timeStamp" value="116" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

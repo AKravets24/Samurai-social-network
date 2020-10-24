@@ -6,5 +6,6 @@ export const getCurrentPage   = (state) => { return state.usersReducer.currentPa
 export const getHeaderAC      = (state) => { return state.headerAC                           };
 export const getColorThemeAC  = (state) => { return state.backgroundReducer.theme            };
 export const getDialogsACs    = (state) => { return state.dialogACs                          };
-export const getMSGStat       = (state) => { return state.dialogsReducer.onSendingMSGEStatus };
+// export const getMSGStat       = (state) => { return state.dialogsReducer.onSendingMSGEStatus };
+export const getMSGStat       = (state) => { return state.dialogsReducer.onSendMSGStatArr    };
 

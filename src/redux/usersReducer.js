@@ -81,7 +81,7 @@ const updateSearchFieldAC       = (text)                  =>  ({type: UPDATE_SEA
 
 const initialUsersInfo = {
     initialUsersList: [],
-    pageSize: 50,
+    pageSize: 80,
     totalCount: 0,
     currentPage: 1,
     isLoading: false,
