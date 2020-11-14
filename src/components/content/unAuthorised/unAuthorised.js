@@ -56,7 +56,6 @@ const Login = (props) => {
                             !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
                         ) {
                             errors.email = 'Invalid email address';
-
                         }
                         if (!values.password) {
                             errors.password = 'Required Field';
@@ -131,7 +130,6 @@ const Login = (props) => {
                                 <button type="submit" disabled={isSubmitting} className={stl.formInput}>Login!</button>
                             </div>
                             <div className={stl.formsWrapper}><h3> {props.authErr} </h3></div>
-
                         </form>
                     )}
 
@@ -158,7 +156,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     const state = stateProps;
     const {dispatch} = dispatchProps;
 
-    const setMeLoginThunk = (email, password, rememberMe) => dispatch(state.appAC.setMeLoginThunkAC(email, password, rememberMe))
+    const setMeLoginThunk=(email,password,rememberMe)=>dispatch(state.appAC.setMeLoginThunkAC(email,password,rememberMe))
 
     return {state, setMeLoginThunk}
 

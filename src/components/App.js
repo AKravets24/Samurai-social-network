@@ -41,7 +41,6 @@ function AppTimeDeterminationContainer(props) {
     return timeKeeper &&
         <AppContainer timeKeeper={timeKeeper} themeUpdater={themeUpdater} state={props.state} getInitializeAppThunk={props.getInitializeAppThunk}
         />
-
 }
 
 function AppContainer(props) {

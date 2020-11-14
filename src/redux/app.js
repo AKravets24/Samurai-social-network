@@ -11,16 +11,17 @@ const instance = axios.create({
 export const usersApi = {
     // initialization
     setMeLogin (email = null, password = null, rememberMe = false)
-                                 { return instance.post(`/auth/login`, {email, password, rememberMe}) .then(response =>
-                                     response.data                                                                  ) },
+                                 { return instance.post(`/auth/login`, {email, password, rememberMe})
+                                                                           .then(response=>response).catch(error=>error)},
     // unAuthorised
-    setMeLogOut()                { return instance.delete(`/auth/login`)             .then(response => response.data  )},
-    getLogIn()                   { return instance.get(`/auth/me`)                   .then(response => response.data  )},
+    setMeLogOut()                { return instance.delete(`/auth/login`)                  .then(response=>response.data)},
+    getLogIn()                   { return instance.get(`/auth/me`)         .then(response=>response).catch(error=>error)},
     // users
     getUsers(pageSize = 10, currentPage = 1) {
-        return instance.get(`users?count=${pageSize}&page=${currentPage}`)           .then(response => response.data  )},
+        return instance.get(`users?count=${pageSize}&page=${currentPage}`) .then(response=>response).catch(error=>error)},
     getCertainUser(userName)     {
-        return instance.get(`users?term=${userName}`)                                .then(response => response.data  )},
+        return instance.get(`users?term=${userName}`)                      .then(response=>response).catch(error=>error)},
+
     followRequest(userId)        { return instance.post(`follow/${userId}`)          .then(response => response.data  )},
     unFollowRequest(userId)      { return instance.delete(`follow/${userId}`)        .then(response => response.data  )},
     // PROFILE
@@ -42,7 +43,7 @@ export const usersApi = {
                                  { return instance.get(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`)
                                                                                      .then(response => response.data  )},
 
-    sendMsgToTalker (userId,body){ return instance.post(`dialogs/${userId}/messages1`, {body})
+    sendMsgToTalker (userId,body){ return instance.post(`dialogs/${userId}/messages`, {body})
                                                                                      .then(response => response  )
                                                                                      .catch(error   => error)
     },

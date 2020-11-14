@@ -1,16 +1,18 @@
 import React, {useState ,useEffect} from "react";
-import Users                        from './users';
+import {Users}                      from './users';
 import {connect}                    from 'react-redux';
 import {withAuthRedirect}           from "../HOC/withAuthRedirect";
 import { withRouter }               from 'react-router-dom';
 import { compose }                  from 'redux';
-import {getCurrentPage, getHeaderAC, getPageSize, getTotalCount, getUsersACs, getUsersInfo, getColorThemeAC,
-    getDialogsACs,getMSGStat}
-                                    from "../../../redux/users-selector";
+import { getHeaderAC,
+         getUsersACs,
+         getDialogsACs,
+         getSmartUsersMediaData}    from "../../../redux/selectors";
 
-function UsersFuncContainer (props) { /*console.log(props.state.colorTheme  )*/
+function UsersFuncContainer (props) {
+    // console.log(props)
 
-    useEffect( ()=>{ props.getUsersThunk(props.state.pageSize, props.state.currentPage)},[] );
+    useEffect( ()=>{ props.getUsersThunk(props.state.smartData.pageSize, props.state.currentPage)},[] );
 
     let setCurrentPage         =(page)=>                  { props.setCurrentPageThunk(props.state.pageSize,page)    };
     let followListener         =(e)=>                     { let userId = e.target.id; props.followThunk(userId)     };
@@ -20,15 +22,12 @@ function UsersFuncContainer (props) { /*console.log(props.state.colorTheme  )*/
     let toggleUserSearchMode   =(flag)=>                  { props.toggleUserSearchMode(flag)                        };
     let sendMessageToUserThunk =(userId,body,actionKey,userName)=>
                                                       { props.sendMessageToUserThunk(userId,body,actionKey,userName)};
-    let feedBackWindowCloser   =(arrIndex)=>               {props.feedBackWindowCloser(arrIndex)                    }
+    let feedBackWindowCloser   =(arrIndex)=>              { props.feedBackWindowCloser(arrIndex)                    };
+    let feedbackRefPush        =(el_id)=>                 { props.feedbackRefPush(el_id)                            };
+    let setErrorToNull         =()     =>                 { props.setErrorToNull()                                  };
 
     return <Users
-        totalCount                                      = { props.state.totalCount     }
-        usersInfo                                       = { props.state.usersInfo      }
-        pageSize                                        = { props.state.pageSize       }
-        currentPage                                     = { props.state.currentPage    }
-        sendingMSGStatArr                               = { props.state.sendingMSGStat }
-        colorTheme                                      = { props.state.colorTheme     }
+        usersInfo                                       = { props.state.smartData     }
 
         followListener                                  = { followListener             }
         unFollowListener                                = { unFollowListener           }
@@ -38,22 +37,21 @@ function UsersFuncContainer (props) { /*console.log(props.state.colorTheme  )*/
         toggleUserSearchMode                            = { toggleUserSearchMode       }
         sendMessageToUserThunk                          = { sendMessageToUserThunk     }
         feedBackWindowCloser                            = { feedBackWindowCloser       }
+        feedbackRefPush                                 = { feedbackRefPush            }
+        setErrorToNull                                  = { setErrorToNull             }
     />
 }
 
 // let AuthRedirectComponent = withAuthRedirect(UsersClassContainer);
 const mapStateToProps = (state) => {
-    // console.log(state);
+    // console.log('mstp')
     return {
-        dialogsACs:       getDialogsACs   (state),
-        usersInfo:        getUsersInfo    (state),
-        usersACs:         getUsersACs     (state),
-        pageSize:         getPageSize     (state),
-        totalCount:       getTotalCount   (state),
-        currentPage:      getCurrentPage  (state),
-        getLogIn:         getHeaderAC     (state),
-        colorTheme:       getColorThemeAC (state),
-        sendingMSGStat:   getMSGStat      (state),
+        smartData:  getSmartUsersMediaData (state),
+
+        dialogsACs: getDialogsACs          (state),
+        usersACs:   getUsersACs            (state),
+        getLogIn:   getHeaderAC            (state),
+
     }
 };
 const mergeProps = (stateProps, dispatchProps) => {
@@ -70,13 +68,15 @@ const mergeProps = (stateProps, dispatchProps) => {
     const getCertainUserThunk    = (userName)             => dispatch ( state.usersACs.getCertainUserThunkAC(userName));
     const toggleUserSearchMode   = (userSearchMode)       => {
         dispatch(state.usersACs.toggleUserSearchModeAC(userSearchMode))};
-    const updateSearchField      = (text)                 => dispatch( state.usersACs.updateSearchFieldAC(text));
+    const updateSearchField      = (text)                 => dispatch ( state.usersACs.updateSearchFieldAC(text));
     const sendMessageToUserThunk = (userId,body,actionKey,userName) =>
                                                              dispatch ( state.dialogsACs.sendMessageToUserThunkAC(userId,body,actionKey,userName));
     const feedBackWindowCloser   = (arrIndex)             => dispatch ( state.dialogsACs.feedBackWindowCloserAC(arrIndex));
+    const feedbackRefPush        = (el_id)                => dispatch ( state.dialogsACs.feedbackRefPushAC( el_id));
+    const setErrorToNull         = ()                     => dispatch ( state.usersACs.setErrorToNullAC() )
 
     return { state, getUsersThunk, setUsersThunk, setCurrentPageThunk, followThunk, unFollowThunk, getCertainUserThunk,
-        toggleUserSearchMode, updateSearchField,sendMessageToUserThunk,feedBackWindowCloser};
+        toggleUserSearchMode, updateSearchField,sendMessageToUserThunk,feedBackWindowCloser, feedbackRefPush, setErrorToNull};
 };
 
 // let withUrlDataProfileContainer = withRouter(AuthRedirectComponent);

@@ -1,5 +1,6 @@
 .profile {
     opacity: 0.9;
+    /*position: relative;*/
 }
 .profileN { background-color: #cfedff;     }
 .profileM { background-color: #fbc498;     }
@@ -69,7 +70,10 @@
     text-align: center;
     border-radius: 5px;
     border: 1px solid grey;
+    text-decoration: none;
+    outline: none;
 }
+
 
 .fileChooser img {
     height: 20px;
@@ -117,35 +121,101 @@
 .BTNsE:active   {background-color: red; color:white         }
 
 
-.profileInfo {
-    width: 65%;
-    margin-left: 5%;
-    height: 370px;
+.jobSeeker p:first-child{
+    font-size: 21px;
 }
 
-.profileInfoN { border-top: 2px solid midnightblue; }
-.profileInfoM { border-top: 2px solid #ff5b1d;      }
-.profileInfoD { border-top: 2px solid lightgreen;   }
-.profileInfoE { border-top: 2px solid darkred;      }
+.profileInfo {
+    width: 65%;
+    margin-left: 25px;
+    /*height: 370px;*/
+    /*height: auto;*/
+}
+
+.contactsH2 {
+    color: black;
+    font-size: 21px;
+    /*text-align: center;*/
+    margin: 0;
+}
+
+.profileInfo ul {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.profileInfo li {
+    font-size: 21px;
+    width: 50%;
+    height: 63px;
+    display: flex;
+    align-items: center;
+
+}
+.profileInfo li p {
+    margin-left: 5px;
+    text-overflow: ellipsis;
+    color: #613233;
+    font-style: italic;
+}
+
+.profileInfo li a {
+    margin-left: 5px;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    color: #613233;
+
+}
+
+.profileInfo li img{
+    width: 40px;
+}
+.profileInfo ul:nth-child(1){
+    margin-left: 5px;
+}
+
+.nameWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+.profileInfoN { border-top: 2px solid midnightblue;border-bottom: 2px solid midnightblue;  }
+.profileInfoM { border-top: 2px solid #ff5b1d;     border-bottom: 2px solid #ff5b1d;       }
+.profileInfoD { border-top: 2px solid lightgreen;  border-bottom: 2px solid lightgreen;    }
+.profileInfoE { border-top: 2px solid darkred;     border-bottom: 2px solid darkred;       }
+
+.followBTN {
+    height: 35px;
+    font-size: 20px;
+    border-radius: 10px;
+    outline: none;
+    margin-left: 25px;
+    cursor: pointer;
+}
 
 .profileInfo h2 {
     font-size: 35px;
-    margin: 0
+    margin: 0;
+    display: inline;
 }
 
 .profileInfo ul {
     margin: 0;
     list-style-type: none;
     padding-left: 0;
-    font-size: 24px;
-    height: 74%;
+    font-size: 25px;
+    /*height: 74%;*/
 }
-
 
 
 .statusBlock {
     position: relative;
-    height: 50px;
+    /*height: 50px;*/
+    height: auto;
+    /*outline: 2px solid red;*/
 }
 
 .writePost {
@@ -197,4 +267,67 @@
     margin-bottom: 15px;
     cursor: pointer;
     /*background-color: wheat;*/
+}
+
+.writeWindow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 500px;
+    height: 260px;
+    /*background-color: red;*/
+    z-index: 1;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+.miniHeadWrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 40px;
+    margin-top: 5px;
+}
+
+.miniHeadWrapper h2 {
+    margin: 0;
+    padding: 0 0 5px 0;
+    font-size: 25px;
+    cursor: default;
+    max-width: 310px;
+    height: 30px;
+}
+
+.miniHeadWrapper a {
+    /*margin-top: -10px;*/
+    text-decoration: none;
+    width: 120px;
+    text-align: center;
+    color: black;
+    border: 1px solid black;
+    height: 35px;
+}
+
+.closeBTN {
+    width: 35px;
+    text-align: center;
+}
+
+
+.textAreaWrapper form {
+    display: flex;
+    flex-direction: column;
+}
+
+.talkTextarea {
+    resize: none;
+    outline: none;
+    width: 95%;
+    height: 160px;
+    border-radius: 10px;
+    font-size: 22px;
+    /*margin-top: 5px;*/
+    margin: 5px auto;
+}
+.textAreaWrapper button {
+    margin: 0 auto;
 }

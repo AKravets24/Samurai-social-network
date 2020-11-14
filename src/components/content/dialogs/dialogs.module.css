@@ -13,7 +13,9 @@
 .dialogNight{background-color:#bee3fa}
 .dialogMorning{background-color:#ffc150;}
 .dialogDay{background-color: lightblue;}
-.dialogEvening{background-color: #ff6969;}
+/*.dialogEvening{background-color: #ff6969;}*/
+/*.dialogEvening{background-color: #fef0f0;}*/
+.dialogEvening{background-color: #4d0000;}
 
 
 
@@ -94,6 +96,7 @@
     text-decoration: none;
     font-size: 25px;
     /*color: dodgerblue;*/
+    color: black;
     font-weight: bold;
     font-family: Arial;
 }
@@ -123,7 +126,8 @@
 .talkerBlockNight           {background-color: #a9c2ff;}
 .talkerBlockMorning         {background-color: #ffffef;}
 .talkerBlockDay             {background-color: lightyellow;}
-.talkerBlockEvening         {background-color: #ffddec;}
+/*.talkerBlockEvening         {background-color: #ffddec;}*/
+.talkerBlockEvening         {background-color: #ffe1e1;}
 
 
 
@@ -144,7 +148,7 @@
 
 .talkerBlockAEvening        {color: blueviolet}
 .talkerBlockAEvening:hover  {color: blue}
-.talkerBlockAEvening:active {color: darkred}
+.talkerBlockAEvening:active {color: black}
 .activeLinkEvening          {color: darkred}
 
 .talkerBlock:hover {

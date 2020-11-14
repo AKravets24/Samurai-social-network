@@ -50,6 +50,7 @@ function Dialogs(props) {
     let [pageNumber,       setPageNumber]        = useState(2);
     let [msgsMapDone,      setMsgsMapDone]       = useState(false);
     let [dialogAreaHeight, setDialogAreaHeight]  = useState(0);
+    let [userNameInHeader, setUserNameInHeader]  = useState('')
 
     let usePrevious=(value)=> {let ref=useRef();useEffect(()=>{ref.current=value});return ref.current;};
     let prevCount = usePrevious(dialogAreaHeight);
@@ -81,7 +82,7 @@ function Dialogs(props) {
                                 <img  src={user.photos.large || props.state.defaultAvatar} alt="err"/>
                             </NavLink>
                             <NavLink to={`/dialogs/${user.id}`}
-                                     onClick={() => {getTalk(user.id); setVisibility(stl.visibility)}}
+                                     onClick={() => {getTalk(user.id); setVisibility(stl.visibility);setUserNameInHeader(user.userName)}}
                                      className={themes.talkerBlockA}
                                      activeClassName={themes.activeLink}>
                                 {user.userName}{user.hasNewMessages &&
@@ -91,6 +92,7 @@ function Dialogs(props) {
             </div>
                 <div className={stl.dialogsAreaAndSender}>
                     <div className={stl.editWrapper}>
+                        <h2>{userNameInHeader}</h2>
                     <div className={ `${stl.editBlock} ${visibility}` } >
                         <h3>On button click makes immediate action</h3>
                     </div>

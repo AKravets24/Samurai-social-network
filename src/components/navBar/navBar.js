@@ -7,7 +7,7 @@ import {withAuthRedirect}         from "../content/HOC/withAuthRedirect";
 
 function NavBarContainer(props) {
     // console.log(props)
-    useEffect(()=>{props.getNewMessagesRequestThunk(); },[])
+    useEffect(()=>{props.state.myId && props.getNewMessagesRequestThunk(); },[]);
 
     return <NavBar
         myId                    = { props.state.myId                   }

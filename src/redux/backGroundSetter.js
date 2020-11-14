@@ -40,6 +40,12 @@ import status_LDR_GIF_M   from './loader/profile/statusM.gif'
 import status_LDR_GIF_D   from './loader/profile/statusD.gif'
 import status_LDR_GIF_E   from './loader/profile/statusE.gif'
 
+// UsersGeneralLoaderGIF
+import userLoaderGIF_N    from './loader/users/LDR_N.gif'
+import userLoaderGIF_M    from './loader/users/LDR_M.gif'
+import userLoaderGIF_D    from './loader/users/LDR_D.gif'
+import userLoaderGIF_E    from './loader/users/LDR_E.gif'
+
 
 const TIMER   = 'TIMER';
 export const timerAC = (timer) => ({type: TIMER, timer});
@@ -52,17 +58,20 @@ export const timerAC = (timer) => ({type: TIMER, timer});
 
 
 let initialState = {
-    theme:               '',
-    backgroundPic:       '',
-    timeToChangeTheme:   0,
-    auth_LDR_GIF:        '',
+    theme:             '',
+    backgroundPic:     '',
+    timeToChangeTheme: 0,
+    auth_LDR_GIF:      '',
     profileThemes: {
-        panoramaPic:        '',
-        panorama_LDR_GIF:   '',
-        ava_LDR_GIF:        '',
-        BTN_LDR_GIF:        '',
-        status_LDR_GIF:     '',
+        panoramaPic:      '',
+        panorama_LDR_GIF: '',
+        ava_LDR_GIF:      '',
+        BTN_LDR_GIF:      '',
+        status_LDR_GIF:   '',
     },
+    usersThemes: {
+        generalLDR_GIF:   '',
+    }
 };
 
 export const backgroundReducer = (state = initialState, action) => {
@@ -71,16 +80,34 @@ export const backgroundReducer = (state = initialState, action) => {
             // console.log('TIMER');
             if (action.timer >= 1440 || action.timer < 180) {
                 // console.log('NIGHT_THEME')
-                return {...state, theme: 'NIGHT', backgroundPic: backDropPIC_N, timeToChangeTheme: 180 - action.timer,
-                    auth_LDR_GIF: auth_LDR_GIF_N,
+                // return {...state, theme: 'NIGHT', backgroundPic: backDropPIC_N, timeToChangeTheme: 180 - action.timer,
+                //     auth_LDR_GIF: auth_LDR_GIF_N,
+                //     profileThemes: {
+                //         panoramaPic:       panoramaPIC_N,
+                //         panorama_LDR_GIF:  panoramaGIF_N,
+                //         ava_LDR_GIF:       ava_LDR_GIF_N,
+                //         BTN_LDR_GIF:       BTN_LDR_GIF_N,
+                //         status_LDR_GIF:    status_LDR_GIF_N,
+                //     },
+                //     usersThemes: {
+                //         generalLDR_GIF:    userLoaderGIF_N,
+                //     }
+                // }
+
+                return {...state, theme: 'EVENING', backgroundPic: backDropPIC_E, timeToChangeTheme: 180 - action.timer,
+                    auth_LDR_GIF: auth_LDR_GIF_E,
                     profileThemes: {
-                        panoramaPic:       panoramaPIC_N,
-                        panorama_LDR_GIF:  panoramaGIF_N,
-                        ava_LDR_GIF:       ava_LDR_GIF_N,
-                        BTN_LDR_GIF:       BTN_LDR_GIF_N,
-                        status_LDR_GIF:    status_LDR_GIF_N,
+                        panoramaPic:       panoramaPIC_E,
+                        panorama_LDR_GIF:  panoramaGIF_E,
+                        ava_LDR_GIF:       ava_LDR_GIF_E,
+                        BTN_LDR_GIF:       BTN_LDR_GIF_E,
+                        status_LDR_GIF:    status_LDR_GIF_E,
+                    },
+                    usersThemes: {
+                        generalLDR_GIF:    userLoaderGIF_E,
                     }
                 }
+
             } else if (action.timer >= 180 && action.timer < 660) {
                 // console.log('MORNING_THEME')
                 return {...state,theme: 'MORNING', backgroundPic: backDropPIC_M, timeToChangeTheme: 660 - action.timer,
@@ -91,6 +118,9 @@ export const backgroundReducer = (state = initialState, action) => {
                         ava_LDR_GIF:       ava_LDR_GIF_M,
                         BTN_LDR_GIF:       BTN_LDR_GIF_M,
                         status_LDR_GIF:    status_LDR_GIF_M,
+                    },
+                    usersThemes: {
+                        generalLDR_GIF:    userLoaderGIF_M,
                     }
                 }
             } else if (action.timer >= 660 && action.timer < 1080) {//1080
@@ -103,6 +133,9 @@ export const backgroundReducer = (state = initialState, action) => {
                         ava_LDR_GIF:       ava_LDR_GIF_D,
                         BTN_LDR_GIF:       BTN_LDR_GIF_D,
                         status_LDR_GIF:    status_LDR_GIF_D,
+                    },
+                    usersThemes: {
+                        generalLDR_GIF:    userLoaderGIF_D,
                     }
                 }
             } else if (action.timer >= 1080 && action.timer < 1440) {//1440
@@ -115,10 +148,12 @@ export const backgroundReducer = (state = initialState, action) => {
                         ava_LDR_GIF:       ava_LDR_GIF_E,
                         BTN_LDR_GIF:       BTN_LDR_GIF_E,
                         status_LDR_GIF:    status_LDR_GIF_E,
+                    },
+                    usersThemes: {
+                        generalLDR_GIF:    userLoaderGIF_E,
                     }
                 }
-
-            }
+                }
         default: return state;
     }
 };

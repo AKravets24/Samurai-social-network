@@ -3,7 +3,7 @@ import {connect}                  from 'react-redux';
 import {Friends}                  from './friends'
 import {compose}                  from 'redux';
 import {withRouter}               from 'react-router-dom';
-import {getUsersInfo} from "../../../redux/users-selector";
+import {getUsersInfo} from "../../../redux/selectors";
 
 
 function FriendsFuncContainer (props) {

@@ -1,18 +1,22 @@
 .modalWindow {
     position: absolute;
     height: 300px;
-    /*width: 800px;*/
-    width: 130%;
-    background-color: lightgoldenrodyellow;
+    width: 80%;
+    /*background-color: lightgoldenrodyellow;*/
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     border-radius: 10px;
     top: 40px;
-    right: 10px;
+    left: 10%;
     border: 1px solid black;
 }
+
+.mWindow_N {background-color: red}
+.mWindow_M {background-color: red}
+.mWindow_D {background-color: lightgoldenrodyellow}
+.mWindow_E {background-color: #fef0f0}
 
 .statusTextArea {
     width: 700px;
@@ -28,6 +32,11 @@
     max-height: 150px
 
 }
+
+.inputN   {background-color: #b9ebff; border: 2px solid midnightblue;  }
+.inputM   {background-color: #fff2eb; border: 2px solid #ff5b1d;       }
+.inputD   {background-color: #feffeb; border: 2px solid lightgreen;    }
+.inputE   {background-color: #faebeb; border: 2px solid darkred;       }
 
 .twoBTNs {
     width: 90%;
@@ -59,15 +68,18 @@
 }
 
 .statusWrapper {
-
+    margin: 15px 0 15px 0;
+    /*text-align: center;*/
+    font-size: 22px;
 }
 
 .statusWrapper:hover {
     background-color: lightgrey;
     border-radius: 10px;
     cursor: pointer;
+
 }
 
 .statusField {
-
+    display: inline;
 }
