@@ -34,24 +34,24 @@ const initializeAppThunkAC      = () => (dispatch)   => {
 };
 
 const initialState = {
-    appInitialized: false,
-    id:             null,
-    email:          null,
-    login:          null,
-    isAuth:         false,
-    authErr:        '',      // вынести в редюсер с логинизацией
-    funnyLoader:    ['tectonic configuration...', 'filling the oceans...',
-                     'planting flora...', 'fauna breeding...',
-                     'crusades...', 'witch-hunting...',
-                     'transition into the renaissance era...',
-                     'scientific and technological revolution...',
-                     'Client: Synchronization...',]
+    appIsInitialized: false,
+    id:               null,
+    email:            null,
+    login:            null,
+    isAuth:           false,
+    authErr:          '',      // вынести в редюсер с логинизацией
+    funnyLoader:      ['tectonic configuration...', 'filling the oceans...',
+                      'planting flora...', 'fauna breeding...',
+                      'crusades...', 'witch-hunting...',
+                      'transition into the renaissance era...',
+                      'scientific and technological revolution...',
+                      'Client: Synchronization...',]
 };
 export const appAuthReducer = (state = initialState, action) => {
     switch (action.type) {
         case INITIALISED_SUCCESSFULLY:
             // console.log('INITIALISED_SUCCESSFULLY')
-            return {...state, appInitialized: true};
+            return {...state, appIsInitialized: true};
 
         case SET_USER_DATA:
             // console.log('SET_USER_DATA')

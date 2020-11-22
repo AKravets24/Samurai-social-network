@@ -19,22 +19,22 @@ const UPDATE_MY_AVATAR         = 'UPDATE_MY_AVATAR';
 const IS_USER_FOLLOWED         = 'IS_USER_FOLLOWED';
 const TOGGLER_IS_FOLLOWING     = 'TOGGLER_IS_FOLLOWING';
 
-const setProfileAC             = (profileData,isFollowed,status)  => ({type: SET_PROFILE,    profileData,isFollowed,status });
-const statusSetterAC           = (status)                  => ({type: STATUS_SETTER,         status});
-const addPostAC                = (finalPost, date, time)   => ({type: ADD_POST,              txt: finalPost, date, time});
-const toggleIsLoadingAC        = (isLoading)               => ({type: TOGGLE_IS_LOADING,     isLoading});
-const updateMyAvatarAC         = (file)                    => ({type: UPDATE_MY_AVATAR,      file });
-const userIsFollowedAC         = (isFollowed)              => ({type:IS_USER_FOLLOWED,       isFollowed});
-const followingTogglerAC       = (isFollowing)             => ({type: TOGGLER_IS_FOLLOWING,  isFollowing})
+const setProfileAC   = (profileData,isFollowed,status)  => ({type: SET_PROFILE,  profileData,isFollowed,status});
+const statusSetterAC        = (status)                  => ({type: STATUS_SETTER,       status                       });
+const addPostAC             = (finalPost, date, time)   => ({type: ADD_POST,            txt: finalPost, date, time   });
+const toggleIsLoadingAC     = (isLoading)               => ({type: TOGGLE_IS_LOADING,   isLoading                    });
+const updateMyAvatarAC      = (file)                    => ({type: UPDATE_MY_AVATAR,    file                         });
+const userIsFollowedAC      = (isFollowed)              => ({type:IS_USER_FOLLOWED,     isFollowed                   });
+const followingTogglerAC    = (isFollowing)             => ({type: TOGGLER_IS_FOLLOWING,isFollowing                  })
 
-const updateStatusThunkAC      = (text)                  => (dispatch) => {
+const updateStatusThunkAC   = (text)                    => (dispatch) => {
     usersApi.updateMyStatus(text)
         .then(data =>{
             let finalStatus = JSON.parse(data);
             dispatch(statusSetterAC(finalStatus.status))
         })
 };
-const updateMyAvatarThunkAC    = (file)                  => (dispatch) => {
+const updateMyAvatarThunkAC = (file)                    => (dispatch) => {
     usersApi.updateMyAvatar(file)
         .then( data => {
             console.log(data);
@@ -42,71 +42,30 @@ const updateMyAvatarThunkAC    = (file)                  => (dispatch) => {
             dispatch(updateMyAvatarAC(data.data.photos.large))
         })
 };
-
-// const getProfileThUnkAC        = (userId)                => (dispatch) => {
-//     dispatch(toggleIsLoadingAC(true));
-//     let status = '';
-//     usersApi.getStatus(userId)
-//         .then(data => {
-//             status = data;
-//             usersApi.getProfile(userId)
-//                 .then(data => {
-//                     dispatch(setProfileAC(data));
-//                     dispatch(statusSetterAC(status))
-//                     dispatch(toggleIsLoadingAC(false));
-//                 })
-//
-//         })
-// };
-
-const getProfileThUnkAC        = (userId)                => (dispatch) => {
+const getProfileThUnkAC     = (userId)                  => (dispatch) => {
     dispatch(toggleIsLoadingAC(true));
-    let status = '';
-    let userName='';
-    let profileData='';
+    let status='', userName='', profileData='';
     usersApi.getStatus(userId)
-        .then(data => {
-            // console.log(1,'status', data)
-            status = data;
-            usersApi.getProfile(userId)
-                .then(data => {
-                    // console.log(2,'profileInfo', data);
-                    profileData = data;
-                    userName=data.fullName;
-                    })
-                .then( ()=>{
-                    usersApi.getCertainUser(userName)
-                        .then(response=>{
-                            // console.log(3,'certainUser', response)
-                            if (response.data) {
-                                response.data.items.filter(el => {
-                                    el.id === userId && dispatch(setProfileAC(profileData,el.followed, status));
-                                    // dispatch(statusSetterAC(status));
-                                    dispatch(toggleIsLoadingAC(false));
-                                })
-                            }
-                        });
-                })
-                })
+        .then(data => status = data)
+    usersApi.getProfile(userId)
+        .then(data => {profileData = data; userName=data.fullName;
+            usersApi.getCertainUser(userName)
+                .then(response=>{
+                    response.data && response.data.items.filter(el => {
+                            el.id === userId && dispatch(setProfileAC(profileData,el.followed, status));
+                            dispatch(toggleIsLoadingAC(false));
+                        })
+                });
+            })
 };
-const getUserIsFollowedThunkAC = (userName, userId)      => (dispatch) => {
-    usersApi.getCertainUser(userName)
-        .then(response=>{
-            if (response.data) {
-                response.data.items.filter(el => {
-                    el.id === userId && dispatch(userIsFollowedAC(el.followed))
-                })
-            }
-        })
-};
-const followUserThunkAC        =(userId)                 => (dispatch) => {
+const followUserThunkAC     = (userId)                  => (dispatch) => {
     dispatch(followingTogglerAC(true));
-    usersApi.followRequest(userId).then((data)=>{if (data.resultCode == 0){
+    usersApi.followRequest(userId).then((data)=>  {if (data.resultCode == 0){
         dispatch(userIsFollowedAC(true));
         dispatch(followingTogglerAC(false));
     }})
 }
-const unFollowUserThunkAC      =(userId)                 => (dispatch) => {
+const unFollowUserThunkAC   = (userId)                  => (dispatch) => {
     dispatch(followingTogglerAC(true));
     usersApi.unFollowRequest(userId).then((data)=>{if (data.resultCode == 0){
         dispatch(userIsFollowedAC(false));
@@ -114,12 +73,28 @@ const unFollowUserThunkAC      =(userId)                 => (dispatch) => {
     }})
 }
 
+// const followThunkTogglerAC  = (userId, isFollowed)      =>  (dispatch) =>  {
+//     dispatch(followingTogglerAC(true, userId));
+//     let followToggler;
+//     !isFollowed?followToggler=usersApi.followRequest:followToggler=usersApi.unFollowRequest;
+//     followToggler(userId,isFollowed).then(response =>{
+//         if (response.status===200){
+//             !isFollowed?dispatch(userIsFollowedAC(false)):dispatch(userIsFollowedAC(true));
+//         } else {
+//             let errorCode=parseInt(JSON.stringify(response.message).replace(/\D+/g,""));
+//             dispatch(errCatcherAtFollowingAC(userId,errorCode));
+//         }
+//         dispatch(toggleFollowingProgressAC(false, userId));
+//     })
+// };
+
+
 
 const profilePictures = { faceBookLogo, gitHubLogo, instagramLogo, mainLinkLogo, twitterLogo, vkLogo, websiteLogo,  youTubeLogo, };
 export const profilePics = (state = profilePictures)=> { return state };
 
 const actionsCreators = { addPostAC, setProfileAC, toggleIsLoadingAC, getProfileThUnkAC,
-    updateStatusThunkAC,  updateMyAvatarThunkAC, /*getUserIsFollowedThunkAC,*/ followUserThunkAC, unFollowUserThunkAC};
+    updateStatusThunkAC,  updateMyAvatarThunkAC, followUserThunkAC, unFollowUserThunkAC};
 
 export const profileACs = (state= actionsCreators)=> { return state };
 
@@ -154,19 +129,14 @@ export const profileReducer = (state = initialProfileState, action,  date, time)
             let text = {id:state.wallPosts.length+1,likesCount:0,message:action.txt,date:action.date,time:action.time};
             stateCopy.wallPosts.unshift(text); stateCopy.postField = ''; return stateCopy;
 
-        case SET_PROFILE:
-            console.log(SET_PROFILE);
-            // console.log(action)
-            return {...state, profileData: action.profileData, isFollowed: action.isFollowed, statusField: action.status};
+        case SET_PROFILE:          return {...state, profileData: action.profileData, isFollowed: action.isFollowed,
+                                            statusField: action.status};
 
         case TOGGLE_IS_LOADING:    return {...state, isLoading: action.isLoading};
 
         case UPDATE_MY_AVATAR:     return {...state, myAvatarLarge: action.file, myAvatarSmall: action.file };// не обновляет компоненту
 
-        case STATUS_SETTER:
-            console.log(STATUS_SETTER) ;
-            console.log(action.status)
-            return {...state, statusField: action.status };
+        case STATUS_SETTER:        return {...state, statusField: action.status };
 
         case IS_USER_FOLLOWED:     return {...state, isFollowed: action.isFollowed};
 

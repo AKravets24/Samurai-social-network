@@ -1,25 +1,32 @@
-import React from "react";
-import {Route, Redirect, withRouter} from "react-router-dom";
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import stl from './content.module.css';
-import ProfileComposer from "./profile/profileContainer";
-import DialogsComposer from "./dialogs/dialogs";
-import News from './news/News';
-import Music from './music/music';
-import Settings from "./settings/settings";
-import UsersContainer from "./users/usersContainer";
-import UnAuthorised from "./unAuthorised/unAuthorised";
-import FriendsComposer from "./friends/friendsContainer";
-import NotFound from "./404/404";
+import React                         from "react";
+import { Route,Redirect,withRouter } from "react-router-dom";
+import { connect }                   from 'react-redux';
+import { compose }                   from 'redux';
+import stl                           from './content.module.css';
+import { ProfileComposer }           from "./profile/profileContainer";
+import { DialogsComposer }           from "./dialogs/dialogs";
+import News                          from './news/News';
+import Music                         from './music/music';
+import Settings                      from "./settings/settings";
+import UsersContainer                from "./users/usersContainer";
+import UnAuthorised                  from "./unAuthorised/unAuthorised";
+import FriendsComposer               from "./friends/friendsContainer";
+import NotFound                      from "./404/404";
+import { getSmartIdAndIsAuth }       from "../../redux/selectors";
 // import {withAuthRedirect} from "./HOC/withAuthRedirect";  // ? нужен ли
 
-function ContentCompContainer (props){ /*console.log(props)*/
-        return <Content myId={props.myId} isAuth={props.isAuth} pathname={props.location.pathname}/>
+let mapStateToProps = (state)=> {  /*console.log(state);*/return { smartData: getSmartIdAndIsAuth(state),}};
+
+export const ContentComposer =  compose ( connect(mapStateToProps), withRouter,)(ContentCompContainer);
+
+function ContentCompContainer (props){ // console.log(props)
+    let {id,isAuth}=props.smartData;
+    return <Content myId={id} isAuth={isAuth} pathname={props.location.pathname}/>
 };
 
-function Content(props) {
-    // console.log(props.pathname)
+function Content(props) {                                                                                               // два рендера - первичный и из-за withRouter
+
+    // console.log(2)
 
     let loginChecker = () => {
         if (props.isAuth) {         // ЗАЛОГИНЕН
@@ -40,7 +47,7 @@ function Content(props) {
             </>
         }
         else {                      // НЕ ЗАЛОГИНЕН
-            if (props.pathname.match(/^\/profile\/\d{1,4}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\b$|^\/friends$|^\/users$|^\/$/))return <Redirect to='/login'/>
+            if ( props.pathname.match(/^\/profile\/\d{1,4}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\b$|^\/friends$|^\/users$|^\/$/))return <Redirect to='/login'/>
             if (!props.pathname.match(/^\/news$|^\/music$|^\/settings$|^\/$|^\/login$|^\/404$/))return <Redirect to='/404'/>
             return <>
                 <Route exact path='/login'            render={() => <UnAuthorised />                        }/>
@@ -53,18 +60,6 @@ function Content(props) {
     };
     return  <div className={stl.content2}> { loginChecker () } </div>
 }
-
-let mapStateToProps = (state)=> {  /*console.log(state)*/
-    return {
-        myId: state.appAuthReducer.id,
-        isAuth: state.appAuthReducer.isAuth,
-    }
-};
-
-export default compose (
-    connect(mapStateToProps),
-    withRouter,
-)(ContentCompContainer);
 
 
 // export default connect(mapStateToProps) (contentCompContainer)

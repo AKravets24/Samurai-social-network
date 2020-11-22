@@ -22,8 +22,8 @@ export const usersApi = {
     getCertainUser(userName)     {
         return instance.get(`users?term=${userName}`)                      .then(response=>response).catch(error=>error)},
 
-    followRequest(userId)        { return instance.post(`follow/${userId}`)          .then(response => response.data  )},
-    unFollowRequest(userId)      { return instance.delete(`follow/${userId}`)        .then(response => response.data  )},
+    followRequest  (userId)      { return instance.post(`follow/${userId}`)  .then(response=>response).catch(error=>error)},
+    unFollowRequest(userId)      { return instance.delete(`follow/${userId}`).then(response=>response).catch(error=>error)},
     // PROFILE
     updateMyStatus(status)       { return instance.put(`profile/status`, {status: status} ).then(response =>
          response.config.data)},
@@ -43,7 +43,7 @@ export const usersApi = {
                                  { return instance.get(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`)
                                                                                      .then(response => response.data  )},
 
-    sendMsgToTalker (userId,body){ return instance.post(`dialogs/${userId}/messages`, {body})
+    sendMsgToTalker(userId,body) { return instance.post(`dialogs/${userId}/messages`, {body})
                                                                                      .then(response => response  )
                                                                                      .catch(error   => error)
     },

@@ -7,7 +7,7 @@ import {getUsersInfo} from "../../../redux/selectors";
 
 
 function FriendsFuncContainer (props) {
-    console.log(props)
+    // console.log(props)
 
     useEffect(()=> {props.getMyFriendsListThunk()},[]);
 
@@ -19,6 +19,9 @@ function FriendsFuncContainer (props) {
         unFollowThunk       = { props.unFollowThunk             }
         followingInProgress = { props.state.followingInProgress }
         colorTheme          = { props.state.colorTheme          }
+
+        followThunkToggler  = { props.followThunkToggler        }
+
     />
 }
 
@@ -43,7 +46,9 @@ const mergeProps = (stateProps, dispatchProps) => {
     const followThunk           = (userId) =>  dispatch (state.friendsACs.followThunkAC(userId)     );
     const unFollowThunk         = (userId) =>  dispatch (state.friendsACs.unFollowThunkAC(userId)   );
 
-    return { state, getMyFriendsListThunk, followThunk, unFollowThunk,  }
+    const followThunkToggler = (userId,isFollowed)    => dispatch ( state.usersACs.followThunkTogglerAC(userId,isFollowed));
+
+    return { state, getMyFriendsListThunk, followThunk, unFollowThunk,followThunkToggler  }
 };
 
 export default compose(

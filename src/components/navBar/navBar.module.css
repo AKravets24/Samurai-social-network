@@ -3,10 +3,10 @@
     display: grid;
     border-radius: 4px 4px 4px 20px;
 }
-.blockMenuNight    {background-color: lightskyblue;}
-.blockMenuMorning  {background-color: #f36d3a;}
-.blockMenuDay      {background-color: lightgreen;}
-.blockMenuEvening  {background-color: #661717;}
+.blockMenuN  {background-color: lightskyblue;}
+.blockMenuM  {background-color: #f36d3a;}
+.blockMenuD  {background-color: lightgreen;}
+.blockMenuE  {background-color: #661717;}
 
 .menu {
     margin: 0 0 0 0;
@@ -32,28 +32,28 @@
     padding: 20px 0 20px 32%;
 }
 
-.linkNight                {color: blue;text-decoration: none;}
-.linkNight:hover          {color: #cefdff;}
-.linkNight:active         {color: white;}
-.menu a.activeLinkNight   {color: white;}
+.linkN                    {color: blue;text-decoration: none;}
+.linkN:hover              {color: #cefdff;}
+.linkN:active             {color: white;}
+.menu a.activeLinkN       {color: white;}
 
 
-.linkMorning              {color: #f6fff6;text-decoration: none;}
-.linkMorning:hover        {color: #3d3030;}
-.linkMorning:active       {color: black;}
-.menu a.activeLinkMorning {color: black;}
+.linkM                    {color: #f6fff6;text-decoration: none;}
+.linkM:hover              {color: #3d3030;}
+.linkM:active             {color: black;}
+.menu a.activeLinkM       {color: black;}
 
 
-.linkDay                  {color: darkgreen;text-decoration: none;}
-.linkDay:hover            {color: orangered;}
-.linkDay:active           {color: red;}
-.menu a.activeLinkDay     {color: red}
+.linkD                    {color: darkgreen;text-decoration: none;}
+.linkD:hover              {color: orangered;}
+.linkD:active             {color: red;}
+.menu a.activeLinkD       {color: red}
 
 
-.linkEvening              {color: white;text-decoration: none;}
-.linkEvening:hover        {color: lightcoral;}
-.linkEvening:active       {color: black}
-.menu a.activeLinkEvening {color: black;}
+.linkE                    {color: white;text-decoration: none;}
+.linkE:hover              {color: lightcoral;}
+.linkE:active             {color: black}
+.menu a.activeLinkE       {color: black;}
 
 
 .dialogsSpan {

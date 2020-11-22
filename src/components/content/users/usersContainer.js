@@ -7,7 +7,9 @@ import { compose }                  from 'redux';
 import { getHeaderAC,
          getUsersACs,
          getDialogsACs,
+    getDialogsACs_compUsers,
          getSmartUsersMediaData}    from "../../../redux/selectors";
+import stl from "./users.module.css";
 
 function UsersFuncContainer (props) {
     // console.log(props)
@@ -17,6 +19,10 @@ function UsersFuncContainer (props) {
     let setCurrentPage         =(page)=>                  { props.setCurrentPageThunk(props.state.pageSize,page)    };
     let followListener         =(e)=>                     { let userId = e.target.id; props.followThunk(userId)     };
     let unFollowListener       =(e)=>                     { let userId = e.target.id; props.unFollowThunk(userId)   };
+
+    let followThunkToggler     =(userId,isFollowed)=>     { props.followThunkToggler(userId,isFollowed) };
+
+
     let updateSearchField      =(text)=>                  { props.updateSearchField(text)                           };
     let getCertainUserThunk    =(userName) =>             { props.getCertainUserThunk(userName)                     };
     let toggleUserSearchMode   =(flag)=>                  { props.toggleUserSearchMode(flag)                        };
@@ -26,11 +32,95 @@ function UsersFuncContainer (props) {
     let feedbackRefPush        =(el_id)=>                 { props.feedbackRefPush(el_id)                            };
     let setErrorToNull         =()     =>                 { props.setErrorToNull()                                  };
 
-    return <Users
-        usersInfo                                       = { props.state.smartData     }
+    let [themes, setThemes] = useState({userPageDnmc:'',generalHeaderDnmc:'',pagBTNDnmc:'',paginationSelectedDnmc:'',paginationDnmc:'',searchInputDnmc:'',userAvaDnmc:'',
+        followBTNDnmc:'',followBTN_ERR_DNMC:'',userNameDnmc:'',mapWrapperDnmc:'', userUnitDnmc:'',userWriteModeDnmc:'',moreUserUnitsDnmc:'',
+    });
+    useEffect(()=>{
+        switch (props.state.smartData.colorTheme) {
+            case 'NIGHT':
+                setThemes({...themes,
+                    userPageDnmc: stl.usersPageN,
+                    generalHeaderDnmc:stl.generalHeaderN,
+                    pagBTNDnmc:stl.pagBTN_N,
+                    paginationSelectedDnmc:stl.paginationSelectedN,
+                    paginationDnmc:stl.paginationN,
+                    searchInputDnmc:stl.searchInputN,
+                    userAvaDnmc:stl.userAvaN,
+                    followBTNDnmc:stl.followBTN_N,
+                    followBTN_ERR_DNMC:stl.followBTN_ERR_N,
+                    userNameDnmc:stl.userNameN,
+                    mapWrapperDnmc:stl.mapWrapperN,
+                    userUnitDnmc:stl.userUnitN,
+                    userWriteModeDnmc:stl.userWriteModeN,
+                    moreUserUnitsDnmc:stl.moreUserUnitsN,
+                });
+                return;
+            case 'MORNING':
+                setThemes({...themes,
+                    userPageDnmc: stl.usersPageM,
+                    generalHeaderDnmc:stl.generalHeaderM,
+                    pagBTNDnmc:stl.pagBTN_M,
+                    paginationSelectedDnmc:stl.paginationSelectedM,
+                    paginationDnmc:stl.paginationM,
+                    searchInputDnmc:stl.searchInputM,
+                    userAvaDnmc:stl.userAvaM,
+                    followBTNDnmc:stl.followBTN_M,
+                    followBTN_ERR_DNMC:stl.followBTN_ERR_M,
+                    userNameDnmc:stl.userNameM,
+                    mapWrapperDnmc:stl.mapWrapperM,
+                    userUnitDnmc:stl.userUnitM,
+                    userWriteModeDnmc:stl.userWriteModeM,
+                    moreUserUnitsDnmc:stl.moreUserUnitsM,
+                });
+                return;
+            case 'DAY':
+                setThemes({...themes,
+                    userPageDnmc: stl.usersPageD,
+                    generalHeaderDnmc:stl.generalHeaderD,
+                    pagBTNDnmc:stl.pagBTN_D,
+                    paginationSelectedDnmc:stl.paginationSelectedD,
+                    paginationDnmc:stl.paginationD,
+                    searchInputDnmc:stl.searchInputD,
+                    userAvaDnmc:stl.userAvaD,
+                    followBTNDnmc:stl.followBTN_D,
+                    followBTN_ERR_DNMC:stl.followBTN_ERR_D,
+                    userNameDnmc:stl.userNameD,
+                    mapWrapperDnmc:stl.mapWrapperD,
+                    userUnitDnmc:stl.userUnitD,
+                    userWriteModeDnmc:stl.userWriteModeD,
+                    moreUserUnitsDnmc:stl.moreUserUnitsD
+                });
+                return;
+            case 'EVENING':
+                setThemes({...themes,
+                    userPageDnmc: stl.usersPageE,
+                    generalHeaderDnmc:stl.generalHeaderE,
+                    pagBTNDnmc:stl.pagBTN_E,
+                    paginationSelectedDnmc:stl.paginationSelectedE,
+                    paginationDnmc:stl.paginationE,
+                    searchInputDnmc:stl.searchInputE,
+                    userAvaDnmc:stl.userAvaE,
+                    followBTNDnmc:stl.followBTN_E,
+                    followBTN_ERR_DNMC:stl.followBTN_ERR_E,
+                    userNameDnmc:stl.userNameE,
+                    mapWrapperDnmc:stl.mapWrapperE,
+                    userUnitDnmc:stl.userUnitE,
+                    userWriteModeDnmc:stl.userWriteModeE,
+                    moreUserUnitsDnmc:stl.moreUserUnitsE,
+                });
+                return;
+            default: return {...themes}
+        }
+    },[props.state.smartData.colorTheme]);
 
-        followListener                                  = { followListener             }
-        unFollowListener                                = { unFollowListener           }
+    return <Users
+        usersInfo                                       = { props.state.smartData      }
+        themes                                          = { themes                     }
+
+        followThunkToggler                              = { followThunkToggler         }
+
+        // followListener                                  = { followListener             }
+        // unFollowListener                                = { unFollowListener           }
         setCurrentPage                                  = { setCurrentPage             }
         updateSearchField                               = { updateSearchField          }
         getCertainUserThunk                             = { getCertainUserThunk        }
@@ -46,11 +136,11 @@ function UsersFuncContainer (props) {
 const mapStateToProps = (state) => {
     // console.log('mstp')
     return {
-        smartData:  getSmartUsersMediaData (state),
+        smartData:  getSmartUsersMediaData  (state),
 
-        dialogsACs: getDialogsACs          (state),
-        usersACs:   getUsersACs            (state),
-        getLogIn:   getHeaderAC            (state),
+        dialogsACs: getDialogsACs_compUsers (state),
+        usersACs:   getUsersACs             (state),
+        getLogIn:   getHeaderAC             (state),
 
     }
 };
@@ -62,12 +152,15 @@ const mergeProps = (stateProps, dispatchProps) => {
 
     const getUsersThunk      = (pageSize,currentPage)     => dispatch ( state.usersACs.getUsersThunkAC(pageSize, currentPage));
     const setCurrentPageThunk= (pageSize,currentPage)     => dispatch ( state.usersACs.setCurrentPageThunkAC(pageSize, currentPage));
-    const followThunk            = (userId)               => dispatch ( state.usersACs.followThunkAC(userId));
-    const unFollowThunk          = (userId)               => dispatch ( state.usersACs.unFollowThunkAC(userId));
+    // const followThunk            = (userId)               => dispatch ( state.usersACs.followThunkAC(userId));
+    // const unFollowThunk          = (userId)               => dispatch ( state.usersACs.unFollowThunkAC(userId));
+
+    const followThunkToggler     = (userId,isFollowed)    => dispatch ( state.usersACs.followThunkTogglerAC(userId,isFollowed));
+
+
     const setUsersThunk          = ()                     => dispatch ( state.usersACs.setUsersThunkAC());
     const getCertainUserThunk    = (userName)             => dispatch ( state.usersACs.getCertainUserThunkAC(userName));
-    const toggleUserSearchMode   = (userSearchMode)       => {
-        dispatch(state.usersACs.toggleUserSearchModeAC(userSearchMode))};
+    const toggleUserSearchMode   = (userSearchMode)       => dispatch (state.usersACs.toggleUserSearchModeAC(userSearchMode));
     const updateSearchField      = (text)                 => dispatch ( state.usersACs.updateSearchFieldAC(text));
     const sendMessageToUserThunk = (userId,body,actionKey,userName) =>
                                                              dispatch ( state.dialogsACs.sendMessageToUserThunkAC(userId,body,actionKey,userName));
@@ -75,8 +168,8 @@ const mergeProps = (stateProps, dispatchProps) => {
     const feedbackRefPush        = (el_id)                => dispatch ( state.dialogsACs.feedbackRefPushAC( el_id));
     const setErrorToNull         = ()                     => dispatch ( state.usersACs.setErrorToNullAC() )
 
-    return { state, getUsersThunk, setUsersThunk, setCurrentPageThunk, followThunk, unFollowThunk, getCertainUserThunk,
-        toggleUserSearchMode, updateSearchField,sendMessageToUserThunk,feedBackWindowCloser, feedbackRefPush, setErrorToNull};
+    return { state, getUsersThunk, setUsersThunk, setCurrentPageThunk, /*followThunk, unFollowThunk,*/ getCertainUserThunk,
+        toggleUserSearchMode, updateSearchField,sendMessageToUserThunk,feedBackWindowCloser, feedbackRefPush, setErrorToNull ,followThunkToggler};
 };
 
 // let withUrlDataProfileContainer = withRouter(AuthRedirectComponent);

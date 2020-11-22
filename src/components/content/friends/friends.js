@@ -61,7 +61,7 @@ export const Friends1 = React.memo(function MyComponent(props) {
 
 
 export function Friends (props) {
-    // console.log(props)
+    console.log(props)
 
     // let [themes, setThemes] = useState({friendsGeneralDnmc:'',})
     useEffect(()=> {

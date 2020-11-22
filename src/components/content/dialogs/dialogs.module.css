@@ -10,12 +10,10 @@
 .dialogsPage {
     border-radius: 5px 5px 20px 5px;
 }
-.dialogNight{background-color:#bee3fa}
-.dialogMorning{background-color:#ffc150;}
-.dialogDay{background-color: lightblue;}
-/*.dialogEvening{background-color: #ff6969;}*/
-/*.dialogEvening{background-color: #fef0f0;}*/
-.dialogEvening{background-color: #4d0000;}
+.dialogN {background-color:#bee3fa}
+.dialogM {background-color:#ffc150;}
+.dialogD {background-color: lightblue;}
+.dialogE {background-color: #4d0000;}
 
 
 
@@ -44,21 +42,21 @@
     max-height: inherit;
 }
 
-.dialogListNight::-webkit-scrollbar                                                                      {background-color: lightyellow; }
-.dialogListNight::-webkit-scrollbar-button,.dialogAreaNight ::-webkit-scrollbar-button:single-button     {background-color: deepskyblue; }
-.dialogListNight::-webkit-scrollbar-thumb,.dialogAreaNight ::-webkit-scrollbar-thumb                     {background-color: deepskyblue; }
+.dialogListN::-webkit-scrollbar                                                                    {background-color: lightyellow; }
+.dialogListN::-webkit-scrollbar-button,.dialogAreaN ::-webkit-scrollbar-button:single-button       {background-color: deepskyblue; }
+.dialogListN::-webkit-scrollbar-thumb, .dialogAreaN ::-webkit-scrollbar-thumb                      {background-color: deepskyblue; }
 
-.dialogListMorning::-webkit-scrollbar                                                                    {background-color: lightyellow; }
-.dialogListMorning::-webkit-scrollbar-button,.dialogAreaMorning::-webkit-scrollbar-button:single-button  {background-color: orangered;   }
-.dialogListMorning::-webkit-scrollbar-thumb,.dialogAreaMorning::-webkit-scrollbar-thumb                  {background-color: orangered;   }
+.dialogListM::-webkit-scrollbar                                                                    {background-color: lightyellow; }
+.dialogListM::-webkit-scrollbar-button,.dialogAreaM::-webkit-scrollbar-button:single-button        {background-color: orangered;   }
+.dialogListM::-webkit-scrollbar-thumb, .dialogAreaM::-webkit-scrollbar-thumb                       {background-color: orangered;   }
 
-.dialogListDay::-webkit-scrollbar                                                                        {background-color: lightyellow; }
-.dialogListDay::-webkit-scrollbar-button,.dialogAreaDay::-webkit-scrollbar-button:single-button          {background-color: lightskyblue;}
-.dialogListDay::-webkit-scrollbar-thumb,.dialogAreaDay::-webkit-scrollbar-thumb                          {background-color: lightskyblue;}
+.dialogListD::-webkit-scrollbar                                                                    {background-color: lightyellow; }
+.dialogListD::-webkit-scrollbar-button,.dialogAreaD::-webkit-scrollbar-button:single-button        {background-color: lightskyblue;}
+.dialogListD::-webkit-scrollbar-thumb, .dialogAreaD::-webkit-scrollbar-thumb                       {background-color: lightskyblue;}
 
-.dialogListEvening ::-webkit-scrollbar                                                                   {background-color: lightyellow; }
-.dialogListEvening ::-webkit-scrollbar-button,.dialogAreaEvening::-webkit-scrollbar-button:single-button {background-color: darkred;     }
-.dialogListEvening ::-webkit-scrollbar-thumb,.dialogAreaEvening::-webkit-scrollbar-thumb                 {background-color: darkred;     }
+.dialogListE ::-webkit-scrollbar                                                                   {background-color: lightyellow; }
+.dialogListE ::-webkit-scrollbar-button,.dialogAreaE::-webkit-scrollbar-button:single-button       {background-color: darkred;     }
+.dialogListE ::-webkit-scrollbar-thumb, .dialogAreaE::-webkit-scrollbar-thumb                      {background-color: darkred;     }
 
 .certainLoader {
     margin: 110% 0 0 25%;
@@ -123,33 +121,32 @@
     padding-right: 2%;
     hyphens: auto;
 }
-.talkerBlockNight           {background-color: #a9c2ff;}
-.talkerBlockMorning         {background-color: #ffffef;}
-.talkerBlockDay             {background-color: lightyellow;}
-/*.talkerBlockEvening         {background-color: #ffddec;}*/
-.talkerBlockEvening         {background-color: #ffe1e1;}
+.talkerBlockN              {background-color: #a9c2ff;     }
+.talkerBlockM              {background-color: #ffffef;     }
+.talkerBlockD              {background-color: lightyellow; }
+.talkerBlockE              {background-color: #ffe1e1;     }
 
 
 
-.talkerBlockANight          {color: blue;}
-.talkerBlockANight:hover    {color: #606069;}
-.talkerBlockANight:active   {color: white}
-.activeLinkNight            {color: white}
+.talkerBlockA_N            {color: blue;         }
+.talkerBlockA_N:hover      {color: #606069;      }
+.talkerBlockA_N:active     {color: white         }
+.activeLinkN               {color: white         }
 
-.talkerBlockAMorning        {color: #f46c05;}
-.talkerBlockAMorning:hover  {color: #3d3030;}
-.talkerBlockAMorning:active {color: black}
-.activeLinkMorning          {color: black}
+.talkerBlockA_M            {color: #f46c05;      }
+.talkerBlockA_M:hover      {color: #3d3030;      }
+.talkerBlockA_M:active     {color: black         }
+.activeLinkM               {color: black         }
 
-.talkerBlockADay            {color: deepskyblue;}
-.talkerBlockADay:hover      {color: royalblue;}
-.talkerBlockADay:active     {color: red;}
-.activeLinkDay              {color: red;}
+.talkerBlockA_D            {color: deepskyblue;  }
+.talkerBlockA_D:hover      {color: royalblue;    }
+.talkerBlockA_D:active     {color: red;          }
+.activeLinkD               {color: red;          }
 
-.talkerBlockAEvening        {color: blueviolet}
-.talkerBlockAEvening:hover  {color: blue}
-.talkerBlockAEvening:active {color: black}
-.activeLinkEvening          {color: darkred}
+.talkerBlockA_E            {color: blueviolet    }
+.talkerBlockA_E:hover      {color: blue          }
+.talkerBlockA_E:active     {color: black         }
+.activeLinkE               {color: darkred       }
 
 .talkerBlock:hover {
     overflow-x: auto;
@@ -237,10 +234,10 @@
     height: 100vh;
     /*max-height: 1500px;*/
 }
-.dialogAreaNight  ,.textareaNight   {background-color: #fdfdfd}
-.dialogAreaMorning,.textareaMorning {background-color: #faffd3}
-.dialogAreaDay    ,.textareaDay     {background-color: lightyellow}
-.dialogAreaEvening,.textareaEvening {background-color: #ffe1e1;}
+.dialogAreaN,.textareaN {background-color: #fdfdfd}
+.dialogAreaM,.textareaM {background-color: #faffd3}
+.dialogAreaD,.textareaD {background-color: lightyellow}
+.dialogAreaE,.textareaE {background-color: #ffe1e1;}
 
 
 .dialogArea img {
@@ -306,30 +303,30 @@
     transform: rotate(-190deg)
 }
 
-.myMsgNight            {background-color: #b8e9b8}
-.myMsgNight::after     {content:'';border-left: 20px solid #b8e9b8; }
+.myMsgN            {background-color: #b8e9b8}
+.myMsgN::after     {content:'';border-left: 20px solid #b8e9b8; }
 
-.myMsgMorning          {background-color: #abffab;}
-.myMsgMorning::after   {content:''; border-left: 20px solid #abffab;}
+.myMsgM            {background-color: #abffab;}
+.myMsgM::after     {content:''; border-left: 20px solid #abffab;}
 
-.myMsgDay              {background-color: lightgreen;}
-.myMsgDay::after       {content:'';  border-left: 20px solid lightgreen;}
+.myMsgD            {background-color: lightgreen;}
+.myMsgD::after     {content:'';  border-left: 20px solid lightgreen;}
 
-.myMsgEvening          {background-color: #6fd76f;}
-.myMsgEvening::after   {content:''; border-left: 20px solid #6fd76f;}
+.myMsgE            {background-color: #6fd76f;}
+.myMsgE::after     {content:''; border-left: 20px solid #6fd76f;}
 
 
-.userMsgNight          {background-color: #a6ebff}
-.userMsgNight::after   {content:''; border-top: 20px solid #a6ebff;}
+.userMsgN          {background-color: #a6ebff}
+.userMsgN::after   {content:''; border-top: 20px solid #a6ebff;}
 
-.userMsgMorning        {background-color: #c7eef9}
-.userMsgDay::after     {content:'';border-left: 20px solid #dbf7ff; }
+.userMsgM          {background-color: #c7eef9}
+.userMsgM::after   {content:'';border-left: 20px solid #dbf7ff; }
 
-.userMsgDay            {background-color: #cef3ff;}
-.userMsgDay::after     {content:''; border-top: 20px solid #cef3ff;}
+.userMsgD          {background-color: #cef3ff;}
+.userMsgD::after   {content:''; border-top: 20px solid #cef3ff;}
 
-.userMsgEvening        {background-color:  #cef3ff;}
-.userMsgEvening::after {content:''; border-top: 20px solid #cef3ff;}
+.userMsgE          {background-color:  #cef3ff;}
+.userMsgE::after   {content:''; border-top: 20px solid #cef3ff;}
 
 
 .messageBlockUser {
@@ -463,21 +460,21 @@
     border-radius: 10px;
     outline: none;
 }
-.sendBTNNight          {background-color: #4967ff;}
-.sendBTNNight:hover    {background-color: midnightblue;color:white}
-.sendBTNNight:active   {background-color: darkblue;color:white}
+.sendBTN_N          {background-color: #4967ff;}
+.sendBTN_N:hover    {background-color: midnightblue;color:white}
+.sendBTN_N:active   {background-color: darkblue;color:white}
 
 
-.sendBTNMorning        {background-color: #ff652a;}
-.sendBTNMorning:hover  {background-color: #ff5b1d;color:white}
-.sendBTNMorning:active {background-color:#ff4700;color:white}
+.sendBTN_M          {background-color: #ff652a;}
+.sendBTN_M:hover    {background-color: #ff5b1d;color:white}
+.sendBTN_M:active   {background-color:#ff4700;color:white}
 
 
-.sendBTNDay            {background-color: #98eaff;}
-.sendBTNDay:hover      {background-color: #6ad3ff;color:black }
-.sendBTNDay:active     {background-color: #3ad7ff;color:black}
+.sendBTN_D          {background-color: #98eaff;}
+.sendBTN_D:hover    {background-color: #6ad3ff;color:black }
+.sendBTN_D:active   {background-color: #3ad7ff;color:black}
 
 
-.sendBTNEvening        {background-color: indianred;}
-.sendBTNEvening:hover  {background-color: darkred; color:white}
-.sendBTNEvening:active {background-color: red; color:white}
+.sendBTN_E          {background-color: indianred;}
+.sendBTN_E:hover    {background-color: darkred; color:white}
+.sendBTN_E:active   {background-color: red; color:white}

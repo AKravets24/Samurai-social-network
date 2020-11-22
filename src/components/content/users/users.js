@@ -7,7 +7,7 @@ import {dialogsReducer} from "../../../redux/dialogsReducer";
 // import UnAuthorised                       from "../unAuthorised/unAuthorised";
 
 export function Users(props) {
-    // console.log(props.usersInfo.pageSize)
+    // console.log(props.themes)
 
     // console.log('render')
 
@@ -38,8 +38,8 @@ export function Users(props) {
         for (let i=startPage;i<=endPage;i++){if(startPage<1){setStartPage(1);setEndPage(endPage=scrollStep)}
             if(endPage>pagesCount){setStartPage(pagesCount-scrollStep);setEndPage(pagesCount)};pagesArr.push(i)}
         return pagesArr.map((page,i) =>
-            <span key={i} className={props.usersInfo.currentPage===page?`${stl.paginationSelected} ${themes.paginationSelectedDnmc}`:
-                `${stl.pagination} ${themes.paginationDnmc}`} onClick={()=>props.usersInfo.currentPage!==page&&setPageListener(page)}
+            <span key={i} className={props.usersInfo.currentPage===page?`${stl.paginationSelected} ${props.themes.paginationSelectedDnmc}`:
+                `${stl.pagination} ${props.themes.paginationDnmc}`} onClick={()=>props.usersInfo.currentPage!==page&&setPageListener(page)}
             >{page}</span>
         );
     };
@@ -50,83 +50,7 @@ export function Users(props) {
     let searchListener   =()=>{let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName)};
     let searchModeCloseListener = () => {props.toggleUserSearchMode(false);props.setCurrentPage(props.usersInfo.currentPage);props.setErrorToNull()};
 
-    let [themes, setThemes] = useState({userPageDnmc:"",generalHeaderDnmc:'',pagBTNDnmc:'',
-        paginationSelectedDnmc:'',paginationDnmc:'', searchInputDnmc:'',userAvaDnmc:'',
-        followBTNDnmc:'',userNameDnmc:'',mapWrapperDnmc:'', userUnitDnmc:'',userWriteModeDnmc:'', moreUserUnitsDnmc:'',
-    });
-    useEffect(()=>{
-        switch (props.usersInfo.colorTheme) {
-            case 'NIGHT':
-                setThemes({...themes,
-                    userPageDnmc: stl.usersPageN,
-                    generalHeaderDnmc:stl.generalHeaderN,
-                    pagBTNDnmc:stl.pagBTN_N,
-                    paginationSelectedDnmc:stl.paginationSelectedN,
-                    paginationDnmc:stl.paginationN,
-                    searchInputDnmc:stl.searchInputN,
-                    userAvaDnmc:stl.userAvaN,
-                    followBTNDnmc:stl.followBTN_N,
-                    userNameDnmc:stl.userNameN,
-                    mapWrapperDnmc:stl.mapWrapperN,
-                    userUnitDnmc:stl.userUnitN,
-                    userWriteModeDnmc:stl.userWriteModeN,
-                    moreUserUnitsDnmc:stl.moreUserUnitsN,
-                });
-                return;
-            case 'MORNING':
-                setThemes({...themes,
-                    userPageDnmc: stl.usersPageM,
-                    generalHeaderDnmc:stl.generalHeaderM,
-                    pagBTNDnmc:stl.pagBTN_M,
-                    paginationSelectedDnmc:stl.paginationSelectedM,
-                    paginationDnmc:stl.paginationM,
-                    searchInputDnmc:stl.searchInputM,
-                    userAvaDnmc:stl.userAvaM,
-                    followBTNDnmc:stl.followBTN_M,
-                    userNameDnmc:stl.userNameM,
-                    mapWrapperDnmc:stl.mapWrapperM,
-                    userUnitDnmc:stl.userUnitM,
-                    userWriteModeDnmc:stl.userWriteModeM,
-                    moreUserUnitsDnmc:stl.moreUserUnitsM,
-                });
-                return;
-            case 'DAY':
-                setThemes({...themes,
-                    userPageDnmc: stl.usersPageD,
-                    generalHeaderDnmc:stl.generalHeaderD,
-                    pagBTNDnmc:stl.pagBTN_D,
-                    paginationSelectedDnmc:stl.paginationSelectedD,
-                    paginationDnmc:stl.paginationD,
-                    searchInputDnmc:stl.searchInputD,
-                    userAvaDnmc:stl.userAvaD,
-                    followBTNDnmc:stl.followBTN_D,
-                    userNameDnmc:stl.userNameD,
-                    mapWrapperDnmc:stl.mapWrapperD,
-                    userUnitDnmc:stl.userUnitD,
-                    userWriteModeDnmc:stl.userWriteModeD,
-                    moreUserUnitsDnmc:stl.moreUserUnitsD
-                });
-                return;
-            case 'EVENING':
-                setThemes({...themes,
-                    userPageDnmc: stl.usersPageE,
-                    generalHeaderDnmc:stl.generalHeaderE,
-                    pagBTNDnmc:stl.pagBTN_E,
-                    paginationSelectedDnmc:stl.paginationSelectedE,
-                    paginationDnmc:stl.paginationE,
-                    searchInputDnmc:stl.searchInputE,
-                    userAvaDnmc:stl.userAvaE,
-                    followBTNDnmc:stl.followBTN_E,
-                    userNameDnmc:stl.userNameE,
-                    mapWrapperDnmc:stl.mapWrapperE,
-                    userUnitDnmc:stl.userUnitE,
-                    userWriteModeDnmc:stl.userWriteModeE,
-                    moreUserUnitsDnmc:stl.moreUserUnitsE,
-                });
-                return;
-            default: return {...themes}
-        }
-    },[props.usersInfo.colorTheme]);
+
 
     // useEffect(()=>{
     //     // console.log(feedbackArr)
@@ -160,8 +84,8 @@ export function Users(props) {
     // setTimeout( ()=> {console.log(feedbackArr)},9000 )
 
 
-    let firstBlockClass  = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
-    let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
+    let firstBlockClass  = `${stl.userUnit} ${props.themes.userUnitDnmc} ${stl.userUnitShowed}`;
+    let secondBlockClass = `${stl.userWriteMode} ${props.themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
 
     let writeMsg = (userId,text,userName)=> {
         let actionKey = uuidv4()
@@ -189,19 +113,21 @@ export function Users(props) {
         setIsHidden(stl.feedbackHidden)
         return isHidden },3000 )}
 
+    // console.log(props.followThunkToggler())
+
     return <>
-        <div className={`${stl.usersPage} ${themes.userPageDnmc}`}>
+        <div className={`${stl.usersPage} ${props.themes.userPageDnmc}`}>
             <div className={stl.userInfo}>
-                <div className={`${stl.generalHeader} ${themes.generalHeaderDnmc}`}>
+                <div className={`${stl.generalHeader} ${props.themes.generalHeaderDnmc}`}>
                     <h2 className={stl.userHeader}>Users</h2>
 
                     <div className={stl.paginationBlockOutside}>
                         {!props.usersInfo.userSearchMode && pagesCount !== 0 &&
                         <>
-                            <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={paginatorDec}
+                            <button className={`${stl.pagBTN} ${props.themes.pagBTNDnmc}`} onClick={paginatorDec}
                                     disabled={disableDec}> &#171; 5 </button>
                             { paginator() }
-                            <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={paginatorInc}
+                            <button className={`${stl.pagBTN} ${props.themes.pagBTNDnmc}`} onClick={paginatorInc}
                                     disabled={disableInc}> 5 &#187;  </button>
                         </>
                         }
@@ -211,9 +137,9 @@ export function Users(props) {
                                value={props.usersInfo.userSearchField}
                                onChange={onChangeListener}
                                onKeyUp={keyUpListener}
-                               className={`${stl.searchInput} ${themes.searchInputDnmc}`}     />
-                        <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchListener}>Find!</button>
-                        <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchModeCloseListener}>X</button>
+                               className={`${stl.searchInput} ${props.themes.searchInputDnmc}`}     />
+                        <button className={`${stl.pagBTN} ${props.themes.pagBTNDnmc}`} onClick={searchListener}>Find!</button>
+                        <button className={`${stl.pagBTN} ${props.themes.pagBTNDnmc}`} onClick={searchModeCloseListener}>X</button>
                     </div>
                 </div>
                 {/*props.usersInfo.usersGettingError*/}
@@ -226,38 +152,40 @@ export function Users(props) {
                             <h2>Houston, we've got a problem...</h2>
                             <h2>{props.usersInfo.usersGettingError||props.usersInfo.userFindingError}</h2>
                             {props.usersInfo.usersGettingError && <button
-                                className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
+                                className={`${stl.moreUsersShower} ${props.themes.pagBTNDnmc}`}
                                 onClick={()=>{props.setErrorToNull();setPageListener(props.usersInfo.currentPage);} }
                             >Try again</button>}
                         </div>
                                                                                                 :
-                    <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
+                    <div className={`${stl.mapWrapper} ${props.themes.mapWrapperDnmc} ${wrapperLocker}`}>
                         {props.usersInfo.initialUsersList && props.usersInfo.initialUsersList
                             .map(user =>
                                 <div className={stl.userUnitContainer} key={user.id}>
-                                    <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`} >
+                                    <div className={`${stl.userUnit} ${props.themes.userUnitDnmc} ${stl.userUnitShowed}`} >
                                         <div className={stl.avaDiv}>
                                             <NavLink to={`/profile/${user.id}`}>
                                                 <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
-                                                     className={`${themes.userAvaDnmc}`}/>
+                                                     className={`${props.themes.userAvaDnmc}`}/>
                                             </NavLink>
                                         </div>
                                         <div className={stl.nameStateBTNs}>
-                                            <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
+                                            <div className={`${stl.userBlockInfo} ${props.themes.userBlockInfoDnmc}`}>
                                                 <NavLink to={`/profile/${user.id}`}>
-                                                    <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
+                                                    <h2 className={`${stl.userName} ${props.themes.userNameDnmc}`}>{user.name} </h2>
                                                 </NavLink>
-                                                <p className={`${themes.userNameDnmc}`}>{user.status}</p>
+                                                <p className={`${props.themes.userNameDnmc}`}>{user.status}</p>
                                             </div>
                                             <div className={stl.followNWriteBTNS}>
                                                 <button
                                                     disabled={props.usersInfo.followingInProgress.some(id=>id==user.id)}
                                                     id={user.id}
-                                                    className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                                    onClick={user.followed?props.unFollowListener:props.followListener}>
-                                                    {user.followed?'unFollow':'Follow'}
+                                                    className={`${stl.followBTN} ${props.themes.followBTNDnmc} 
+                                                    ${user.error && props.themes.followBTN_ERR_DNMC }`}
+                                                    onClick={()=>props.followThunkToggler(user.id,user.followed)}
+                                                >
+                                                    {user.error?user.error:user.followed?'unFollow':'Follow'}
                                                 </button>
-                                                <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                <button className={`${stl.followBTN} ${props.themes.followBTNDnmc}`}
                                                         disabled={isDisabled}
                                                         onClick={e=>userIdTalkModeOn(e,user.id, user.name)}
                                                 >
@@ -268,9 +196,9 @@ export function Users(props) {
                                     </div>
                                     <div  className={`${stl.userUnitHidden}`}>
                                     <div className={stl.miniHeadWrapper}>
-                                        <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
-                                        <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
-                                        <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
+                                        <h2 className={`${stl.userName} ${props.themes.userNameDnmc}`}>{user.name}</h2>
+                                        <button className={`${stl.followBTN} ${props.themes.followBTNDnmc}`}>Go to chat</button>
+                                        <button className={`${stl.closeBTN} ${stl.followBTN} ${props.themes.followBTNDnmc}`}
                                                 onClick={e=>{userIdTalkModeOff(e)}}
                                         >X</button>
                                     </div>
@@ -282,7 +210,7 @@ export function Users(props) {
                                             <form onSubmit={handleSubmit}>
                                                 <textarea name="text" className={stl.talkTextarea}
                                                 onChange={handleChange} value={values.text} placeholder={errors.text} />
-                                                <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${props.themes.followBTNDnmc}`}
                                                 > Send Msg </button>
                                             </form>
                                         )}
@@ -295,8 +223,8 @@ export function Users(props) {
 
                 }
             </div>
-            <div className={ `${stl.moreUserUnits}  ${themes.moreUserUnitsDnmc}`}>
-                <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
+            <div className={ `${stl.moreUserUnits}  ${props.themes.moreUserUnitsDnmc}`}>
+                <button className={`${stl.moreUsersShower} ${props.themes.pagBTNDnmc}`}
                         onClick={props.showMoreListener}>Show More
                 </button>
             </div>

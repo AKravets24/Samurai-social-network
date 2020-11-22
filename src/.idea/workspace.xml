@@ -315,6 +315,17 @@
       <workItem from="1605227264445" duration="594000" />
       <workItem from="1605263588386" duration="1997000" />
       <workItem from="1605270703369" duration="22844000" />
+      <workItem from="1605349948257" duration="20007000" />
+      <workItem from="1605542248390" duration="13883000" />
+      <workItem from="1605607050148" duration="18902000" />
+      <workItem from="1605692039516" duration="13979000" />
+      <workItem from="1605719621327" duration="9209000" />
+      <workItem from="1605780235127" duration="16963000" />
+      <workItem from="1605868390719" duration="6502000" />
+      <workItem from="1605877382692" duration="14772000" />
+      <workItem from="1605958847880" duration="19628000" />
+      <workItem from="1605987075441" duration="15150000" />
+      <workItem from="1606038480431" duration="6944000" />
     </task>
     <servers />
   </component>
@@ -326,22 +337,18 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="649" y="200" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1601072213366" />
-    <state x="611" y="365" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1595929015534">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="611" y="365" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1595929015534" />
     <state x="667" y="228" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1597417209308">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="667" y="228" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1597417209308" />
-    <state x="601" y="237" width="672" height="677" key="run.anything.popup" timestamp="1603813069424">
+    <state x="601" y="237" width="672" height="677" key="run.anything.popup" timestamp="1605694135545">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="601" y="237" width="672" height="677" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603813069424" />
-    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup" timestamp="1602586199524">
+    <state x="601" y="237" width="672" height="677" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1605694135545" />
+    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup" timestamp="1605708064451">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1602586199524" />
+    <state x="1261" y="208" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1605708064451" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -353,12 +360,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
-          <line>32</line>
+          <line>122</line>
           <option name="timeStamp" value="70" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
-          <line>69</line>
+          <line>162</line>
           <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -368,12 +375,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
-          <line>72</line>
+          <line>81</line>
           <option name="timeStamp" value="81" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
-          <line>129</line>
+          <line>140</line>
           <option name="timeStamp" value="93" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -383,7 +390,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
-          <line>82</line>
+          <line>90</line>
           <option name="timeStamp" value="107" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -397,18 +404,13 @@
           <option name="timeStamp" value="114" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/components/content/profile/profileContainer.js</url>
-          <line>39</line>
-          <option name="timeStamp" value="121" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/profile/statusBlock.js</url>
           <line>44</line>
           <option name="timeStamp" value="125" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/profile/profile.js</url>
-          <line>157</line>
+          <line>156</line>
           <option name="timeStamp" value="133" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -417,56 +419,135 @@
           <option name="timeStamp" value="134" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/redux/app.js</url>
-          <line>19</line>
-          <option name="timeStamp" value="135" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/dialogs/dialogs.js</url>
-          <line>78</line>
+          <line>89</line>
           <option name="timeStamp" value="138" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/redux/usersReducer.js</url>
-          <line>116</line>
-          <properties lambdaOrdinal="-1" />
+          <line>141</line>
           <option name="timeStamp" value="149" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/redux/usersReducer.js</url>
-          <line>30</line>
-          <properties lambdaOrdinal="-1" />
+          <line>33</line>
           <option name="timeStamp" value="151" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/redux/usersReducer.js</url>
-          <line>134</line>
-          <properties lambdaOrdinal="-1" />
+          <line>168</line>
           <option name="timeStamp" value="152" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
-          <line>304</line>
-          <properties lambdaOrdinal="-1" />
+          <line>232</line>
           <option name="timeStamp" value="154" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
-          <line>38</line>
-          <properties lambdaOrdinal="-1" />
+          <line>128</line>
           <option name="timeStamp" value="155" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/users/users.js</url>
-          <line>221</line>
-          <properties lambdaOrdinal="-1" />
+          <line>147</line>
           <option name="timeStamp" value="156" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/profile/profile.js</url>
+          <line>79</line>
+          <option name="timeStamp" value="158" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/backGroundSetter.js</url>
+          <line>62</line>
+          <option name="timeStamp" value="162" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/backGroundSetter.js</url>
+          <line>61</line>
+          <option name="timeStamp" value="164" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
+          <line>125</line>
+          <option name="timeStamp" value="173" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/App.js</url>
+          <line>63</line>
+          <option name="timeStamp" value="179" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
+          <line>27</line>
+          <option name="timeStamp" value="182" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
+          <line>29</line>
+          <option name="timeStamp" value="183" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
+          <line>31</line>
+          <option name="timeStamp" value="184" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
+          <line>32</line>
+          <option name="timeStamp" value="185" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
+          <line>34</line>
+          <option name="timeStamp" value="186" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/navBar/navBar.js</url>
+          <line>35</line>
+          <option name="timeStamp" value="187" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/app.js</url>
+          <line>24</line>
+          <option name="timeStamp" value="188" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/redux/app.js</url>
+          <line>25</line>
+          <option name="timeStamp" value="189" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
+          <line>22</line>
+          <option name="timeStamp" value="195" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/users/usersContainer.js</url>
+          <line>157</line>
+          <option name="timeStamp" value="196" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/components/content/profile/profileContainer.js</url>
-          <line>48</line>
+          <line>158</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="157" />
+          <option name="timeStamp" value="198" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/profile/profileContainer.js</url>
+          <line>160</line>
+          <option name="timeStamp" value="199" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/profile/profileContainer.js</url>
+          <line>159</line>
+          <option name="timeStamp" value="200" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/content/friends/friendsContainer.js</url>
+          <line>48</line>
+          <option name="timeStamp" value="202" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

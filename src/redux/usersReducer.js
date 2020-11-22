@@ -1,5 +1,6 @@
 import maleProfilePic  from './img/dialogs/male.png'
 import { usersApi }    from "./app";
+import {dialogsReducer} from "./dialogsReducer";
 
 const FOLLOW                        = 'FOLLOW';
 const UNFOLLOW                      = 'UNFOLLOW';
@@ -12,6 +13,7 @@ const UPDATE_SEARCH_FIELD           = 'UPDATE_SEARCH_FIELD';
 const AT_GETTING_USERS_ERROR_CAUGHT = 'AT_GETTING_USERS_ERROR_CAUGHT';
 const AT_FINDING_USERS_ERROR_CAUGHT = 'AT_FINDING_USERS_ERROR_CAUGHT';
 const ERROR_NULLIFIER               = 'ERROR_NULLIFIER';
+const ERROR_AT_FOLLOWING_TOGGLER    = 'ERROR_AT_FOLLOWING_TOGGLER';
 
 const followBTNAC               = (userId)                =>  ({type: FOLLOW, userId});
 const unFollowBTNAC             = (userId)                =>  ({type: UNFOLLOW, userId});
@@ -22,13 +24,14 @@ const toggleFollowingProgressAC = (isLoading, userId)     =>  ({type: TOGGLE_IS_
 const errCatcherAtUsersGetAC    = (usersGettingError)     =>  ({type: AT_GETTING_USERS_ERROR_CAUGHT, usersGettingError });
 const errCatcherAtUsersFindAC   = (usersFindingError)     =>  ({type: AT_FINDING_USERS_ERROR_CAUGHT, usersFindingError });
 const setErrorToNullAC          = ()                      =>  ({type: ERROR_NULLIFIER})
+const errCatcherAtFollowingAC   = (userId,errorCode)      =>  ({type: ERROR_AT_FOLLOWING_TOGGLER,userId,errorCode})
 
 const getUsersThunkAC           = (pageSize, currentPage) =>  (dispatch) =>  {
         dispatch(toggleIsLoadingAC(true));
         usersApi.getUsers(pageSize, currentPage)
             .then(response => {
                 if (response.data) {
-                    // console.log(response)
+                    console.log(response)
                     dispatch(setUsersAC(response.data.items, response.data.totalCount));
                     dispatch(toggleIsLoadingAC(false));
                 } else {
@@ -52,12 +55,31 @@ const setCurrentPageThunkAC     = (pageSize, currentPage) =>  (dispatch) =>  {
             }
         });
 };
+
+const followThunkTogglerAC      = (userId, isFollowed)    =>  (dispatch) =>  {
+    dispatch(toggleFollowingProgressAC(true, userId));
+    let followToggler;
+    !isFollowed?followToggler=usersApi.followRequest:followToggler=usersApi.unFollowRequest;
+    followToggler(userId,isFollowed).then(response =>{
+        if (response.status===200){
+            !isFollowed?dispatch(followBTNAC(userId)):dispatch(unFollowBTNAC(userId));
+        } else {
+            let errorCode=parseInt(JSON.stringify(response.message).replace(/\D+/g,""));
+            dispatch(errCatcherAtFollowingAC(userId,errorCode));
+        }
+        dispatch(toggleFollowingProgressAC(false, userId));
+    })
+}
+
 const followThunkAC             = (userId)                =>  (dispatch) =>  {
         dispatch(toggleFollowingProgressAC(true, userId));
         usersApi.followRequest(userId)
-            .then( data =>{
-                if (data.resultCode == 0){
+            .then(response =>{
+                if (response.status===200){
                     dispatch(followBTNAC(userId))
+                } else {
+                    let errorCode=parseInt(JSON.stringify(response.message).replace(/\D+/g,""));
+                    dispatch(errCatcherAtFollowingAC(userId,errorCode));
                 }
                 dispatch(toggleFollowingProgressAC(false, userId));
             })
@@ -65,11 +87,14 @@ const followThunkAC             = (userId)                =>  (dispatch) =>  {
 const unFollowThunkAC           = (userId)                =>  (dispatch) =>  {
     dispatch(toggleFollowingProgressAC(true, userId))
     usersApi.unFollowRequest(userId)
-        .then( data =>{
-            if (data.resultCode == 0){
+        .then(response =>{
+            if (response.status===200){
                 dispatch(unFollowBTNAC(userId));
             }
-            console.log(data)
+            else {
+                let errorCode=parseInt(JSON.stringify(response.message).replace(/\D+/g,""));
+                dispatch(errCatcherAtFollowingAC(userId,errorCode));
+            }
             dispatch(toggleFollowingProgressAC(false, userId))
         })
 };
@@ -105,7 +130,7 @@ const updateSearchFieldAC       = (text)                  =>  ({type: UPDATE_SEA
 
 const initialUsersInfo = {
     initialUsersList:     [],
-    pageSize:             80,
+    pageSize:             10,
     totalCount:           0,
     currentPage:          1,
     isLoading:            false,
@@ -121,7 +146,9 @@ export const usersReducer = (state = initialUsersInfo, action) => {
     // debugger;
     switch (action.type) {
         case FOLLOW : /*console.log('action type === FOLLOW');*/
+            console.log(FOLLOW)
             return { ...state, initialUsersList: state.initialUsersList.map(currentUser => {
+
                     if (currentUser.id == action.userId) { return {...currentUser, followed: true}
                     }
                     return {...currentUser} }) };
@@ -130,6 +157,13 @@ export const usersReducer = (state = initialUsersInfo, action) => {
                     if (currentUser.id == action.userId) { return {...currentUser, followed: false}
                     }
                     return {...currentUser} }) };
+        case ERROR_AT_FOLLOWING_TOGGLER:console.log(ERROR_AT_FOLLOWING_TOGGLER)
+            return {...state, initialUsersList: state.initialUsersList.map (currentUser=> {
+                    if (currentUser.id == action.userId) { return {...currentUser, error: `${action.errorCode} error!`  }
+                    }
+                    return {...currentUser}
+                })}
+
 
         case SET_USERS: { /*console.log('action type === SET_USERS');*/
             // console.log(action)
@@ -137,10 +171,8 @@ export const usersReducer = (state = initialUsersInfo, action) => {
         }
         case SET_CURRENT_PAGE: /*console.log('action type === SET_CURRENT_PAGE');*/
             return {...state, currentPage: action.currentPage};
-
         case TOGGLE_IS_LOADING: /*console.log('action type === TOGGLE_IS_LOADING');*/
             return {...state, isLoading: action.isLoading};
-
         case TOGGLE_IS_FOLLOWING_PROGRESS: /*console.log('action type === TOGGLE_IS_FOLLOWING_PROGRESS');*/
             return {
                 ...state, followingInProgress: action.isLoading
@@ -158,8 +190,7 @@ export const usersReducer = (state = initialUsersInfo, action) => {
             return {...state, usersGettingError: action.usersGettingError.substr(1 ,action.usersGettingError.length-2)};
         case AT_FINDING_USERS_ERROR_CAUGHT:
             console.log('AT_FINDING_USERS_ERROR_CAUGHT')
-            return  {...state, userFindingError: action.usersFindingError.substr(1 ,action.usersFindingError.length-2)+12345}
-
+            return  {...state, userFindingError: action.usersFindingError.substr(1 ,action.usersFindingError.length-2)}
         case ERROR_NULLIFIER:
             // console.log('ERROR_NULLIFIER');
             return {...state, usersGettingError: '', userFindingError:'',}
@@ -169,5 +200,5 @@ export const usersReducer = (state = initialUsersInfo, action) => {
     }
 };
 const actionCreators = {getUsersThunkAC, setCurrentPageThunkAC, followThunkAC, unFollowThunkAC,setUsersThunkAC,
-    getCertainUserThunkAC, toggleUserSearchModeAC, updateSearchFieldAC, setErrorToNullAC};
+    getCertainUserThunkAC, toggleUserSearchModeAC, updateSearchFieldAC, setErrorToNullAC, followThunkTogglerAC};
 export const usersACs = (state = actionCreators) => { return state };

@@ -4,43 +4,54 @@ import {compose}                             from 'redux';
 import {withRouter, NavLink}                 from 'react-router-dom';
 import {Formik}                              from 'formik';
 import stl                                   from './dialogs.module.css';
+import {
+    getColorTheme,
+    getDialogsACs_compDialogs,
+    getDialogsReducer,
+    getMyId, getSmartDialogsReducer
+} from "../../../redux/selectors";
+
+
+function DialogFuncContainer (props) {
+    // console.log(props)
+    useEffect(()=> {
+        props.getMyNegotiatorsListThunk();
+        let userId = props.match.params.userId;
+        if (userId) props.talkedBeforeThunk(userId)
+    },[])
+
+    let setSelectedMessages = (messageId) => { props.state.dialogACs.setSelectedMessagesAC(messageId) };
+
+    let [themes, setThemes] = useState({dialogDynamic:'',firstScroller:'',talkerBlockTheme:'',activeLink:'', talkerBlockA:'',msgMeDynamic:'',msgUserDynamic:'',dialogAreaBackgroundNSecondScroll:'', textAreaDynamic:'',sendBTNDynamic:''})
+    useEffect(()=> {
+        switch (props.state.colorTheme) {
+            case 'NIGHT'  :return setThemes({...themes,dialogDynamic:stl.dialogN,firstScroller:stl.dialogListN,talkerBlockTheme:stl.talkerBlockN,activeLink:stl.activeLinkN, talkerBlockA:stl.talkerBlockA_N,msgMeDynamic:stl.myMsgN,
+                    msgUserDynamic:stl.userMsgN,dialogAreaBackgroundNSecondScroll:stl.dialogAreaN,textAreaDynamic:stl.textareaN,sendBTNDynamic:stl.sendBTN_N,});
+            case 'MORNING':return setThemes({...themes,dialogDynamic:stl.dialogM,firstScroller:stl.dialogListM,talkerBlockTheme:stl.talkerBlockM,activeLink:stl.activeLinkM, talkerBlockA:stl.talkerBlockA_M,msgMeDynamic:stl.myMsgM,
+                    msgUserDynamic:stl.userMsgM,dialogAreaBackgroundNSecondScroll:stl.dialogAreaM,textAreaDynamic:stl.textareaM,sendBTNDynamic:stl.sendBTN_M,});
+            case 'DAY'    :return setThemes({...themes,dialogDynamic:stl.dialogD,firstScroller:stl.dialogListD,talkerBlockTheme:stl.talkerBlockD,activeLink:stl.activeLinkD, talkerBlockA:stl.talkerBlockA_D,msgMeDynamic:stl.myMsgD,
+                    msgUserDynamic:stl.userMsgD,dialogAreaBackgroundNSecondScroll:stl.dialogAreaD,textAreaDynamic:stl.textareaD,sendBTNDynamic:stl.sendBTN_D,});
+            case'EVENING' :return setThemes({...themes,dialogDynamic:stl.dialogE,firstScroller: stl.dialogListE,talkerBlockTheme:stl.talkerBlockE,activeLink:stl.activeLinkE, talkerBlockA:stl.talkerBlockA_E,msgMeDynamic:stl.myMsgE,
+                    msgUserDynamic:stl.userMsgE,dialogAreaBackgroundNSecondScroll:stl.dialogAreaE,textAreaDynamic:stl.textareaE,sendBTNDynamic:stl.sendBTN_E,});
+        }},[props.state.colorTheme])
+
+    return themes.dialogDynamic && <Dialogs state                   =  { props.state.props            }
+                    getTalkWithUserThunk    =  { props.getTalkWithUserThunk   }
+                    sendMessageToUserThunk  =  { props.sendMessageToUserThunk }
+                    userIdInURL             =  { props.match.params.userId    }
+                    myId                    =  { props.state.myId             }
+                    dialogIsLoading         =  { props.state.dialogIsLoading  }
+                    setSelectedMessages     =  { props.setSelectedMessages    }
+                    setSpamMessagesThunk    =  { props.setSpamMessagesThunk   }
+                    deleteMessageThunk      =  { props.deleteMessageThunk     }
+                    addPrevMessagesThunk    =  { props.addPrevMessagesThunk   }
+                    colorTheme              =  { props.state.colorTheme       }
+                    themes                  =  { themes                       }
+    />;
+}
 
 function Dialogs(props) {
-    // console.log(props.colorTheme);
-
-    let [themes, setThemes] = useState({dialogDynamic:'',firstScroller:'',talkerBlockTheme:'',activeLink:'', talkerBlockA:'',
-        msgMeDynamic:'',msgUserDynamic:'',dialogAreaBackgroundNSecondScroll:'', textAreaDynamic:'',sendBTNDynamic:''})
-    useEffect(()=> {
-        switch (props.colorTheme) {
-            case 'NIGHT':
-                setThemes({...themes,dialogDynamic:stl.dialogNight, firstScroller:stl.dialogListNight,
-                talkerBlockTheme:stl.talkerBlockNight, activeLink:stl.activeLinkNight, talkerBlockA: stl.talkerBlockANight,msgMeDynamic:stl.myMsgNight,
-                    msgUserDynamic:stl.userMsgNight,dialogAreaBackgroundNSecondScroll:stl.dialogAreaNight,textAreaDynamic:stl.textareaNight,
-                    sendBTNDynamic: stl.sendBTNNight,
-                })
-                return;
-            case 'MORNING':
-                setThemes({...themes,dialogDynamic:stl.dialogMorning, firstScroller:stl.dialogListMorning,
-            talkerBlockTheme:stl.talkerBlockMorning,activeLink:stl.activeLinkMorning, talkerBlockA: stl.talkerBlockAMorning,msgMeDynamic:stl.myMsgMorning,
-                    msgUserDynamic:stl.userMsgMorning,dialogAreaBackgroundNSecondScroll:stl.dialogAreaMorning,textAreaDynamic:stl.textareaMorning,
-                    sendBTNDynamic: stl.sendBTNMorning,
-                })
-                return;
-            case 'DAY':
-                setThemes({...themes,dialogDynamic:stl.dialogDay,firstScroller:stl.dialogListDay,
-            talkerBlockTheme:stl.talkerBlockDay,activeLink:stl.activeLinkDay, talkerBlockA: stl.talkerBlockADay,msgMeDynamic:stl.myMsgDay,
-                    msgUserDynamic:stl.userMsgDay,dialogAreaBackgroundNSecondScroll:stl.dialogAreaDay,textAreaDynamic:stl.textareaDay,
-                    sendBTNDynamic: stl.sendBTNDay,
-                })
-                return;
-            case'EVENING':
-                setThemes({...themes,dialogDynamic:stl.dialogEvening,firstScroller: stl.dialogListEvening,
-            talkerBlockTheme:stl.talkerBlockEvening,activeLink:stl.activeLinkEvening, talkerBlockA: stl.talkerBlockAEvening,msgMeDynamic:stl.myMsgEvening,
-                    msgUserDynamic:stl.userMsgEvening, dialogAreaBackgroundNSecondScroll:stl.dialogAreaEvening,textAreaDynamic:stl.textareaEvening,
-                    sendBTNDynamic: stl.sendBTNEvening
-                })
-                return;
-        }},[props.colorTheme])
+    console.log('render');
 
     const dialogArea  = useRef(null);
     const bufferBlock = useRef('');
@@ -70,21 +81,21 @@ function Dialogs(props) {
     useEffect( ()=>{ /*msgsMapDone &&*/ scrollToDown(bufferBlock)},[msgsMapDone])
 
     return <>
-        <div className={`${stl.dialogsPage} ${themes.dialogDynamic}`}>
+        <div className={`${stl.dialogsPage} ${props.themes.dialogDynamic}`}>
             <div className={stl.dialogListAndArea}>
-                <div className={`${stl.dialogList} ${themes.firstScroller}`}>
+                <div className={`${stl.dialogList} ${props.themes.firstScroller}`}>
                 {props.state.dialogsList.length === 0 ?
                     <img className={stl.certainLoader} src={props.state.allDialogsLoader} alt="Err"/> :
                      props.state.dialogsList
                     .map((user, i) =>
-                        <div className={`${stl.talkerBlock} ${themes.talkerBlockTheme}`} key={i} >
+                        <div className={`${stl.talkerBlock} ${props.themes.talkerBlockTheme}`} key={i} >
                             <NavLink to={`/profile/${user.id}`} >
                                 <img  src={user.photos.large || props.state.defaultAvatar} alt="err"/>
                             </NavLink>
                             <NavLink to={`/dialogs/${user.id}`}
                                      onClick={() => {getTalk(user.id); setVisibility(stl.visibility);setUserNameInHeader(user.userName)}}
-                                     className={themes.talkerBlockA}
-                                     activeClassName={themes.activeLink}>
+                                     className={props.themes.talkerBlockA}
+                                     activeClassName={props.themes.activeLink}>
                                 {user.userName}{user.hasNewMessages &&
                             <span>({user.newMessagesCount})</span> }
                             </NavLink>
@@ -97,7 +108,7 @@ function Dialogs(props) {
                         <h3>On button click makes immediate action</h3>
                     </div>
                 </div>
-                <div className={`${stl.dialogArea} ${themes.dialogAreaBackgroundNSecondScroll}`}
+                <div className={`${stl.dialogArea} ${props.themes.dialogAreaBackgroundNSecondScroll}`}
                      ref={dialogArea} onScroll={()=>!dialogArea.current.scrollTop && oldMsgLazyLoader()}>
                 <div className={stl.oldMsgsLoader}>
                     {props.state.prevMsgsIsLoading && <img src={props.state.prevMsgsLoader} alt=""/>}
@@ -111,7 +122,7 @@ function Dialogs(props) {
                       if(i===arr.length-1){scrollToDown(bufferBlock)}
                       return <div
                            key={i} className={+msg.senderId === +props.myId ?
-                           `${stl.messageBlockMe} ${themes.msgMeDynamic} ` : `${stl.messageBlockUser} ${themes.msgUserDynamic}`}
+                           `${stl.messageBlockMe} ${props.themes.msgMeDynamic} ` : `${stl.messageBlockUser} ${props.themes.msgUserDynamic}`}
                            id={msg.id}
                            onDoubleClick={()=> visibility ? setVisibility(null) : setVisibility(stl.visibility) }
                       >
@@ -136,11 +147,11 @@ function Dialogs(props) {
                         {({values, errors,handleChange,handleSubmit,isSubmitting,}) => (
                             <form onSubmit={handleSubmit}>
                                 <textarea name="text" onChange={handleChange} value={values.text} placeholder={errors.text}
-                                className={`${themes.textAreaDynamic}`}
+                                className={`${props.themes.textAreaDynamic}`}
                                 onKeyUp={e=>{e.keyCode===13&&sendMessageListener(dialogId,values.text);values.text=''
                                 }}
                                     />
-                                <button type="submit" disabled={isSubmitting} className={`${stl.sendBTN} ${themes.sendBTNDynamic}` }
+                                <button type="submit" disabled={isSubmitting} className={`${stl.sendBTN} ${props.themes.sendBTNDynamic}` }
                                 // onClick={()=>sendMessageListener(dialogId,values.text)}
                                 > Send </button>
                             </form>
@@ -153,36 +164,14 @@ function Dialogs(props) {
     </>
 };
 
-function DialogFuncContainer (props) {
-    // console.log(props)
-    useEffect(()=> {
-        props.getMyNegotiatorsListThunk();
-        let userId = props.match.params.userId;
-        if (userId) props.talkedBeforeThunk(userId)
-    },[])
-
-    let setSelectedMessages = (messageId) => { props.state.dialogACs.setSelectedMessagesAC(messageId) };
-
-    return <Dialogs state                   =  { props.state.props            }
-                    getTalkWithUserThunk    =  { props.getTalkWithUserThunk   }
-                    sendMessageToUserThunk  =  { props.sendMessageToUserThunk }
-                    userIdInURL             =  { props.match.params.userId    }
-                    myId                    =  { props.state.myId             }
-                    dialogIsLoading         =  { props.state.dialogIsLoading  }
-                    setSelectedMessages     =  { props.setSelectedMessages    }
-                    setSpamMessagesThunk    =  { props.setSpamMessagesThunk   }
-                    deleteMessageThunk      =  { props.deleteMessageThunk     }
-                    addPrevMessagesThunk    =  { props.addPrevMessagesThunk   }
-                    colorTheme              =  { props.state.colorTheme       }
-    />;
-}
 
 let mapStateToProps = (state) => {
     return {
-        props:      state.dialogsReducer,
-        dialogACs:  state.dialogACs,
-        myId:       state.appAuthReducer.id,
-        colorTheme: state.backgroundReducer.theme,
+        // props:      getDialogsReducer         (state),
+        props:      getSmartDialogsReducer    (state),
+        dialogACs:  getDialogsACs_compDialogs (state),
+        myId:       getMyId                   (state),
+        colorTheme: getColorTheme             (state),
     }
 };
 
@@ -201,7 +190,7 @@ let mergeProps = (stateProps, dispatchProps) => { const  state  = stateProps; co
         talkedBeforeThunk, setSelectedMessages, setSpamMessagesThunk, deleteMessageThunk, addPrevMessagesThunk }
 };
 
-export default compose (
+export const DialogsComposer = compose (
     connect(mapStateToProps, null, mergeProps),
     withRouter
     )(DialogFuncContainer);

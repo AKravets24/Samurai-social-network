@@ -16,25 +16,24 @@ const CLEAR_CERTAIN_USER_DIALOG     = 'CLEAR_CERTAIN_USER_DIALOG';
 const SET_SELECTED_MESSAGES         = 'SET_SELECTED_MESSAGES';
 const SET_SPAM_MESSAGE              = 'SET_SPAM_MESSAGE';
 const DELETE_MESSAGE                = 'DELETE_MESSAGE';
-const GET_NEW_MESSAGES_UPDATE       = 'GET_NEW_MESSAGES_UPDATE';
-const BTN_STATE_TOGGLER             = 'BTN_STATE_TOGGLER';
 const ADDED_PREVIOUS_MSGS           = 'ADDED_PREVIOUS_MSGS';
 const PREV_MSGS_LOADING_TOGGLER     = 'PREV_MSGS_LOADING_TOGGLER';
-const ERR_ON_GETTING_NEW_MSGS_COUNT = 'ERR_ON_GETTING_NEW_MSGS_COUNT';
 const ON_SENDING_MSG_STATUS         = 'ON_SENDING_MSG_STATUS';
 const FEEDBACK_WINDOW_CLOSER        = 'FEEDBACK_WINDOW_CLOSER';
-const FEEDBACK_REF_PUSH             = 'FEEDBACK_REF_PUSH'
+const FEEDBACK_REF_PUSH             = 'FEEDBACK_REF_PUSH';
 
-const setMyCompanions               = (data) =>                      ({type: SET_MY_COMPANIONS_LIST, data});
-const getMyNegotiatorsListThunkAC   = () =>                          (dispatch) => {
+const NEW_MSG_ACTTION_COMBINER      = 'NEW_MSG_ACTTION_COMBINER'
+
+const setMyCompanions             = (data) =>                      ({type: SET_MY_COMPANIONS_LIST, data});
+const getMyNegotiatorsListThunkAC = () =>                          (dispatch) => {
     usersApi.getMyNegotiatorsList()
         .then(data=>
             dispatch(setMyCompanions(data)))
 };
-const setTalkWithUser               = (data)=>                       ({type: SET_TALK_WITH_USER, data});
-const toggleIsLoadingAC             = (allDialogIsLoading) =>        ({type: TOGGLE_IS_LOADING, allDialogIsLoading});
-const setEmptyCertainUserDialog     = () =>                          ({type: CLEAR_CERTAIN_USER_DIALOG})
-const getTalkWithUserThunkAC        = (userId) =>                    (dispatch) => {
+const setTalkWithUser             = (data)=>                       ({type: SET_TALK_WITH_USER, data});
+const toggleIsLoadingAC           = (allDialogIsLoading) =>        ({type: TOGGLE_IS_LOADING, allDialogIsLoading});
+const setEmptyCertainUserDialog   = () =>                          ({type: CLEAR_CERTAIN_USER_DIALOG})
+const getTalkWithUserThunkAC      = (userId) =>                    (dispatch) => {
     dispatch(setEmptyCertainUserDialog())
     dispatch(toggleIsLoadingAC(true))
     usersApi.getTalkWithUser(userId) .then(data=> {
@@ -43,10 +42,10 @@ const getTalkWithUserThunkAC        = (userId) =>                    (dispatch) 
     })
 
 };
-const addPrevMSGS                   = (prevMsgs) =>                  ({ type: ADDED_PREVIOUS_MSGS, prevMsgs });
-const prevMsgsloadingTogglerAC      = (prevMsgsIsLoading)  =>        ({type: PREV_MSGS_LOADING_TOGGLER, prevMsgsIsLoading});
+const addPrevMSGS                 = (prevMsgs) =>                  ({ type: ADDED_PREVIOUS_MSGS, prevMsgs });
+const prevMsgsloadingTogglerAC    = (prevMsgsIsLoading)  =>        ({type: PREV_MSGS_LOADING_TOGGLER, prevMsgsIsLoading});
 
-const addPrevMessagesThunkAC        = (userId,msgCount,pageNumber) =>(dispatch) => {
+const addPrevMessagesThunkAC      = (userId,msgCount,pageNumber) =>(dispatch) => {
     dispatch(prevMsgsloadingTogglerAC(true));
     usersApi.getTalkWithUser(userId,  msgCount, pageNumber )
         .then(data =>  {
@@ -55,9 +54,9 @@ const addPrevMessagesThunkAC        = (userId,msgCount,pageNumber) =>(dispatch) 
         })
 };
 
-const sendMsgAC                     = (msg) =>                             ({type: SEND_MESSAGE_TO_USER,msg:msg.data.message});
-const onSendingMSGEStatusAC         = (number,userId,actionKey,userName)=> ({type: ON_SENDING_MSG_STATUS,number,userId,actionKey,userName});
-const sendMessageToUserThunkAC      = (userId,body,actionKey,userName) =>
+const sendMsgAC                   = (msg) =>                             ({type: SEND_MESSAGE_TO_USER,msg:msg.data.message});
+const onSendingMSGEStatusAC       = (number,userId,actionKey,userName)=> ({type: ON_SENDING_MSG_STATUS,number,userId,actionKey,userName});
+const sendMessageToUserThunkAC    = (userId,body,actionKey,userName) =>
                                                                      (dispatch) => {
     dispatch(onSendingMSGEStatusAC(0, userId,actionKey,userName));
     usersApi.sendMsgToTalker(userId,body,userName)
@@ -69,10 +68,10 @@ const sendMessageToUserThunkAC      = (userId,body,actionKey,userName) =>
             else { dispatch(onSendingMSGEStatusAC(2,userId,actionKey,userName)) }
         })
 };
-const feedBackWindowCloserAC        = (arrIndex) =>                  ({type:FEEDBACK_WINDOW_CLOSER, arrIndex})
+const feedBackWindowCloserAC      = (arrIndex) =>                  ({type:FEEDBACK_WINDOW_CLOSER, arrIndex})
 
-const createNewDialogAC             = (userId, fullName, photos) =>  ({type: CREATE_AND_SET_NEW_DIALOG, userId, fullName, photos});
-const talkedBeforeThunkAC           = (userId) =>                    (dispatch) => {
+const createNewDialogAC           = (userId, fullName, photos) =>  ({type: CREATE_AND_SET_NEW_DIALOG, userId, fullName, photos});
+const talkedBeforeThunkAC         = (userId) =>                    (dispatch) => {
     usersApi.getMyNegotiatorsList()
         .then(data => {
             if  (data.find(el=> (el.id === +userId))) {
@@ -91,9 +90,9 @@ const talkedBeforeThunkAC           = (userId) =>                    (dispatch) 
             }}
         )
 };
-const setSelectedMessagesAC         = (messageId) =>                 ({type: SET_SELECTED_MESSAGES, messageId});
-const deleteMessageAC               = (messageId, index) =>          ({type: DELETE_MESSAGE, messageId, index});
-const deleteMessageThunkAC          = (messageId) =>                 (dispatch) => {
+const setSelectedMessagesAC       = (messageId) =>                 ({type: SET_SELECTED_MESSAGES, messageId});
+const deleteMessageAC             = (messageId, index) =>          ({type: DELETE_MESSAGE, messageId, index});
+const deleteMessageThunkAC        = (messageId) =>                 (dispatch) => {
    usersApi.deleteMessage(messageId)
        .then(data => {
            console.log(data)
@@ -101,33 +100,24 @@ const deleteMessageThunkAC          = (messageId) =>                 (dispatch) 
            }
        )
 };
-const setAsSpamMessage              = (messageId, index) =>          ({type: SET_SPAM_MESSAGE, messageId, index});
-const setSpamMessagesThunkAC        = (messageId) =>                 (dispatch) => {
+const setAsSpamMessage            = (messageId, index) =>          ({type: SET_SPAM_MESSAGE, messageId, index});
+const setSpamMessagesThunkAC      = (messageId) =>                 (dispatch) => {
     usersApi.setAsSpamMessage(messageId)
         .then(data => {
             // console.log(data)
             dispatch(setAsSpamMessage(messageId))
         })
 };
-const getNewMessagesUpdate          = (messagesCount) =>             ({type: GET_NEW_MESSAGES_UPDATE, messagesCount});
-const getNewMSGSBTNToggler          = (isDisabled) =>                ({type: BTN_STATE_TOGGLER, isDisabled});
-const setErrNewMSGSRequestCountAC   = (hasErr) =>                    ({type: ERR_ON_GETTING_NEW_MSGS_COUNT, hasErr})
+
+const newMsgActonCombiner         = (newMessagesCount,BTNIsDisabled,hasErr) =>({type:NEW_MSG_ACTTION_COMBINER,newMessagesCount,BTNIsDisabled,hasErr});
+
 const getNewMessagesRequestThunkAC  = () =>                          (dispatch) => {
-    dispatch(getNewMSGSBTNToggler(true))
-    dispatch(setErrNewMSGSRequestCountAC(false))
+    dispatch(newMsgActonCombiner(0,true,false))
     usersApi.getNewMessages()
         .then(response => {
-            if(response.status === 200) {
-                // console.log(response)
-                dispatch(getNewMessagesUpdate(response.data));
-                dispatch(getNewMSGSBTNToggler(false));
-            }
-             else {
-                // console.log(1)
-                dispatch(getNewMSGSBTNToggler(false));
-                dispatch(setErrNewMSGSRequestCountAC(true))
-            }
-        })
+            if (response.status === 200) { dispatch(newMsgActonCombiner(response.data,false,null))
+            } else { dispatch(newMsgActonCombiner(0,false,true))
+            }})
 };
 
 const feedbackRefPushAC             = (el)  =>                    ({type: FEEDBACK_REF_PUSH, el});
@@ -162,14 +152,10 @@ let initialDialogsState = {
 export const dialogsReducer = ( state = initialDialogsState, action, date, time ) => {
     let stateCopy = {...state};
     switch (action.type) {
-
-        case GET_NEW_MESSAGES_UPDATE:
-            // console.log('GET_NEW_MESSAGES_UPDATE')
-            return {...state, newMessagesCounter: action.messagesCount}
-
-        case BTN_STATE_TOGGLER:
-            // console.log('BTN_STATE_TOGGLER')
-            return {...state, newMessageBTNDisabled: action.isDisabled}
+        case NEW_MSG_ACTTION_COMBINER:
+            // console.log(action)
+            return {...state,newMessagesCounter:action.newMessagesCount,newMessageBTNDisabled:action.BTNIsDisabled,
+                errGettingNewMSGSCount:action.hasErr};
 
         case SEND_MESSAGE_TO_USER:      stateCopy.certainDialog.items.push(action.msg); return stateCopy;
         case SET_MY_COMPANIONS_LIST:    return {...state, dialogsList: action.data}
@@ -207,10 +193,6 @@ export const dialogsReducer = ( state = initialDialogsState, action, date, time 
         case PREV_MSGS_LOADING_TOGGLER :
             // console.log('PREV_MSGS_LOADING_TOGGLER')
             return {...state, prevMsgsIsLoading: action.prevMsgsIsLoading};
-
-        case ERR_ON_GETTING_NEW_MSGS_COUNT:
-            // console.log('ERR_ON_GETTING_NEW_MSGS_COUNT')
-            return {...state, errGettingNewMSGSCount: action.hasErr};
 
         // case ON_SENDING_MSG_STATUS:
         //     // console.log(ON_SENDING_MSG_STATUS, action.number, action.userId,action.actionKey);

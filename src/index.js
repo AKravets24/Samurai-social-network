@@ -1,10 +1,11 @@
-import React from 'react';
-import App from "./components/App";
-import {BrowserRouter} from "react-router-dom";
-import ReactDOM from 'react-dom';
-import {store} from "./redux/redux-store";
-import './index.css';
-import {Provider} from 'react-redux';
+import React             from 'react';
+import { BrowserRouter } from "react-router-dom";
+import   ReactDOM        from 'react-dom';
+import { store }         from "./redux/redux-store";
+import { Provider }      from 'react-redux';
+import { AppConnector }  from "./components/App";
+import                      './index.css';
+
 // import {Provider} from './components/storeContext';
 
 // console.log(Provider)
@@ -16,7 +17,7 @@ let reRender = (store) => {
         <React.StrictMode>
             <BrowserRouter>
                 <Provider store={store} >
-                    <App/>
+                    <AppConnector />
                 </Provider>
             </BrowserRouter>
         </React.StrictMode>, document.getElementById('root')

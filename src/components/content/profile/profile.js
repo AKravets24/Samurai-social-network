@@ -1,29 +1,29 @@
-import React,{useState,useEffect} from "react";
-import {Formik}                   from 'formik';
-import {NavLink}                  from 'react-router-dom';
-import stl                        from './profile.module.css';
-import Post                       from './post/post';
-import {StatusCompFunc}           from "./statusBlock";
-import { v4 as uuidv4 }           from 'uuid';
+import React,{ useState,useEffect } from "react";
+import { Formik }                   from 'formik';
+import { NavLink }                  from 'react-router-dom';
+import stl                          from './profile.module.css';
+import Post                         from './post/post';
+import { StatusCompFunc }           from "./statusBlock";
+import { v4 as uuidv4 }             from 'uuid';
 
-const Profile = React.memo(props => {
-    // console.log(props.state.profileMedia)
-    console.log('render')
-    // props.state.profile, props.state.props.loader, props.state.props.myAvatarLarge, props.state.myId,
-    // props.state.props
+
+
+export const Profile = props => {
+    console.log(1)
 
     let userId = props.state.profileMedia.profileData.userId;
-    let [themes, setThemes] = useState({profileDynamic:'',profileInfoDnmc:'',BTNs: '',writePostDnmc:'',textInput:'',})
+    let [themes, setThemes] = useState({profileDynamic:'',profileInfoDnmc:'',BTNs:'',writePostDnmc:'',textInput:'',})
+    const [panorama, setPanorama] = useState({panoramaClass:stl.panoramaPic,panoramaSrc:props.state.picsNLoaders.panoramaPic})
     useEffect(()=> {
-        if     (props.state.colorTheme==='NIGHT'  ){ setThemes({...themes,profileDynamic:stl.profileN,
+        if     (props.state.picsNLoaders.colorTheme==='NIGHT'  ){ setThemes({...themes,profileDynamic:stl.profileN,
             profileInfoDnmc:stl.profileInfoN,BTNs:stl.BTNsN,writePostDnmc:stl.writePostN,textInput: stl.inputN,})}
-        else if(props.state.colorTheme==='MORNING'){ setThemes({...themes,profileDynamic:stl.profileM,
+        else if(props.state.picsNLoaders.colorTheme==='MORNING'){ setThemes({...themes,profileDynamic:stl.profileM,
             profileInfoDnmc:stl.profileInfoM, BTNs:stl.BTNsM,writePostDnmc:stl.writePostM,textInput: stl.inputM,})}
-        else if(props.state.colorTheme==='DAY'    ){ setThemes({...themes,profileDynamic:stl.profileD,
+        else if(props.state.picsNLoaders.colorTheme==='DAY'    ){ setThemes({...themes,profileDynamic:stl.profileD,
             profileInfoDnmc:stl.profileInfoD,BTNs:stl.BTNsD,writePostDnmc:stl.writePostD,textInput: stl.inputD,})}
-        else if(props.state.colorTheme==='EVENING'){ setThemes({...themes,profileDynamic:stl.profileE,
+        else if(props.state.picsNLoaders.colorTheme==='EVENING'){ setThemes({...themes,profileDynamic:stl.profileE,
             profileInfoDnmc:stl.profileInfoE,BTNs:stl.BTNsE,writePostDnmc:stl.writePostE, textInput: stl.inputE,})}
-    },[props.colorTheme])
+    },[props.state.picsNLoaders.colorTheme])
 
     const addPostListener = (finalPost) => { props.addPost(finalPost) };
         const getContacts     = (obj,logos)       => {const result = [];
@@ -38,13 +38,12 @@ const Profile = React.memo(props => {
             return ( result.map((el)=><li key={uuidv4()}> <img src={el.title} alt="err"/>  {el.value==='nope'? <p>{el.value}</p> :
                 <a href={el.value}>{el.value}</a> }</li>))
         };
-
-        props.state.profileMedia.profileData.contacts && getContacts(props.state.profileMedia.profileData.contacts, props.state.profilePics)
+    props.state.profileMedia.profileData.contacts && getContacts(props.state.profileMedia.profileData.contacts, props.state.profilePics)
 
     const photoSaver      = (e)         => { props.updateMyAvatarThunk(e.target.files[0]) };
 
-    // const [panorama, setPanorama] = useState({panoramaClass:stl.panoramaGIF,panoramaSrc:props.state.panorama_LDR_GIF})
-    const [panorama, setPanorama] = useState({panoramaClass:stl.panoramaPic,panoramaSrc:props.state.panoramaPic})
+    // const [panorama, setPanorama] = useState({panoramaClass:stl.panoramaGIF,panoramaSrc:props.state.media.panorama_LDR_GIF})
+
 
     let [writeMode, setWriteMode] = useState(false)
 
@@ -78,7 +77,7 @@ const Profile = React.memo(props => {
         }
        {!userId &&
         <div className={stl.loaderDiv}>
-            <img className={stl.loader} src={props.state.auth_LDR_GIF} alt="Err"/>
+            <img className={stl.loader} src={props.state.picsNLoaders.auth_LDR_GIF} alt="Err"/>
         </div>
         }
         {userId &&
@@ -94,13 +93,13 @@ const Profile = React.memo(props => {
                 <div className={stl.profileDetails}>
                     <div className={stl.profilePicNBTN}>
                         <div>
-                            <img src={!userId?props.ava_LDR_GIF:props.state.profileMedia.profileData.photos.large||
+                            <img src={!userId?props.state.picsNLoaders.ava_LDR_GIF:props.state.profileMedia.profileData.photos.large||
                                 props.state.profileMedia.myAvatarLarge} alt="Err"/>
                         </div>
                         <input disabled={!userId} type="file" name="image" id='file' onChange={photoSaver} className={stl.fileInput}/>
                         {!userId                                                                        ?
                             <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`}
-                            ><img src={props.BTN_LDR_GIF} alt="err"/></label>                           :
+                            ><img src={props.state.picsNLoaders.BTN_LDR_GIF} alt="err"/></label>                           :
                             props.state.myId === userId                                                 ?
                             <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`}
                             >   <div> Choose your new picture</div>
@@ -133,7 +132,7 @@ const Profile = React.memo(props => {
                             <StatusCompFunc
                                 isMe                     = { props.state.myId === userId                       }// Я
                                 isLoading                = { !userId                                           }
-                                loader                   = { props.status_LDR_GIF                              }
+                                loader                   = { props.state.picsNLoaders.status_LDR_GIF           }
                                 colorTheme               = { props.state.colorTheme                            }
                                 statusField              = { props.state.profileMedia.statusField              }
                                 previousStatus           = { props.state.profileMedia.previousStatus           }
@@ -182,12 +181,8 @@ const Profile = React.memo(props => {
         </div>
         }
     </>
-},
-    function areEqual (prevProps, nextProps) {
-    // return prevProps.state.profileMedia.isLoading === nextProps.state.profileMedia.isLoading;
-}
-)
-export default Profile;
+};
+// export default Profile;
 
 // {!props.state.profileMedia.profileData.userId ?
 //     <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`} onMouseEnter={funnyHover} onMouseLeave={funnyUnHover}

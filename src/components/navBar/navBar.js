@@ -1,99 +1,101 @@
-import React,{useEffect, useState} from "react";
-import stl                        from './navBar.module.css';
-import {NavLink}                  from 'react-router-dom';
-import {connect}                  from 'react-redux';
+import   React,{ useEffect, useState }                                from "react";
+import   stl                                                          from './navBar.module.css';
+import { NavLink}                                                     from 'react-router-dom';
+import { connect}                                                     from 'react-redux';
+import { withAuthRedirect}                                            from "../content/HOC/withAuthRedirect";
 
-import {withAuthRedirect}         from "../content/HOC/withAuthRedirect";
+import { getDialogACs,getMyId,getSmartPartialDialogReducer,getSmartDialogsReducer,getTheme } from "../../redux/selectors";
 
 function NavBarContainer(props) {
     // console.log(props)
-    useEffect(()=>{props.state.myId && props.getNewMessagesRequestThunk(); },[]);
+    // console.log('container')
 
-    return <NavBar
-        myId                    = { props.state.myId                   }
-        colorTheme              = { props.state.colorTheme             }
-        getNewMessages          = { props.getNewMessagesRequestThunk   }
-        btnIsDisabled           = { props.state.btnNewMessagesState    }
-        newMSGSCounter          = { props.state.newMSGSCounter         }
-        msgLoader               = { props.state.msgLoader              }
-        errGettingNewMSGSCount  = { props.state.errGettingNewMSGSCount }
-        onErrorPic              = { props.state.onErrorPic             }
+    let [themes, setThemes] = useState({dynamicActiveClass:'',dynamicClass:'stl.linkNight  ',blockMenu:'',counter:'',});
+    useEffect(()=> {
+        switch (props.state.colorTheme) {
+            case 'NIGHT'  : return setThemes({...themes,dynamicActiveClass:stl.activeLinkN,dynamicClass:stl.linkN,blockMenu:stl.blockMenuN,counter:stl.counterN, });
+            case 'MORNING': return setThemes({...themes,dynamicActiveClass:stl.activeLinkM,dynamicClass:stl.linkM,blockMenu:stl.blockMenuM,counter:stl.counterM, });
+            case 'DAY'    : return setThemes({...themes,dynamicActiveClass:stl.activeLinkD,dynamicClass:stl.linkD,blockMenu:stl.blockMenuD,counter:stl.counterD, });
+            case 'EVENING': return setThemes({...themes,dynamicActiveClass:stl.activeLinkE,dynamicClass:stl.linkE,blockMenu:stl.blockMenuE,counter:stl.counterE, });
+        }
+    },[props.state.colorTheme]);
+
+    let {newMessageBTNDisabled:btnIsDisabled,newMessagesCounter:newMSGSCounter,msgLoader,errGettingNewMSGSCount,onError:onErrorPic}=props.state.partDialogReducer;
+
+    useEffect(()=>{props.state.myId && props.getNewMessagesRequestThunk()},[]);
+
+    return themes.dynamicActiveClass && <NavBar
+        myId                    = { props.state.myId                 }
+        getNewMessages          = { props.getNewMessagesRequestThunk }
+        themes                  = { themes                           }
+
+        btnIsDisabled           = { btnIsDisabled                    }
+        newMSGSCounter          = { newMSGSCounter                   }
+        msgLoader               = { msgLoader                        }
+        errGettingNewMSGSCount  = { errGettingNewMSGSCount           }
+        onErrorPic              = { onErrorPic                       }
     />
 }
 function NavBar(props) {
-    // console.log(props.errGettingNewMSGSCount)
+    // console.log(props)
+    // console.log('render')
 
-    let [themes, setThemes] = useState({dynamicActiveClass:'',dynamicClass:'stl.linkNight  ',blockMenu:'',counter:'',});
+    // let [isHiddenBTN, setIsHiddenBTN] = useState(stl.hidden);
+    let isHiddenBTN = stl.hidden;
+    let [element, setElement]         = useState('');
 
-    useEffect(()=> {
-             if(props.colorTheme==='NIGHT'  ){setThemes({...themes,dynamicActiveClass:stl.activeLinkNight  ,dynamicClass:stl.linkNight  ,blockMenu:stl.blockMenuNight,
-                 counter:stl.counterN,
-             })}
-        else if(props.colorTheme==='MORNING'){setThemes({...themes,dynamicActiveClass:stl.activeLinkMorning,dynamicClass:stl.linkMorning,blockMenu:stl.blockMenuMorning,
-                 counter:stl.counterM,
-        })}
-        else if(props.colorTheme==='DAY'    ){setThemes({...themes,dynamicActiveClass:stl.activeLinkDay    ,dynamicClass:stl.linkDay    ,blockMenu:stl.blockMenuDay,
-                 counter:stl.counterD,
-        })}
-        else if(props.colorTheme==='EVENING'){setThemes({...themes,dynamicActiveClass:stl.activeLinkEvening,dynamicClass:stl.linkEvening,blockMenu:stl.blockMenuEvening,
-                 counter:stl.counterE,
-        })}
-    },[props.colorTheme]);
-
-    let [isHiddenBTN, setIsHiddenBTN] = useState(stl.hidden);
-    let [element, setElement]   = useState('');
-
-    useEffect( ()=> { BTNRenderSelector() }, [props.btnIsDisabled, props.errGettingNewMSGSCount] );
+    useEffect( ()=> {BTNRenderSelector() }, [props.btnIsDisabled, props.errGettingNewMSGSCount] );
 
     const BTNRenderSelector=()=>{
         if (props.btnIsDisabled){
-            setIsHiddenBTN(stl.hidden);
+            // setIsHiddenBTN(stl.hidden);
+            isHiddenBTN = stl.hidden;
             setElement(<img src={props.msgLoader} alt="err"/>); // лодер конверта
             return element }
         else if (props.errGettingNewMSGSCount){
-            setIsHiddenBTN(stl.showed)
+            // setIsHiddenBTN(stl.showed)
+            stl.hidden = stl.showed;
             setElement(<img className={stl.errorImg} src={props.onErrorPic} alt='err'/>); // пиктограмма ошибки
             return  element }
         else {
-            setElement(<span className={themes.dynamicClass}> +1? </span>)
+            setElement(<span className={props.themes.dynamicClass}> +1? </span>)
             return element}
     };
 
     return <>
-        <div className={`${stl.blockMenu}  ${themes.blockMenu}`}>
+        <div className={`${stl.blockMenu}  ${props.themes.blockMenu}`}>
             <ul className={stl.menu}>
-                {!props.myId && <li><NavLink to={`/login`} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}
+                {!props.myId && <li><NavLink to={`/login`} className={props.themes.dynamicClass} activeClassName={props.themes.dynamicActiveClass}
                 >Get Login</NavLink></li>}
-                { props.myId && <li><NavLink to={`/profile/${props.myId}`} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}
+                { props.myId && <li><NavLink to={`/profile/${props.myId}`} className={props.themes.dynamicClass} activeClassName={props.themes.dynamicActiveClass}
                 > Profile </NavLink></li>}
-                { props.myId && <li><NavLink to={'/friends'} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}
+                { props.myId && <li><NavLink to={'/friends'} className={props.themes.dynamicClass} activeClassName={props.themes.dynamicActiveClass}
                 > Friends </NavLink></li>}
 
                 { props.myId && <li className={stl.dialogsSpan}>
                     <button disabled={props.btnIsDisabled} onClick={props.getNewMessages} className={isHiddenBTN}>
                         {element}
-
                        {/* { props.btnIsDisabled && !props.errGettingNewMSGSCount ?  <img src={props.msgLoader} alt="err"/>  :
                             <span className={themes.dynamicClass}> '+1?'</span>}*/}
                     </button>
                     <NavLink to={'/dialogs'}
-                             className={themes.dynamicClass}
-                             activeClassName={themes.dynamicActiveClass}>
+                             className={props.themes.dynamicClass}
+                             activeClassName={props.themes.dynamicActiveClass}>
                         Dialogs </NavLink>
-                    <p className={`${themes.counter}`} hidden={!props.newMSGSCounter}>({props.newMSGSCounter})</p>
+                    <p className={`${props.themes.counter}`} hidden={!props.newMSGSCounter}>({props.newMSGSCounter})</p>
                 </li>}
                 { props.myId && <li><NavLink to={'/users'}
-                                             className={themes.dynamicClass}
-                                             activeClassName={themes.dynamicActiveClass}> Users </NavLink></li>}
+                                             className={props.themes.dynamicClass}
+                                             activeClassName={props.themes.dynamicActiveClass}> Users </NavLink></li>}
                 <li><NavLink to='/news'
-                             className={themes.dynamicClass}
-                             activeClassName={themes.dynamicActiveClass}> News </NavLink></li>
+                             className={props.themes.dynamicClass}
+                             activeClassName={props.themes.dynamicActiveClass}> News </NavLink></li>
                 <li><NavLink to='/music'
-                             className={themes.dynamicClass}
-                             activeClassName={themes.dynamicActiveClass}> Music </NavLink></li>
+                             className={props.themes.dynamicClass}
+                             activeClassName={props.themes.dynamicActiveClass}> Music </NavLink></li>
                 <li><NavLink to='/settings'
-                             className={themes.dynamicClass}
-                             activeClassName={themes.dynamicActiveClass}> Settings </NavLink></li>
+                             className={props.themes.dynamicClass}
+                             activeClassName={props.themes.dynamicActiveClass}> Settings </NavLink></li>
             </ul>
         </div>
     </>
@@ -102,14 +104,11 @@ function NavBar(props) {
 const mapStateToProps = (state) => {
     // console.log(state);
     return {
-        myId:                   state.appAuthReducer.id,
-        colorTheme:             state.backgroundReducer.theme,
-        dialogACs:              state.dialogACs,
-        btnNewMessagesState:    state.dialogsReducer.newMessageBTNDisabled,
-        newMSGSCounter:         state.dialogsReducer.newMessagesCounter,
-        msgLoader:              state.dialogsReducer.msgLoader,
-        errGettingNewMSGSCount: state.dialogsReducer.errGettingNewMSGSCount,
-        onErrorPic:             state.dialogsReducer.onError,
+        myId:                   getMyId                      (state),
+        colorTheme:             getTheme                     (state),
+        dialogACs:              getDialogACs                 (state),
+        partDialogReducer:      getSmartPartialDialogReducer (state),
+        // partDialogReducer:     getSmartDialogsReducer(state),
     }
 };
 
@@ -121,7 +120,6 @@ const mergeProps = (stateProps, dispatchProps) => {
     const getNewMessagesRequestThunk =()=> dispatch(state.dialogACs.getNewMessagesRequestThunkAC() );
 
     return { state, getNewMessagesRequestThunk  }
-
 };
 
 const navBarConnector = connect(mapStateToProps, null, mergeProps)(NavBarContainer)
