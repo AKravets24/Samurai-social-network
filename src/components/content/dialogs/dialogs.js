@@ -12,15 +12,11 @@ import {
 } from "../../../redux/selectors";
 
 
-function DialogFuncContainer (props) {
-    // console.log(props)
+function DialogFuncContainer (props) { /*console.log(props.state.props.errNegotiatorsListGet)*/
     useEffect(()=> {
-        props.getMyNegotiatorsListThunk();
         let userId = props.match.params.userId;
-        if (userId) props.talkedBeforeThunk(userId)
+        userId ? props.talkedBeforeThunk(userId) : props.getMyNegotiatorsListThunk();
     },[])
-
-    let setSelectedMessages = (messageId) => { props.state.dialogACs.setSelectedMessagesAC(messageId) };
 
     let [themes, setThemes] = useState({dialogDynamic:'',firstScroller:'',talkerBlockTheme:'',activeLink:'', talkerBlockA:'',msgMeDynamic:'',msgUserDynamic:'',dialogAreaBackgroundNSecondScroll:'', textAreaDynamic:'',sendBTNDynamic:''})
     useEffect(()=> {
@@ -35,23 +31,28 @@ function DialogFuncContainer (props) {
                     msgUserDynamic:stl.userMsgE,dialogAreaBackgroundNSecondScroll:stl.dialogAreaE,textAreaDynamic:stl.textareaE,sendBTNDynamic:stl.sendBTN_E,});
         }},[props.state.colorTheme])
 
-    return themes.dialogDynamic && <Dialogs state                   =  { props.state.props            }
-                    getTalkWithUserThunk    =  { props.getTalkWithUserThunk   }
-                    sendMessageToUserThunk  =  { props.sendMessageToUserThunk }
-                    userIdInURL             =  { props.match.params.userId    }
-                    myId                    =  { props.state.myId             }
-                    dialogIsLoading         =  { props.state.dialogIsLoading  }
-                    setSelectedMessages     =  { props.setSelectedMessages    }
-                    setSpamMessagesThunk    =  { props.setSpamMessagesThunk   }
-                    deleteMessageThunk      =  { props.deleteMessageThunk     }
-                    addPrevMessagesThunk    =  { props.addPrevMessagesThunk   }
-                    colorTheme              =  { props.state.colorTheme       }
-                    themes                  =  { themes                       }
+
+    return themes.dialogDynamic && <Dialogs
+                    state                      =  { props.state.props               }
+                    getTalkWithUserThunk       =  { props.getTalkWithUserThunk      }
+                    getMyNegotiatorsListThunk  =  { props.getMyNegotiatorsListThunk }
+                    sendMessageToUserThunk     =  { props.sendMessageToUserThunk    }
+                    userIdInURL                =  { props.match.params.userId       }
+                    myId                       =  { props.state.myId                }
+                    dialogIsLoading            =  { props.state.dialogIsLoading     }
+                    setSelectedMessages        =  { props.setSelectedMessages       }
+                    setSpamMessagesThunk       =  { props.setSpamMessagesThunk      }
+                    deleteMessageThunk         =  { props.deleteMessageThunk        }
+                    addPrevMessagesThunk       =  { props.addPrevMessagesThunk      }
+                    colorTheme                 =  { props.state.colorTheme          }
+                    themes                     =  { themes                          }
     />;
 }
 
 function Dialogs(props) {
-    console.log('render');
+    // console.log('render');
+
+    console.log(props.state.certainDialogIsLoading)
 
     const dialogArea  = useRef(null);
     const bufferBlock = useRef('');
@@ -61,31 +62,50 @@ function Dialogs(props) {
     let [pageNumber,       setPageNumber]        = useState(2);
     let [msgsMapDone,      setMsgsMapDone]       = useState(false);
     let [dialogAreaHeight, setDialogAreaHeight]  = useState(0);
-    let [userNameInHeader, setUserNameInHeader]  = useState('')
+    let [userNameInHeader, setUserNameInHeader]  = useState('');
 
     let usePrevious=(value)=> {let ref=useRef();useEffect(()=>{ref.current=value});return ref.current;};
     let prevCount = usePrevious(dialogAreaHeight);
-    let sendMessageListener = (userId,msg)=>{setDialogId(dialogId=userId);props.sendMessageToUserThunk(userId,msg.substring(0, msg.length-1))};
+    let sendMessageListener = (userId,msg)=>{debugger;setDialogId(dialogId=userId);props.sendMessageToUserThunk(userId,msg.substring(0, msg.length-1))};
     let getTalk = (userId) => {setDialogId(dialogId=userId); props.getTalkWithUserThunk(dialogId)};
     let scrollToDown = (bufferBlock) => {bufferBlock.current&&bufferBlock.current.scrollIntoView({behavior: "auto"})};
 
     let oldMsgLazyLoader=()=>{let msgCount=5;props.addPrevMessagesThunk(dialogId,msgCount,pageNumber);setPageNumber(pageNumber+1)};
 
-    useEffect(()=> {!props.state.prevMsgsIsLoading && dialogArea.current.scrollTo(0,dialogAreaHeight-prevCount)
+    useEffect(()=>{!props.state.prevMsgsIsLoading && dialogArea.current.scrollTo(0,dialogAreaHeight-prevCount)
     },[props.state.prevMsgsIsLoading])
-
-    useEffect( ()=>{setDialogAreaHeight(dialogAreaHeight=dialogArea.current.scrollHeight);
+    useEffect(()=>{setDialogAreaHeight(dialogAreaHeight=dialogArea.current.scrollHeight);
     return setDialogAreaHeight(0);
     }, [props.state] );
+    useEffect(()=>{ /*msgsMapDone &&*/ scrollToDown(bufferBlock)},[msgsMapDone])
 
-    useEffect( ()=>{ /*msgsMapDone &&*/ scrollToDown(bufferBlock)},[msgsMapDone])
+    // console.log(props.state.certainDialog);
+
+    let submitter = (values) => {
+        console.log(values)
+    };
+
+    // console.log(props.state.certainDialogLoader)
 
     return <>
         <div className={`${stl.dialogsPage} ${props.themes.dialogDynamic}`}>
             <div className={stl.dialogListAndArea}>
                 <div className={`${stl.dialogList} ${props.themes.firstScroller}`}>
-                {props.state.dialogsList.length === 0 ?
-                    <img className={stl.certainLoader} src={props.state.allDialogsLoader} alt="Err"/> :
+                {props.state.dialogsList.length=== 0  && !props.state.errNegotiatorsListGet ?
+                    <img className={stl.certainLoader} src={props.state.allDialogsLoader} alt="Err"/>
+                    :
+                    props.state.errNegotiatorsListGet?
+                        <div className={stl.errorBlock}>
+                            <h2>Error!</h2>
+                            <div>
+                                <img onLoad={true} src={props.state.errNegotiatorsListPIC} alt="Err"/>
+                            </div>
+                            <p>{props.state.errNegotiatorsListGet} Connection lost!</p>
+                            <button className={`${stl.errBTN} ${props.themes.sendBTNDynamic}`}
+                                    onClick={()=>props.getMyNegotiatorsListThunk()}
+                            >Try again</button>
+                        </div>
+                    :
                      props.state.dialogsList
                     .map((user, i) =>
                         <div className={`${stl.talkerBlock} ${props.themes.talkerBlockTheme}`} key={i} >
@@ -113,10 +133,10 @@ function Dialogs(props) {
                 <div className={stl.oldMsgsLoader}>
                     {props.state.prevMsgsIsLoading && <img src={props.state.prevMsgsLoader} alt=""/>}
                 </div>
-                {Object.keys(props.state.certainDialog).length === 0 && props.userIdInURL ||
-                !props.state.certainDialog.items && props.userIdInURL ?
-                <img src={props.state.certainDialogLoader} alt="err"/>  :
-                props.state.certainDialog.items && props.state.certainDialog.items
+
+                { props.state.certainDialogIsLoading ? <img src={props.state.certainDialogLoader} alt="err"/>                                                         :
+                  props.state.errCertainDialogGet  ? <div className={stl.errorBlock}> {props.state.errCertainDialogGet}</div> :
+                  props.state.certainDialog.items
                    .map((msg, i,arr) =>{
                       if(msgsMapDone===false&&i===arr.length-1){return setMsgsMapDone(true)}
                       if(i===arr.length-1){scrollToDown(bufferBlock)}
@@ -141,16 +161,16 @@ function Dialogs(props) {
                     <div ref={bufferBlock}/>
                 </div>
                     <div className={stl.sender}>
-                    <Formik initialValues={{text:''}} validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
-                            onSubmit={(values,{setSubmitting})=>{sendMessageListener(dialogId,values.text);values.text='';setSubmitting(false);
-                            }}>
+                    <Formik initialValues={{text:''}} validate={values=>{const errors={};if(!values.text){errors.text='Required'} return errors}}
+                            // onSubmit={(values,{setSubmitting})=>{sendMessageListener(dialogId,values.text);values.text='';setSubmitting(false);
+                            onSubmit={ (values)=> submitter(values) }
+                                >
                         {({values, errors,handleChange,handleSubmit,isSubmitting,}) => (
                             <form onSubmit={handleSubmit}>
                                 <textarea name="text" onChange={handleChange} value={values.text} placeholder={errors.text}
                                 className={`${props.themes.textAreaDynamic}`}
-                                onKeyUp={e=>{e.keyCode===13&&sendMessageListener(dialogId,values.text);values.text=''
-                                }}
-                                    />
+                                // onKeyUp={e=>{e.keyCode===13&&sendMessageListener(dialogId,values.text);values.text=''}}
+                                />
                                 <button type="submit" disabled={isSubmitting} className={`${stl.sendBTN} ${props.themes.sendBTNDynamic}` }
                                 // onClick={()=>sendMessageListener(dialogId,values.text)}
                                 > Send </button>

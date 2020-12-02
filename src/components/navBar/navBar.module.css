@@ -3,10 +3,10 @@
     display: grid;
     border-radius: 4px 4px 4px 20px;
 }
-.blockMenuN  {background-color: lightskyblue;}
-.blockMenuM  {background-color: #f36d3a;}
-.blockMenuD  {background-color: lightgreen;}
-.blockMenuE  {background-color: #661717;}
+.blockMenuN  {background-color: lightskyblue; transition: 5000ms; }
+.blockMenuM  {background-color: #f36d3a;      transition: 5000ms; }
+.blockMenuD  {background-color: lightgreen;   transition: 5000ms; }
+.blockMenuE  {background-color: #661717;      transition: 5000ms; }
 
 .menu {
     margin: 0 0 0 0;
@@ -32,7 +32,7 @@
     padding: 20px 0 20px 32%;
 }
 
-.linkN                    {color: blue;text-decoration: none;}
+.linkN                    {color: blue;text-decoration: none;  }
 .linkN:hover              {color: #cefdff;}
 .linkN:active             {color: white;}
 .menu a.activeLinkN       {color: white;}

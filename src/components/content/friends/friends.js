@@ -61,32 +61,20 @@ export const Friends1 = React.memo(function MyComponent(props) {
 
 
 export function Friends (props) {
-    console.log(props)
+    // console.log(props.errOnGettingFriends)
 
     // let [themes, setThemes] = useState({friendsGeneralDnmc:'',})
     useEffect(()=> {
         switch (props.colorTheme) {
-            case 'NIGHT':
-                setThemes({...themes,friendsGeneralDnmc: stl.friendsGeneralN,
-                })
-                return;
-            case 'MORNING':
-                setThemes({...themes,friendsGeneralDnmc: stl.friendsGeneralM,
-                })
-                return;
-            case 'DAY':
-                setThemes({...themes,friendsGeneralDnmc: stl.friendsGeneralD,
-                })
-                return;
-            case'EVENING':
-                setThemes({...themes,friendsGeneralDnmc: stl.friendsGeneralE,
-                })
-                return;
+            case 'NIGHT'  : return setThemes({...themes,friendsGeneralDnmc: stl.friendsGeneralN,})
+            case 'MORNING': return setThemes({...themes,friendsGeneralDnmc: stl.friendsGeneralM,})
+            case 'DAY'    : return setThemes({...themes,friendsGeneralDnmc: stl.friendsGeneralD,})
+            case'EVENING' : return setThemes({...themes,friendsGeneralDnmc: stl.friendsGeneralE,})
         }},[props.colorTheme]);
 
     let [themes, setThemes] = useState({friendsGeneralDnmc:'',pagBTNDnmc:'',
         paginationSelectedDnmc:'',paginationDnmc:'', searchInputDnmc:'',userAvaDnmc:'',
-        followBTNDnmc:'',userNameDnmc:'',mapWrapperDnmc:'', userUnitDnmc:'',userWriteModeDnmc:'', moreUserUnitsDnmc:'',
+        followBTNDnmc:'',followBTN_ERR_DNMC:'',userNameDnmc:'',mapWrapperDnmc:'', userUnitDnmc:'',userWriteModeDnmc:'', moreUserUnitsDnmc:'',
     });
 
     useEffect(()=> {
@@ -100,6 +88,7 @@ export function Friends (props) {
                     searchInputDnmc:stl.searchInputN,
                     userAvaDnmc:stl.userAvaN,
                     followBTNDnmc:stl.followBTN_N,
+                    followBTN_ERR_DNMC:stl.followBTN_ERR_N,
                     userNameDnmc:stl.userNameN,
                     mapWrapperDnmc:stl.mapWrapperN,
                     userUnitDnmc:stl.userUnitN,
@@ -116,6 +105,7 @@ export function Friends (props) {
                     searchInputDnmc:stl.searchInputM,
                     userAvaDnmc:stl.userAvaM,
                     followBTNDnmc:stl.followBTN_M,
+                    followBTN_ERR_DNMC:stl.followBTN_ERR_M,
                     userNameDnmc:stl.userNameM,
                     mapWrapperDnmc:stl.mapWrapperM,
                     userUnitDnmc:stl.userUnitM,
@@ -132,6 +122,7 @@ export function Friends (props) {
                     searchInputDnmc:stl.searchInputD,
                     userAvaDnmc:stl.userAvaD,
                     followBTNDnmc:stl.followBTN_D,
+                    followBTN_ERR_DNMC:stl.followBTN_ERR_D,
                     userNameDnmc:stl.userNameD,
                     mapWrapperDnmc:stl.mapWrapperD,
                     userUnitDnmc:stl.userUnitD,
@@ -148,6 +139,7 @@ export function Friends (props) {
                     searchInputDnmc:stl.searchInputE,
                     userAvaDnmc:stl.userAvaE,
                     followBTNDnmc:stl.followBTN_E,
+                    followBTN_ERR_DNMC:stl.followBTN_ERR_E,
                     userNameDnmc:stl.userNameE,
                     mapWrapperDnmc:stl.mapWrapperE,
                     userUnitDnmc:stl.userUnitE,
@@ -169,10 +161,6 @@ export function Friends (props) {
     let firstBlockClass  = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
     let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
 
-    const followListener   = (userId) => { props.followThunk   (userId) };
-    const unFollowListener = (userId) => { props.unFollowThunk (userId) };
-
-
     let writeMsg = (userId,text,userName)=> {
         setUserName(userName)
         props.sendMessageToUserThunk(userId, text);
@@ -192,69 +180,100 @@ export function Friends (props) {
         e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=secondBlockClass;
     };
 
-    return <div className={`${stl.friendsGeneral} ${themes.friendsGeneralDnmc}`}>
-        <h2 className={stl.userHeader}>Friends</h2>
-        <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
-            {props.friendsList.map((user, i) =>
-                <div className={stl.userUnitContainer} key={user.id}>
-                    <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`} >
-                        <div className={stl.avaDiv}>
-                            <NavLink to={`/profile/${user.id}`}>
-                                <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
-                                     className={`${themes.userAvaDnmc}`}/>
-                            </NavLink>
-                        </div>
-                        <div className={stl.nameStateBTNs}>
-                            <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
-                                <NavLink to={`/profile/${user.id}`}>
-                                    <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
-                                </NavLink>
-                                <p className={`${themes.userNameDnmc}`}>{user.status}</p>
+    // console.log(props)
+
+    return <>
+        {props.errOnGettingFriends ?
+            <div className={`${stl.Houston} ${themes.friendsGeneralDnmc}` }>
+                <h2>Houston, we've got a problem...</h2>
+                <h2>{props.errOnGettingFriends}</h2>
+                <button
+                    className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
+                    onClick={()=>props.getMyFriendsList() }
+                >Try again
+                </button>
+            </div>
+            :
+            <div className={`${stl.friendsGeneral} ${themes.friendsGeneralDnmc}`}>
+                <h2 className={stl.userHeader}>Friends</h2>
+                <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
+                    {props.friendsList.map((user, i) =>
+                        <div className={stl.userUnitContainer} key={user.id}>
+                            <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`}>
+                                <div className={stl.avaDiv}>
+                                    <NavLink to={`/profile/${user.id}`}>
+                                        <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
+                                             className={`${themes.userAvaDnmc}`}/>
+                                    </NavLink>
+                                </div>
+                                <div className={stl.nameStateBTNs}>
+                                    <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
+                                        <NavLink to={`/profile/${user.id}`}>
+                                            <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
+                                        </NavLink>
+                                        <p className={`${themes.userNameDnmc}`}>{user.status}</p>
+                                    </div>
+                                    <div className={stl.followNWriteBTNS}>
+                                        <button
+                                            disabled={props.usersInfo.followingInProgress.some(id => id == user.id)}
+                                            id={user.id}
+                                            className={`${stl.followBTN} ${themes.followBTNDnmc} 
+                                                    ${user.error && themes.followBTN_ERR_DNMC}`}
+                                            onClick={() => props.followThunkToggler(user.id, user.followed)}
+                                        >
+                                            {user.error ? user.error : user.followed ? 'unFollow' : 'Follow'}
+                                        </button>
+                                        <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                disabled={isDisabled}
+                                                onClick={e => userIdTalkModeOn(e, user.id, user.name)}
+                                        >
+                                            Write message
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div className={stl.followNWriteBTNS}>
-                                <button
-                                    disabled={props.usersInfo.followingInProgress.some(id=>id==user.id)}
-                                    id={user.id}
-                                    className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                    onClick={user.followed?props.unFollowListener:props.followListener}>
-                                    {user.followed?'unFollow':'Follow'}
-                                </button>
-                                <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                        disabled={isDisabled}
-                                        onClick={e=>userIdTalkModeOn(e,user.id, user.name)}
-                                >
-                                    Write message
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div  className={`${stl.userUnitHidden}`}>
-                        <div className={stl.miniHeadWrapper}>
-                            <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
-                            <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
-                            <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
-                                    onClick={e=>{userIdTalkModeOff(e)}}
-                            >X</button>
-                        </div>
-                        <div className={stl.textAreaWrapper}>
-                            <Formik initialValues={{text:''}}validate={values=>{const errors={};if(!values.text){errors.text='Required'}return errors}}
-                                    onSubmit={(values,{setSubmitting})=>{writeMsg(user.id,values.text,user.name);values.text='';setSubmitting(false);
-                                    }}>
-                                {({values,errors,handleChange,handleSubmit,isSubmitting})=>(
-                                    <form onSubmit={handleSubmit}>
+                            <div className={`${stl.userUnitHidden}`}>
+                                <div className={stl.miniHeadWrapper}>
+                                    <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
+                                    <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
+                                    <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
+                                            onClick={e => {userIdTalkModeOff(e)}}
+                                    >X
+                                    </button>
+                                </div>
+                                <div className={stl.textAreaWrapper}>
+                                    <Formik initialValues={{text: ''}} validate={values => {
+                                        const errors = {};
+                                        if (!values.text) {
+                                            errors.text = 'Required'
+                                        }
+                                        return errors
+                                    }}
+                                            onSubmit={(values, {setSubmitting}) => {
+                                                writeMsg(user.id, values.text, user.name);
+                                                values.text = '';
+                                                setSubmitting(false);
+                                            }}>
+                                        {({values, errors, handleChange, handleSubmit, isSubmitting}) => (
+                                            <form onSubmit={handleSubmit}>
                                                 <textarea name="text" className={stl.talkTextarea}
-                                                          onChange={handleChange} value={values.text} placeholder={errors.text} />
-                                        <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                        > Send Msg </button>
-                                    </form>
-                                )}
-                            </Formik>
+                                                          onChange={handleChange} value={values.text}
+                                                          placeholder={errors.text}/>
+                                                <button type="submit" disabled={isSubmitting}
+                                                        className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                                                > Send Msg
+                                                </button>
+                                            </form>
+                                        )}
+                                    </Formik>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div >
-            )}
-        </div>
-    </div>
+                    )}
+                </div>
+            </div>
+        }
+        </>
 };
 
 // {user.followed

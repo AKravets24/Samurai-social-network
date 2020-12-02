@@ -1,58 +1,48 @@
 import * as axios from "axios";
-import dialogs from "../components/content/dialogs/dialogs";
 
 const instance = axios.create({
     withCredentials: true,
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     headers: { "API-KEY": "83df008c-c6eb-4d84-acd3-e62be0f407d9"}, });
 
-// отрефакторить до объекта с разделением по компонентам, так как шас в нем каша
-
 export const usersApi = {
-    // initialization
-    setMeLogin (email = null, password = null, rememberMe = false)
-                                 { return instance.post(`/auth/login`, {email, password, rememberMe})
-                                                                           .then(response=>response).catch(error=>error)},
-    // unAuthorised
-    setMeLogOut()                { return instance.delete(`/auth/login`)                  .then(response=>response.data)},
-    getLogIn()                   { return instance.get(`/auth/me`)         .then(response=>response).catch(error=>error)},
-    // users
-    getUsers(pageSize = 10, currentPage = 1) {
-        return instance.get(`users?count=${pageSize}&page=${currentPage}`) .then(response=>response).catch(error=>error)},
-    getCertainUser(userName)     {
-        return instance.get(`users?term=${userName}`)                      .then(response=>response).catch(error=>error)},
-
-    followRequest  (userId)      { return instance.post(`follow/${userId}`)  .then(response=>response).catch(error=>error)},
-    unFollowRequest(userId)      { return instance.delete(`follow/${userId}`).then(response=>response).catch(error=>error)},
-    // PROFILE
-    updateMyStatus(status)       { return instance.put(`profile/status`, {status: status} ).then(response =>
-         response.config.data)},
-    updateMyAvatar(file)         {
-        const formData = new FormData(); formData.append('image', file);
+    // INITIALISATION ------------------------------------------------------------------------------------------------------------ INITIALISATION
+    setMeLogin (email=null,password=null,rememberMe=false)
+                                 { return instance.post(`/auth/login`,{email,password,rememberMe})
+                                                                                           .then(res=>res).catch(err=>err)},
+    // UNAUTHORISED -------------------------------------------------------------------------------------------------------------- UNAUTHORISED
+    setMeLogOut()                { return instance.delete(`/auth/login`)                   .then(res=>res.data)},
+    getLogIn()                   { return instance.get(`/auth/me`)                         .then(res=>res).catch(err=>err)},
+    // PROFILE ------------------------------------------------------------------------------------------------------------------- PROFILE
+    getProfile(userId)           { return instance.get(`profile/${userId}`)                .then(res=>res).catch(err=>err)},
+    getStatus(userId)            { return instance.get(`profile/status/${userId}`)         .then(res=>res).catch(err=>err)},
+    updateMyStatus(status)       { return instance.put(`profile/status`,{status: status})  .then(res=>res).catch(err=>err)},
+    updateMyAvatar(file)         { const formData = new FormData(); formData.append('image', file);
         return instance.put(`profile/photo`, formData, { headers: { 'Content-Type': 'multipart/form-data' }
-        })                                                                           .then(response => response.data  )},
-    getProfile(userId)           { return instance.get(`profile/${userId}`)          .then(response => response.data  )},
-    getStatus(userId)            { return instance.get(`profile/status/${userId}`)   .then(response => response.data  )},
+        })                                                                                 .then(res=>res).catch(err=>err)},
+    // FRIENDS ------------------------------------------------------------------------------------------------------------------- FRIENDS
+    getMyFriends()               { return instance.get(`users?friend=true&count=50`)       .then(res=>res).catch(err=>err)},
+    // DIALOGS ------------------------------------------------------------------------------------------------------------------- DIALOGS
+    getMyNegotiatorsList ()      { return instance.get(`dialogs`)                          .then(res=>res).catch(err=>err)},
+    getTalkWithUser (userId,msgCount=20,pageNumber=1)
+    { return instance.get(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`)
+        .then(res=>res).catch(err=>err)},
+    sendMsgToTalker(userId,body) { return instance.post(`dialogs/${userId}/messages`,{body}).then(res=>res).catch(err=>err)},
 
-    // friends
-    getMyFriends()               {
-        return instance.get(`users?friend=true&count=50`)                   .then(response => response.data  )},
-    // dialogs
-    getMyNegotiatorsList ()      { return instance.get(`dialogs`)                    .then(response => response.data  )},
-    getTalkWithUser (userId, msgCount=20, pageNumber=1)
-                                 { return instance.get(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`)
-                                                                                     .then(response => response.data  )},
-
-    sendMsgToTalker(userId,body) { return instance.post(`dialogs/${userId}/messages`, {body})
-                                                                                     .then(response => response  )
-                                                                                     .catch(error   => error)
-    },
-    getNewMessages ()            { return instance.get(`dialogs/messages/new/count`) .then(response => response )
-                                                                                     .catch(error   => error)          },
+    getNewMessages ()            { return instance.get(`dialogs/messages/new/count`)        .then(res=>res).catch(err=>err)},
     deleteMessage  (messageId)   { return instance.delete(`dialogs/messages/${messageId}`)
-                                                                                     .then(response => response.data  )},
+                                                                                            .then(response => response.data  )},
     setAsSpamMessage(messageId)  { return instance.post(`dialogs/messages/${messageId}/spam`)
-                                                                                     .then(response => response.data  )},
+                                                                                            .then(response => response.data  )},
+    // USERS --------------------------------------------------------------------------------------------------------------------- USERS
+    getUsers(pageSize =10,currentPage=1){
+        return instance.get(`users?count=${pageSize}&page=${currentPage}`)                  .then(res=>res).catch(err=>err)},
+
+    getCertainUser(pageSize, userName,pageOfEquals=1)
+    { return instance.get(`users?count=${pageSize}&term=${userName}&page=${pageOfEquals}`)  .then(res=>res).catch(err=>err)},
+
+    followRequest  (userId)      { return instance.post(`follow/${userId}`)                 .then(res=>res).catch(err=>err)},
+    unFollowRequest(userId)      { return instance.delete(`follow/${userId}`)               .then(res=>res).catch(err=>err)},
 };
 
 // ссылки для тестирования

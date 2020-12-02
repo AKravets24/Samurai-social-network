@@ -78,35 +78,29 @@ export const backgroundReducer = (state = initialState, action) => {
     switch (action.type) {
         case TIMER:
             // console.log('TIMER');
-            if (action.timer >= 1440 || action.timer < 180) {
+            if (action.timer >= 1440 || action.timer < 180) {  //  if (action.timer >= 1440 || action.timer < 180) {
                 // console.log('NIGHT_THEME')
-                // return {...state, theme: 'NIGHT', backgroundPic: backDropPIC_N, timeToChangeTheme: 180 - action.timer,
-                //     auth_LDR_GIF: auth_LDR_GIF_N,
-                //     profileThemes: {panoramaPic:panoramaPIC_N,panorama_LDR_GIF:panoramaGIF_N,ava_LDR_GIF:ava_LDR_GIF_N,BTN_LDR_GIF:BTN_LDR_GIF_N,status_LDR_GIF:status_LDR_GIF_N,},
-                //     usersThemes: {generalLDR_GIF:userLoaderGIF_N,}
-                // }
-
-                return {...state,theme: 'MORNING', backgroundPic: backDropPIC_M, timeToChangeTheme: 660 - action.timer,
-                    auth_LDR_GIF: auth_LDR_GIF_M,
-                    profileThemes: { panoramaPic:panoramaPIC_M,panorama_LDR_GIF:panoramaGIF_M,ava_LDR_GIF:ava_LDR_GIF_M,BTN_LDR_GIF:BTN_LDR_GIF_M,status_LDR_GIF:status_LDR_GIF_M,},
-                    usersThemes:   { generalLDR_GIF:userLoaderGIF_M,}
+                return {...state, theme: 'NIGHT', backgroundPic: backDropPIC_N, timeToChangeTheme: 180 - action.timer,
+                    auth_LDR_GIF: auth_LDR_GIF_N,
+                    profileThemes: {panoramaPic:panoramaPIC_N,panorama_LDR_GIF:panoramaGIF_N,ava_LDR_GIF:ava_LDR_GIF_N,BTN_LDR_GIF:BTN_LDR_GIF_N,status_LDR_GIF:status_LDR_GIF_N,},
+                    usersThemes: {generalLDR_GIF:userLoaderGIF_N,}
                 }
 
-            } else if (action.timer >= 180 && action.timer < 660) {
+            } else if (action.timer >= 180 && action.timer < 660) { // } else if (action.timer >= 180 && action.timer < 660) {
                 // console.log('MORNING_THEME')
-                return {...state,theme: 'MORNING', backgroundPic: backDropPIC_M, timeToChangeTheme: 660 - action.timer,
+                return {...state,theme: 'MORNING', backgroundPic: backDropPIC_M, timeToChangeTheme: 660 - action.timer, // 660
                     auth_LDR_GIF: auth_LDR_GIF_M,
                     profileThemes: { panoramaPic:panoramaPIC_M,panorama_LDR_GIF:panoramaGIF_M,ava_LDR_GIF:ava_LDR_GIF_M,BTN_LDR_GIF:BTN_LDR_GIF_M,status_LDR_GIF:status_LDR_GIF_M,},
                     usersThemes:   { generalLDR_GIF:userLoaderGIF_M,}
                 }
-            } else if (action.timer >= 660 && action.timer < 1080) {//1080
+            } else if (action.timer >= 660 && action.timer < 1080) { // } else if (action.timer >= 660 && action.timer < 1080) { //1080
                 // console.log('DAY_THEME')
                 return {...state, theme: 'DAY', backgroundPic: backDropPIC_D, timeToChangeTheme: 1080 - action.timer,
                     auth_LDR_GIF: auth_LDR_GIF_D,
                     profileThemes: {panoramaPic:panoramaPIC_D,panorama_LDR_GIF:panoramaGIF_D,ava_LDR_GIF:ava_LDR_GIF_D,BTN_LDR_GIF:BTN_LDR_GIF_D,status_LDR_GIF:status_LDR_GIF_D,},
                     usersThemes:   {generalLDR_GIF:userLoaderGIF_D,}
                 }
-            } else if (action.timer >= 1080 && action.timer < 1440) {//1440
+            } else if (action.timer >= 1080 && action.timer < 1440) { // } else if (action.timer >= 1080 && action.timer < 1440) { //1440
                 // console.log('EVENING_THEME')
                 return {...state, theme: 'EVENING', backgroundPic: backDropPIC_E, timeToChangeTheme: 1440 - action.timer,
                     auth_LDR_GIF: auth_LDR_GIF_E,

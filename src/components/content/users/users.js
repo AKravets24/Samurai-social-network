@@ -7,49 +7,51 @@ import {dialogsReducer} from "../../../redux/dialogsReducer";
 // import UnAuthorised                       from "../unAuthorised/unAuthorised";
 
 export function Users(props) {
-    // console.log(props.themes)
-
     // console.log('render')
 
-    let pagesCount = null;
-    if (props.usersInfo.pageSize) pagesCount = Math.ceil(props.usersInfo.totalCount / props.usersInfo.pageSize);
-    let [startPage,  setStartPage]        = useState(1);
-    let [endPage,    setEndPage]          = useState(10);
-    let [scrollStep, setScrollStep]       = useState(10);
-    let [disableDec, setDisableDec]       = useState(true);
-    let [disableInc, setDisableInc]       = useState(false);
     let [isDisabled, setIsDisabled]       = useState(false);
     let [wrapperLocker, setWrapperLocker] = useState('');
+    let [portionNumber, setPortionNumber] = useState(1);
+    let [searchMode, setSearchMode]       = useState(false);
 
-    let paginatorDec = () => {
-        setStartPage(startPage - scrollStep);
-        setEndPage(endPage - scrollStep);
-        startPage <= 1 ? setDisableDec(disableDec = true) : setDisableDec(disableDec = false);
-        endPage >= pagesCount ? setDisableInc(disableInc = true) : setDisableInc(disableInc = false)
-    };
-    let paginatorInc = () => {
-        setStartPage(startPage + scrollStep);
-        setEndPage(endPage + scrollStep);
-        startPage <= 1 ? setDisableDec(disableDec = true) : setDisableDec(disableDec = false);
-        endPage >= pagesCount ? setDisableInc(disableInc = true) : setDisableInc(disableInc = false);
-    };
     let paginator    = () => {
+        let pageStep = 10;
+        let pagesAmount = Math.ceil(props.usersInfo.totalCount / props.usersInfo.pageSize)
+        let leftPortionPageNumber  = (portionNumber - 1) * pageStep + 1
+        let rightPortionPageNumber = portionNumber * pageStep;
         let pagesArr=[];
-        for (let i=startPage;i<=endPage;i++){if(startPage<1){setStartPage(1);setEndPage(endPage=scrollStep)}
-            if(endPage>pagesCount){setStartPage(pagesCount-scrollStep);setEndPage(pagesCount)};pagesArr.push(i)}
-        return pagesArr.map((page,i) =>
-            <span key={i} className={props.usersInfo.currentPage===page?`${stl.paginationSelected} ${props.themes.paginationSelectedDnmc}`:
-                `${stl.pagination} ${props.themes.paginationDnmc}`} onClick={()=>props.usersInfo.currentPage!==page&&setPageListener(page)}
-            >{page}</span>
-        );
-    };
+        for (let i=1;i<=pagesAmount;i++){pagesArr.push(i)}
+
+        return !!pagesAmount && <div className={stl.paginationBlockOutside} >
+            <button className={`${stl.pagBTN} ${props.themes.pagBTNDnmc}`} onClick={()=> setPortionNumber(portionNumber-1)}
+                    disabled={portionNumber===1}> &#171; {pageStep} </button>
+            {pagesArr
+                .filter(p=>p >= leftPortionPageNumber && p<=rightPortionPageNumber)
+                .map( p=> {
+                    return <span key={p} className={props.usersInfo.currentPage===p?`${stl.paginationSelected} ${props.themes.paginationSelectedDnmc}`:
+                        `${stl.pagination} ${props.themes.paginationDnmc}`}
+                                 onClick={()=>{
+                                 props.usersInfo.userSearchField && searchMode ?
+                                    props.usersInfo.currentPage!==p && props.getCertainUserThunk(props.usersInfo.pageSize,props.usersInfo.userSearchField,p):
+                                    props.usersInfo.currentPage!==p && setPageListener(p)}
+                                 }
+                    >{p}
+                          </span>
+                })}
+            <button className={`${stl.pagBTN} ${props.themes.pagBTNDnmc}`} onClick={()=>setPortionNumber(portionNumber+1)}
+                    /*disabled={pagesAmount > portionNumber}*/> {pageStep} &#187;</button>
+        </div>
+    }; // доделать дисабл кнопки!!!!!!!
 
     let setPageListener  = (page) => {props.setCurrentPage(page);setWrapperLocker('');setIsDisabled(false);};
     let onChangeListener = ({target}) => {let {value} = target;props.updateSearchField(value)};
     let keyUpListener    =(e)=>{if(e.keyCode === 13){let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName)}};
-    let searchListener   =()=>{let userName=props.usersInfo.userSearchField;props.getCertainUserThunk(userName)};
-    let searchModeCloseListener = () => {props.toggleUserSearchMode(false);props.setCurrentPage(props.usersInfo.currentPage);props.setErrorToNull()};
-
+    let searchListener   =()=>{
+        let userName=props.usersInfo.userSearchField;
+        let pageSize = props.usersInfo.pageSize;
+        props.getCertainUserThunk(pageSize,userName);
+        setSearchMode(true)};
+    let searchModeCloseListener = () => {props.setCurrentPage(1);props.setErrorToNull();setSearchMode(false)};
 
 
     // useEffect(()=>{
@@ -83,7 +85,6 @@ export function Users(props) {
 
     // setTimeout( ()=> {console.log(feedbackArr)},9000 )
 
-
     let firstBlockClass  = `${stl.userUnit} ${props.themes.userUnitDnmc} ${stl.userUnitShowed}`;
     let secondBlockClass = `${stl.userWriteMode} ${props.themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
 
@@ -113,7 +114,7 @@ export function Users(props) {
         setIsHidden(stl.feedbackHidden)
         return isHidden },3000 )}
 
-    // console.log(props.followThunkToggler())
+    console.log(props.usersInfo.userNotFound)
 
     return <>
         <div className={`${stl.usersPage} ${props.themes.userPageDnmc}`}>
@@ -121,17 +122,8 @@ export function Users(props) {
                 <div className={`${stl.generalHeader} ${props.themes.generalHeaderDnmc}`}>
                     <h2 className={stl.userHeader}>Users</h2>
 
-                    <div className={stl.paginationBlockOutside}>
-                        {!props.usersInfo.userSearchMode && pagesCount !== 0 &&
-                        <>
-                            <button className={`${stl.pagBTN} ${props.themes.pagBTNDnmc}`} onClick={paginatorDec}
-                                    disabled={disableDec}> &#171; 5 </button>
-                            { paginator() }
-                            <button className={`${stl.pagBTN} ${props.themes.pagBTNDnmc}`} onClick={paginatorInc}
-                                    disabled={disableInc}> 5 &#187;  </button>
-                        </>
-                        }
-                    </div>
+                        {  paginator() }
+
                     <div className={stl.searchBlock} >
                         <input type="text"
                                value={props.usersInfo.userSearchField}
@@ -143,11 +135,11 @@ export function Users(props) {
                     </div>
                 </div>
                 {/*props.usersInfo.usersGettingError*/}
-            {props.usersInfo.isLoading                                                           ?
+            {props.usersInfo.isLoading                                                           ?                      // список юзеров грузится?
                     <div className={stl.loaderDiv}>
                         <img className={stl.loader} src={props.usersInfo.generalLDR_GIF} alt="Err"/>
-                    </div>                                                                      :
-                    props.usersInfo.usersGettingError || props.usersInfo.userFindingError      ?
+                    </div>                                                                       :
+                    props.usersInfo.usersGettingError || props.usersInfo.userFindingError        ?                      // ошибка при поиске юзеров?
                         <div className={stl.Houston}>
                             <h2>Houston, we've got a problem...</h2>
                             <h2>{props.usersInfo.usersGettingError||props.usersInfo.userFindingError}</h2>
@@ -156,7 +148,10 @@ export function Users(props) {
                                 onClick={()=>{props.setErrorToNull();setPageListener(props.usersInfo.currentPage);} }
                             >Try again</button>}
                         </div>
-                                                                                                :
+                                                                                                  :
+                        props.usersInfo.userNotFound && !props.usersInfo.initialUsersList.length  ?                     // ничего не найдено при кастомном поиске?
+                            <div>{props.usersInfo.userNotFound}</div> :
+
                     <div className={`${stl.mapWrapper} ${props.themes.mapWrapperDnmc} ${wrapperLocker}`}>
                         {props.usersInfo.initialUsersList && props.usersInfo.initialUsersList
                             .map(user =>

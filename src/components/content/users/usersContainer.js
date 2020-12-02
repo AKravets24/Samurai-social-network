@@ -16,16 +16,13 @@ function UsersFuncContainer (props) {
 
     useEffect( ()=>{ props.getUsersThunk(props.state.smartData.pageSize, props.state.currentPage)},[] );
 
-    let setCurrentPage         =(page)=>                  { props.setCurrentPageThunk(props.state.pageSize,page)    };
-    let followListener         =(e)=>                     { let userId = e.target.id; props.followThunk(userId)     };
-    let unFollowListener       =(e)=>                     { let userId = e.target.id; props.unFollowThunk(userId)   };
+    let setCurrentPage         =(page)=>                  { props.setCurrentPageThunk(props.state.smartData.pageSize,page)};
 
     let followThunkToggler     =(userId,isFollowed)=>     { props.followThunkToggler(userId,isFollowed) };
 
 
     let updateSearchField      =(text)=>                  { props.updateSearchField(text)                           };
-    let getCertainUserThunk    =(userName) =>             { props.getCertainUserThunk(userName)                     };
-    let toggleUserSearchMode   =(flag)=>                  { props.toggleUserSearchMode(flag)                        };
+    let getCertainUserThunk    =(pageSize, userName,pageOfEquals)=> {props.getCertainUserThunk(pageSize, userName,pageOfEquals)        };
     let sendMessageToUserThunk =(userId,body,actionKey,userName)=>
                                                       { props.sendMessageToUserThunk(userId,body,actionKey,userName)};
     let feedBackWindowCloser   =(arrIndex)=>              { props.feedBackWindowCloser(arrIndex)                    };
@@ -119,12 +116,9 @@ function UsersFuncContainer (props) {
 
         followThunkToggler                              = { followThunkToggler         }
 
-        // followListener                                  = { followListener             }
-        // unFollowListener                                = { unFollowListener           }
         setCurrentPage                                  = { setCurrentPage             }
         updateSearchField                               = { updateSearchField          }
         getCertainUserThunk                             = { getCertainUserThunk        }
-        toggleUserSearchMode                            = { toggleUserSearchMode       }
         sendMessageToUserThunk                          = { sendMessageToUserThunk     }
         feedBackWindowCloser                            = { feedBackWindowCloser       }
         feedbackRefPush                                 = { feedbackRefPush            }
@@ -152,15 +146,15 @@ const mergeProps = (stateProps, dispatchProps) => {
 
     const getUsersThunk      = (pageSize,currentPage)     => dispatch ( state.usersACs.getUsersThunkAC(pageSize, currentPage));
     const setCurrentPageThunk= (pageSize,currentPage)     => dispatch ( state.usersACs.setCurrentPageThunkAC(pageSize, currentPage));
-    // const followThunk            = (userId)               => dispatch ( state.usersACs.followThunkAC(userId));
-    // const unFollowThunk          = (userId)               => dispatch ( state.usersACs.unFollowThunkAC(userId));
 
-    const followThunkToggler     = (userId,isFollowed)    => dispatch ( state.usersACs.followThunkTogglerAC(userId,isFollowed));
+     const followThunkToggler     = (userId,isFollowed)    => dispatch ( state.usersACs.followThunkTogglerAC(userId,isFollowed));
 
 
     const setUsersThunk          = ()                     => dispatch ( state.usersACs.setUsersThunkAC());
-    const getCertainUserThunk    = (userName)             => dispatch ( state.usersACs.getCertainUserThunkAC(userName));
-    const toggleUserSearchMode   = (userSearchMode)       => dispatch (state.usersACs.toggleUserSearchModeAC(userSearchMode));
+
+    const getCertainUserThunk    = (pageSize, userName,pageOfEquals)=>{
+                                                             dispatch ( state.usersACs.getCertainUserThunkAC(pageSize,userName,pageOfEquals))};
+
     const updateSearchField      = (text)                 => dispatch ( state.usersACs.updateSearchFieldAC(text));
     const sendMessageToUserThunk = (userId,body,actionKey,userName) =>
                                                              dispatch ( state.dialogsACs.sendMessageToUserThunkAC(userId,body,actionKey,userName));
@@ -168,8 +162,8 @@ const mergeProps = (stateProps, dispatchProps) => {
     const feedbackRefPush        = (el_id)                => dispatch ( state.dialogsACs.feedbackRefPushAC( el_id));
     const setErrorToNull         = ()                     => dispatch ( state.usersACs.setErrorToNullAC() )
 
-    return { state, getUsersThunk, setUsersThunk, setCurrentPageThunk, /*followThunk, unFollowThunk,*/ getCertainUserThunk,
-        toggleUserSearchMode, updateSearchField,sendMessageToUserThunk,feedBackWindowCloser, feedbackRefPush, setErrorToNull ,followThunkToggler};
+    return {state,getUsersThunk,setUsersThunk,setCurrentPageThunk,getCertainUserThunk,/*toggleUserSearchMode,*/updateSearchField,
+        sendMessageToUserThunk,feedBackWindowCloser,feedbackRefPush,setErrorToNull,followThunkToggler};
 };
 
 // let withUrlDataProfileContainer = withRouter(AuthRedirectComponent);

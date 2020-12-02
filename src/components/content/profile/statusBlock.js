@@ -2,7 +2,7 @@ import React, {useEffect,useState} from "react";
 import stl from "./statusBlock.module.css";
 
 export function StatusCompFunc (props) {
-        // console.log(props.colorTheme);
+        // console.log(props.errOnStatusUpdate);
 
     const [statusEdit, setStatusEdit]                 = useState(false);
     const fieldMaxLength = 300;
@@ -19,60 +19,53 @@ export function StatusCompFunc (props) {
     let [themes, setThemes] = useState({windowDNMC:'',textInput:''})
 
     useEffect( ()=> {
-        if        (props.colorTheme==='NIGHT'){
-            setThemes( {...themes,windowDNMC: stl.mWindow_N,textInput:stl.inputN } )
-        } else if (props.colorTheme==='MORNING'){
-            setThemes( {...themes,windowDNMC: stl.mWindow_M,textInput:stl.inputM } )
-        } else if (props.colorTheme==='DAY'){
-            setThemes( {...themes,windowDNMC: stl.mWindow_D,textInput:stl.inputD } )
-        } else if (props.colorTheme==='EVENING'){
-            setThemes( {...themes,windowDNMC: stl.mWindow_E,textInput:stl.inputE } )
-        }
+        if      (props.colorTheme==='NIGHT'  )setThemes({...themes,windowDNMC:stl.mWindow_N,textInput:stl.inputN})
+        else if (props.colorTheme==='MORNING')setThemes({...themes,windowDNMC:stl.mWindow_M,textInput:stl.inputM})
+        else if (props.colorTheme==='DAY'    )setThemes({...themes,windowDNMC:stl.mWindow_D,textInput:stl.inputD})
+        else if (props.colorTheme==='EVENING')setThemes({...themes,windowDNMC:stl.mWindow_E,textInput:stl.inputE})
     }, [props.colorTheme] )
-
 
     let statusChangeListener=({target})=>{let {value}=target;setFieldBalanceLength(fieldMaxLength-value.length);setStatusFieldValue(value);};
     let confirmStatus=()=>{props.updateStatusThunk(statusFieldValue);setStatusFieldValue(props.statusField);setStatusEdit(false);};
-    let rejectStatus = () => {setStatusFieldValue(previousStatus);setStatusEdit(false); };
+    let rejectStatus = () => {setStatusFieldValue(previousStatus); setFieldBalanceLength(fieldMaxLength-previousStatus.length); setStatusEdit(false);  };
 
-    window.onmousedown = ({target}) => { let {id} = target; statusEdit  && !id && rejectStatus() };
-    window.onkeyup = (e) =>                  { statusEdit  && e.key === "Escape" && rejectStatus() };
+    window.onkeyup = (e) => { statusEdit  && e.key === "Escape" && rejectStatus() };
 
-    // console.log(props.statusField)
+    let modalCloser=(e)=>{e.target.attributes.name&&e.target.attributes.name.value==='modalBackground'&&setStatusEdit(false)}
+
+    let changeColor1 =(e)=>{console.log(e.target.parentElement.parentElement.className=stl.first )}
+    let changeColor2 =(e)=>{console.log(e.target.parentElement.parentElement.className=stl.second)}
+
+    // console.log(props)
 
     return <>
-        { !statusEdit ?
             <div className={stl.statusWrapper}>
-                <p className={stl.statusField}
-                    id='statusField'
-                    onClick={props.isMe ? ()=>{setStatusEdit(true)}:null}>
-                    {/*{props.statusField ? props.statusField : 'Write your status here'}*/}
-                    {/*Status: {props.isLoading ? <img src={props.loader} alt='err'/> : props.statusField }*/}
-                    {props.statusField ? props.statusField :  props.isMe ? 'Set your status here': null  }
+                <p className={`${stl.statusField} ${props.errOnStatusUpdate && stl.statusError}`}
+                   onClick={props.isMe ? ()=>{setStatusEdit(true)}:null}>
+                    {props.errOnStatusLoading ?
+                        props.errOnStatusLoading : props.errOnStatusUpdate ?
+                            props.errOnStatusUpdate : props.statusField ?
+                                props.statusField : props.isMe ?
+                                    'Set your status here' : null
+                    }
                 </p>
             </div>
-            :
-            <div className={`${stl.modalWindow}  ${themes.windowDNMC}`}
-                 id='modalWindow'>
+        { statusEdit && <div className={`${stl.modalBackground}`} name='modalBackground' onMouseDown={e=>{modalCloser(e)}}>
+                <div className={`${stl.modalWindow}  ${themes.windowDNMC}`}>
                 <textarea autoFocus={true}
                           maxLength={fieldMaxLength}
                           className={`${stl.statusTextArea} ${themes.textInput}`}
-                          id='statusInput'
                           value={statusFieldValue}
                           onChange={statusChangeListener}
                           placeholder={'write your mind here'}
                 />
-                <div id='counter'> {fieldBalanceLength} symbols left</div>
-                <div className={stl.twoBTNs} id='twoBTNs'>
-                    <button className={stl.BTNChangeSaver}
-                            id='applier'
-                            onClick={()=>{confirmStatus()}}> Apply changes
-                    </button>
-                    <button className={stl.BTNChangeReject}
-                            id='rejector'
-                            onClick={rejectStatus}
-                    > Reject changes
-                    </button>
+                    <div> {fieldBalanceLength} symbols left</div>
+                    <div className={stl.twoBTNs} >
+                        <button className={stl.BTNChangeSaver}  onClick={()=>{confirmStatus()}}> Apply changes</button>
+                        <button className={stl.BTNChangeReject} onClick={rejectStatus}> Reject changes </button>
+                        <button onClick={e=>{changeColor1(e)}}>1</button>
+                        <button onClick={e=>{changeColor2(e)}}>2</button>
+                    </div>
                 </div>
             </div>
         }

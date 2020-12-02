@@ -13,14 +13,14 @@ function FriendsFuncContainer (props) {
 
     return <Friends
         friendsList         = { props.state.friendsList         }
+        errOnGettingFriends = { props.state.errOnGettingFriends }
         usersInfo           = { props.state.usersInfo           }
         defaultAvatar       = { props.state.defaultAvatar       }
-        followThunk         = { props.followThunk               }
-        unFollowThunk       = { props.unFollowThunk             }
         followingInProgress = { props.state.followingInProgress }
         colorTheme          = { props.state.colorTheme          }
 
         followThunkToggler  = { props.followThunkToggler        }
+        getMyFriendsList = { props.getMyFriendsListThunk     }
 
     />
 }
@@ -29,6 +29,7 @@ const mapStateToProps = (state) => {
     // console.log(state.friendsReducer.followingInProgress);
     return {
         friendsList:          state.friendsReducer.fiendsList,
+        errOnGettingFriends:  state.friendsReducer.errOnGettingFriends,
         defaultAvatar:        state.friendsReducer.defaultAvatar,
         friendsACs:           state.friendsACs,
         followingInProgress:  state.friendsReducer.followingInProgress,
@@ -42,13 +43,11 @@ const mergeProps = (stateProps, dispatchProps) => {
     const {dispatch} = dispatchProps;
     // console.log( stateProps );
 
-    const getMyFriendsListThunk = () =>        dispatch (state.friendsACs.getMyFriendsListThunkAC() );
-    const followThunk           = (userId) =>  dispatch (state.friendsACs.followThunkAC(userId)     );
-    const unFollowThunk         = (userId) =>  dispatch (state.friendsACs.unFollowThunkAC(userId)   );
+    const getMyFriendsListThunk = ()                => dispatch (state.friendsACs.getMyFriendsListThunkAC() );
 
-    const followThunkToggler = (userId,isFollowed)    => dispatch ( state.usersACs.followThunkTogglerAC(userId,isFollowed));
+    const followThunkToggler = (userId,isFollowed) => dispatch(state.friendsACs.followThunkTogglerAC(userId,isFollowed));
 
-    return { state, getMyFriendsListThunk, followThunk, unFollowThunk,followThunkToggler  }
+    return { state, getMyFriendsListThunk, followThunkToggler  }
 };
 
 export default compose(
@@ -56,4 +55,3 @@ export default compose(
     withRouter,
     // withAuthRedirect,
 )(FriendsFuncContainer);
-

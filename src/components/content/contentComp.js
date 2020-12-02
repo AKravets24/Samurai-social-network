@@ -3,7 +3,7 @@ import { Route,Redirect,withRouter } from "react-router-dom";
 import { connect }                   from 'react-redux';
 import { compose }                   from 'redux';
 import stl                           from './content.module.css';
-import { ProfileComposer }           from "./profile/profileContainer";
+import { ProfileComposer }           from "./profile/profileCompWithContainer";
 import { DialogsComposer }           from "./dialogs/dialogs";
 import News                          from './news/News';
 import Music                         from './music/music';

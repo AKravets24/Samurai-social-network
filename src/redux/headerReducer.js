@@ -4,14 +4,9 @@ const SET_LOGOUT_USER_DATA = 'SET_LOGOUT_USER_DATA';
 
 const setLogOutUserDataAC = () => ({type: SET_LOGOUT_USER_DATA, data: {id:null, email:null, login:null, isAuth: false}})
 
-const setMeLogOutThunkAC = () => (dispatch) => {
-    usersApi.setMeLogOut()
-        .then(data => {
-            if (data.resultCode === 0) {
-                // console.log(data)
-                dispatch(setLogOutUserDataAC())
-            }
-        })
+const setMeLogOutThunkAC = () => async (dispatch) => {
+    let data = await usersApi.setMeLogOut()
+            data.resultCode === 0 ? dispatch(setLogOutUserDataAC()) : console.log(data)
 };
 
 const actionCreators = { setMeLogOutThunkAC };

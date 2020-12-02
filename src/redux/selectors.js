@@ -54,18 +54,28 @@ export const getProfilePics                = state => state.profilePics         
 // in reSelector's control it returns  profileReducer's state
 const getWallPosts                         = state => state.profileReducer.wallPosts                            ;
 const getProfileData                       = state => state.profileReducer.profileData                          ;
+const getProfileDataPhotoLarge             = state => state.profileReducer.profileData.photos.large             ;
+const getProfileDataPhotoSmall             = state => state.profileReducer.profileData.photos.small             ;
 const getIsLoading_compProfile             = state => state.profileReducer.isLoading                            ;
 const getStatusField                       = state => state.profileReducer.statusField                          ;
 const getMyAvatarSmall                     = state => state.profileReducer.myAvatarSmall                        ;
 const getMyAvatarLarge                     = state => state.profileReducer.myAvatarLarge                        ;
 const getIsFollowed                        = state => state.profileReducer.isFollowed                           ;
 const getIsFollowing                       = state => state.profileReducer.isFollowing                          ;
+const getIsonFollowingErr                  = state => state.profileReducer.onFollowingErr                       ;
+const getErrOnProfileLoading               = state => state.profileReducer.errOnProfileLoading                  ;
+const getErrOnStatusLoading                = state => state.profileReducer.errOnStatusLoading                   ;
+const getErrOnStatusUpdate                 = state => state.profileReducer.errOnStatusUpdate                    ;
+const getErrOnAvatarUpdate                 = state => state.profileReducer.errOnAvatarUpdate                    ;
 
 export const getSmartProfileMediaData = createSelector(
-    getWallPosts, getProfileData, getIsLoading_compProfile, getStatusField, getMyAvatarSmall, getMyAvatarLarge,
-    getIsFollowed, getIsFollowing,   (
-        wallPosts,profileData,isLoading,statusField,myAvatarSmall,myAvatarLarge,isFollowed,isFollowing,  )=> {
-        return {wallPosts, profileData, isLoading, statusField, myAvatarSmall, myAvatarLarge, isFollowed, isFollowing,
+    getWallPosts, getProfileData, getProfileDataPhotoLarge,getProfileDataPhotoSmall, getIsLoading_compProfile, getStatusField, getMyAvatarSmall, getMyAvatarLarge,
+    getIsFollowed, getIsFollowing,getIsonFollowingErr,getErrOnProfileLoading,getErrOnStatusLoading,getErrOnStatusUpdate,
+    getErrOnAvatarUpdate,(
+        wallPosts,profileData, large,small, isLoading,statusField,myAvatarSmall,myAvatarLarge,isFollowed,isFollowing,onFollowingErr,
+        errOnProfileLoading,errOnStatusLoading,errOnStatusUpdate,errOnAvatarUpdate  )=> {
+        return {wallPosts, profileData,large,small, isLoading, statusField, myAvatarSmall, myAvatarLarge,isFollowed,isFollowing,
+            onFollowingErr,errOnProfileLoading,errOnStatusLoading,errOnStatusUpdate,errOnAvatarUpdate
         }
     });
 // pics and gifs to Profile
@@ -83,7 +93,7 @@ export const getSmartPicsNLoaders = createSelector(getTheme,getAuth_LDR_GIF,getA
      panoramaPic,panorama_LDR_GIF)=> {
         return  {colorTheme:theme,auth_LDR_GIF,ava_LDR_GIF,BTN_LDR_GIF,status_LDR_GIF,
             panoramaPic,panorama_LDR_GIF }
-    })
+    });
 
 // DIALOGS RESELECTORS===============================================================================================================DIALOGS RESELECTORS============
 export const getDialogsACs_compDialogs  = state => state.dialogACs                                               ;
@@ -92,6 +102,8 @@ export const getDialogsReducer          = state => state.dialogsReducer         
 const getDialogsList                    = state => state.dialogsReducer.dialogsList                              ;
 const getCertainDialog                  = state => state.dialogsReducer.certainDialog                            ;
 const getAllDialogsIsLoading            = state => state.dialogsReducer.allDialogsIsLoading                      ;
+const getCertainDialogIsLoading         = state => state.dialogsReducer.certainDialogIsLoading                      ;
+
 const getDefaultAvatar_compDialogs      = state => state.dialogsReducer.defaultAvatar                            ;
 const getcertainDialogLoader            = state => state.dialogsReducer.certainDialogLoader                      ;
 const getAllDialogsLoader               = state => state.dialogsReducer.allDialogsLoader                         ;
@@ -105,18 +117,21 @@ const getOnError                        = state => state.dialogsReducer.onError 
 const getOnSendMSGStatArr               = state => state.dialogsReducer.onSendMSGStatArr                         ;
 const getKeyArr                         = state => state.dialogsReducer.keyArr                                   ;
 const getFeedbackArr_compDialogs        = state => state.dialogsReducer.feedbackArr                              ;
+const getErrNegotiatorsListGet          = state => state.dialogsReducer.errNegotiatorsListGet                    ;
+const getErrNegotiatorsListPIC          = state => state.dialogsReducer.errNegotiatorsListPIC                    ;
+const getErrCertainDialogGet            = state => state.dialogsReducer.errCertainDialogGet                      ;
 
-export const getSmartDialogsReducer = createSelector(getDialogsList,getCertainDialog,getAllDialogsIsLoading,getDefaultAvatar_compDialogs,
-    getcertainDialogLoader,getAllDialogsLoader,getNewMessagesCounter,getNewMessageBTNDisabled,getMsgLoader,getPrevMsgsIsLoading,
-    getPrevMsgsLoader,getOnError,getErrGettingNewMSGSCount,getOnSendMSGStatArr,getKeyArr,getFeedbackArr_compDialogs,
-    (dialogsList,certainDialog,allDialogsIsLoading,defaultAvatar,certainDialogLoader,allDialogsLoader,newMessagesCounter, newMessageBTNDisabled,
-     msgLoader,prevMsgsIsLoading,prevMsgsLoader,onError,errGettingNewMSGSCount,onSendMSGStatArr,keyArr,feedbackArr)=>{
-        // debugger
-        return {dialogsList, certainDialog, allDialogsIsLoading, defaultAvatar, certainDialogLoader, allDialogsLoader, newMessagesCounter,
+export const getSmartDialogsReducer = createSelector(getDialogsList,getCertainDialog,getAllDialogsIsLoading,getCertainDialogIsLoading,getDefaultAvatar_compDialogs,
+    getcertainDialogLoader,getAllDialogsLoader,getNewMessagesCounter,getNewMessageBTNDisabled,getMsgLoader,getPrevMsgsIsLoading,getPrevMsgsLoader,
+    getOnError,getErrGettingNewMSGSCount,getOnSendMSGStatArr,getKeyArr,getFeedbackArr_compDialogs,getErrNegotiatorsListGet,getErrNegotiatorsListPIC,
+    getErrCertainDialogGet,
+    (dialogsList,certainDialog,allDialogsIsLoading,certainDialogIsLoading,defaultAvatar,certainDialogLoader,allDialogsLoader,newMessagesCounter, newMessageBTNDisabled,
+     msgLoader,prevMsgsIsLoading,prevMsgsLoader,onError,errGettingNewMSGSCount,onSendMSGStatArr,keyArr,feedbackArr,errNegotiatorsListGet,
+     errNegotiatorsListPIC,errCertainDialogGet,)=>{
+        return {dialogsList, certainDialog, allDialogsIsLoading,certainDialogIsLoading, defaultAvatar, certainDialogLoader, allDialogsLoader, newMessagesCounter,
             newMessageBTNDisabled, msgLoader, prevMsgsIsLoading, prevMsgsLoader, onError, errGettingNewMSGSCount, onSendMSGStatArr,
-            keyArr, feedbackArr,}
+            keyArr, feedbackArr,errNegotiatorsListGet,errNegotiatorsListPIC,errCertainDialogGet}
     });
-
 
 // USERS RESELECTORS===============================================================================================================USERS RESELECTORS==============
 
@@ -133,6 +148,7 @@ const getFollowingInProgress             = state => state.usersReducer.following
 const getUserSearchMode                  = state => state.usersReducer.userSearchMode                           ;
 const getUserSearchField                 = state => state.usersReducer.userSearchField                          ;
 const getUsersGettingError               = state => state.usersReducer.usersGettingError                        ;
+const getUserNotFound                    = state => state.usersReducer.userNotFound                             ;
 const getUserFindingError                = state => state.usersReducer.userFindingError                         ;
 const getMSGStat                         = state => state.dialogsReducer.onSendMSGStatArr                       ;
 const getFeedbackArr                     = state => state.dialogsReducer.feedbackArr                            ;
@@ -140,12 +156,12 @@ const getGeneralLDR_GIF                  = state => state.backgroundReducer.user
 const getColorThemeAC                    = state => state.backgroundReducer.theme                               ;
 
 export const getSmartUsersMediaData = createSelector(getInitialUserList,getPageSize,getTotalCount,getCurrentPage,getIsLoading_compUsers,
-    getDefaultAvatar,getFollowingInProgress,getUserSearchMode,getUserSearchField, getUsersGettingError,getUserFindingError
+    getDefaultAvatar,getFollowingInProgress,getUserSearchMode,getUserSearchField, getUsersGettingError, getUserNotFound, getUserFindingError
     ,getMSGStat,getFeedbackArr,getGeneralLDR_GIF,getColorThemeAC,
     (initialUsersList,pageSize,totalCount,currentPage,isLoading,defaultAvatar,followingInProgress,userSearchMode,
-     userSearchField,usersGettingError,userFindingError, onSendMSGStatArr, feedbackArr, generalLDR_GIF, theme)=> {
+     userSearchField,usersGettingError,userNotFound, userFindingError, onSendMSGStatArr, feedbackArr, generalLDR_GIF, theme)=> {
         return {initialUsersList,pageSize,totalCount, currentPage,isLoading,defaultAvatar,
-              followingInProgress,userSearchMode,  userSearchField,usersGettingError,userFindingError,
+              followingInProgress,userSearchMode,  userSearchField,usersGettingError,userNotFound,userFindingError,
             colorTheme:theme,feedbackArr,sendingMSGStat:onSendMSGStatArr,  generalLDR_GIF }
     });
 
