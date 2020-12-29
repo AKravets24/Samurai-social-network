@@ -1,7 +1,8 @@
 import React from 'react';
 import Stl from './settings.module.css';
+import News from "../news/News";
 
-export default class Settings extends React.Component {
+class Settings extends React.Component {
     render() {
         return (
             <>
@@ -10,3 +11,4 @@ export default class Settings extends React.Component {
         )
     }
 }
+export default Settings;

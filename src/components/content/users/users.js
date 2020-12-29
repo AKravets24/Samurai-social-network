@@ -19,6 +19,7 @@ export function Users(props) {
         let pagesAmount = Math.ceil(props.usersInfo.totalCount / props.usersInfo.pageSize)
         let leftPortionPageNumber  = (portionNumber - 1) * pageStep + 1
         let rightPortionPageNumber = portionNumber * pageStep;
+        let portionCount = Math.ceil(pagesAmount/pageStep)
         let pagesArr=[];
         for (let i=1;i<=pagesAmount;i++){pagesArr.push(i)}
 
@@ -35,13 +36,16 @@ export function Users(props) {
                                     props.usersInfo.currentPage!==p && props.getCertainUserThunk(props.usersInfo.pageSize,props.usersInfo.userSearchField,p):
                                     props.usersInfo.currentPage!==p && setPageListener(p)}
                                  }
-                    >{p}
+                         >{p}
                           </span>
                 })}
             <button className={`${stl.pagBTN} ${props.themes.pagBTNDnmc}`} onClick={()=>setPortionNumber(portionNumber+1)}
-                    /*disabled={pagesAmount > portionNumber}*/> {pageStep} &#187;</button>
+                    disabled={
+                        // pageStep > pagesAmount ||
+                         portionNumber > portionCount-1
+                    }> {pageStep} &#187;</button>
         </div>
-    }; // доделать дисабл кнопки!!!!!!!
+    };
 
     let setPageListener  = (page) => {props.setCurrentPage(page);setWrapperLocker('');setIsDisabled(false);};
     let onChangeListener = ({target}) => {let {value} = target;props.updateSearchField(value)};
@@ -51,7 +55,9 @@ export function Users(props) {
         let pageSize = props.usersInfo.pageSize;
         props.getCertainUserThunk(pageSize,userName);
         setSearchMode(true)};
-    let searchModeCloseListener = () => {props.setCurrentPage(1);props.setErrorToNull();setSearchMode(false)};
+    let searchModeCloseListener = () => {searchMode&&props.setCurrentPage(1);props.setErrorToNull();props.updateSearchField('');
+    /*searchMode&&
+    setSearchMode(false)*/};
 
 
     // useEffect(()=>{
@@ -89,11 +95,11 @@ export function Users(props) {
     let secondBlockClass = `${stl.userWriteMode} ${props.themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
 
     let writeMsg = (userId,text,userName)=> {
+
         let actionKey = uuidv4()
         props.sendMessageToUserThunk(userId, text, actionKey, userName);
         setWrapperLocker('');
         setIsDisabled(false);
-
     };
     let userIdTalkModeOff =e=> {
         setWrapperLocker('');
@@ -114,7 +120,7 @@ export function Users(props) {
         setIsHidden(stl.feedbackHidden)
         return isHidden },3000 )}
 
-    console.log(props.usersInfo.userNotFound)
+    // console.log(props)
 
     return <>
         <div className={`${stl.usersPage} ${props.themes.userPageDnmc}`}>
@@ -150,7 +156,10 @@ export function Users(props) {
                         </div>
                                                                                                   :
                         props.usersInfo.userNotFound && !props.usersInfo.initialUsersList.length  ?                     // ничего не найдено при кастомном поиске?
-                            <div>{props.usersInfo.userNotFound}</div> :
+                            <div className={stl.nobodyFound}>
+                                <img src={props.usersInfo.userNotFoundGIF} alt="Err"/>
+                                <h2>{props.usersInfo.userNotFound} =(</h2>
+                            </div> :
 
                     <div className={`${stl.mapWrapper} ${props.themes.mapWrapperDnmc} ${wrapperLocker}`}>
                         {props.usersInfo.initialUsersList && props.usersInfo.initialUsersList
@@ -287,6 +296,8 @@ const FeedBacker = React.memo(props=> {
         return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
 
 
+
+        
         // let flag;
         // let res1=[];
         // let res2=[];

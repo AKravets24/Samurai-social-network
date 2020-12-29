@@ -52,7 +52,7 @@ function DialogFuncContainer (props) { /*console.log(props.state.props.errNegoti
 function Dialogs(props) {
     // console.log('render');
 
-    console.log(props.state.certainDialogIsLoading)
+    // console.log(props.state.certainDialogIsLoading)
 
     const dialogArea  = useRef(null);
     const bufferBlock = useRef('');
@@ -85,7 +85,7 @@ function Dialogs(props) {
         console.log(values)
     };
 
-    // console.log(props.state.certainDialogLoader)
+    // console.log( props.state.certainDialog )
 
     return <>
         <div className={`${stl.dialogsPage} ${props.themes.dialogDynamic}`}>
@@ -210,7 +210,7 @@ let mergeProps = (stateProps, dispatchProps) => { const  state  = stateProps; co
         talkedBeforeThunk, setSelectedMessages, setSpamMessagesThunk, deleteMessageThunk, addPrevMessagesThunk }
 };
 
-export const DialogsComposer = compose (
+export default compose (
     connect(mapStateToProps, null, mergeProps),
     withRouter
     )(DialogFuncContainer);

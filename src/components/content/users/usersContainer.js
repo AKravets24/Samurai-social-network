@@ -13,13 +13,18 @@ import stl from "./users.module.css";
 
 function UsersFuncContainer (props) {
     // console.log(props)
+    let pageSize = props.state.smartData.pageSize;
+    let currentPage = props.state.smartData.currentPage;
+    // console.log(currentPage)
 
-    useEffect( ()=>{ props.getUsersThunk(props.state.smartData.pageSize, props.state.currentPage)},[] );
+    useEffect( ()=>{
+        console.log('aasd')
+        props.getUsersThunk(props.state.smartData.pageSize, props.state.currentPage)
+        props.history.push(`users?page=${currentPage}`)
+    },[currentPage] );
 
     let setCurrentPage         =(page)=>                  { props.setCurrentPageThunk(props.state.smartData.pageSize,page)};
-
     let followThunkToggler     =(userId,isFollowed)=>     { props.followThunkToggler(userId,isFollowed) };
-
 
     let updateSearchField      =(text)=>                  { props.updateSearchField(text)                           };
     let getCertainUserThunk    =(pageSize, userName,pageOfEquals)=> {props.getCertainUserThunk(pageSize, userName,pageOfEquals)        };
@@ -170,7 +175,7 @@ const mergeProps = (stateProps, dispatchProps) => {
 // const UsersContainer = connect(mapStateToProps, null, mergeProps)(AuthRedirectComponent);
 // export default UsersContainer;
 
-export default compose(
+export default  compose(
     connect(mapStateToProps, null, mergeProps),
     withRouter,
     // withAuthRedirect,

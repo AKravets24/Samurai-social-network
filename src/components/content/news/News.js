@@ -1,7 +1,7 @@
 import React from 'react';
 import Stl from './news.module.css';
 
-export default class News extends React.Component {
+class News extends React.Component {
 
     render() {
         return (
@@ -13,3 +13,4 @@ export default class News extends React.Component {
         )
     }
 }
+export default News;

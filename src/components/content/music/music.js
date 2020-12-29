@@ -1,8 +1,9 @@
 import React from 'react';
 import Stl from './music.module.css';
+import News from "../news/News";
 
 
-export default class navBar extends React.Component {
+class Music extends React.Component {
 
     render() {
 
@@ -13,3 +14,4 @@ export default class navBar extends React.Component {
         </>
     }
 }
+export default Music;

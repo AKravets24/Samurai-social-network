@@ -385,3 +385,15 @@
 .textAreaWrapper button {
     margin: 0 auto;
 }
+
+.feedBacker {
+    position: fixed;
+    height: 110px;
+    width: 300px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #4f4f4f;
+    left: 10px;
+    bottom: 10px;
+    z-index: 5;
+}
