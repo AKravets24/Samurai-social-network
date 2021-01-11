@@ -93,12 +93,12 @@ export const usersApi = {
     getTalkWithUser (userId:number,msgCount:number=20,pageNumber:number=1)
     { return instance.get(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`)
                                                                                             .then(res=>res).catch(err=>err)},
-    sendMsgToTalker(userId:number,body:string) { return instance.post(`dialogs1/${userId}/messages`,{body})
+    sendMsgToTalker(userId:number,body:string) { return instance.post(`dialogs/${userId}/messages`,{body})
                                                                                             .then(res=>res).catch(err=>err)},
     getNewMessages ()            { return instance.get(`dialogs/messages/new/count`)        .then(res=>res).catch(err=>err)},
-    deleteMessage  (messageId:number)   { return instance.delete(`dialogs/messages/${messageId}`)
+    deleteMessage  (messageId:string)   { return instance.delete(`dialogs/messages/${messageId}`)
                                                                                             .then(response => response.data  )},
-    setAsSpamMessage(messageId:number)  { return instance.post(`dialogs/messages/${messageId}/spam`)
+    setAsSpamMessage(messageId:string)  { return instance.post(`dialogs/messages/${messageId}/spam`)
                                                                                             .then(response => response.data  )},
     // USERS --------------------------------------------------------------------------------------------------------------------- USERS
     getUsers(pageSize =10,currentPage=1){

@@ -239,16 +239,16 @@ type SetTalkWithUser_Type              = {type: typeof SET_TALK_WITH_USER, data:
 type AddPrevMSGS_Type                  = {type: typeof ADDED_PREVIOUS_MSGS, prevMsgs: MessageData_Type[]}
 type PrevMsgsloadingTogglerAC_Type     = {type: typeof PREV_MSGS_LOADING_TOGGLER, prevMsgsIsLoading:boolean}
 type SendMsgAC_Type                    = {type: typeof SEND_MESSAGE_TO_USER, msg:string }
-type OnSendingMSGEStatusAC_Type        = {type: typeof ON_SENDING_MSG_STATUS,number:number,userId:number,actionKey:number,userName:string}
+type OnSendingMSGEStatusAC_Type        = {type: typeof ON_SENDING_MSG_STATUS,number:number,userId:number,actionKey:string,userName:string}
 type FeedBackWindowCloserAC_Type       = {type: typeof FEEDBACK_WINDOW_CLOSER, arrIndex:number}
 type Photos_Type                       = {large:string, small:string}
 type CreateNewDialogAC_Type            = {type: typeof CREATE_AND_SET_NEW_DIALOG, userId:number, fullName:string, photos:Photos_Type}
 type SetErrCertainDialogGetAC_Type     = {type: typeof ERR_CERTAIN_DIALOG_GET, error:string}
 type NewMsgActonCombiner_Type          = {type: typeof NEW_MSG_ACTTION_COMBINER,newMessagesCount:number,BTNIsDisabled:boolean,hasErr:boolean}
 type FeedbackRefPushAC_Type            = {type: typeof FEEDBACK_REF_PUSH, el:any}
-type SetSelectedMessagesAC_Type        = {type: typeof SET_SELECTED_MESSAGES, messageId:number}
-type DeleteMessageAC_Type              = {type: typeof DELETE_MESSAGE, messageId:number, index:number}
-type setAsSpamMessage                  = {type: typeof SET_SPAM_MESSAGE, messageId:number, index:number}
+type SetSelectedMessagesAC_Type        = {type: typeof SET_SELECTED_MESSAGES, messageId:string}
+type DeleteMessageAC_Type              = {type: typeof DELETE_MESSAGE, messageId:string, index:number}
+type setAsSpamMessage                  = {type: typeof SET_SPAM_MESSAGE, messageId:string, index:number}
 // type sendMsgAC = {type: typeof SEND_MESSAGE_TO_USER, msg: msg.data.message }
 
 
@@ -260,15 +260,15 @@ const addPrevMSGS                  = (prevMsgs:MessageData_Type[]):AddPrevMSGS_T
 const prevMsgsloadingTogglerAC     = (prevMsgsIsLoading:boolean):PrevMsgsloadingTogglerAC_Type  =>          ({type: PREV_MSGS_LOADING_TOGGLER, prevMsgsIsLoading});
 // const sendMsgAC                    = (msg) =>                       ({type: SEND_MESSAGE_TO_USER,msg:msg.data.message});
 const sendMsgAC                    = (msg:string):SendMsgAC_Type =>                                         ({type: SEND_MESSAGE_TO_USER,msg});
-const onSendingMSGEStatusAC        = (number:number,userId:number,actionKey:number,userName:string):OnSendingMSGEStatusAC_Type=>  ({type: ON_SENDING_MSG_STATUS,number,userId,actionKey,userName});
+const onSendingMSGEStatusAC        = (number:number,userId:number,actionKey:string,userName:string):OnSendingMSGEStatusAC_Type=>  ({type: ON_SENDING_MSG_STATUS,number,userId,actionKey,userName});
 const feedBackWindowCloserAC       = (arrIndex:number):FeedBackWindowCloserAC_Type =>                       ({type:FEEDBACK_WINDOW_CLOSER, arrIndex})
 const createNewDialogAC            = (userId:number, fullName:string, photos:Photos_Type):CreateNewDialogAC_Type =>  ({type: CREATE_AND_SET_NEW_DIALOG, userId, fullName, photos});
 const setErrCertainDialogGetAC     = (error:string):SetErrCertainDialogGetAC_Type                   =>      ({type: ERR_CERTAIN_DIALOG_GET, error});
 const newMsgActonCombiner          = (newMessagesCount:number,BTNIsDisabled:boolean,hasErr:boolean):NewMsgActonCombiner_Type => ({type:NEW_MSG_ACTTION_COMBINER,newMessagesCount,BTNIsDisabled,hasErr});
 const feedbackRefPushAC            = (el:any):FeedbackRefPushAC_Type  =>                                     ({type: FEEDBACK_REF_PUSH, el});
-const setSelectedMessagesAC        = (messageId:number):SetSelectedMessagesAC_Type =>                        ({type: SET_SELECTED_MESSAGES, messageId});
-const deleteMessageAC              = (messageId:number, index:number):DeleteMessageAC_Type =>                ({type: DELETE_MESSAGE, messageId, index});
-const setAsSpamMessage             = (messageId:number, index:number):setAsSpamMessage =>                    ({type: SET_SPAM_MESSAGE, messageId, index});
+const setSelectedMessagesAC        = (messageId:string):SetSelectedMessagesAC_Type =>                        ({type: SET_SELECTED_MESSAGES, messageId});
+const deleteMessageAC              = (messageId:string, index:number):DeleteMessageAC_Type =>                ({type: DELETE_MESSAGE, messageId, index});
+const setAsSpamMessage             = (messageId:string, index:number):setAsSpamMessage =>                    ({type: SET_SPAM_MESSAGE, messageId, index});
 
 type ActionTypes = SetDialogsAreLoadingToggleAC_Type | SetMyCompanions_Type | setErrMyNegotiatorsList | SetTalkWithUser_Type |
     AddPrevMSGS_Type | PrevMsgsloadingTogglerAC_Type | SendMsgAC_Type | OnSendingMSGEStatusAC_Type | FeedBackWindowCloserAC_Type |
@@ -319,11 +319,11 @@ const addPrevMessagesThunkAC       = (userId:number,msgCount:number,pageNumber:n
     dispatch(prevMsgsloadingTogglerAC(false));
 
 };
-const deleteMessageThunkAC         = (messageId:number,index:number) =>                  async (dispatch:any) => {
+const deleteMessageThunkAC         = (messageId:string,index:number) =>                  async (dispatch:any) => {
     let data = await usersApi.deleteMessage(messageId)
     data.status===200 ? dispatch (deleteMessageAC(messageId,index)): console.log(data);
 };
-const setSpamMessagesThunkAC       = (messageId:number,index:number) =>                  async (dispatch:any) => {
+const setSpamMessagesThunkAC       = (messageId:string,index:number) =>                  async (dispatch:any) => {
     let data = await usersApi.setAsSpamMessage(messageId)
     data.response===200? dispatch(setAsSpamMessage(messageId,index)) : console.log(data)};
 const getNewMessagesRequestThunkAC = () =>                                               async (dispatch:any) => {
@@ -332,7 +332,7 @@ const getNewMessagesRequestThunkAC = () =>                                      
     response.status === 200 ? dispatch(newMsgActonCombiner(response.data,false,false)) :
         dispatch(newMsgActonCombiner(0,false,true));
 };
-const sendMessageToUserThunkAC     = (userId:number,body:string,actionKey:number,userName:string)=> async (dispatch:any) => {
+const sendMessageToUserThunkAC     = (userId:number,body:string,actionKey:string,userName:string)=> async (dispatch:any) => {
         dispatch(onSendingMSGEStatusAC(0, userId,actionKey,userName));
         let response = await usersApi.sendMsgToTalker(userId,body)
         response.status === 200 ?
@@ -340,8 +340,22 @@ const sendMessageToUserThunkAC     = (userId:number,body:string,actionKey:number
             dispatch(onSendingMSGEStatusAC(2,userId,actionKey,userName))
     };
 
+export type DialogActions_Type = {
+    getMyNegotiatorsListThunkAC:  () => void
+    getTalkWithUserThunkAC:       (userId:number) => void
+    sendMessageToUserThunkAC:     (userId:number,body:string,actionKey:string,userName:string) => void
+    createNewDialogAC:            (userId:number, fullName:string, photos:Photos_Type) => CreateNewDialogAC_Type
+    talkedBeforeThunkAC:          (userId:number) => void
+    setSelectedMessagesAC:        (messageId:string) => SetSelectedMessagesAC_Type
+    setSpamMessagesThunkAC:       (messageId:string,index:number) => void
+    deleteMessageThunkAC:         (messageId:string,index:number) => void
+    getNewMessagesRequestThunkAC: () => void
+    addPrevMessagesThunkAC:       (userId:number,msgCount:number,pageNumber:number) => void
+    feedBackWindowCloserAC:       (arrIndex:number) => FeedBackWindowCloserAC_Type
+    feedbackRefPushAC:            (el:any) => FeedbackRefPushAC_Type
+}
 
-const dialogActions = {getMyNegotiatorsListThunkAC, getTalkWithUserThunkAC, sendMessageToUserThunkAC, createNewDialogAC,
+const dialogActions:DialogActions_Type = {getMyNegotiatorsListThunkAC, getTalkWithUserThunkAC, sendMessageToUserThunkAC, createNewDialogAC,
     talkedBeforeThunkAC, setSelectedMessagesAC, setSpamMessagesThunkAC, deleteMessageThunkAC, getNewMessagesRequestThunkAC,
     addPrevMessagesThunkAC, feedBackWindowCloserAC, feedbackRefPushAC};
 
@@ -357,13 +371,13 @@ type MessageData_Type = {
     translatedBody: null | boolean
     viewed: boolean
 }
-type CertainDialog_Type = {
+export type CertainDialog_Type = {
     error?: null | string
     items: MessageData_Type[]
     totalCount?: number
 }
 
-type DialogsList_Type = {
+export type DialogsList_Type = {
     hasNewMessages: boolean
     id: number
     lastDialogActivityDate: string
@@ -390,14 +404,14 @@ let initialDialogsState  = {
     onError:                errorPic                  as string,               
     errGettingNewMSGSCount: false                     as boolean,
     onSendMSGStatArr:       []                        as any[],                        
-    keyArr:                 []                        as number[],
+    keyArr:                 []                        as string[],
     feedbackArr:            []                        as string[],                     
     errNegotiatorsListGet:  0                         as number,
     errNegotiatorsListPIC:  radioTowerPIC             as string,          
     errCertainDialogGet:    ''                        as string,
 };
 
-type InitialDialogsState_Type = typeof initialDialogsState;
+export type InitialDialogsState_Type = typeof initialDialogsState;
 
 export const dialogsReducer = ( state = initialDialogsState, action:ActionTypes, /* date:string, time:string */ ):InitialDialogsState_Type => {
     let stateCopy = {...state};

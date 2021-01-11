@@ -164,6 +164,7 @@ import userLoaderGIF_N  from './loader/users/LDR_N.gif';
 import userLoaderGIF_M  from './loader/users/LDR_M.gif';
 import userLoaderGIF_D  from './loader/users/LDR_D.gif';
 import userLoaderGIF_E  from './loader/users/LDR_E.gif';
+import { type } from "os";
 
 
 const TIMER   = 'TIMER';
@@ -184,9 +185,13 @@ export const backGroundSetterACs = (state=actionCreators) => state;
 // let timeToChangeTheme = 0; // Время до смены картинки
 // let timer = 0; // Количество времени в минутах прошедшее от начала суток до момента открытия сайта
 
+export type ProfileThemes_Type = {
+    panoramaPic:string;panorama_LDR_GIF:string;ava_LDR_GIF:string;BTN_LDR_GIF:string;status_LDR_GIF:string}
+
+export type UsersThemesBGR_Type = {generalLDR_GIF:string}
 
 let initialState = {
-    theme:             null  as null | string,
+    theme:             ''    as string,
     backgroundPic:     ''    as string,
     timeToChangeTheme: null  as null | number,
     auth_LDR_GIF:      ''    as string,
@@ -196,10 +201,10 @@ let initialState = {
         ava_LDR_GIF:      ''   as string,
         BTN_LDR_GIF:      ''   as string,
         status_LDR_GIF:   ''   as string,
-    },
+    } as ProfileThemes_Type,
     usersThemes: {
         generalLDR_GIF:   ''   as string,
-    }
+    } as UsersThemesBGR_Type,
 };
 
 export type BG_State_Type = typeof initialState;

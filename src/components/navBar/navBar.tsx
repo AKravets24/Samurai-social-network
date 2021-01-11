@@ -296,7 +296,7 @@ const mapStateToProps = (state: AppStateType) => {
     }
 };
  
-const mergeProps = (stateProps:any, dispatchProps:any) => {
+const mergeProps = (stateProps:any, dispatchProps:any) => {                                                   // ANY !!!!!!!!!!!!!!!!!!!
     const  state  = stateProps;
     // console.log(stateProps);
     

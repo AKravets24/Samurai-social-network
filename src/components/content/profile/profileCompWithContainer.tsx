@@ -11,13 +11,15 @@ import {
     getSmartProfileMediaData,
     getSmartPicsNLoaders,
 } from "../../../redux/selectors";
-import { Formik, Form, Field }           from 'formik';
+import { Formik, Form, Field }    from 'formik';
 import stl                        from './profile.module.css';
 import Post                       from './post/post';
 import { StatusCompFunc }         from "./statusBlock";
 import { v4 as uuidv4 }           from 'uuid';
-import { type } from "os";
-import { stringify } from "querystring";
+import { AppStateType }           from "../../../redux/redux-store";
+import { InitialProfileState_Type, profileACs_Type, ProfilePicturesTypes } from "../../../redux/profileReducer";
+
+import { ProfileThemes_Type }  from '../../../redux/backGroundSetter'
 
 
 type ContainerProps_Type = {
@@ -64,13 +66,34 @@ type ContainerProps_Type = {
             errOnProfileLoading: string
             errOnStatusLoading: string
             errOnStatusUpdate: string
-            isFollowed: null | boolean
+            isFollowed:  boolean
             isFollowing: boolean
             isLoading: boolean
             large: null | string
             myAvatarLarge: string
             myAvatarSmall: string
             onFollowingErr: null | string
+            profileData: {
+                aboutMe: null | string
+                contacts: {
+                    facebook:  string
+                    github:    string
+                    instagram: string
+                    mainlink:  string
+                    twitter:   string
+                    vk:        string
+                    website:   string
+                    youtube:   string
+                }
+                fullName: string
+                lookingForAJob: string
+                lookingForAJobDescription: string
+                photos: {small: null | string, large: null | string}
+                userId:  number
+            }
+            small: null | string
+            statusField: string
+            wallPosts: any
         }
         profilePics: {
             faceBookLogo: string
@@ -81,6 +104,7 @@ type ContainerProps_Type = {
             vkLogo:       string
             websiteLogo:  string
             youTubeLogo:  string
+            
         }
     }
     
@@ -136,19 +160,18 @@ type Profile_Types = {
     updateStatusThunk: (text:string) => void
     match: any
     colorTheme: string
-    state: ContainerProps_Type["profileState"]
-    profileState: {
+    state:  {
         myId: number
         picsNLoaders: {
-            BTN_LDR_GIF: string
-            auth_LDR_GIF:string
-            ava_LDR_GIF: string
-            colorTheme: string
-            panoramaPic: string
+            BTN_LDR_GIF:      string
+            auth_LDR_GIF:     string
+            ava_LDR_GIF:      string
+            colorTheme:       string
+            panoramaPic:      string
             panorama_LDR_GIF: string
-            status_LDR_GIF:  string
+            status_LDR_GIF:   string
         }
-    profileACs: {
+        profileACs: {
             addPostAC: (finalPost:string, date:string, time:string) => void
             afterSendMSGStatCleaner: () => void
             followThunkTogglerAC: (userId:number, isFollowed:boolean) => void
@@ -158,15 +181,15 @@ type Profile_Types = {
             toggleIsLoadingAC: (isLoading:boolean) => void
             updateMyAvatarThunkAC: (file:any) => void
             updateStatusThunkAC: (text:string) => void
-    }
-    profileMedia: {
+        }
+        profileMedia: {
             MSGToUserSended: string
             errAtMSGSending: string
             errOnAvatarUpdate: string
             errOnProfileLoading: string
             errOnStatusLoading: string
             errOnStatusUpdate: string
-            isFollowed: null | boolean
+            isFollowed:  boolean
             isFollowing: boolean
             isLoading: boolean
             large: null | string
@@ -189,13 +212,13 @@ type Profile_Types = {
                 lookingForAJob: string
                 lookingForAJobDescription: string
                 photos: {small: null | string, large: null | string}
-                userId: null | number
+                userId:  number
             }
             small: null | string
             statusField: string
             wallPosts: any
-    }
-    profilePics: {
+        }
+        profilePics: {
             faceBookLogo:  string
             gitHubLogo:    string
             instagramLogo: string
@@ -204,6 +227,7 @@ type Profile_Types = {
             vkLogo:        string 
             websiteLogo:   string
             youTubeLogo:   string
+        }
     }
     themes: {
         BTN_ERR_DNMC:    string
@@ -213,25 +237,27 @@ type Profile_Types = {
         profileInfoDnmc: string
         textInput:       string
         writePostDnmc:   string
-    }
+        
+        }
 }
-}
 
 
-
-const Profile = (props:any) => {
+const Profile:React.FC<Profile_Types> = (props) => {
     // console.log('render');
-    console.log(props);
+    // console.log(props);
     
     type Error_Type               = {text?:string}
     let errOnGettingProfile       = props.state.profileMedia.errOnProfileLoading;
-    let userId :number            = props.state.profileMedia.profileData.userId;
+    let userId                    = props.state.profileMedia.profileData.userId;
     let errOnStatusLoading        = props.state.profileMedia.errOnStatusLoading;
     let isFollowed                = props.state.profileMedia.isFollowed;
     let onFollowingErr            = props.state.profileMedia.onFollowingErr;
    
     let [writeMode, setWriteMode] = useState(false)
     let [feedBacker,setFeedBacker]= useState(false)
+
+    useEffect(()=>{setTimeout(()=>{setFeedBacker(false);props.sendingStatCleaner()},2000)
+    },[props.state.profileMedia.MSGToUserSended || props.state.profileMedia.errAtMSGSending])
 
     const addPostListener = (finalPost:string) => { props.addPost(finalPost) };
     const getContacts     = (obj:any,logos:any)       => {const result = [];
@@ -252,21 +278,9 @@ const Profile = (props:any) => {
 
     let modalCloser=(e:any)=>{e.target.attributes['data-name']&&e.target.attributes['data-name'].value==='modalBackground'&&setWriteMode(false)}
 
-    let sendMsg = (userId:number,message:string ) =>{
-        props.sendMsgToTalkerThunk(userId,message);
-        setFeedBacker(true)
-        setWriteMode(false);
-    }
+    let sendMsg = (userId:number,message:string ) =>{props.sendMsgToTalkerThunk(userId,message);setFeedBacker(true);setWriteMode(false);}
 
     let feedBackCloser = () => {setFeedBacker(false)}
-        // console.log(props.state.profileMedia.MSGToUserSended )
-        // console.log(props.state.profileMedia.errAtMSGSending )
-
-    if ( props.state.profileMedia.MSGToUserSended || props.state.profileMedia.errAtMSGSending) {
-        setTimeout(()=>{setFeedBacker(false)
-        props.sendingStatCleaner();
-        },2000)
-    }
 
     return <>
         {writeMode &&
@@ -274,7 +288,7 @@ const Profile = (props:any) => {
         onClick={e=>{modalCloser(e)}}>
             <div  className={`${stl.writeWindow} ${props.themes.profileDnmc}`}>
                 <div className={stl.miniHeadWrapper}>
-                    <h2 className={`${stl.userName} ${props.themes.userNameDnmc}`}>{props.state.profileMedia.profileData.fullName}</h2>
+                    {/* <h2 className={`${stl.userName} ${props.themes.userNameDnmc}`}>{props.state.profileMedia.profileData.fullName}</h2> */}
                     <NavLink className={`${stl.followBTN} ${props.themes.BTNs}`} to={`/dialogs/${userId}` }
                     > Go to chat
                     </NavLink>
@@ -291,7 +305,8 @@ const Profile = (props:any) => {
                          <form onSubmit={handleSubmit}>
                              <textarea name="text" className={stl.talkTextarea}
                              onChange={handleChange} value={values.text} placeholder={errors.text} />
-                             <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${props.themes.followBTNDnmc}`}
+                             {/* <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${props.themes.followBTNDnmc}`} */}
+                             <button type="submit" disabled={isSubmitting} className={`${stl.followBTN}`}
                              > Send Msg </button>
                          </form>
                      )}
@@ -311,7 +326,6 @@ const Profile = (props:any) => {
             </p>
         </div>
         }
-
 
         {!userId && !errOnGettingProfile && <div className={stl.loaderDiv}>
             <img className={stl.loader} src={props.state.picsNLoaders.auth_LDR_GIF} alt="Err"/>
@@ -340,12 +354,8 @@ const Profile = (props:any) => {
                 <div className={stl.profileDetails}>
                     <div className={stl.profilePicNBTN}>
                         <div>
-                            {/*<img src={!userId?props.state.picsNLoaders.ava_LDR_GIF:props.state.profileMedia.profileData.photos.large||*/}
-                            {/*    props.state.profileMedia.myAvatarLarge} alt="Err"/>*/}
-
                             <img src={!userId?props.state.picsNLoaders.ava_LDR_GIF:props.state.profileMedia.profileData.photos.large||
                                 props.state.profileMedia.myAvatarLarge} alt="Err"/>
-
                         </div>
                         <input disabled={!userId} type="file" name="image" id='file' onChange={photoSaver} className={stl.fileInput}/>
                         {!userId                                                                        ?
@@ -401,11 +411,7 @@ const Profile = (props:any) => {
                                 colorTheme               = { props.colorTheme                                  }
                                 statusField              = { props.state.profileMedia.statusField              }
                                 errOnStatusLoading       = { errOnStatusLoading                                }
-                                previousStatus           = { props.state.profileMedia.previousStatus           }
                                 updateStatusThunk        = { props.updateStatusThunk                           }
-                                letterBalanceCounter     = { props.letterBalanceCounter                        }
-                                statusFieldMaxLength     = { props.state.profileMedia.statusFieldMaxLength     }
-                                statusFieldBalanceLength = { props.state.profileMedia.statusFieldBalanceLength }
                                 errOnStatusUpdate        = { props.state.profileMedia.errOnStatusUpdate        }
                             />
                         </div>
@@ -450,9 +456,17 @@ const Profile = (props:any) => {
     </>
 };
 
-//@ts-ignore
-let mapStateToProps = (state)=> {
-    // console.log('render');
+
+type MSTP_Type = {
+    profileMedia: InitialProfileState_Type
+    picsNLoaders: ProfileThemes_Type
+    myId: number | null
+    profilePics: ProfilePicturesTypes
+    profileACs: profileACs_Type
+}
+
+let mapStateToProps = (state:AppStateType):MSTP_Type=> {
+    // console.log(state);
     return {
         profileMedia:     getSmartProfileMediaData  (state),
         picsNLoaders:     getSmartPicsNLoaders      (state),
@@ -461,13 +475,16 @@ let mapStateToProps = (state)=> {
         profileACs:       getProfileACs             (state),
     }
 };
-//@ts-ignore
-let mergeProps = (stateProps, dispatchProps)=>{
+
+type DispatchProps_Type = {dispatch: (action:any)=> void}
+
+let mergeProps = (stateProps:MSTP_Type, dispatchProps:DispatchProps_Type)=>{
+    // console.log(dispatchProps);
     
     const  profileState  = stateProps;
     const { dispatch }   = dispatchProps;
 
-    const addPost              =(finalPost:any)=> {
+    const addPost              =(finalPost:string)=> {
         let date = new Date();
         let data=`${("0"+date.getDate()).slice(-2)}.${("0"+(date.getMonth()+1)).slice(-2)}.${(date.getFullYear()-2000)}`;
         let time=`${("0"+date.getHours()).slice(-2)}:${("0"+date.getMinutes()).slice(-2)}`;
@@ -483,8 +500,8 @@ let mergeProps = (stateProps, dispatchProps)=>{
     return {profileState,addPost,getProfileThunk,updateStatusThunk,updateMyAvatarThunk,followThunkToggler,sendMsgToTalkerThunk,sendingStatCleaner}
 };
 
+//@ts-ignore
 export default compose (connect(mapStateToProps, null, mergeProps), withRouter, withAuthRedirect)(ProfileFuncContainer);
-
 
 
 

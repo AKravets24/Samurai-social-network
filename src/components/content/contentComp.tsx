@@ -14,9 +14,11 @@ import { AppStateType }              from '../../redux/redux-store';
     
 //@ts-ignore
 const ProfileComposer = lazy(()=> import("./profile/profileCompWithContainer"));
-
+//@ts-ignore
 const FriendsComposer = lazy(()=> import("./friends/friendsContainer"));
+//@ts-ignore
 const DialogsComposer = lazy(()=> import("./dialogs/dialogs"));
+//@ts-ignore
 const UsersComposer   = lazy(()=> import("./users/usersContainer"));
 const News            = lazy(()=> import('./news/News'));
 const Music           = lazy(()=> import('./news/News'));

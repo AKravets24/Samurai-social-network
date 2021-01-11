@@ -130,13 +130,24 @@ const afterSendMSGStatCleaner      = ()                                       =>
     dispatch(sendingStatCleanerAC())
 }
 
-type ProfilePicturesTypes = {faceBookLogo:string, gitHubLogo:string, instagramLogo:string, mainLinkLogo:string, twitterLogo:string, vkLogo:string, websiteLogo:string,  youTubeLogo:string}
+export type ProfilePicturesTypes = {faceBookLogo:string, gitHubLogo:string, instagramLogo:string, mainLinkLogo:string, twitterLogo:string, vkLogo:string, websiteLogo:string,  youTubeLogo:string}
 
 const profilePictures:ProfilePicturesTypes = { faceBookLogo, gitHubLogo, instagramLogo, mainLinkLogo, twitterLogo, vkLogo, websiteLogo,  youTubeLogo, };
 export const profilePics = (state = profilePictures)=> { return state };
 
+export type profileACs_Type = {
+    addPostAC:  (finalPost:string, date:string, time:string) => AddPostAC_Type 
+    setProfileAC: (profileData:any,isFollowed:boolean,status:string) => SetProfileAC_Type
+    toggleIsLoadingAC: (isLoading:boolean)=> ToggleIsLoadingAC_Type
+    getProfileThUnkAC: (userId:number, isMe:boolean)=> void
+    updateStatusThunkAC: (text:string) => void  
+    updateMyAvatarThunkAC: (file:any) => void 
+    followThunkTogglerAC: (userId:number, isFollowed:boolean)=> void
+    sendMsgToTalkerThunkAC: (userId:number, message:string) =>void
+    afterSendMSGStatCleaner: ()=>void
+}
 
-const actionsCreators = { addPostAC, setProfileAC, toggleIsLoadingAC, getProfileThUnkAC, updateStatusThunkAC,  updateMyAvatarThunkAC,  
+const actionsCreators:profileACs_Type = { addPostAC, setProfileAC, toggleIsLoadingAC, getProfileThUnkAC, updateStatusThunkAC,  updateMyAvatarThunkAC,  
     followThunkTogglerAC, sendMsgToTalkerThunkAC, afterSendMSGStatCleaner };
 
 export const profileACs = (state= actionsCreators)=> { return state };
@@ -187,9 +198,9 @@ let initialProfileState = {
     errAtMSGSending:     ''                as string,
 };
 
-type InitialProfileState_Type = typeof initialProfileState
+export type InitialProfileState_Type = typeof initialProfileState
 
-export const profileReducer = (state = initialProfileState, action:ActionTypes, /* date:string, time:string */):InitialProfileState_Type  => {
+export const profileReducer = (state:InitialProfileState_Type = initialProfileState, action:ActionTypes, /* date:string, time:string */):InitialProfileState_Type  => {
     let stateCopy = {...state};
 switch (action.type) {                                                                                                  //сделать через Formik
         case ADD_POST:

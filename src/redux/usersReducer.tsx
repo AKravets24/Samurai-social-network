@@ -166,7 +166,7 @@ const setCurrentPageAC          = (currentPage:number):SetCurrentPageAC_Type    
 const toggleIsLoadingAC         = (isLoading:boolean):ToggleIsLoadingAC_Type                         =>  ({type: TOGGLE_IS_LOADING,             isLoading         });
 const toggleFollowingProgressAC = (isLoading:boolean, userId:number):ToggleFollowingProgressAC_Type  =>  ({type: TOGGLE_IS_FOLLOWING_PROGRESS,  isLoading, userId });
 const errCatcherAtUsersGetAC    = (usersGettingError:string):ErrCatcherAtUsersGetAC_Type             =>  ({type: AT_GETTING_USERS_ERROR_CAUGHT, usersGettingError });
-const errCatcherAtUsersFindAC   = (usersFindingError:string): ErrCatcherAtUsersFindAC_Type           =>  ({type: AT_FINDING_USERS_ERROR_CAUGHT, usersFindingError });
+const errCatcherAtUsersFindAC   = (usersFindingError:string):ErrCatcherAtUsersFindAC_Type            =>  ({type: AT_FINDING_USERS_ERROR_CAUGHT, usersFindingError });
 const setErrorToNullAC          = ():SetErrorToNullAC_Type                                           =>  ({type: ERROR_NULLIFIER                                  });
 const errCatcherAtFollowingAC   = (userId:number,errorCode:number):ErrCatcherAtFollowingAC_Type      =>  ({type: ERROR_AT_FOLLOWING_TOGGLER,    userId,errorCode  });
 const updateSearchFieldAC       = (text:string):UpdateSearchFieldAC_Type                             =>  ({type: UPDATE_SEARCH_FIELD,           text              });
@@ -176,10 +176,10 @@ type ActionTypes = FollowBTNTogglerAC_Type | SetUsersAC_Type | SetCurrentPageAC_
     ErrCatcherAtFollowingAC_Type | UpdateSearchFieldAC_Type;
 
 const getUsersThunkAC           = (pageSize:number, currentPage:number)                    => async (dispatch:any, getState:any) =>  {
-    console.log(getState().headerAc);
+    // console.log(getState());
     dispatch(toggleIsLoadingAC(true));
     let response = await usersApi.getUsers(pageSize, currentPage);
-    console.log(response)
+    // console.log(response)
     response.status===200 ?
         dispatch(setUsersAC(response.data.items,response.data.totalCount)):dispatch(errCatcherAtUsersGetAC(JSON.stringify(response.message)));
     dispatch(toggleIsLoadingAC(false));
@@ -213,6 +213,19 @@ const getCertainUserThunkAC     = (pageSize:number,userName:string,pageOfEquals:
     dispatch(toggleIsLoadingAC(false));
 }; // доработать логику возврате(возвращает только 10 юзеров)
 
+export type UsersACs_Type = {
+    setErrorToNullAC     : ()=>SetErrorToNullAC_Type
+    updateSearchFieldAC  : (text:string)=>UpdateSearchFieldAC_Type
+    getUsersThunkAC      : (pageSize:number, currentPage:number)=>void
+    setCurrentPageThunkAC: (pageSize:number, currentPage:number)=>void
+    followThunkTogglerAC : (userId:number, isFollowed:boolean)=>void
+    getCertainUserThunkAC: (pageSize:number,userName:string,pageOfEquals:number)=>void
+}
+
+const actionCreators:UsersACs_Type = {getUsersThunkAC, setCurrentPageThunkAC, 
+    getCertainUserThunkAC,updateSearchFieldAC, setErrorToNullAC, followThunkTogglerAC};
+export const usersACs = (state = actionCreators) => { return state };
+
 
 type InitialUsersList_Type = {
     followed: boolean
@@ -239,7 +252,7 @@ const initialUsersInfo = {
     userNotFoundGIF:      nobodyFoundGIF   as string,
 };
 
-type InitialUsersInfo_Type = typeof initialUsersInfo;
+export type InitialUsersInfo_Type = typeof initialUsersInfo;
 
 export const usersReducer = (state = initialUsersInfo, action:ActionTypes) :InitialUsersInfo_Type  => {
     // debugger;
@@ -286,7 +299,5 @@ export const usersReducer = (state = initialUsersInfo, action:ActionTypes) :Init
             return {...state};
     }
 };
-const actionCreators = {getUsersThunkAC, setCurrentPageThunkAC, /*setUsersThunkAC,*/
-    getCertainUserThunkAC,updateSearchFieldAC, setErrorToNullAC, followThunkTogglerAC};
-export const usersACs = (state = actionCreators) => { return state };
+
 

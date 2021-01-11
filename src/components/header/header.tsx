@@ -140,13 +140,13 @@ const mapStateToProps = (state:AppStateType) => {  // console.log(getSmartAppAut
     // console.log(state);
     
     return {
-        authData:   getSmartAppAuthReducer(state),
-        colorTheme: getColorTheme(state),
-        headerAC:   getHeaderAC(state),
+        authData:   getSmartAppAuthReducer (state),
+        colorTheme: getColorTheme          (state),
+        headerAC:   getHeaderAC            (state),
     }
 };
 
-const mergeProps = (stateProps:any, dispatchProps:any) => {
+const mergeProps = (stateProps:any, dispatchProps:any) => {                                                   //ANY!!!!!!!!!!!!!!!!!!!!
     const state = stateProps;
     const {dispatch} = dispatchProps;
     const setMeLogOutThunk = () => dispatch( state.headerAC.setMeLogOutThunkAC ()  );
