@@ -3,7 +3,7 @@ import stl                                   from './users.module.css';
 import {NavLink}                             from 'react-router-dom';
 import {Formik}                              from 'formik';
 import { v4 as uuidv4 }                      from 'uuid';
-import {dialogsReducer}                      from "../../../redux/dialogsReducer";
+import { ForUsersSomeAttrs }                 from "../../../redux/dialogsReducer";
 import { MRGProps_Type, UsersThemes_Type }   from "./usersContainer";
 import { InitialUsersInfo_Type }             from "../../../redux/usersReducer";
 import { UsersThemesBGR_Type } from "../../../redux/backGroundSetter";
@@ -11,12 +11,12 @@ import { UsersThemesBGR_Type } from "../../../redux/backGroundSetter";
 
 type UsersProps_Type = {
     themes:     UsersThemes_Type
-    usersInfo:  InitialUsersInfo_Type & UsersThemesBGR_Type 
+    usersInfo:  InitialUsersInfo_Type & UsersThemesBGR_Type &  ForUsersSomeAttrs  
     usersFuncs: MRGProps_Type['actions']
 }
 
 export let Users:React.FC<UsersProps_Type> = ({themes,usersInfo,usersFuncs}) => {
-    console.log(usersInfo)
+    // console.log(usersInfo)
 
     type Error_Type   = {text?:string}
 
@@ -129,11 +129,10 @@ export let Users:React.FC<UsersProps_Type> = ({themes,usersInfo,usersFuncs}) => 
 
     let [isHidden, setIsHidden] = useState<null | string>(null)
 
-    let postClass=()=>{ setTimeout( ()=>{
-        setIsHidden(stl.feedbackHidden)
-        return isHidden },3000 )}
+    let postClass=()=>{ setTimeout( ()=>{setIsHidden(stl.feedbackHidden); return isHidden },3000 )}
 
-    // console.log(props)
+    // console.log(usersInfo.onSendMSGStatArr)
+
 
     return <>
         <div className={`${stl.usersPage} ${themes.userPageDnmc}`}>
@@ -248,66 +247,79 @@ export let Users:React.FC<UsersProps_Type> = ({themes,usersInfo,usersFuncs}) => 
             </div>
         </div>
 
-        {/* <FeedBacker sendingMSGStatArr={usersInfo.sendingMSGStat} feedBackWindowCloser={usersFuncs.feedBackWindowCloser} /> */}
-
+        <FeedBacker 
+        sendingMSGStatArr   = {usersInfo.onSendMSGStatArr} 
+        feedBackWindowCloser = {usersFuncs.feedBackWindowCloser} 
+        />
     </>
 }
 
-// const FeedBacker = React.memo(props=> {
-//         // console.log(props)
-//     let feedBackRef = useRef(null);
+interface properties {
+    sendingMSGStatArr: any[]
+    feedBackWindowCloser: (arrIndex: number) => void
+}
 
-//     let feedBackNamer = (i, statNum, feedBackRef )=>{
+const properties2 : properties = {
+    sendingMSGStatArr: [],
+    feedBackWindowCloser: (arrIndex) => arrIndex
+}
 
-//         // feedBackRef.current && console.log(feedBackRef.current.getAttribute('data-name'));
-//         // feedBackRef.current && feedBackRef.current.setAttribute('data-name', 'fuck-off блять!!!');
-//         // feedBackRef.current && console.log(feedBackRef.current.getAttribute('data-name'));
+const FeedBacker =({sendingMSGStatArr,feedBackWindowCloser}:properties) => {
+        console.log(sendingMSGStatArr)
+    let feedBackRef = useRef<HTMLDivElement | null>(null);
 
-//         // feedBackRef.current && console.log(feedBackRef.current.attributes.getNamedItem('data-name'));
-//         // feedBackRef.current && console.log(feedBackRef.current.attributes[0].nodeValue);
-//         // feedBackRef.current && feedBackRef.current.attributes.setNamedItem({'data-name': 'on'});
-//         // feedBackRef.current && console.log(feedBackRef.current.attributes.getNamedItem('data'));
-//         // feedBackRef.current && console.log(feedBackRef.current.attributes.attributes[0]);
+    let feedBackNamer = (i:number, statNum:number, /* feedBackRef:HTMLDivElement */ )=>{
 
-//         if (i===0){return `${stl.feedbackWindow0}`;}
+        // feedBackRef.current && console.log(feedBackRef.current.getAttribute('data-name'));
+        // feedBackRef.current && feedBackRef.current.setAttribute('data-name', 'fuck-off блять!!!');
+        // feedBackRef.current && console.log(feedBackRef.current.getAttribute('data-name'));
 
-//         if (statNum === 0 ) {}
-//         // console.log(1); /*feedBackCloserTimeOut(i);*/}
-//         if (i===1) return stl.feedbackWindow1
-//         if (i>= 2) return stl.feedbackWindow2
-//     }
+        // feedBackRef.current && console.log(feedBackRef.current.attributes.getNamedItem('data-name'));
+        // feedBackRef.current && console.log(feedBackRef.current.attributes[0].nodeValue);
+        // feedBackRef.current && feedBackRef.current.attributes.setNamedItem({'data-name': 'on'});
+        // feedBackRef.current && console.log(feedBackRef.current.attributes.getNamedItem('data'));
+        // feedBackRef.current && console.log(feedBackRef.current.attributes.attributes[0]);
 
-//     let attributer = (feedBackRef,i)=> {
-//         feedBackCloserTimeOut(i)
-//         return 'off'
-//     }
+        if (i===0){return `${stl.feedbackWindow0}`;}
 
-//     let feedBackCloser=(i)=>{ props.feedBackWindowCloser(i) }
+        if (statNum === 0 ) {}
+        // console.log(1); /*feedBackCloserTimeOut(i);*/}
+        if (i===1) return stl.feedbackWindow1
+        if (i>= 2) return stl.feedbackWindow2
+    }
 
-//     let feedBackCloserTimeOut=(i)=>{ setTimeout( ()=>{ props.feedBackWindowCloser(i)}, 5000)  }
+    let attributer = (i:number)=> {feedBackCloserTimeOut(i); return 'off'}
 
-//     return props.sendingMSGStatArr
-//         .map((el,i)=> {
-//             let cycleId  = uuidv4()
-//             // feedBackRef.current && el.statNum !== 0 && attributer(feedBackRef, cycleId)
+    let feedBackCloser=(i:number)=>{ feedBackWindowCloser(i) }
 
-//             return <div ref={feedBackRef}
-//                         data-flag={attributer(feedBackRef,i)}
-//                         key={cycleId}
-//                         id={cycleId}
-//                         className={feedBackNamer(i, el.statNum, feedBackRef)}
-//             >
-//                 <button onClick={() => feedBackCloser(i)}> X</button>
-//                 <p>{el.statNum === 0 && 'Sending message...' ||
-//                 el.statNum === 1 && `Message delivered to ${el.userName}` ||
-//                 el.statNum === 2 && `Failed to deliver message to ${el.userName} ` }
-//                 </p>
-//             </div>
-//         })
-// },
+    let feedBackCloserTimeOut=(i:number)=>{ setTimeout( ()=>{ feedBackWindowCloser(i)}, 5000)  }
+
+    return <>
+    {sendingMSGStatArr.map((el,i)=> {
+            let cycleId  = uuidv4()
+            // feedBackRef.current && el.statNum !== 0 && attributer(feedBackRef, cycleId)
+
+            return <div ref={feedBackRef}
+                        data-flag={attributer(i)}
+                        key={cycleId}
+                        id={cycleId}
+                        className={feedBackNamer(i, el.statNum)}
+            >
+                <button onClick={() => feedBackCloser(i)}> X</button>
+                <p>{el.statNum === 0 && 'Sending message...' ||
+                    el.statNum === 1 && `Message delivered to ${el.userName}` ||
+                    el.statNum === 2 && `Failed to deliver message to ${el.userName} `}
+                </p>
+            </div>
+        })}
+    </>
+}
+// ,
+
 //     function areEqual (prevProps, nextProps) {
 //         return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
 //     }
+// )
     
 
 

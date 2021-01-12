@@ -199,7 +199,7 @@ const UsersReducerPart_1 = createSelector(getInitialUserList,getPageSize,getTota
 
 const UsersReducerPart_2 = createSelector(getUserFindingError,getMSGStat,getFeedbackArr,getGeneralLDR_GIF,getUserNotFoundGIF,
                       (userFindingError,onSendMSGStatArr,feedbackArr,generalLDR_GIF,userNotFoundGIF,)=>{
-    let UsersPart_2 = {userFindingError,sendingMSGStat:onSendMSGStatArr,feedbackArr,generalLDR_GIF,userNotFoundGIF,}
+    let UsersPart_2 = {userFindingError,onSendMSGStatArr,feedbackArr,generalLDR_GIF,userNotFoundGIF,}
                 return UsersPart_2
     })    
 

@@ -252,6 +252,7 @@ const initialUsersInfo = {
     userNotFoundGIF:      nobodyFoundGIF   as string,
 };
 
+
 export type InitialUsersInfo_Type = typeof initialUsersInfo;
 
 export const usersReducer = (state = initialUsersInfo, action:ActionTypes) :InitialUsersInfo_Type  => {

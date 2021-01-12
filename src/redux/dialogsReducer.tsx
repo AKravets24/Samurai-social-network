@@ -413,6 +413,13 @@ let initialDialogsState  = {
 
 export type InitialDialogsState_Type = typeof initialDialogsState;
 
+let ForUsersSomeAttrs1 = {
+    onSendMSGStatArr: initialDialogsState.onSendMSGStatArr ,
+    feedbackArr:      initialDialogsState.feedbackArr      ,
+}
+export type ForUsersSomeAttrs = typeof ForUsersSomeAttrs1
+
+
 export const dialogsReducer = ( state = initialDialogsState, action:ActionTypes, /* date:string, time:string */ ):InitialDialogsState_Type => {
     let stateCopy = {...state};
     switch (action.type) {

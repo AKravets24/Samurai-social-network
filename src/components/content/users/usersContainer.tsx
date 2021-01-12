@@ -4,18 +4,14 @@ import {connect}                    from 'react-redux';
 import {withAuthRedirect}           from "../HOC/withAuthRedirect";
 import { withRouter }               from 'react-router-dom';
 import { compose }                  from 'redux';
-import { getHeaderAC,
-         getUsersACs,
-         getDialogACs,
-    getDialogsACs_compUsers,
-         getSmartUsersMediaData,
-         SmartUserMediaData_Type,
-         getColorTheme}    from "../../../redux/selectors";
-import stl                          from "./users.module.css";
+import   stl                        from "./users.module.css";
+import { getUsersACs,getColorTheme,
+         getDialogsACs_compUsers,
+         getSmartUsersMediaData,}   from "../../../redux/selectors";
 import { AppStateType }             from "../../../redux/redux-store"
 import { InitialUsersInfo_Type, UsersACs_Type }    from "../../../redux/usersReducer"
-import { DialogActions_Type }       from "../../../redux/dialogsReducer"
-import { UsersThemesBGR_Type } from "../../../redux/backGroundSetter";
+import { DialogActions_Type, ForUsersSomeAttrs}    from "../../../redux/dialogsReducer"
+import { UsersThemesBGR_Type }      from "../../../redux/backGroundSetter";
 
 
 type UserContProps_Type = {
@@ -25,21 +21,21 @@ type UserContProps_Type = {
     staticContext: any          // comes from WithRouter
 
     actions: MRGProps_Type['actions']
-    state:   MSTP_Type /* & UsersThemesBGR_Type  */
+    state:   MSTP_Type 
 };
 
-
-export type UsersThemes_Type = {userPageDnmc:string,generalHeaderDnmc:string,pagBTNDnmc:string,paginationSelectedDnmc:string,paginationDnmc:string,searchInputDnmc:string,userAvaDnmc:string,
-followBTNDnmc:string,followBTN_ERR_DNMC:string,userNameDnmc:string,mapWrapperDnmc:string, userUnitDnmc:string,userWriteModeDnmc:string,moreUserUnitsDnmc:string}
+export type UsersThemes_Type = {userPageDnmc:string,generalHeaderDnmc:string,pagBTNDnmc:string,paginationSelectedDnmc:string,paginationDnmc:string,searchInputDnmc:string,
+    userAvaDnmc:string,followBTNDnmc:string,followBTN_ERR_DNMC:string,userNameDnmc:string,mapWrapperDnmc:string, userUnitDnmc:string,userWriteModeDnmc:string,
+    moreUserUnitsDnmc:string}
 
 let UsersFuncContainer: React.FC<UserContProps_Type> = ({state,actions,history,location,match,staticContext}) => {                                                           //anyType!!!!!!!!!!!!!!!!!!!
-    // console.log(state)
-    let pageSize = state.smartData.pageSize;
-    let currentPage = state.smartData.currentPage;
+    
+    let pageSize:number = state.smartData.pageSize;
+    let currentPage:number = state.smartData.currentPage;
     // console.log(currentPage)
 
     useEffect( ()=> {
-        actions.getUsersThunk(state.smartData.pageSize, state.smartData.currentPage)
+        actions.getUsersThunk(pageSize,currentPage)
         history.push(`users?page=${currentPage}`)
     },[currentPage] );
 
@@ -138,6 +134,8 @@ let UsersFuncContainer: React.FC<UserContProps_Type> = ({state,actions,history,l
 
 // usersInfo:  InitialUsersInfo_Type & UsersThemesBGR_Type
 
+console.log(state.smartData)
+
     return themes.userPageDnmc ? 
     <Users
         usersInfo  = { state.smartData }
@@ -146,11 +144,8 @@ let UsersFuncContainer: React.FC<UserContProps_Type> = ({state,actions,history,l
     /> : null
 }
 
-// let AuthRedirectComponent = withAuthRedirect(UsersClassContainer);
-
-
 type MSTP_Type = {
-    smartData:  InitialUsersInfo_Type & UsersThemesBGR_Type                   // юзаются данные из 3 редюсеров но почему то ts на тип из одного не ругается
+    smartData:   InitialUsersInfo_Type & UsersThemesBGR_Type & ForUsersSomeAttrs         // юзаются данные из 3 редюсеров но почему то ts на тип из одного не ругается
     dialogsACs: DialogActions_Type
     usersACs:   UsersACs_Type
     colorTheme: string
@@ -167,7 +162,6 @@ const mapStateToProps = (state:AppStateType):MSTP_Type => {
 };
 
 type DispatchProps_Type = {dispatch: (action:any)=> void}
-
 
 export type MRGProps_Type = {
     state: MSTP_Type
@@ -206,6 +200,7 @@ const mergeProps = (stateProps:MSTP_Type, dispatchProps:DispatchProps_Type):MRGP
     return { state, actions };
 };
 
+// let AuthRedirectComponent = withAuthRedirect(UsersClassContainer);
 // let withUrlDataProfileContainer = withRouter(AuthRedirectComponent);
 // const UsersContainer = connect(mapStateToProps, null, mergeProps)(AuthRedirectComponent);
 // export default UsersContainer;
