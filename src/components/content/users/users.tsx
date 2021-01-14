@@ -254,17 +254,12 @@ export let Users:React.FC<UsersProps_Type> = ({themes,usersInfo,usersFuncs}) => 
     </>
 }
 
-interface properties {
+interface FBProps_Type {
     sendingMSGStatArr: any[]
     feedBackWindowCloser: (arrIndex: number) => void
 }
 
-const properties2 : properties = {
-    sendingMSGStatArr: [],
-    feedBackWindowCloser: (arrIndex) => arrIndex
-}
-
-const FeedBacker =({sendingMSGStatArr,feedBackWindowCloser}:properties) => {
+const FeedBacker = React.memo(({sendingMSGStatArr,feedBackWindowCloser}:FBProps_Type) => {
         console.log(sendingMSGStatArr)
     let feedBackRef = useRef<HTMLDivElement | null>(null);
 
@@ -313,13 +308,11 @@ const FeedBacker =({sendingMSGStatArr,feedBackWindowCloser}:properties) => {
             </div>
         })}
     </>
-}
-// ,
-
-//     function areEqual (prevProps, nextProps) {
-//         return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
-//     }
-// )
+},
+    function areEqual (prevProps, nextProps) {
+        return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
+    }
+)
     
 
 

@@ -39,6 +39,7 @@ let UsersFuncContainer: React.FC<UserContProps_Type> = ({state,actions,history,l
         history.push(`users?page=${currentPage}`)
     },[currentPage] );
 
+    // НАХЕРА ЭТО ДУБЛИРОВАНИЕ??
     let getUsersThunk          =(pageSize:number,currentPage:number) => {actions.getUsersThunk(pageSize,currentPage)}
     let setCurrentPageThunk    =(pageSize:number,page:number)=>         {actions.setCurrentPageThunk(pageSize,page)};
     let followThunkToggler     =(userId:number,isFollowed:boolean)=>    {actions.followThunkToggler(userId,isFollowed) };

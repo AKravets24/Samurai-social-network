@@ -209,6 +209,20 @@ export const getSmartUsersMediaData = createSelector(UsersReducerPart_1,UsersRed
 export type SmartUserMediaData_Type =  typeof getSmartUsersMediaData
 
 
+// FRIENDS RESELECTORS===============================================================================================================FRIENDS RESELECTORS==============
+
+export const getFriendsACs = (state:AppStateType) => state.friendsACs
+
+//in reSelector control
+const getFiendsList                      = (state:AppStateType) => state.friendsReducer.friendsList          ;
+const getDefaultAvatar_compFriends       = (state:AppStateType) => state.friendsReducer.defaultAvatar       ;
+const getFollowingInProgress_compFriends = (state:AppStateType) => state.friendsReducer.followingInProgress ;
+const getErrOnGettingFriends             = (state:AppStateType) => state.friendsReducer.errOnGettingFriends ;
+
+export const GetSmartFriendsReducer = createSelector (getFiendsList,getDefaultAvatar_compFriends,getFollowingInProgress_compFriends,
+    getErrOnGettingFriends, (friendsList,defaultAvatar,followingInProgress,errOnGettingFriends) => {
+        return {friendsList,defaultAvatar,followingInProgress,errOnGettingFriends}
+})
 
 //
 //getSmartUsersMediaData was here
