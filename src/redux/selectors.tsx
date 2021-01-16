@@ -12,8 +12,11 @@ export const getBackGroundSetterACs        = (state:AppStateType) => state.backG
 const getBackgroundPic                     = (state:AppStateType) => state.backgroundReducer.backgroundPic                     ;
 const getTimeToChangeTheme                 = (state:AppStateType) => state.backgroundReducer.timeToChangeTheme                 ;
 const getAuth_LDR_GIF                      = (state:AppStateType) => state.backgroundReducer.auth_LDR_GIF                      ; //also used in Profile reSelector
+
+
+export type GetSmartBGR_type = {backgroundPic:string,timeToChangeTheme:number,auth_LDR_GIF:string}
 export const getSmartBackGroundReducer = createSelector(getBackgroundPic,getTimeToChangeTheme,getAuth_LDR_GIF,
-            (backgroundPic,timeToChangeTheme,auth_LDR_GIF)=> {
+            (backgroundPic,timeToChangeTheme,auth_LDR_GIF):GetSmartBGR_type=> {
     return  {backgroundPic,timeToChangeTheme,auth_LDR_GIF}})                                                   ;
 
 export const geSmartInitialized        = createSelector(getInitialized,(appInitialized)=>{

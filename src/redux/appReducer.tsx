@@ -1,6 +1,9 @@
 import {usersApi} from "./app";
 import {timerAC} from './backGroundSetter'
 import {SetLogOutUserDataAC_Type} from "./headerReducer";
+import {Dispatch} from "redux";
+import {ThunkAction} from "redux-thunk"
+import { AppStateType } from "./redux-store";
 
 const INITIALISED_SUCCESSFULLY =  'INITIALISED_SUCCESSFULLY';
 const SET_USER_DATA            =  'SET_USER_DATA';
@@ -23,42 +26,45 @@ const captchaSetterAC          = (captcha:string):CaptchaSetterAC_Type          
 const errGetCaptchaAC          = (error:string):ErrGetCaptchaAC_Type                      =>({type: ERR_GET_CAPTCHA, error    })                                              
 
 
+type ActionTypes=InitialisedSuccessAC_Type|SetUserDataAC_Type|AuthErrCatcherAC_Type|SetLogOutUserDataAC_Type|CaptchaSetterAC_Type|ErrGetCaptchaAC_Type;
 
-type ActionTypes = InitialisedSuccessAC_Type | SetUserDataAC_Type | AuthErrCatcherAC_Type | SetLogOutUserDataAC_Type | 
-CaptchaSetterAC_Type | ErrGetCaptchaAC_Type ;
+type Dispatch_Type = Dispatch<ActionTypes>
+type ThunkAC_Type =  ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes >
 
 
-const getLogInThunkAC      = () =>                             async (dispatch:any) => {
+const getLogInThunkAC      = ():ThunkAC_Type =>                             async (dispatch:Dispatch_Type) => {
     let response = await usersApi.getLogIn();
     let {id, email, login} = response.data.data;
     response.status===200 ?
         dispatch(setUserDataAC(id, email, login)) :
         dispatch(authErrCatcherAC(response.message))
 };
-const setMeLoginThunkAC    = (email:string,password:string,rememberMe:boolean, captchaCode:string) => async (dispatch:any) => {
+const setMeLoginThunkAC    = (email:string,password:string,rememberMe:boolean,captchaCode:string):any =>                    // ANY TYPE!!!!!!!!!!!!!!
+    async (dispatch:any) => {
     let response = await usersApi.setMeLogin(email, password, rememberMe,captchaCode)
     console.log(response);    
     response.data.resultCode===0  ? dispatch(getLogInThunkAC()):
     response.data.resultCode===10 ? dispatch(getCaptchaThunkAC())&& dispatch(errGetCaptchaAC(response.data.messages[0])):
     dispatch(authErrCatcherAC(response.message))  
 };
-const getCaptchaThunkAC    = () =>                             async (dispatch:any) => {
+const getCaptchaThunkAC    = ():ThunkAC_Type =>                             async (dispatch:Dispatch_Type) => {
    let response = await usersApi.getCaptcha();
    console.log(response);
    response.status===200 ? dispatch(captchaSetterAC(response.data.url)):dispatch(errGetCaptchaAC(response))
 }
-const initializeAppThunkAC = (timer:number) =>                 async (dispatch:any) => {
+const initializeAppThunkAC = (timer:number):any =>                 async (dispatch:any) => {                                 // ANY TYPE!!!!!!!!!!!!!!
     dispatch(timerAC(timer))
     dispatch(getLogInThunkAC())
     .then( () => { dispatch(initialisedSuccessAC());})
 };
 
 export type App_ACs_Type = {
-    getLogInThunkAC:      ()=> void
-    setMeLoginThunkAC:    (email:string,password:string,rememberMe:boolean, captchaCode:string)=>void
-    getCaptchaThunkAC:    ()=> void
-    initializeAppThunkAC: (timer:number) => void
+    getLogInThunkAC:      ()=> ThunkAC_Type
+    setMeLoginThunkAC:    (email:string,password:string,rememberMe:boolean, captchaCode:string)=>ThunkAC_Type
+    getCaptchaThunkAC:    ()=> ThunkAC_Type
+    initializeAppThunkAC: (timer:number) => ThunkAC_Type
 }
+
 const actionCreators:App_ACs_Type = {getLogInThunkAC,setMeLoginThunkAC,getCaptchaThunkAC,initializeAppThunkAC};
 export const appAC = (state=actionCreators) => state;
 

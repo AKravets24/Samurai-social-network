@@ -158,8 +158,6 @@ export let Friends:React.FC<FriendsProps_Type> = ({themes,palsFuncs,palsInfo}) =
     let firstBlockClass  = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
     let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
 
-   
-
     let userIdTalkModeOff=(e:React.SyntheticEvent) => {                                              
         setWrapperLocker('');setIsDisabled(false);
         let target = e.target as HTMLInputElement
@@ -186,7 +184,7 @@ export let Friends:React.FC<FriendsProps_Type> = ({themes,palsFuncs,palsInfo}) =
         setWrapperLocker('');
         setIsDisabled(false);
     };
-    
+
     let followTogglerListener=(userId:number,userIsFollowed:boolean)=>{palsFuncs.followThunkToggler(userId, userIsFollowed)}
     let getMyFriendsListener = () => {palsFuncs.getMyFriendsListThunk()}
 

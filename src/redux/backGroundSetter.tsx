@@ -168,7 +168,7 @@ import { type } from "os";
 
 
 const TIMER   = 'TIMER';
-type TimerAC_Type = {type: typeof TIMER, timer:number}
+export type TimerAC_Type = {type: typeof TIMER, timer:number}
 export const timerAC = (timer:number):TimerAC_Type => ({type: TIMER, timer});
 
 type ActionTypes = TimerAC_Type;
@@ -193,7 +193,7 @@ export type UsersThemesBGR_Type = {generalLDR_GIF:string}
 let initialState = {
     theme:             ''    as string,
     backgroundPic:     ''    as string,
-    timeToChangeTheme: null  as null | number,
+    timeToChangeTheme: 0     as number,
     auth_LDR_GIF:      ''    as string,
     profileThemes: {
         panoramaPic:      ''   as string,

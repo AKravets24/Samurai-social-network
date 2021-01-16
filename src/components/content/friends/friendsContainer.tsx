@@ -3,8 +3,6 @@ import {connect}                  from 'react-redux';
 import {Friends}                  from './friends'
 import {compose}                  from 'redux';
 import {withRouter}               from 'react-router-dom';
-//@ts-ignore
-// import {getUsersInfo} from "../../../redux/selectors";
 import stl                        from './../users/users.module.css'
 import { getColorTheme, GetSmartFriendsReducer,getFriendsACs, getDialogsACs_compUsers } from "../../../redux/selectors";
 import { InitialFriendsInfo_Type, FriendsACs } from "../../../redux/friendsReducer";
@@ -26,7 +24,7 @@ export type PalsThemes_Type = {friendsGeneralDnmc:string,pagBTNDnmc:string,pagin
 
 
 let  FriendsFuncContainer:React.FC<FriendsContProps_Type> = ({ actions,state }) => {
-    console.log(state)
+    // console.log(state)
 
     useEffect(()=> {actions.getMyFriendsListThunk()},[]);
 
@@ -156,7 +154,7 @@ const mergeProps = (stateProps:MSTP_Type, dispatchProps:DispatchProps_Type):MRGP
 
 export default compose(
     //@ts-ignore
-    connect(mapStateToProps ,null, mergeProps),
+    (mapStateToProps ,null, mergeProps),
     withRouter,
     // withAuthRedirect,
 )(FriendsFuncContainer);

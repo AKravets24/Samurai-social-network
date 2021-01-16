@@ -132,9 +132,12 @@
 
 
 
-import maleProfilePic  from './img/dialogs/male.png';
-import { usersApi }    from "./app";
-import nobodyFoundGIF  from './img/users/polarPupCry.gif';
+import maleProfilePic   from  './img/dialogs/male.png';
+import { usersApi }     from  "./app";
+import nobodyFoundGIF   from  './img/users/polarPupCry.gif';
+import { AppStateType } from  "./../redux/redux-store"
+import { Dispatch }     from 'redux';
+import { ThunkAction }  from 'redux-thunk';
 
 const FOLLOW_ACTION_TOGGLER         = 'FOLLOW_ACTION_TOGGLER';
 const SET_USERS                     = 'SET_USERS';
@@ -175,16 +178,21 @@ type ActionTypes = FollowBTNTogglerAC_Type | SetUsersAC_Type | SetCurrentPageAC_
     ToggleFollowingProgressAC_Type | ErrCatcherAtUsersGetAC_Type | ErrCatcherAtUsersFindAC_Type | SetErrorToNullAC_Type |
     ErrCatcherAtFollowingAC_Type | UpdateSearchFieldAC_Type;
 
-const getUsersThunkAC           = (pageSize:number, currentPage:number)                    => async (dispatch:any, getState:any) =>  {
+type GetState_Type = ()=> AppStateType      // для примера типизации санок внутри скобок
+type Dispatch_Type = Dispatch<ActionTypes>  // для примера типизации санок внутри скобок
+
+type ThunkAction_type = ThunkAction<Promise<void>,AppStateType,unknown,ActionTypes>
+
+const getUsersThunkAC = (pageSize:number,currentPage:number):ThunkAction_type => // после скобок - типизация в сооотв с документашкой
+    async (dispatch:Dispatch_Type, getState:GetState_Type) =>  {    // getState это необязательный  доп аргумент, который в данной реализации проекта не используется
     // console.log(getState());
     dispatch(toggleIsLoadingAC(true));
     let response = await usersApi.getUsers(pageSize, currentPage);
-    // console.log(response)
     response.status===200 ?
         dispatch(setUsersAC(response.data.items,response.data.totalCount)):dispatch(errCatcherAtUsersGetAC(JSON.stringify(response.message)));
     dispatch(toggleIsLoadingAC(false));
 };
-const setCurrentPageThunkAC     = (pageSize:number, currentPage:number)                    => async (dispatch:any) =>  {
+const setCurrentPageThunkAC = (pageSize:number, currentPage:number):ThunkAction_type  => async (dispatch:Dispatch_Type) =>  {
     dispatch(toggleIsLoadingAC(true));
     dispatch(setCurrentPageAC(currentPage));
     dispatch(setErrorToNullAC());
@@ -194,7 +202,7 @@ const setCurrentPageThunkAC     = (pageSize:number, currentPage:number)         
         dispatch(setUsersAC(response.data.items,response.data.totalCount)) : dispatch(errCatcherAtUsersGetAC(JSON.stringify(response.message)))
     dispatch(toggleIsLoadingAC(false));
 };
-const followThunkTogglerAC      = (userId:number, isFollowed:boolean)                      => async (dispatch:any) =>  {
+const followThunkTogglerAC  = (userId:number, isFollowed:boolean):ThunkAction_type    => async (dispatch:Dispatch_Type) =>  {
     dispatch(toggleFollowingProgressAC(true, userId));
     let followToggler;
     isFollowed?followToggler=usersApi.unFollowRequest:followToggler=usersApi.followRequest;
@@ -203,7 +211,7 @@ const followThunkTogglerAC      = (userId:number, isFollowed:boolean)           
         dispatch(errCatcherAtFollowingAC(userId, parseInt(JSON.stringify(response.message).replace(/\D+/g,""))));
     dispatch(toggleFollowingProgressAC(false, userId));
 };
-const getCertainUserThunkAC     = (pageSize:number,userName:string,pageOfEquals:number=1)  => async (dispatch:any) =>  {
+const getCertainUserThunkAC = (pageSize:number,userName:string,pageOfEquals:number=1):ThunkAction_type  => async (dispatch:Dispatch_Type) =>  {
     // dispatch (toggleUserSearchModeAC(true))
     dispatch (toggleIsLoadingAC(true));
     dispatch(setCurrentPageAC(pageOfEquals))
@@ -216,10 +224,10 @@ const getCertainUserThunkAC     = (pageSize:number,userName:string,pageOfEquals:
 export type UsersACs_Type = {
     setErrorToNullAC     : ()=>SetErrorToNullAC_Type
     updateSearchFieldAC  : (text:string)=>UpdateSearchFieldAC_Type
-    getUsersThunkAC      : (pageSize:number, currentPage:number)=>void
-    setCurrentPageThunkAC: (pageSize:number, currentPage:number)=>void
-    followThunkTogglerAC : (userId:number, isFollowed:boolean)=>void
-    getCertainUserThunkAC: (pageSize:number,userName:string,pageOfEquals:number)=>void
+    getUsersThunkAC      : (pageSize:number, currentPage:number)=>ThunkAction_type
+    setCurrentPageThunkAC: (pageSize:number, currentPage:number)=>ThunkAction_type
+    followThunkTogglerAC : (userId:number, isFollowed:boolean)=>ThunkAction_type
+    getCertainUserThunkAC: (pageSize:number,userName:string,pageOfEquals:number)=>ThunkAction_type
 }
 
 const actionCreators:UsersACs_Type = {getUsersThunkAC, setCurrentPageThunkAC, 
@@ -227,14 +235,7 @@ const actionCreators:UsersACs_Type = {getUsersThunkAC, setCurrentPageThunkAC,
 export const usersACs = (state = actionCreators) => { return state };
 
 
-type InitialUsersList_Type = {
-    followed: boolean
-    id: number
-    name: string
-    photos: { small: number, large: string }
-    status: null|string
-    uniqueUrlName: null|string
-}
+type InitialUsersList_Type={followed:boolean,id:number,name:string,photos:{small:number,large:string},status:null|string,uniqueUrlName:null|string}
 
 const initialUsersInfo = {
     initialUsersList:     []               as InitialUsersList_Type[],

@@ -213,6 +213,9 @@ import allDialogsLoadeGIF          from './loader/dialogs/spinner_yellow.gif';
 import envelopeGIF                 from './loader/dialogs/envelope.gif';
 import meetLinesGIF                from './loader/dialogs/lGreenMeetLines.gif';
 import radioTowerPIC               from './img/dialogs/radioTower1.png';
+import { Dispatch }                from "redux";
+import { ThunkAction }             from "redux-thunk"; 
+import { AppStateType } from './redux-store';
 
 const SEND_MESSAGE_TO_USER         = "SEND-MESSAGE-TO-USER";
 const SET_MY_COMPANIONS_LIST       = 'SET_MY_COMPANIONS_LIST';
@@ -275,21 +278,25 @@ type ActionTypes = SetDialogsAreLoadingToggleAC_Type | SetMyCompanions_Type | se
     CreateNewDialogAC_Type | SetErrCertainDialogGetAC_Type | NewMsgActonCombiner_Type | FeedbackRefPushAC_Type |
     SetSelectedMessagesAC_Type | DeleteMessageAC_Type | setAsSpamMessage;
 
-const getMyNegotiatorsListThunkAC  = () =>                                               async (dispatch:any) => {
+type Dispatch_Type = Dispatch<ActionTypes>;
+type ThunkAC_Type = ThunkAction<Promise<void>,AppStateType,unknown,ActionTypes> 
+
+
+const getMyNegotiatorsListThunkAC  = ():ThunkAC_Type =>                                               async (dispatch:Dispatch_Type) => {
     dispatch(setDialogsAreLoadingToggleAC(true, false))
     let response = await usersApi.getMyNegotiatorsList();
     response.status===200 ? dispatch(setMyCompanions(response.data)) :
         dispatch(setErrMyNegotiatorsList(parseInt(JSON.stringify(response.message).replace(/\D+/g,"")))); // errorCode
     dispatch(setDialogsAreLoadingToggleAC(false, false))
 };
-const getTalkWithUserThunkAC       = (userId:number) =>                                  async (dispatch:any) => {
+const getTalkWithUserThunkAC       = (userId:number):ThunkAC_Type =>                                  async (dispatch:Dispatch_Type) => {
     dispatch(setDialogsAreLoadingToggleAC(false, true))
     let response = await usersApi.getTalkWithUser(userId);
     response.status===200 ? dispatch(setTalkWithUser(response.data)):
         dispatch(setErrCertainDialogGetAC(JSON.stringify(response.message)));
     dispatch(setDialogsAreLoadingToggleAC(false, false))
 };
-const talkedBeforeThunkAC          = (userId:number) =>                                  async (dispatch:any) => {
+const talkedBeforeThunkAC          = (userId:number):ThunkAC_Type =>                                  async (dispatch:Dispatch_Type) => {
     dispatch(setDialogsAreLoadingToggleAC(true, true))
     let response = await usersApi.getMyNegotiatorsList()                                                                // получаем список диалогов
     if(response.status===200) {
@@ -311,7 +318,7 @@ const talkedBeforeThunkAC          = (userId:number) =>                         
     }
     dispatch(setDialogsAreLoadingToggleAC(false, false))
 };
-const addPrevMessagesThunkAC       = (userId:number,msgCount:number,pageNumber:number)=> async (dispatch:any) => {
+const addPrevMessagesThunkAC       = (userId:number,msgCount:number,pageNumber:number):ThunkAC_Type=> async (dispatch:Dispatch_Type) => {
     dispatch(prevMsgsloadingTogglerAC(true));
     let response = await usersApi.getTalkWithUser(userId,  msgCount, pageNumber )
     console.log(response)
@@ -319,20 +326,20 @@ const addPrevMessagesThunkAC       = (userId:number,msgCount:number,pageNumber:n
     dispatch(prevMsgsloadingTogglerAC(false));
 
 };
-const deleteMessageThunkAC         = (messageId:string,index:number) =>                  async (dispatch:any) => {
+const deleteMessageThunkAC         = (messageId:string,index:number):ThunkAC_Type =>                  async (dispatch:Dispatch_Type) => {
     let data = await usersApi.deleteMessage(messageId)
     data.status===200 ? dispatch (deleteMessageAC(messageId,index)): console.log(data);
 };
-const setSpamMessagesThunkAC       = (messageId:string,index:number) =>                  async (dispatch:any) => {
+const setSpamMessagesThunkAC       = (messageId:string,index:number):ThunkAC_Type =>                  async (dispatch:Dispatch_Type) => {
     let data = await usersApi.setAsSpamMessage(messageId)
     data.response===200? dispatch(setAsSpamMessage(messageId,index)) : console.log(data)};
-const getNewMessagesRequestThunkAC = () =>                                               async (dispatch:any) => {
+const getNewMessagesRequestThunkAC = ():ThunkAC_Type =>                                               async (dispatch:Dispatch_Type) => {
     dispatch(newMsgActonCombiner(0,true,false))
     let response = await usersApi.getNewMessages()
     response.status === 200 ? dispatch(newMsgActonCombiner(response.data,false,false)) :
         dispatch(newMsgActonCombiner(0,false,true));
 };
-const sendMessageToUserThunkAC     = (userId:number,body:string,actionKey:string,userName:string)=> async (dispatch:any) => {
+const sendMessageToUserThunkAC     = (userId:number,body:string,actionKey:string,userName:string):ThunkAC_Type=> async (dispatch:Dispatch_Type) => {
         dispatch(onSendingMSGEStatusAC(0, userId,actionKey,userName));
         let response = await usersApi.sendMsgToTalker(userId,body)
         response.status === 200 ?
@@ -341,16 +348,16 @@ const sendMessageToUserThunkAC     = (userId:number,body:string,actionKey:string
     };
 
 export type DialogActions_Type = {
-    getMyNegotiatorsListThunkAC:  () => void
-    getTalkWithUserThunkAC:       (userId:number) => void
-    sendMessageToUserThunkAC:     (userId:number,body:string,actionKey:string,userName:string) => void
+    getMyNegotiatorsListThunkAC:  () => ThunkAC_Type
+    getTalkWithUserThunkAC:       (userId:number) => ThunkAC_Type
+    sendMessageToUserThunkAC:     (userId:number,body:string,actionKey:string,userName:string) => ThunkAC_Type
     createNewDialogAC:            (userId:number, fullName:string, photos:Photos_Type) => CreateNewDialogAC_Type
-    talkedBeforeThunkAC:          (userId:number) => void
+    talkedBeforeThunkAC:          (userId:number) => ThunkAC_Type
     setSelectedMessagesAC:        (messageId:string) => SetSelectedMessagesAC_Type
-    setSpamMessagesThunkAC:       (messageId:string,index:number) => void
-    deleteMessageThunkAC:         (messageId:string,index:number) => void
-    getNewMessagesRequestThunkAC: () => void
-    addPrevMessagesThunkAC:       (userId:number,msgCount:number,pageNumber:number) => void
+    setSpamMessagesThunkAC:       (messageId:string,index:number) => ThunkAC_Type
+    deleteMessageThunkAC:         (messageId:string,index:number) => ThunkAC_Type
+    getNewMessagesRequestThunkAC: () => ThunkAC_Type
+    addPrevMessagesThunkAC:       (userId:number,msgCount:number,pageNumber:number) => ThunkAC_Type
     feedBackWindowCloserAC:       (arrIndex:number) => FeedBackWindowCloserAC_Type
     feedbackRefPushAC:            (el:any) => FeedbackRefPushAC_Type
 }

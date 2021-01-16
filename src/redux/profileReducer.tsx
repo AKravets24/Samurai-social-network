@@ -1,16 +1,18 @@
-import Avatar                  from "./img/profilePic/avatar.jpg";
-import faceBookLogo            from "./img/profilePic/facebook.png";
-import gitHubLogo              from "./img/profilePic/gitHub.png";
-import instagramLogo           from "./img/profilePic/instagram.png";
-import mainLinkLogo            from "./img/profilePic/mainLink.png";
-import websiteLogo             from "./img/profilePic/webSite.png";
-import twitterLogo             from "./img/profilePic/twitter.png";
-import vkLogo                  from "./img/profilePic/vk.png";
-import youTubeLogo             from "./img/profilePic/youtube.png";
+import Avatar           from "./img/profilePic/avatar.jpg";
+import faceBookLogo     from "./img/profilePic/facebook.png";
+import gitHubLogo       from "./img/profilePic/gitHub.png";
+import instagramLogo    from "./img/profilePic/instagram.png";
+import mainLinkLogo     from "./img/profilePic/mainLink.png";
+import websiteLogo      from "./img/profilePic/webSite.png";
+import twitterLogo      from "./img/profilePic/twitter.png";
+import vkLogo           from "./img/profilePic/vk.png";
+import youTubeLogo      from "./img/profilePic/youtube.png";
 
-import maleProfilePic          from './img/dialogs/male.png'
-import {usersApi}              from "./app";
-import { type } from "os";
+import maleProfilePic   from './img/dialogs/male.png'
+import {   usersApi  }  from "./app";
+import {   Dispatch  }  from "redux"
+import { ThunkAction }  from "redux-thunk"
+import { AppStateType } from "./redux-store";
 
 const ADD_POST                    = "ADD-POST";
 const SET_PROFILE                 = 'SET_PROFILE';
@@ -71,8 +73,10 @@ type ActionTypes = SetProfileAC_Type | StatusSetterAC_Type | AddPostAC_Type | To
     SetErrorToNullAC_Type | ErrCattcherAtStatUpdateAC_Type | ErrCatcherAtAvaUpdateAC_Type | SendMSGToUserAC_Type | ErrOnSendingMSG_Type | 
     SendingStatCleaner_Type;
 
+type ThunkAC_Type=ThunkAction<Promise<void>,AppStateType,unknown,ActionTypes>
+type Dispatch_Type = Dispatch<ActionTypes>
 
-const getProfileThUnkAC     = (userId:number, isMe:boolean)              => async (dispatch:any) => {
+const getProfileThUnkAC     = (userId:number, isMe:boolean):ThunkAC_Type       => async (dispatch:Dispatch_Type) => {
     dispatch(toggleIsLoadingAC(true));
     let status='', userName='', profileData='';
     let statusResponse = await usersApi.getStatus(userId)
@@ -92,7 +96,7 @@ const getProfileThUnkAC     = (userId:number, isMe:boolean)              => asyn
     dispatch(toggleIsLoadingAC(false));
 };
 
-const followThunkTogglerAC  = (userId:number, isFollowed:boolean)        => async (dispatch:any) => {
+const followThunkTogglerAC  = (userId:number, isFollowed:boolean):ThunkAC_Type => async (dispatch:Dispatch_Type) => {
     dispatch(followingTogglerAC(true));dispatch(setErrorToNullAC());
     let followToggler;
     isFollowed?followToggler=usersApi.unFollowRequest:followToggler=usersApi.followRequest;
@@ -102,13 +106,13 @@ const followThunkTogglerAC  = (userId:number, isFollowed:boolean)        => asyn
     dispatch(followingTogglerAC(false));
 };
 
-const updateStatusThunkAC   = (text:string)                              => async (dispatch:any) => {
+const updateStatusThunkAC   = (text:string):ThunkAC_Type                       => async (dispatch:Dispatch_Type) => {
     let response = await usersApi.updateMyStatus(text)
     response.status===200 ?
     dispatch(statusSetterAC(JSON.parse(response.config.data).status)) : dispatch(errCattcherAtStatUpdateAC(JSON.stringify(response.message)));
 };
 
-const updateMyAvatarThunkAC = (file:any)                                 => async (dispatch:any) => {
+const updateMyAvatarThunkAC = (file:any):ThunkAC_Type                          => async (dispatch:Dispatch_Type) => {
     let response = await usersApi.updateMyAvatar(file)
     // console.log(parseInt(JSON.stringify(response.message).replace(/\D+/g,"")))
     console.log(response)
@@ -117,7 +121,7 @@ const updateMyAvatarThunkAC = (file:any)                                 => asyn
         dispatch(errCatcherAtAvaUpdateAC(parseInt(JSON.stringify(response.message).replace(/\D+/g,""))));
 };
 
-const sendMsgToTalkerThunkAC = (userId:number, message:string)           => async (dispatch:any) => {
+const sendMsgToTalkerThunkAC = (userId:number, message:string):ThunkAC_Type    => async (dispatch:Dispatch_Type) => {
     let response = await usersApi.sendMsgToTalker(userId,message);   
     console.log(response);
     
@@ -126,7 +130,7 @@ const sendMsgToTalkerThunkAC = (userId:number, message:string)           => asyn
         dispatch(errOnSendingMSGToUserAC(parseInt(JSON.stringify(response.message).replace(/\D+/g,""))));
 }
 
-const afterSendMSGStatCleaner      = ()                                       => (dispatch:any)=> {
+const afterSendMSGStatCleaner = ():any                => (dispatch:any)=> {          // поправить экшн нормальным написанием 
     dispatch(sendingStatCleanerAC())
 }
 
@@ -139,11 +143,11 @@ export type profileACs_Type = {
     addPostAC:  (finalPost:string, date:string, time:string) => AddPostAC_Type 
     setProfileAC: (profileData:any,isFollowed:boolean,status:string) => SetProfileAC_Type
     toggleIsLoadingAC: (isLoading:boolean)=> ToggleIsLoadingAC_Type
-    getProfileThUnkAC: (userId:number, isMe:boolean)=> void
-    updateStatusThunkAC: (text:string) => void  
-    updateMyAvatarThunkAC: (file:any) => void 
-    followThunkTogglerAC: (userId:number, isFollowed:boolean)=> void
-    sendMsgToTalkerThunkAC: (userId:number, message:string) =>void
+    getProfileThUnkAC: (userId:number, isMe:boolean)=> ThunkAC_Type
+    updateStatusThunkAC: (text:string) => ThunkAC_Type  
+    updateMyAvatarThunkAC: (file:any) => ThunkAC_Type 
+    followThunkTogglerAC: (userId:number, isFollowed:boolean)=> ThunkAC_Type
+    sendMsgToTalkerThunkAC: (userId:number, message:string) => ThunkAC_Type
     afterSendMSGStatCleaner: ()=>void
 }
 
@@ -151,8 +155,6 @@ const actionsCreators:profileACs_Type = { addPostAC, setProfileAC, toggleIsLoadi
     followThunkTogglerAC, sendMsgToTalkerThunkAC, afterSendMSGStatCleaner };
 
 export const profileACs = (state= actionsCreators)=> { return state };
-
-
 
 let initialProfileState = {
     wallPosts:           [

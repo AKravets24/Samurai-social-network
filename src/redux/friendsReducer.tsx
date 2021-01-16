@@ -1,5 +1,8 @@
-import maleProfilePic from './img/dialogs/male.png';
-import {usersApi}     from "./app";
+import maleProfilePic  from './img/dialogs/male.png';
+import {usersApi}      from "./app";
+import { Dispatch }    from "redux";
+import { ThunkAction } from "redux-thunk"
+import { AppStateType } from './redux-store';
 
 
 const GOT_FRIENDS_LIST              = 'GET_FRIENDS';
@@ -25,7 +28,10 @@ const errCatcherAtFriendsGetAC      = (usersGettingError:string):ErrCatcherAtFri
 
 type ActionTypes = GetMyFriendsAC_Type | FollowBTNTogglerAC_Type | ErrCatcherAtFollowingAC_Type | ToggleFollowingProgressAC_Type | ErrCatcherAtFriendsGetAC_Type
 
-const followThunkTogglerAC          = (userId:number,isFollowed:boolean)  =>  async (dispatch:any) =>  {
+type Dispatch_Type = Dispatch<ActionTypes>
+type ThunkAC_Type = ThunkAction<Promise<void>,AppStateType,unknown,ActionTypes>
+
+const followThunkTogglerAC          = (userId:number,isFollowed:boolean):ThunkAC_Type  =>  async (dispatch:Dispatch_Type) =>  {
     dispatch(toggleFollowingProgressAC(true, userId));
     let followToggler;
     isFollowed?followToggler=usersApi.unFollowRequest:followToggler=usersApi.followRequest;
@@ -35,7 +41,7 @@ const followThunkTogglerAC          = (userId:number,isFollowed:boolean)  =>  as
     dispatch(toggleFollowingProgressAC(false, userId));
 };
 
-const getMyFriendsListThunkAC       = ()                                  =>  async (dispatch:any) =>  {
+const getMyFriendsListThunkAC       = ():ThunkAC_Type                                  =>  async (dispatch:Dispatch_Type) =>  {
     let response = await usersApi.getMyFriends()
     // console.log(response);
         response.status===200 ?
@@ -43,8 +49,8 @@ const getMyFriendsListThunkAC       = ()                                  =>  as
 };
 
 export type FriendsACs = {
-    followThunkTogglerAC   : (userId:number,isFollowed:boolean) => void
-    getMyFriendsListThunkAC: () => void
+    followThunkTogglerAC   : (userId:number,isFollowed:boolean) => ThunkAC_Type
+    getMyFriendsListThunkAC: () => ThunkAC_Type
 }
 
 const actionCreators:FriendsACs = {getMyFriendsListThunkAC,followThunkTogglerAC};
