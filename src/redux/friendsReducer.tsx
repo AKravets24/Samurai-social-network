@@ -1,5 +1,5 @@
 import maleProfilePic  from './img/dialogs/male.png';
-import {usersApi}      from "./app";
+import {usersApi,UsersArr}      from "./app";
 import { Dispatch }    from "redux";
 import { ThunkAction } from "redux-thunk"
 import { AppStateType } from './redux-store';
@@ -11,16 +11,14 @@ const TOGGLE_IS_FOLLOWING_PROGRESS  = 'TOGGLE_IS_FOLLOWING_PROGRESS';
 const ERROR_AT_FOLLOWING_TOGGLER    = 'ERROR_AT_FOLLOWING_TOGGLER';
 const ERROR_AT_GETTING_USERS        = 'ERROR_AT_GETTING_USERS';
 
-export type FriendsListContent_Type = {name:string,error:string, followed:boolean,id:number|any,photos:{small:string,large:string},status:string,uniqueUrlName:null|string}
-
-type GetMyFriendsAC_Type            = {type: typeof GOT_FRIENDS_LIST, returnedList: FriendsListContent_Type[] }
+type GetMyFriendsAC_Type            = {type: typeof GOT_FRIENDS_LIST, returnedList: UsersArr[] }
 type FollowBTNTogglerAC_Type        = {type: typeof FOLLOW_ACTION_TOGGLER, userId:number, isFollowed:boolean}
 type ErrCatcherAtFollowingAC_Type   = {type: typeof ERROR_AT_FOLLOWING_TOGGLER, userId:number,errorCode:number}
 type ToggleFollowingProgressAC_Type = {type: typeof TOGGLE_IS_FOLLOWING_PROGRESS, isLoading:boolean, userId:number}
 type ErrCatcherAtFriendsGetAC_Type  = {type: typeof ERROR_AT_GETTING_USERS, usersGettingError:string}
 
 
-const getMyFriendsAC                = (returnedList:FriendsListContent_Type[]):GetMyFriendsAC_Type        =>  ({type: GOT_FRIENDS_LIST, returnedList});
+const getMyFriendsAC                = (returnedList:UsersArr[]):GetMyFriendsAC_Type                       =>  ({type: GOT_FRIENDS_LIST, returnedList});
 const followBTNTogglerAC            = (userId:number,isFollowed:boolean):FollowBTNTogglerAC_Type          =>  ({type: FOLLOW_ACTION_TOGGLER,userId,isFollowed});
 const errCatcherAtFollowingAC       = (userId:number,errorCode:number):ErrCatcherAtFollowingAC_Type       =>  ({type: ERROR_AT_FOLLOWING_TOGGLER,userId,errorCode});
 const toggleFollowingProgressAC     = (isLoading:boolean, userId:number):ToggleFollowingProgressAC_Type   =>  ({type: TOGGLE_IS_FOLLOWING_PROGRESS, isLoading, userId});
@@ -35,17 +33,17 @@ const followThunkTogglerAC          = (userId:number,isFollowed:boolean):ThunkAC
     dispatch(toggleFollowingProgressAC(true, userId));
     let followToggler;
     isFollowed?followToggler=usersApi.unFollowRequest:followToggler=usersApi.followRequest;
-    let response = await followToggler(userId)
-        response.status===200 ? dispatch(followBTNTogglerAC(userId,!isFollowed)) :
-        dispatch(errCatcherAtFollowingAC(userId,parseInt(JSON.stringify(response.message).replace(/\D+/g,"")))); // errorCode
+    try{let response = await followToggler(userId)
+        if(response.status===200) dispatch(followBTNTogglerAC(userId,!isFollowed)) }
+    catch (err) { dispatch(errCatcherAtFollowingAC(userId,parseInt(JSON.stringify(err.message).replace(/\D+/g,""))));} // errorCode
     dispatch(toggleFollowingProgressAC(false, userId));
 };
 
 const getMyFriendsListThunkAC       = ():ThunkAC_Type                                  =>  async (dispatch:Dispatch_Type) =>  {
-    let response = await usersApi.getMyFriends()
-    // console.log(response);
-        response.status===200 ?
-        dispatch(getMyFriendsAC(response.data.items)):dispatch(errCatcherAtFriendsGetAC(JSON.stringify(response.message)))
+    try {let response = await usersApi.getMyFriends()
+        console.log(response);
+        if(response.status===200) dispatch(getMyFriendsAC(response.data.items)) }
+    catch(err){dispatch(errCatcherAtFriendsGetAC(JSON.stringify(err.message)))}
 };
 
 export type FriendsACs = {
@@ -59,7 +57,7 @@ export const friendsACs =(state=actionCreators)=>{return state};
 
 
 const initialFriendsInfo  = {
-    friendsList: []                 as FriendsListContent_Type[],
+    friendsList: []                 as UsersArr[],
     defaultAvatar: maleProfilePic   as string,
     followingInProgress: []         as number[],
     errOnGettingFriends: ''         as string,
@@ -73,10 +71,10 @@ export const friendsReducer = (state = initialFriendsInfo, action:ActionTypes) :
         case GOT_FRIENDS_LIST:             return {...state, friendsList: action.returnedList};
         // case ERROR_AT_GETTING_USERS:       return {...state,errOnGettingFriends: action.usersGettingError}
         case ERROR_AT_GETTING_USERS:       return {...state, errOnGettingFriends: action.usersGettingError.substr(1 ,action.usersGettingError.length-2)};
-        case FOLLOW_ACTION_TOGGLER:        return {...state,friendsList:state.friendsList.map((currentUser:FriendsListContent_Type)=> {
+        case FOLLOW_ACTION_TOGGLER:        return {...state,friendsList:state.friendsList.map((currentUser:UsersArr)=> {
                     if (+currentUser.id === +action.userId) { return {...currentUser, followed: action.isFollowed}
                     } return {...currentUser} })};
-        case ERROR_AT_FOLLOWING_TOGGLER:   return {...state,friendsList:state.friendsList.map((currentUser:FriendsListContent_Type)=> {
+        case ERROR_AT_FOLLOWING_TOGGLER:   return {...state,friendsList:state.friendsList.map((currentUser:UsersArr)=> {
                 if (currentUser.id == action.userId) { return {...currentUser, error: `${action.errorCode} error!`  }
                 } return {...currentUser} })};
         case TOGGLE_IS_FOLLOWING_PROGRESS: return {...state,followingInProgress: action.isLoading

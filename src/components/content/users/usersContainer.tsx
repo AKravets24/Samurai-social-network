@@ -135,7 +135,7 @@ let UsersFuncContainer: React.FC<UserContProps_Type> = ({state,actions,history,l
 
 // usersInfo:  InitialUsersInfo_Type & UsersThemesBGR_Type
 
-console.log(state.smartData)
+// console.log(state.smartData)
 
     return themes.userPageDnmc ? 
     <Users

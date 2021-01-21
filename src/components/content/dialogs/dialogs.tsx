@@ -5,11 +5,10 @@ import {withRouter, NavLink}                 from 'react-router-dom';
 import {Formik}                              from 'formik';
 import stl                                   from './dialogs.module.css';
 import {
-    getColorTheme,
-    getDialogsACs_compDialogs,
-    getDialogsReducer,
+    getColorTheme,getDialogsACs_compDialogs,
     getMyId, getSmartDialogsReducer}         from "../../../redux/selectors";
-import { CertainDialog_Type, DialogsList_Type, DialogActions_Type, InitialDialogsState_Type }                from '../../../redux/dialogsReducer'
+import { DialogActions_Type, InitialDialogsState_Type } from '../../../redux/dialogsReducer'
+
 import { AppStateType } from "../../../redux/redux-store";
 
 
@@ -25,7 +24,8 @@ type DialogContainerProps_Type = {
    
 }
 
-type Themes_Type = {activeLink:       string
+type Themes_Type = {
+    activeLink:       string
     dialogAreaBackgroundNSecondScroll: string
     dialogDynamic:    string
     firstScroller:    string
@@ -38,7 +38,7 @@ type Themes_Type = {activeLink:       string
 }
 
 let DialogFuncContainer = ({state,actions,history,location,match,staticContext}:DialogContainerProps_Type)=> { 
-    console.log(match)
+    // console.log(match)
 
     useEffect(()=> {
         match.params.userId ? actions.talkedBeforeThunk(match.params.userId) : actions.getMyNegotiatorsListThunk();

@@ -205,7 +205,7 @@
 // };
 //
 
-import { usersApi }                from './app';
+import { CertainDialog_Type, DialogsList_Type, MessageData_Type, usersApi }                from './app';
 import maleProfilePic              from './img/dialogs/male.png';
 import errorPic                    from './img/dialogs/error.png';
 import certainDialogLoaderGIF      from './loader/dialogs/loader_green_spinner.gif';
@@ -213,9 +213,9 @@ import allDialogsLoadeGIF          from './loader/dialogs/spinner_yellow.gif';
 import envelopeGIF                 from './loader/dialogs/envelope.gif';
 import meetLinesGIF                from './loader/dialogs/lGreenMeetLines.gif';
 import radioTowerPIC               from './img/dialogs/radioTower1.png';
-import { Dispatch }                from "redux";
-import { ThunkAction }             from "redux-thunk"; 
-import { AppStateType } from './redux-store';
+import {   Dispatch   }            from "redux";
+import { ThunkAction  }            from "redux-thunk"; 
+import { AppStateType }            from './redux-store';
 
 const SEND_MESSAGE_TO_USER         = "SEND-MESSAGE-TO-USER";
 const SET_MY_COMPANIONS_LIST       = 'SET_MY_COMPANIONS_LIST';
@@ -244,7 +244,7 @@ type PrevMsgsloadingTogglerAC_Type     = {type: typeof PREV_MSGS_LOADING_TOGGLER
 type SendMsgAC_Type                    = {type: typeof SEND_MESSAGE_TO_USER, msg:string }
 type OnSendingMSGEStatusAC_Type        = {type: typeof ON_SENDING_MSG_STATUS,number:number,userId:number,actionKey:string,userName:string}
 type FeedBackWindowCloserAC_Type       = {type: typeof FEEDBACK_WINDOW_CLOSER, arrIndex:number}
-type Photos_Type                       = {large:string, small:string}
+type Photos_Type                       = {large:null|string, small:null|string}
 type CreateNewDialogAC_Type            = {type: typeof CREATE_AND_SET_NEW_DIALOG, userId:number, fullName:string, photos:Photos_Type}
 type SetErrCertainDialogGetAC_Type     = {type: typeof ERR_CERTAIN_DIALOG_GET, error:string}
 type NewMsgActonCombiner_Type          = {type: typeof NEW_MSG_ACTTION_COMBINER,newMessagesCount:number,BTNIsDisabled:boolean,hasErr:boolean}
@@ -284,27 +284,32 @@ type ThunkAC_Type = ThunkAction<Promise<void>,AppStateType,unknown,ActionTypes>
 
 const getMyNegotiatorsListThunkAC  = ():ThunkAC_Type =>                                               async (dispatch:Dispatch_Type) => {
     dispatch(setDialogsAreLoadingToggleAC(true, false))
-    let response = await usersApi.getMyNegotiatorsList();
-    response.status===200 ? dispatch(setMyCompanions(response.data)) :
-        dispatch(setErrMyNegotiatorsList(parseInt(JSON.stringify(response.message).replace(/\D+/g,"")))); // errorCode
+    try { let response = await usersApi.getMyNegotiatorsList();
+        if(response.status===200)  dispatch(setMyCompanions(response.data)) } 
+    catch (err) {
+        dispatch(setErrMyNegotiatorsList(parseInt(JSON.stringify(err).replace(/\D+/g,"")))); // errorCode
+    }
+        // dispatch(setErrMyNegotiatorsList(parseInt(JSON.stringify(response.message).replace(/\D+/g,"")))); // errorCode
     dispatch(setDialogsAreLoadingToggleAC(false, false))
 };
+
 const getTalkWithUserThunkAC       = (userId:number):ThunkAC_Type =>                                  async (dispatch:Dispatch_Type) => {
     dispatch(setDialogsAreLoadingToggleAC(false, true))
-    let response = await usersApi.getTalkWithUser(userId);
-    response.status===200 ? dispatch(setTalkWithUser(response.data)):
-        dispatch(setErrCertainDialogGetAC(JSON.stringify(response.message)));
+    try {let response = await usersApi.getTalkWithUser(userId);
+        if(response.status===200)  dispatch(setTalkWithUser(response.data))}
+    catch (err){dispatch(setErrCertainDialogGetAC(JSON.stringify(err.message)))};
     dispatch(setDialogsAreLoadingToggleAC(false, false))
 };
 const talkedBeforeThunkAC          = (userId:number):ThunkAC_Type =>                                  async (dispatch:Dispatch_Type) => {
     dispatch(setDialogsAreLoadingToggleAC(true, true))
-    let response = await usersApi.getMyNegotiatorsList()                                                                // получаем список диалогов
+    try {
+    let response = await usersApi.getMyNegotiatorsList()                                                            // получаем список диалогов
     if(response.status===200) {
         dispatch(setMyCompanions(response.data))
-        if(response.data.find((el:any)=>(el.id===+userId))) {                                                             // если в списке диалогов есть нужный юзер
-            let responseCertainUser = await usersApi.getTalkWithUser(userId)                                        // то запрашиваем диалог с ним
-            responseCertainUser.status===200 ? dispatch(setTalkWithUser(responseCertainUser.data))        :
-                dispatch(setErrCertainDialogGetAC(JSON.stringify(responseCertainUser.message)));                    //error
+        if(response.data.find((el:DialogsList_Type)=>(el.id===+userId))) {                                          // если в списке диалогов есть нужный юзер
+            try{let responseCertainUser = await usersApi.getTalkWithUser(userId)                                        // то запрашиваем диалог с ним
+                responseCertainUser.status===200 && dispatch(setTalkWithUser(responseCertainUser.data))}
+            catch (err){dispatch(setErrCertainDialogGetAC(JSON.stringify(err.message)))};                    //error
         } else {
             let getProfileResponse = await usersApi.getProfile(userId);
             console.log(getProfileResponse)
@@ -312,38 +317,42 @@ const talkedBeforeThunkAC          = (userId:number):ThunkAC_Type =>            
             dispatch(createNewDialogAC(+userId, fullName, photos))
         }
     }
-    else {
-        dispatch(setErrMyNegotiatorsList(parseInt(JSON.stringify(response.message).replace(/\D+/g,"")))); // errorCode
-        dispatch(setErrCertainDialogGetAC(JSON.stringify(response.message)));                                                   // error
+    }catch (err) {
+        dispatch(setErrMyNegotiatorsList(parseInt(JSON.stringify(err.message).replace(/\D+/g,"")))); // errorCode
+        dispatch(setErrCertainDialogGetAC(JSON.stringify(err.message)));                                                   // error
+        // dispatch(setErrMyNegotiatorsList(parseInt(JSON.stringify(response).replace(/\D+/g,"")))); // errorCode
+        // dispatch(setErrCertainDialogGetAC(JSON.stringify(response)));                                                   // error
     }
     dispatch(setDialogsAreLoadingToggleAC(false, false))
 };
 const addPrevMessagesThunkAC       = (userId:number,msgCount:number,pageNumber:number):ThunkAC_Type=> async (dispatch:Dispatch_Type) => {
     dispatch(prevMsgsloadingTogglerAC(true));
     let response = await usersApi.getTalkWithUser(userId,  msgCount, pageNumber )
-    console.log(response)
     dispatch(addPrevMSGS(response.data.items))
     dispatch(prevMsgsloadingTogglerAC(false));
 
 };
 const deleteMessageThunkAC         = (messageId:string,index:number):ThunkAC_Type =>                  async (dispatch:Dispatch_Type) => {
-    let data = await usersApi.deleteMessage(messageId)
-    data.status===200 ? dispatch (deleteMessageAC(messageId,index)): console.log(data);
+    try { let response = await usersApi.deleteMessage(messageId)
+        if(response.status===200) dispatch (deleteMessageAC(messageId,index)) } 
+    catch (err) { console.log(err); }
 };
 const setSpamMessagesThunkAC       = (messageId:string,index:number):ThunkAC_Type =>                  async (dispatch:Dispatch_Type) => {
-    let data = await usersApi.setAsSpamMessage(messageId)
-    data.response===200? dispatch(setAsSpamMessage(messageId,index)) : console.log(data)};
+    try{let response = await usersApi.setAsSpamMessage(messageId)
+        if(response.status===200) dispatch(setAsSpamMessage(messageId,index)) } 
+    catch(err){ console.log(err)} };
 const getNewMessagesRequestThunkAC = ():ThunkAC_Type =>                                               async (dispatch:Dispatch_Type) => {
     dispatch(newMsgActonCombiner(0,true,false))
-    let response = await usersApi.getNewMessages()
-    response.status === 200 ? dispatch(newMsgActonCombiner(response.data,false,false)) :
-        dispatch(newMsgActonCombiner(0,false,true));
+    try {let response = await usersApi.getNewMessages()
+        if(response.status===200) dispatch(newMsgActonCombiner(response.data,false,false))}
+    catch (err) {dispatch(newMsgActonCombiner(0,false,true))};
 };
 const sendMessageToUserThunkAC     = (userId:number,body:string,actionKey:string,userName:string):ThunkAC_Type=> async (dispatch:Dispatch_Type) => {
         dispatch(onSendingMSGEStatusAC(0, userId,actionKey,userName));
         let response = await usersApi.sendMsgToTalker(userId,body)
+        console.log(response.data);
         response.status === 200 ?
-            dispatch(onSendingMSGEStatusAC(1,userId,actionKey,userName)) && dispatch(sendMsgAC(response.data)) :
+            dispatch(onSendingMSGEStatusAC(1,userId,actionKey,userName)) && dispatch(sendMsgAC(response.data.data.message.body)) :
             dispatch(onSendingMSGEStatusAC(2,userId,actionKey,userName))
     };
 
@@ -369,53 +378,27 @@ const dialogActions:DialogActions_Type = {getMyNegotiatorsListThunkAC, getTalkWi
 export const dialogACs = (state = dialogActions)=> { return state };
 
 
-type MessageData_Type = {
-    addedAt: string
-    body: string
-    id: string
-    recipientId: number
-    senderId: number
-    translatedBody: null | boolean
-    viewed: boolean
-}
-export type CertainDialog_Type = {
-    error?: null | string
-    items: MessageData_Type[]
-    totalCount?: number
-}
-
-export type DialogsList_Type = {
-    hasNewMessages: boolean
-    id: number
-    lastDialogActivityDate: string
-    lastUserActivityDate: string
-    newMessagesCount: number
-    photos: {small: string, large: string}
-    userName: string
-}
-
-
 let initialDialogsState  = {
-    dialogsList:            []                        as DialogsList_Type[],         
-    certainDialog:          {items:[]}                as CertainDialog_Type,
-    allDialogsIsLoading:    false                     as boolean,                  
-    certainDialogIsLoading: false                     as boolean,
-    defaultAvatar:          maleProfilePic            as string,         
-    certainDialogLoader:    certainDialogLoaderGIF    as string,
-    allDialogsLoader:       allDialogsLoadeGIF        as string,     
-    newMessagesCounter:     0                         as number,
-    newMessageBTNDisabled:  false                     as boolean,                  
-    msgLoader:              envelopeGIF               as string,
-    prevMsgsIsLoading:      false                     as boolean,                  
-    prevMsgsLoader:         meetLinesGIF              as string,
-    onError:                errorPic                  as string,               
-    errGettingNewMSGSCount: false                     as boolean,
-    onSendMSGStatArr:       []                        as any[],                        
-    keyArr:                 []                        as string[],
-    feedbackArr:            []                        as string[],                     
-    errNegotiatorsListGet:  0                         as number,
-    errNegotiatorsListPIC:  radioTowerPIC             as string,          
-    errCertainDialogGet:    ''                        as string,
+    dialogsList:            []                     as DialogsList_Type[],         
+    certainDialog:          {items:[]}             as CertainDialog_Type,
+    allDialogsIsLoading:    false                  as boolean,                  
+    certainDialogIsLoading: false                  as boolean,
+    defaultAvatar:          maleProfilePic         as string,         
+    certainDialogLoader:    certainDialogLoaderGIF as string,
+    allDialogsLoader:       allDialogsLoadeGIF     as string,     
+    newMessagesCounter:     0                      as number,
+    newMessageBTNDisabled:  false                  as boolean,                  
+    msgLoader:              envelopeGIF            as string,
+    prevMsgsIsLoading:      false                  as boolean,                  
+    prevMsgsLoader:         meetLinesGIF           as string,
+    onError:                errorPic               as string,               
+    errGettingNewMSGSCount: false                  as boolean,
+    onSendMSGStatArr:       []                     as any[],                        
+    keyArr:                 []                     as string[],
+    feedbackArr:            []                     as string[],                     
+    errNegotiatorsListGet:  0                      as number,
+    errNegotiatorsListPIC:  radioTowerPIC          as string,          
+    errCertainDialogGet:    ''                     as string,
 };
 
 export type InitialDialogsState_Type = typeof initialDialogsState;
@@ -440,10 +423,7 @@ export const dialogsReducer = ( state = initialDialogsState, action:ActionTypes,
         //     stateCopy.certainDialog.items.push(message); return stateCopy;
         case SET_MY_COMPANIONS_LIST:        return {...state, dialogsList: action.data};
         case ERR_NEGOTIATORS_LIST_GET:      return {...state, errNegotiatorsListGet: action.errorCode};
-
-        case DIALOGS_ARE_LOADING_TOGGLER:
-            console.log(action) ;  return {...state, certainDialogIsLoading: action.certainDialog}
-
+        case DIALOGS_ARE_LOADING_TOGGLER:   return {...state, certainDialogIsLoading: action.certainDialog}
         case ERR_CERTAIN_DIALOG_GET:        return {...state, errCertainDialogGet: action.error.substr(1 ,action.error.length-2)};
         case SET_TALK_WITH_USER:            return {...state, certainDialog: action.data};
         case CREATE_AND_SET_NEW_DIALOG:

@@ -260,7 +260,7 @@ interface FBProps_Type {
 }
 
 const FeedBacker = React.memo(({sendingMSGStatArr,feedBackWindowCloser}:FBProps_Type) => {
-        console.log(sendingMSGStatArr)
+        // console.log(sendingMSGStatArr)
     let feedBackRef = useRef<HTMLDivElement | null>(null);
 
     let feedBackNamer = (i:number, statNum:number, /* feedBackRef:HTMLDivElement */ )=>{

@@ -5,7 +5,7 @@ import {connect}       from 'react-redux'
 import {Redirect}      from "react-router-dom";
 import {getSmartAppAuthReducer}   from "../../../redux/selectors";
 import { AppStateType } from '../../../redux/redux-store';
-import { App_ACs_Type, InitialStateType } from '../../../redux/appReducer';
+// import { App_ACs_Type, InitialStateType } from '../../../redux/appReducer';
 
 
 type ContainerProps_Type = {
@@ -170,7 +170,8 @@ const Login = ({authErr,captcha,errCaptchaGet,setMeLogin}:LoginProps_Type) => {
             </div>
 };
 
-type MSTP_Type = { appAC:App_ACs_Type, appAuthReducer:InitialStateType}
+// type MSTP_Type = { appAC:App_ACs_Type, appAuthReducer:InitialStateType}
+type MSTP_Type = { appAC:any, appAuthReducer:any}
 
 const mapStateToProps = (state:AppStateType):MSTP_Type => { //console.log(state)
     return {

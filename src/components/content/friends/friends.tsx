@@ -4,7 +4,8 @@ import stl                          from './../users/users.module.css'
 import {Formik}                     from 'formik';
 import { v4 as uuidv4 }             from 'uuid';
 import { PalsThemes_Type, MRGProps_Type } from './friendsContainer';
-import { FriendsListContent_Type, InitialFriendsInfo_Type } from '../../../redux/friendsReducer';
+import { InitialFriendsInfo_Type } from '../../../redux/friendsReducer';
+import { UsersArr } from '../../../redux/app';
 
 // export const Friends1 = React.memo(function MyComponent(props) {
 //     // console.log(props)
@@ -205,7 +206,7 @@ export let Friends:React.FC<FriendsProps_Type> = ({themes,palsFuncs,palsInfo}) =
             <div className={`${stl.friendsGeneral} ${themes.friendsGeneralDnmc}`}>
                 <h2 className={stl.userHeader}>Friends</h2>
                 <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
-                    {palsInfo.friendsList.map((user:FriendsListContent_Type) =>
+                    {palsInfo.friendsList.map((user:UsersArr) =>
                         <div className={stl.userUnitContainer} key={user.id}>
                             <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`}>
                                 <div className={stl.avaDiv}>

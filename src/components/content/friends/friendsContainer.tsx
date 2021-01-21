@@ -139,7 +139,9 @@ export type MRGProps_Type = {
 
 const mergeProps = (stateProps:MSTP_Type, dispatchProps:DispatchProps_Type):MRGProps_Type => {
     const state = stateProps;
-    const {dispatch} = dispatchProps;
+    console.log(dispatchProps);
+
+    const { dispatch } = dispatchProps;
 
     const getMyFriendsListThunk = () => dispatch (state.friendsACs.getMyFriendsListThunkAC() );
     const followThunkToggler = (userId:number,isFollowed:boolean) => 
@@ -154,7 +156,7 @@ const mergeProps = (stateProps:MSTP_Type, dispatchProps:DispatchProps_Type):MRGP
 
 export default compose(
     //@ts-ignore
-    (mapStateToProps ,null, mergeProps),
+    connect<MSTP_Type, {}, MRGProps_Type, AppStateType>(mapStateToProps, null, mergeProps),
     withRouter,
     // withAuthRedirect,
 )(FriendsFuncContainer);

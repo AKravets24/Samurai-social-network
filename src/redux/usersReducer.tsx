@@ -133,7 +133,7 @@
 
 
 import maleProfilePic   from  './img/dialogs/male.png';
-import { usersApi }     from  "./app";
+import { usersApi, UsersArr }     from  "./app";
 import nobodyFoundGIF   from  './img/users/polarPupCry.gif';
 import { AppStateType } from  "./../redux/redux-store"
 import { Dispatch }     from 'redux';
@@ -152,7 +152,7 @@ const ERROR_AT_FOLLOWING_TOGGLER    = 'ERROR_AT_FOLLOWING_TOGGLER';
 
 
 type FollowBTNTogglerAC_Type        = {type: typeof FOLLOW_ACTION_TOGGLER,         userId:number,           isFollowed:boolean}
-type SetUsersAC_Type                = {type: typeof SET_USERS,                     users:InitialUsersList_Type[], totalCount:number }
+type SetUsersAC_Type                = {type: typeof SET_USERS,                     users:UsersArr[], totalCount:number }
 type SetCurrentPageAC_Type          = {type: typeof SET_CURRENT_PAGE,              currentPage:number                         }
 type ToggleIsLoadingAC_Type         = {type: typeof TOGGLE_IS_LOADING,             isLoading:boolean                          }
 type ToggleFollowingProgressAC_Type = {type: typeof TOGGLE_IS_FOLLOWING_PROGRESS,  isLoading:boolean,       userId:number     }
@@ -164,7 +164,7 @@ type UpdateSearchFieldAC_Type       = {type: typeof UPDATE_SEARCH_FIELD,        
 
 
 const followBTNTogglerAC        = (userId:number,isFollowed:boolean):FollowBTNTogglerAC_Type         =>  ({type: FOLLOW_ACTION_TOGGLER,         userId,isFollowed });
-const setUsersAC                = (users:InitialUsersList_Type[],totalCount:number):SetUsersAC_Type  =>  ({type: SET_USERS,                     users,totalCount  });
+const setUsersAC                = (users:UsersArr[],totalCount:number):SetUsersAC_Type               =>  ({type: SET_USERS,                     users,totalCount  });
 const setCurrentPageAC          = (currentPage:number):SetCurrentPageAC_Type                         =>  ({type: SET_CURRENT_PAGE,              currentPage       });
 const toggleIsLoadingAC         = (isLoading:boolean):ToggleIsLoadingAC_Type                         =>  ({type: TOGGLE_IS_LOADING,             isLoading         });
 const toggleFollowingProgressAC = (isLoading:boolean, userId:number):ToggleFollowingProgressAC_Type  =>  ({type: TOGGLE_IS_FOLLOWING_PROGRESS,  isLoading, userId });
@@ -185,13 +185,21 @@ type ThunkAction_type = ThunkAction<Promise<void>,AppStateType,unknown,ActionTyp
 
 const getUsersThunkAC = (pageSize:number,currentPage:number):ThunkAction_type => // после скобок - типизация в сооотв с документашкой
     async (dispatch:Dispatch_Type, getState:GetState_Type) =>  {    // getState это необязательный  доп аргумент, который в данной реализации проекта не используется
-    // console.log(getState());
     dispatch(toggleIsLoadingAC(true));
-    let response = await usersApi.getUsers(pageSize, currentPage);
-    response.status===200 ?
-        dispatch(setUsersAC(response.data.items,response.data.totalCount)):dispatch(errCatcherAtUsersGetAC(JSON.stringify(response.message)));
+    try{let response = await usersApi.getUsers(pageSize, currentPage);
+        if(response.status===200)dispatch(setUsersAC(response.data.items,response.data.totalCount)) }
+    catch(err){dispatch(errCatcherAtUsersGetAC(JSON.stringify(err)));}
     dispatch(toggleIsLoadingAC(false));
 };
+const getCertainUserThunkAC = (pageSize:number,userName:string,pageOfEquals:number=1):ThunkAction_type  => async (dispatch:Dispatch_Type) =>  {
+    // dispatch (toggleUserSearchModeAC(true))
+    dispatch (toggleIsLoadingAC(true));
+    dispatch(setCurrentPageAC(pageOfEquals))
+    try{let response = await usersApi.getCertainUser(pageSize, userName, pageOfEquals)
+        if(response.status===200) dispatch(setUsersAC(response.data.items,response.data.totalCount))}
+    catch(err){ dispatch(errCatcherAtUsersFindAC(JSON.stringify(err.message)))};
+    dispatch(toggleIsLoadingAC(false));
+}; // доработать логику возврата(возвращает только 10 юзеров)
 const setCurrentPageThunkAC = (pageSize:number, currentPage:number):ThunkAction_type  => async (dispatch:Dispatch_Type) =>  {
     dispatch(toggleIsLoadingAC(true));
     dispatch(setCurrentPageAC(currentPage));
@@ -199,27 +207,19 @@ const setCurrentPageThunkAC = (pageSize:number, currentPage:number):ThunkAction_
     let response = await usersApi.getUsers(pageSize, currentPage )
     console.log(response)
     response.status===200 ?
-        dispatch(setUsersAC(response.data.items,response.data.totalCount)) : dispatch(errCatcherAtUsersGetAC(JSON.stringify(response.message)))
+        dispatch(setUsersAC(response.data.items,response.data.totalCount)) : dispatch(errCatcherAtUsersGetAC(JSON.stringify(response)))
     dispatch(toggleIsLoadingAC(false));
 };
 const followThunkTogglerAC  = (userId:number, isFollowed:boolean):ThunkAction_type    => async (dispatch:Dispatch_Type) =>  {
     dispatch(toggleFollowingProgressAC(true, userId));
     let followToggler;
     isFollowed?followToggler=usersApi.unFollowRequest:followToggler=usersApi.followRequest;
-    let response = await followToggler(userId)
-    response.status===200 ? dispatch(followBTNTogglerAC(userId,!isFollowed)) :
-        dispatch(errCatcherAtFollowingAC(userId, parseInt(JSON.stringify(response.message).replace(/\D+/g,""))));
+    try{ let response = await followToggler(userId)
+    console.log(response);
+    if(response.status===200)dispatch(followBTNTogglerAC(userId,!isFollowed)) }
+    catch (err) { dispatch(errCatcherAtFollowingAC(userId, parseInt(JSON.stringify(err.message).replace(/\D+/g,""))));}
     dispatch(toggleFollowingProgressAC(false, userId));
 };
-const getCertainUserThunkAC = (pageSize:number,userName:string,pageOfEquals:number=1):ThunkAction_type  => async (dispatch:Dispatch_Type) =>  {
-    // dispatch (toggleUserSearchModeAC(true))
-    dispatch (toggleIsLoadingAC(true));
-    dispatch(setCurrentPageAC(pageOfEquals))
-    let response = await usersApi.getCertainUser(pageSize, userName, pageOfEquals)
-    response.status===200 ?
-        dispatch(setUsersAC(response.data.items,response.data.totalCount)) : dispatch(errCatcherAtUsersFindAC(JSON.stringify(response.message)));
-    dispatch(toggleIsLoadingAC(false));
-}; // доработать логику возврате(возвращает только 10 юзеров)
 
 export type UsersACs_Type = {
     setErrorToNullAC     : ()=>SetErrorToNullAC_Type
@@ -235,10 +235,8 @@ const actionCreators:UsersACs_Type = {getUsersThunkAC, setCurrentPageThunkAC,
 export const usersACs = (state = actionCreators) => { return state };
 
 
-type InitialUsersList_Type={followed:boolean,id:number,name:string,photos:{small:number,large:string},status:null|string,uniqueUrlName:null|string}
-
 const initialUsersInfo = {
-    initialUsersList:     []               as InitialUsersList_Type[],
+    initialUsersList:     []               as UsersArr[],
     pageSize:             50               as number,
     totalCount:           0                as number,
     currentPage:          1                as number,

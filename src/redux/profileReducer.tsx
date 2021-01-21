@@ -8,10 +8,10 @@ import twitterLogo      from "./img/profilePic/twitter.png";
 import vkLogo           from "./img/profilePic/vk.png";
 import youTubeLogo      from "./img/profilePic/youtube.png";
 
-import maleProfilePic   from './img/dialogs/male.png'
-import {   usersApi  }  from "./app";
-import {   Dispatch  }  from "redux"
-import { ThunkAction }  from "redux-thunk"
+import maleProfilePic   from './img/dialogs/male.png';
+import { ProfileData_Type, usersApi  }  from "./app";
+import {   Dispatch  }  from "redux";
+import { ThunkAction }  from "redux-thunk";
 import { AppStateType } from "./redux-store";
 
 const ADD_POST                    = "ADD-POST";
@@ -76,58 +76,89 @@ type ActionTypes = SetProfileAC_Type | StatusSetterAC_Type | AddPostAC_Type | To
 type ThunkAC_Type=ThunkAction<Promise<void>,AppStateType,unknown,ActionTypes>
 type Dispatch_Type = Dispatch<ActionTypes>
 
+// const getProfileThUnkAC     = (userId:number, isMe:boolean):ThunkAC_Type       => async (dispatch:Dispatch_Type) => {
+//     dispatch(toggleIsLoadingAC(true));
+//     let status='', userName='', profileData={};
+//     let statusResponse = await usersApi.getStatus(userId)
+//     statusResponse.status===200 ? status=statusResponse.data :
+//         dispatch(errCatcherAtStatusGetAC(parseInt(JSON.stringify(statusResponse.message).replace(/\D+/g,""))))
+//     let profileResponse = await usersApi.getProfile(userId) 
+//     console.log(profileResponse);
+    
+//     if (profileResponse.status === 200){
+//         profileData = profileResponse.data;
+//         userName = profileResponse.data.fullName;
+//         if (isMe) { dispatch(setProfileAC(profileData, false, status));
+//         } else {
+//             let certainResponse =  await usersApi.getCertainUser(null,userName);
+//             certainResponse.data.items.filter((el:any) => {
+//                 el.id === userId && dispatch(setProfileAC(profileData, el.followed, status));})
+//         }
+//     // } else dispatch(errCatcherAtProfileGetAC(parseInt(JSON.stringify(profileResponse.message).replace(/\D+/g,""))));
+//     } else dispatch(errCatcherAtProfileGetAC(parseInt(JSON.stringify(profileResponse).replace(/\D+/g,""))));
+//     dispatch(toggleIsLoadingAC(false));
+// };
+
+
 const getProfileThUnkAC     = (userId:number, isMe:boolean):ThunkAC_Type       => async (dispatch:Dispatch_Type) => {
     dispatch(toggleIsLoadingAC(true));
-    let status='', userName='', profileData='';
-    let statusResponse = await usersApi.getStatus(userId)
-    statusResponse.status===200 ? status=statusResponse.data :
-        dispatch(errCatcherAtStatusGetAC(parseInt(JSON.stringify(statusResponse.message).replace(/\D+/g,""))))
-    let profileResponse = await usersApi.getProfile(userId)
-    if (profileResponse.status === 200){
-        profileData = profileResponse.data;
-        userName = profileResponse.data.fullName;
-        if (isMe) { dispatch(setProfileAC(profileData, false, status));
-        } else {
-            let certainResponse =  await usersApi.getCertainUser(null,userName);
-            certainResponse.data.items.filter((el:any) => {
-                el.id === userId && dispatch(setProfileAC(profileData, el.followed, status));})
+    let status='', userName='', profileData={};
+    try {
+        let statusResponse = await usersApi.getStatus(userId)
+        if(statusResponse.status===200) status=statusResponse.data 
+    } catch (err) { dispatch(errCatcherAtStatusGetAC(parseInt(JSON.stringify(err.message).replace(/\D+/g,"")))) }
+    try {
+        let profileResponse = await usersApi.getProfile(userId) 
+        if (profileResponse.status === 200){
+            profileData = profileResponse.data;
+            userName = profileResponse.data.fullName;
+            if (isMe) { dispatch(setProfileAC(profileData, false, status));
+            } else {
+                let certainResponse =  await usersApi.getCertainUser(null,userName);
+                console.log(certainResponse);
+                certainResponse.data.items.filter((el:any) => {
+                    el.id === userId && dispatch(setProfileAC(profileData, el.followed, status));})
+            }
         }
-    } else dispatch(errCatcherAtProfileGetAC(parseInt(JSON.stringify(profileResponse.message).replace(/\D+/g,""))));
-    dispatch(toggleIsLoadingAC(false));
+    } catch (err) {
+        dispatch(errCatcherAtProfileGetAC(parseInt(JSON.stringify(err.message).replace(/\D+/g,""))));
+        dispatch(toggleIsLoadingAC(false));
+    } 
 };
 
 const followThunkTogglerAC  = (userId:number, isFollowed:boolean):ThunkAC_Type => async (dispatch:Dispatch_Type) => {
     dispatch(followingTogglerAC(true));dispatch(setErrorToNullAC());
     let followToggler;
     isFollowed?followToggler=usersApi.unFollowRequest:followToggler=usersApi.followRequest;
-    let response = await followToggler(userId);
-    response.status===200 ? dispatch(followBTNTogglerAC(userId,!isFollowed)) :
-        dispatch(errCatcherAtFollowingAC(userId,parseInt(JSON.stringify(response.message).replace(/\D+/g,""))));
+    try{let response = await followToggler(userId);
+        if(response.status===200)dispatch(followBTNTogglerAC(userId,!isFollowed))}
+    catch(err){dispatch(errCatcherAtFollowingAC(userId,parseInt(JSON.stringify(err.message).replace(/\D+/g,""))));}
     dispatch(followingTogglerAC(false));
 };
 
 const updateStatusThunkAC   = (text:string):ThunkAC_Type                       => async (dispatch:Dispatch_Type) => {
-    let response = await usersApi.updateMyStatus(text)
-    response.status===200 ?
-    dispatch(statusSetterAC(JSON.parse(response.config.data).status)) : dispatch(errCattcherAtStatUpdateAC(JSON.stringify(response.message)));
+    try {let response = await usersApi.updateMyStatus(text)
+    if(response.status===200) dispatch(statusSetterAC(JSON.parse(response.config.data).status))
+    } catch(err){ dispatch(errCattcherAtStatUpdateAC(JSON.stringify(err.message)))};
 };
 
-const updateMyAvatarThunkAC = (file:any):ThunkAC_Type                          => async (dispatch:Dispatch_Type) => {
-    let response = await usersApi.updateMyAvatar(file)
+const updateMyAvatarThunkAC = (file:string):ThunkAC_Type                       => async (dispatch:Dispatch_Type) => {
+    try {let response = await usersApi.updateMyAvatar(file)
     // console.log(parseInt(JSON.stringify(response.message).replace(/\D+/g,"")))
     console.log(response)
-    response.status === 200 ?
-        dispatch(updateMyAvatarAC(response.data.data.photos.large)) :
-        dispatch(errCatcherAtAvaUpdateAC(parseInt(JSON.stringify(response.message).replace(/\D+/g,""))));
+    if(response.status === 200) 
+        dispatch(updateMyAvatarAC(response.data.data.photos.large))} catch (err) {
+        dispatch(errCatcherAtAvaUpdateAC(parseInt(JSON.stringify(err.message).replace(/\D+/g,""))))};
 };
 
 const sendMsgToTalkerThunkAC = (userId:number, message:string):ThunkAC_Type    => async (dispatch:Dispatch_Type) => {
-    let response = await usersApi.sendMsgToTalker(userId,message);   
-    console.log(response);
-    
-    response.status === 200 ? 
-        dispatch(sendMSGPositiveReportAC('Your message delivered!')) : 
-        dispatch(errOnSendingMSGToUserAC(parseInt(JSON.stringify(response.message).replace(/\D+/g,""))));
+    try {
+        let response = await usersApi.sendMsgToTalker(userId,message);   
+        console.log(response);
+        if(response.status === 200)  dispatch(sendMSGPositiveReportAC('Your message delivered!')) 
+    } catch (err) { 
+        dispatch(errOnSendingMSGToUserAC(parseInt(JSON.stringify(err.message).replace(/\D+/g,""))));
+    }
 }
 
 const afterSendMSGStatCleaner = ():any                => (dispatch:any)=> {          // поправить экшн нормальным написанием 
