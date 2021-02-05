@@ -14,14 +14,14 @@ type Dispatch_Type = Dispatch<ActionTypes>;
 type ThunkAC_Type = ThunkAction<Promise<void>,AppStateType,unknown,ActionTypes>
 
 export const setMeLogOutThunkAC = ():ThunkAC_Type => async (dispatch:Dispatch_Type) => {
-    let data = await usersApi.setMeLogOut()
-            data.resultCode === 0 ? dispatch(setLogOutUserDataAC()) : console.log(data)
+    let response = await usersApi.setMeLogOut()
+    console.log(response);
+    
+    response.data.resultCode === 0 ? dispatch(setLogOutUserDataAC()) : console.log(response)
 
 };
 
-type HeaderAC_type = {
-    setMeLogOutThunkAC: () => void
-}
+export type HeaderAC_type = { setMeLogOutThunkAC: () => void }
 
 const actionCreators:HeaderAC_type = { setMeLogOutThunkAC };
 export const headerAC = (state= actionCreators) => state;

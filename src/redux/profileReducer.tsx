@@ -56,7 +56,7 @@ const statusSetterAC            = (status:string): StatusSetterAC_Type          
 const addPostAC                 = (finalPost:string, date:string, time:string):AddPostAC_Type     => ({type: ADD_POST, finalPost, date, time              });
 const toggleIsLoadingAC         = (isLoading:boolean):ToggleIsLoadingAC_Type                      => ({type: TOGGLE_IS_LOADING, isLoading                 });
 const updateMyAvatarAC          = (file:string): UpdateMyAvatarAC_Type                            => ({type: UPDATE_MY_AVATAR, file                       });
-const followingTogglerAC        = (isFollowing:boolean):FollowingTogglerAC_Type                   => ({type: TOGGLER_IS_FOLLOWING,isFollowing             });
+export const followingTogglerAC        = (isFollowing:boolean):FollowingTogglerAC_Type                   => ({type: TOGGLER_IS_FOLLOWING,isFollowing             });
 const followBTNTogglerAC        = (userId:number,isFollowed:null|boolean):FollowBTNTogglerAC_Type => ({type: FOLLOW_ACTION_TOGGLER,userId,isFollowed      });
 const errCatcherAtFollowingAC   = (userId:number,errorCode:number):ErrCatcherAtFollowingAC_Type   => ({type: ERROR_AT_FOLLOWING_TOGGLER,userId,errorCode  });
 const errCatcherAtProfileGetAC  = (errorCode:number):ErrCatcherAtProfileGetAC_Type                => ({type: ERROR_AT_GETTING_PROFILE, errorCode          });

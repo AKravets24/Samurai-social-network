@@ -70,14 +70,20 @@
 // export default HeaderConnector;
 
 
-import React, {useState, useEffect}                         from "react";
-import stl                                                  from './header.module.css'
-import logo                                                 from './img/logo.jpg'
-import logout                                               from './img/logout.png'
-import {NavLink}                                            from 'react-router-dom';
-import {connect}                                            from 'react-redux';
-import {getColorTheme, getHeaderAC, getSmartAppAuthReducer} from "../../redux/selectors";
-import {AppStateType}                                       from '../../redux/redux-store';
+import React, {useState,
+     useEffect}              from "react";
+import stl                   from './header.module.css';
+import cn                    from 'classnames/bind';
+import logo                  from './img/logo.jpg';
+import logout                from './img/logout.png';
+import {NavLink}             from 'react-router-dom';
+import {connect}             from 'react-redux';
+import {getColorTheme, 
+    getHeaderAC, 
+    getSmartAppAuthReducer}  from "../../redux/selectors";
+import {AppStateType}        from '../../redux/redux-store';
+import { appStateType }      from "../../redux/appReducer";
+import { HeaderAC_type }     from "../../redux/headerReducer";
 
 
 type PropsTypes = {isAuth:boolean,logIn:string,setMeLogOutThunk: ()=>void ,themes:{headerDynamic:string,logotypeH1:string,loginH4:string,loginHref:string}}
@@ -88,20 +94,21 @@ type PropsTypes = {isAuth:boolean,logIn:string,setMeLogOutThunk: ()=>void ,theme
     // console.log(props)
     const logOutListener = () => { setMeLogOutThunk() };
 
-    return <div className={`${stl.header} ${themes.headerDynamic}`}>
-               <div className={stl.buffer}/>
-               <div className={stl.logotype}>
+
+    return <div className={cn(stl.header,themes.headerDynamic)}>
+               <div className={cn(stl.buffer)}/>
+               <div className={cn(stl.logotype)}>
                    <img src={logo} alt="#err"/>
-                   <h1 className={themes.logotypeH1} >Rocket Network</h1>
+                   <h1 className={cn(themes.logotypeH1)} >Rocket Network</h1>
                </div>
-               <div className={stl.login}>
+               <div className={cn(stl.login)}>
                    {isAuth ?
-                       <div className={stl.loginTrue}>
-                           <h4 className={themes.loginH4}> {logIn} (It's you) </h4>
+                       <div className={cn(stl.loginTrue)}>
+                           <h4 className={cn(themes.loginH4)}> {logIn} (It's you) </h4>
                            <img src={logout} alt="err" onClick={logOutListener} />
                        </div>
                        :
-                       <NavLink to={'login'}> <h3 className={themes.loginHref}>Login</h3> </NavLink>
+                       <NavLink to={'login'}> <h3 className={cn(themes.loginHref)}>Login</h3> </NavLink>
                    }
                </div>
            </div>
@@ -136,7 +143,13 @@ function HeaderContainer (props:ContainerPropsType) {
         />
 }
 
-const mapStateToProps = (state:AppStateType) => {  // console.log(getSmartAppAuthReducer(state));
+type MSTP_Type = {
+    authData:   appStateType
+    colorTheme: string
+    headerAC:   HeaderAC_type
+}
+
+const mapStateToProps = (state:AppStateType):MSTP_Type => {  // console.log(getSmartAppAuthReducer(state));
     // console.log(state);
     
     return {
@@ -146,13 +159,16 @@ const mapStateToProps = (state:AppStateType) => {  // console.log(getSmartAppAut
     }
 };
 
-const mergeProps = (stateProps:any, dispatchProps:any) => {                                                   //ANY!!!!!!!!!!!!!!!!!!!!
+type MRGProps_Type = {state: MSTP_Type, setMeLogOutThunk:()=> void}
+type DispatchProps_Type = {dispatch: (action:any)=> void}
+
+const mergeProps = (stateProps:MSTP_Type, dispatchProps:DispatchProps_Type):MRGProps_Type => {                                                   //ANY!!!!!!!!!!!!!!!!!!!!
     const state = stateProps;
     const {dispatch} = dispatchProps;
     const setMeLogOutThunk = () => dispatch( state.headerAC.setMeLogOutThunkAC ()  );
     return { state, setMeLogOutThunk }
 };
-
-const HeaderConnector = connect(mapStateToProps, null, mergeProps) (HeaderContainer)
+//@ts-ignore
+const HeaderConnector = connect<MSTP_Type, {}, MRGProps_Type, AppStateType>(mapStateToProps, null, mergeProps) (HeaderContainer) as React.ComponentType
 export default HeaderConnector;
 

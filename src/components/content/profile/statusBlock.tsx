@@ -15,7 +15,7 @@ type StatusProps = {
 }
 
 export function StatusCompFunc (props:StatusProps) {
-        console.log(props);
+        // console.log(props);
 
     const [statusEdit, setStatusEdit]                 = useState(false);
     const fieldMaxLength = 300;

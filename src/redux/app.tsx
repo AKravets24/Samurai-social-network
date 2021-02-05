@@ -66,35 +66,33 @@
 
 import axios, { AxiosResponse } from "axios";
 
-
 const instance = axios.create({
     withCredentials: true,
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     headers: { "API-KEY": "83df008c-c6eb-4d84-acd3-e62be0f407d9"}, });
 
-
 export const usersApi = {
 // INITIALISATION ------------------------------------------------------------------------------------------------------------ INITIALISATION
     setMeLogin (email:string,password:string,rememberMe:boolean=false,captcha:string=''){
-             return instance.post(`/auth/login`,{email,password,rememberMe,captcha})   .then(res=>res).catch(err=>err)},
-    // UNAUTHORISED -------------------------------------------------------------------------------------------------------------- UNAUTHORISED
-    getLogIn()                   { return instance.get<GetLogIn_Type>(`/auth/me`)       .then(res=>res).catch(err=>err)},
-    setMeLogOut()                { return instance.delete(`/auth/login`)                .then(res=>res.data)},
-    getCaptcha()                 { return instance.get(`/security/get-captcha-url`)     .then(res=>res).catch(err=>err)},
+             return instance.post<SetMeLogin_Type>(`/auth/login`,{email,password,rememberMe,captcha})            },
+// UNAUTHORISED -------------------------------------------------------------------------------------------------------------- UNAUTHORISED
+    getLogIn()                           { return instance.get<GetLogIn_Type>(`/auth/me`)                        },
+    setMeLogOut()                        { return instance.delete<SetMeLogOut_Type>(`/auth/login`)               },
+    getCaptcha()                         { return instance.get<GetCaptcha_Type>(`/security/get-captcha-url`)     },
  // PROFILE ------------------------------------------------------------------------------------------------------------------- PROFILE
-    getProfile(userId:number)    { return instance.get<ProfileData_Type>(`profile/${userId}`)      },
-    getStatus(userId:number)     { return instance.get<string>(`profile/status/${userId}`)         },
-    updateMyStatus(status:string){ return instance.put<string>(`profile/status`,{status: status})  },
-    updateMyAvatar(file:string)  { const formData = new FormData(); formData.append('image', file);
+    getProfile(userId:number)            { return instance.get<ProfileData_Type>(`profile/${userId}`)            },
+    getStatus(userId:number)             { return instance.get<string>(`profile/status/${userId}`)               },
+    updateMyStatus(status:string)        { return instance.put<string>(`profile/status`,{status: status})        },
+    updateMyAvatar(file:string)          { const formData = new FormData(); formData.append('image', file);
         return instance.put<UpdateMyAva_Type>(`profile/photo`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })},
 // FRIENDS ------------------------------------------------------------------------------------------------------------------- FRIENDS
-    getMyFriends()               { return instance.get<UsersListData_Type>(`users?friend=true&count=50`)        /* .then(res=>res).catch(err=>err) */},
+    getMyFriends()                       { return instance.get<UsersListData_Type>(`users?friend=true&count=50`) },
 // DIALOGS ------------------------------------------------------------------------------------------------------------------- DIALOGS
-    getMyNegotiatorsList ()      { return instance.get<DialogsList_Type[]>(`dialogs`)                  },
+    getMyNegotiatorsList ()              { return instance.get<DialogsList_Type[]>(`dialogs`)                  },
     getTalkWithUser (userId:number,msgCount:number=20,pageNumber:number=1)
         { return instance.get<CertainDialog_Type>(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`) },
     sendMsgToTalker(userId:number,body:string) { return instance.post<SendMsgToTalker_Type>(`dialogs/${userId}/messages`,{body})},
-    getNewMessages ()            { return instance.get<number>(`dialogs/messages/new/count`) },
+    getNewMessages ()                   { return instance.get<number>(`dialogs/messages/new/count`) },
     deleteMessage  (messageId:string)   { return instance.delete<DeleteMSG_Type> (`dialogs/messages/${messageId}`)},
     setAsSpamMessage(messageId:string)  { return instance.post<SetAsSpamMSG_Type>(`dialogs/messages/${messageId}/spam`) },
 // USERS --------------------------------------------------------------------------------------------------------------------- USERS
@@ -105,8 +103,10 @@ export const usersApi = {
     unFollowRequest(userId:number)      { return instance.delete<Un_Follow_Type>(`follow/${userId}`)  },
 };
 
-type UpdateMyAva_Type = { data:{ photos:{ small:string,large:string } } }
-
+type SetMeLogin_Type = {data:{id:number,login:string, email:string},fieldsErrors:string[],messages:string[],resultCode:number};
+type GetCaptcha_Type  = {url:string};
+type SetMeLogOut_Type = {data: {},fieldsErrors: string[],messages: string[],resultCode: number};
+type UpdateMyAva_Type = { data:{ photos:{ small:string,large:string } } };
 export type ProfileData_Type = {
     aboutMe: null|string
     contacts:{facebook:string,github:string,instagram:string,mainLink:string,twitter:string,vk:string,website:string,youtube:string}
@@ -115,13 +115,8 @@ export type ProfileData_Type = {
     lookingForAJobDescription: null|string
     photos: {small:null|string,large:null|string}
     userId: number
-}
-export type GetLogIn_Type = {
-    data: {id:number,email:string,login:string}
-    resultCode:number
-    messages: Array<string>
-    message:string
-} 
+};
+export type GetLogIn_Type = {data:{id:number,email:string,login:string},resultCode:number,messages: Array<string>,message:string}; 
 export type DialogsList_Type = {
     hasNewMessages: boolean
     id: number
@@ -130,21 +125,9 @@ export type DialogsList_Type = {
     newMessagesCount: number
     photos: {small:null|string, large: null|string}
     userName: string
-}
-export type MessageData_Type = {
-    addedAt: string
-    body: string
-    id: string
-    recipientId: number
-    senderId: number
-    translatedBody: null|boolean
-    viewed: boolean
-}
-export type CertainDialog_Type = {
-    error?: null | string
-    items: MessageData_Type[]
-    totalCount?: number
-}
+};
+export type MessageData_Type = {addedAt:string,body:string,id:string,recipientId:number,senderId:number,translatedBody:null|boolean,viewed:boolean}
+export type CertainDialog_Type = {error?:null|string,items:MessageData_Type[],totalCount?:number}
 type SendMsgToTalker_Type = {
     data:{
         message: {
@@ -167,17 +150,13 @@ type SendMsgToTalker_Type = {
 export type UsersArr = {
     error:string
     followed: boolean
-    id: number | any // в Users в jsx почему-то ругается если оставить number при мапинге
+    id: number | any // в Users в jsx почему-то ругается при мапинге, если оставить number 
     name: string
     photos: {small:string|null,large:string|null}
     status: null|string
     uniqueUrlName: null
     }
-type UsersListData_Type = {
-    error: null
-    items: UsersArr[]
-    totalCount: number
-}
+type UsersListData_Type = {error:null,items:UsersArr[],totalCount:number}
 type DeleteMSG_Type = {}
 type SetAsSpamMSG_Type = {}
 type Un_Follow_Type = {}

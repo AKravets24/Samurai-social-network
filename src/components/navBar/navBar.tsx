@@ -309,5 +309,5 @@ const mergeProps = (stateProps:any, dispatchProps:any) => {                     
 };
 
 // @ts-ignore
-const navBarConnector = connect(mapStateToProps, null, mergeProps)(NavBarContainer)          // упорно ts выплёвывает ошибку непонятного генеза
+const navBarConnector = connect(mapStateToProps, null, mergeProps)(NavBarContainer) as React.ComponentType         // упорно ts выплёвывает ошибку непонятного генеза
 export default navBarConnector;

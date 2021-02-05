@@ -205,7 +205,6 @@ const setCurrentPageThunkAC = (pageSize:number, currentPage:number):ThunkAction_
     dispatch(setCurrentPageAC(currentPage));
     dispatch(setErrorToNullAC());
     let response = await usersApi.getUsers(pageSize, currentPage )
-    console.log(response)
     response.status===200 ?
         dispatch(setUsersAC(response.data.items,response.data.totalCount)) : dispatch(errCatcherAtUsersGetAC(JSON.stringify(response)))
     dispatch(toggleIsLoadingAC(false));
@@ -215,8 +214,7 @@ const followThunkTogglerAC  = (userId:number, isFollowed:boolean):ThunkAction_ty
     let followToggler;
     isFollowed?followToggler=usersApi.unFollowRequest:followToggler=usersApi.followRequest;
     try{ let response = await followToggler(userId)
-    console.log(response);
-    if(response.status===200)dispatch(followBTNTogglerAC(userId,!isFollowed)) }
+        if(response.status===200)dispatch(followBTNTogglerAC(userId,!isFollowed)) }
     catch (err) { dispatch(errCatcherAtFollowingAC(userId, parseInt(JSON.stringify(err.message).replace(/\D+/g,""))));}
     dispatch(toggleFollowingProgressAC(false, userId));
 };

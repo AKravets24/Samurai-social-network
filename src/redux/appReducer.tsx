@@ -1,9 +1,9 @@
 import {usersApi} from "./app";
-import {timerAC} from './backGroundSetter'
+import {timerAC, TimerAC_Type} from './backGroundSetter'
 import {SetLogOutUserDataAC_Type} from "./headerReducer";
 import {Dispatch} from "redux";
 import {ThunkAction} from "redux-thunk"
-import { AppStateType } from "./redux-store";
+import { AppStateType, InferActionsTypes } from "./redux-store";
 
 const INITIALISED_SUCCESSFULLY =  'INITIALISED_SUCCESSFULLY';
 const SET_USER_DATA            =  'SET_USER_DATA';
@@ -18,47 +18,62 @@ type AuthErrCatcherAC_Type     = {type: typeof AUTH_ERR_CATCHER, authErr:string 
 type CaptchaSetterAC_Type      = {type: typeof GET_CAPTCHA, captcha:string}
 type ErrGetCaptchaAC_Type      = {type: typeof ERR_GET_CAPTCHA, error:string}
 
-
-const initialisedSuccessAC     = (): InitialisedSuccessAC_Type                            =>({type: INITIALISED_SUCCESSFULLY  });
-const setUserDataAC            = (id:number,email:string,login:string):SetUserDataAC_Type =>({type: SET_USER_DATA, data: {id, email, login}});
-const authErrCatcherAC         = (authErr:string):AuthErrCatcherAC_Type                   =>({type: AUTH_ERR_CATCHER, authErr });
-const captchaSetterAC          = (captcha:string):CaptchaSetterAC_Type                    =>({type: GET_CAPTCHA, captcha      }) 
-const errGetCaptchaAC          = (error:string):ErrGetCaptchaAC_Type                      =>({type: ERR_GET_CAPTCHA, error    })                                              
-
-
 type ActionTypes=InitialisedSuccessAC_Type|SetUserDataAC_Type|AuthErrCatcherAC_Type|SetLogOutUserDataAC_Type|CaptchaSetterAC_Type|ErrGetCaptchaAC_Type;
+type ActionTypes2 = InferActionsTypes<typeof actions>;
+
+const actions = {
+    initialisedSuccessAC: (): InitialisedSuccessAC_Type                            =>({type: INITIALISED_SUCCESSFULLY  }),
+    setUserDataAC       : (id:number,email:string,login:string):SetUserDataAC_Type =>({type: SET_USER_DATA, data: {id, email, login}}),
+    authErrCatcherAC    : (authErr:string):AuthErrCatcherAC_Type                   =>({type: AUTH_ERR_CATCHER, authErr }),
+    captchaSetterAC     : (captcha:string):CaptchaSetterAC_Type                    =>({type: GET_CAPTCHA, captcha      }), 
+    errGetCaptchaAC     : (error:string):ErrGetCaptchaAC_Type                      =>({type: ERR_GET_CAPTCHA, error    }),                                            
+}
+
+
 
 type Dispatch_Type = Dispatch<ActionTypes>
 type ThunkAC_Type =  ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes >
 
 
 const getLogInThunkAC      = ():ThunkAC_Type =>                             async (dispatch:Dispatch_Type) => {
-    let response = await usersApi.getLogIn();
-    console.log(response);
-    
-    let {id, email, login} = response.data.data;
-    response.status===200 ?
-        dispatch(setUserDataAC(id, email, login)) :
-        dispatch(authErrCatcherAC(response.message))
-    
+    try{let response = await usersApi.getLogIn();
+        let {id, email, login} = response.data.data;
+        if(response.status===200) dispatch(actions.setUserDataAC(id, email, login)) }
+    catch(err){dispatch(actions.authErrCatcherAC(err.message))}
+
 };
-const setMeLoginThunkAC    = (email:string,password:string,rememberMe:boolean,captchaCode:string):any =>                    // ANY TYPE!!!!!!!!!!!!!!
-async (dispatch:any) => {  
-    let response = await usersApi.setMeLogin(email, password, rememberMe,captchaCode)
-    console.log(response);    
-    response.data.resultCode===0  ? dispatch(getLogInThunkAC()):
-    response.data.resultCode===10 ? dispatch(getCaptchaThunkAC())&& dispatch(errGetCaptchaAC(response.data.messages[0])):
-    dispatch(authErrCatcherAC(response.message))  
+const setMeLoginThunkAC    = (email:string,password:string,rememberMe:boolean,captchaCode:string):ThunkAC_Type =>  
+async (dispatch:Dispatch_Type) => {  
+    try{let response = await usersApi.setMeLogin(email, password, rememberMe,captchaCode);  
+        if(response.data.resultCode===0) {
+            try{let loginResponse = await usersApi.getLogIn();
+                let {id, email, login} = loginResponse.data.data;
+                if(loginResponse.status===200) dispatch(actions.setUserDataAC(id, email, login)) }
+            catch(loginErr){dispatch(actions.authErrCatcherAC(loginErr.message))} }
+        if(response.data.resultCode===10){
+            try{let getCaptchaResponse = await usersApi.getCaptcha(); 
+                if(getCaptchaResponse.status===200)dispatch(actions.captchaSetterAC(getCaptchaResponse.data.url))}
+        catch(getCaptchaErr){                                         // нужен вменяемый обработчик ошибки получения капчи!!
+            dispatch(actions.errGetCaptchaAC(getCaptchaErr))                  // не пойму, нужна ли эта строка
+            dispatch(actions.errGetCaptchaAC(getCaptchaErr.data.messages[0])) // или эта?
+        }     
+        }
+    }
+    catch (err){dispatch(actions.authErrCatcherAC(err.message))}  
 };
 const getCaptchaThunkAC    = ():ThunkAC_Type =>                             async (dispatch:Dispatch_Type) => {
-   let response = await usersApi.getCaptcha();
-   console.log(response);
-   response.status===200 ? dispatch(captchaSetterAC(response.data.url)):dispatch(errGetCaptchaAC(response))
+    try{let response = await usersApi.getCaptcha();
+        console.log(response);
+        if(response.status===200) dispatch(actions.captchaSetterAC(response.data.url))}
+    catch(err){dispatch(actions.errGetCaptchaAC(err))}
 }
-const initializeAppThunkAC = (timer:number):any =>                 async (dispatch:any) => {                                 // ANY TYPE!!!!!!!!!!!!!!
-    dispatch(timerAC(timer))
-    dispatch(getLogInThunkAC())
-    .then( () => { dispatch(initialisedSuccessAC());})
+const initializeAppThunkAC = (timer:number):ThunkAC_Type =>                 async (dispatch:Dispatch_Type) => { 
+    timerAC(timer)                // было dispatch(timerAC(timer)), вернуть и доработать, если не будет срабатывать вообще вроде он нафиг не нужен тут
+    try{let response = await usersApi.getLogIn();
+        let {id, email, login} = response.data.data;
+        if(response.status===200) dispatch(actions.setUserDataAC(id, email, login))
+        dispatch(actions.initialisedSuccessAC()) }
+    catch(err){dispatch(actions.authErrCatcherAC(err.message))}
 };
 
 export type App_ACs_Type = {
@@ -90,9 +105,9 @@ const initialState = {
 };
 
 
-export type InitialStateType = typeof initialState;
+export type appStateType = typeof initialState;
 
-export const appAuthReducer = (state = initialState, action:ActionTypes): InitialStateType => {
+export const appAuthReducer = (state = initialState, action:ActionTypes): appStateType => {
     switch (action.type) {
         case INITIALISED_SUCCESSFULLY: return {...state, appIsInitialized: true      };
         case SET_USER_DATA:            return {...state, ...action.data, isAuth: true};
@@ -105,7 +120,23 @@ export const appAuthReducer = (state = initialState, action:ActionTypes): Initia
 };
 
 
+//==================================================================================================
+// const initializeAppThunkAC = (timer:number):ThunkAC_Type =>                 async (dispatch:any) => {                                 // ANY TYPE!!!!!!!!!!!!!!
+//     dispatch(timerAC(timer))
+//     dispatch(getLogInThunkAC())
+//     .then( () => { dispatch(initialisedSuccessAC());})
+// };
 
+// const setMeLoginThunkAC    = (email:string,password:string,rememberMe:boolean,captchaCode:string):ThunkAC_Type =>                    // ANY TYPE!!!!!!!!!!!!!!
+// async (dispatch:any) => {  
+//     try{let response = await usersApi.setMeLogin(email, password, rememberMe,captchaCode);
+//         console.log(response);    
+//         if(response.data.resultCode===0) dispatch(getLogInThunkAC());
+//         if(response.data.resultCode===10)dispatch(getCaptchaThunkAC()); dispatch(errGetCaptchaAC(response.data.messages[0]))}
+//     catch (err){dispatch(authErrCatcherAC(err.message))}  
+// };
+
+//==================================================================================================
 
 
 
