@@ -13,15 +13,15 @@ import                      './index.css';
 let reRender = (store) => {
     // console.log(store.getState())
 
-    ReactDOM.render(
-        <React.StrictMode>
-            <BrowserRouter>
-                <Provider store={store} >
-                    <AppConnector />
-                </Provider>
-            </BrowserRouter>
-        </React.StrictMode>, document.getElementById('root')
-    )
+  ReactDOM.render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <Provider store={store} >
+          <AppConnector />
+        </Provider>
+      </BrowserRouter>
+    </React.StrictMode>, document.getElementById('root')
+  )
 };
 
 reRender(store);

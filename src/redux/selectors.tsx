@@ -61,7 +61,9 @@ export const getSmartIdAndIsAuth          = createSelector(getIsAuth,getMyId,(is
 export const getProfileACs                 = (state:AppStateType) => state.profileACs                                          ;
 export const getProfilePics                = (state:AppStateType) => state.profilePics                                         ;
 // in reSelector's control it returns  profileReducer's state
+// ProfileReducerPart_1
 const getWallPosts                         = (state:AppStateType) => state.profileReducer.wallPosts                            ;
+const getWallPostsLength                   = (state:AppStateType) => state.profileReducer.wallPosts.length                     ; // контролит ДЛИНУ массива
 const getProfileData                       = (state:AppStateType) => state.profileReducer.profileData                          ;
 const getProfileDataPhotoLarge             = (state:AppStateType) => state.profileReducer.profileData.photos.large             ;
 const getProfileDataPhotoSmall             = (state:AppStateType) => state.profileReducer.profileData.photos.small             ;
@@ -72,6 +74,8 @@ const getMyAvatarLarge                     = (state:AppStateType) => state.profi
 const getIsFollowed                        = (state:AppStateType) => state.profileReducer.isFollowed                           ;
 const getIsFollowing                       = (state:AppStateType) => state.profileReducer.isFollowing                          ;
 const getIsonFollowingErr                  = (state:AppStateType) => state.profileReducer.onFollowingErr                       ;
+
+// ProfileReducerPart_2
 const getErrOnProfileLoading               = (state:AppStateType) => state.profileReducer.errOnProfileLoading                  ;
 const getErrOnStatusLoading                = (state:AppStateType) => state.profileReducer.errOnStatusLoading                   ;
 const getErrOnStatusUpdate                 = (state:AppStateType) => state.profileReducer.errOnStatusUpdate                    ;
@@ -79,17 +83,18 @@ const getErrOnAvatarUpdate                 = (state:AppStateType) => state.profi
 const MSGToUserSended                      = (state:AppStateType) => state.profileReducer.MSGToUserSended                      ;
 const errAtMSGSending                      = (state:AppStateType) => state.profileReducer.errAtMSGSending                      ;
 
-const ProfileReducerPart_1 = createSelector (getWallPosts,
+
+const ProfileReducerPart_1 = createSelector (getWallPosts,getWallPostsLength,
     getProfileData,getProfileDataPhotoLarge,getProfileDataPhotoSmall,getIsLoading_compProfile,getStatusField,getMyAvatarSmall,
-    getMyAvatarLarge,getIsFollowed,getIsFollowing,getIsonFollowingErr,getErrOnProfileLoading,
-                (wallPosts,profileData,large,small,isLoading,statusField,myAvatarSmall,myAvatarLarge,isFollowed,isFollowing,onFollowingErr,errOnProfileLoading,)=>{
-  let ProfilePart_1 =  {wallPosts,profileData,large,small,isLoading,statusField,myAvatarSmall,myAvatarLarge,isFollowed,isFollowing,onFollowingErr,errOnProfileLoading,}
+    getMyAvatarLarge,getIsFollowed,getIsFollowing,getIsonFollowingErr,
+                       (wallPosts,WallPostsLength,profileData,large,small,isLoading,statusField,myAvatarSmall,myAvatarLarge,isFollowed,isFollowing,onFollowingErr,)=>{
+  let ProfilePart_1 =  {wallPosts,WallPostsLength,profileData,large,small,isLoading,statusField,myAvatarSmall,myAvatarLarge,isFollowed,isFollowing,onFollowingErr,}
         return ProfilePart_1
     })
 
-const ProfileReducerPart_2 = createSelector (getErrOnStatusLoading,getErrOnStatusUpdate,getErrOnAvatarUpdate,MSGToUserSended,errAtMSGSending,
-                       (errOnStatusLoading,errOnStatusUpdate,errOnAvatarUpdate,MSGToUserSended, errAtMSGSending,)=>{
-   let ProfilePart_2 = {errOnStatusLoading,errOnStatusUpdate,errOnAvatarUpdate,MSGToUserSended, errAtMSGSending,}
+const ProfileReducerPart_2 = createSelector (getErrOnProfileLoading,getErrOnStatusLoading,getErrOnStatusUpdate,getErrOnAvatarUpdate,MSGToUserSended,errAtMSGSending,getWallPostsLength,
+                       (errOnProfileLoading,errOnStatusLoading,errOnStatusUpdate,errOnAvatarUpdate,MSGToUserSended,errAtMSGSending,wallPostsLength)=>{
+   let ProfilePart_2 = {errOnProfileLoading,errOnStatusLoading,errOnStatusUpdate,errOnAvatarUpdate,MSGToUserSended,errAtMSGSending,wallPostsLength}
         return  ProfilePart_2
     })
 

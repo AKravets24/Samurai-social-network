@@ -1,284 +1,336 @@
-import React, {useState, useEffect, useRef}  from "react";
-import {connect}                             from "react-redux";
-import {compose}                             from 'redux';
-import {withRouter, NavLink}                 from 'react-router-dom';
-import {Formik}                              from 'formik';
-import stl                                   from './dialogs.module.css';
+import React, { useState, useEffect, useRef } from "react";
+import { connect } from "react-redux";
+import { compose } from 'redux';
+import { withRouter, NavLink } from 'react-router-dom';
+import { Field, Formik } from 'formik';
+import stl from './dialogs.module.css';
 import {
-    getColorTheme,getDialogsACs_compDialogs,
-    getMyId, getSmartDialogsReducer}         from "../../../redux/selectors";
+  getColorTheme, getDialogsACs_compDialogs,
+  getMyId, getSmartDialogsReducer
+} from "../../../redux/selectors";
 import { DialogActions_Type, InitialDialogsState_Type } from '../../../redux/dialogsReducer'
 
 import { AppStateType } from "../../../redux/redux-store";
+import { log } from "console";
 
 
 
 type DialogContainerProps_Type = {
-    history:  any                                                              // comes from WithRouter
-    location: {pathname:string, search:string, hash:string, state:any}         // comes from WithRouter
-    match:    any                                                              // comes from WithRouter
-    staticContext: any                                                         // comes from WithRouter ?
+  history: any                                                              // comes from WithRouter
+  location: { pathname: string, search: string, hash: string, state: any }         // comes from WithRouter
+  match: any                                                              // comes from WithRouter
+  staticContext: any                                                         // comes from WithRouter ?
 
-    state:    MSTP_Type
-    actions:  MRGProps_Type['actions']
-   
+  state: MSTP_Type
+  actions: MRGProps_Type['actions']
+
 }
 
 type Themes_Type = {
-    activeLink:       string
-    dialogAreaBackgroundNSecondScroll: string
-    dialogDynamic:    string
-    firstScroller:    string
-    msgMeDynamic:     string
-    msgUserDynamic:   string
-    sendBTNDynamic:   string
-    talkerBlockA:     string
-    talkerBlockTheme: string
-    textAreaDynamic:  string
+  activeLink: string
+  dialogAreaBackgroundNSecondScroll: string
+  dialogDynamic: string
+  firstScroller: string
+  msgMeDynamic: string
+  msgUserDynamic: string
+  sendBTNDynamic: string
+  talkerBlockA: string
+  talkerBlockTheme: string
+  textAreaDynamic: string
 }
 
-let DialogFuncContainer = ({state,actions,history,location,match,staticContext}:DialogContainerProps_Type)=> { 
-    // console.log(match)
+let DialogFuncContainer = ({ state, actions, match }: DialogContainerProps_Type) => {
+  // console.log(match)
 
-    useEffect(()=> {
-        match.params.userId ? actions.talkedBeforeThunk(match.params.userId) : actions.getMyNegotiatorsListThunk();
-    },[])
+  useEffect(() => {
+    match.params.userId ? actions.talkedBeforeThunk(match.params.userId) : actions.getMyNegotiatorsListThunk();
+  }, [])
 
-    let [themes, setThemes] = useState<Themes_Type>({dialogDynamic:'',firstScroller:'',talkerBlockTheme:'',activeLink:'', talkerBlockA:'',msgMeDynamic:'',msgUserDynamic:'',dialogAreaBackgroundNSecondScroll:'', textAreaDynamic:'',sendBTNDynamic:''})
-    useEffect(()=> {
-        switch (state.colorTheme) {
-            case 'NIGHT'  :return setThemes({...themes,dialogDynamic:stl.dialogN,firstScroller:stl.dialogListN,talkerBlockTheme:stl.talkerBlockN,activeLink:stl.activeLinkN, talkerBlockA:stl.talkerBlockA_N,msgMeDynamic:stl.myMsgN,
-                    msgUserDynamic:stl.userMsgN,dialogAreaBackgroundNSecondScroll:stl.dialogAreaN,textAreaDynamic:stl.textareaN,sendBTNDynamic:stl.sendBTN_N,});
-            case 'MORNING':return setThemes({...themes,dialogDynamic:stl.dialogM,firstScroller:stl.dialogListM,talkerBlockTheme:stl.talkerBlockM,activeLink:stl.activeLinkM, talkerBlockA:stl.talkerBlockA_M,msgMeDynamic:stl.myMsgM,
-                    msgUserDynamic:stl.userMsgM,dialogAreaBackgroundNSecondScroll:stl.dialogAreaM,textAreaDynamic:stl.textareaM,sendBTNDynamic:stl.sendBTN_M,});
-            case 'DAY'    :return setThemes({...themes,dialogDynamic:stl.dialogD,firstScroller:stl.dialogListD,talkerBlockTheme:stl.talkerBlockD,activeLink:stl.activeLinkD, talkerBlockA:stl.talkerBlockA_D,msgMeDynamic:stl.myMsgD,
-                    msgUserDynamic:stl.userMsgD,dialogAreaBackgroundNSecondScroll:stl.dialogAreaD,textAreaDynamic:stl.textareaD,sendBTNDynamic:stl.sendBTN_D,});
-            case'EVENING' :return setThemes({...themes,dialogDynamic:stl.dialogE,firstScroller: stl.dialogListE,talkerBlockTheme:stl.talkerBlockE,activeLink:stl.activeLinkE, talkerBlockA:stl.talkerBlockA_E,msgMeDynamic:stl.myMsgE,
-                    msgUserDynamic:stl.userMsgE,dialogAreaBackgroundNSecondScroll:stl.dialogAreaE,textAreaDynamic:stl.textareaE,sendBTNDynamic:stl.sendBTN_E,});
-    }},[state.colorTheme])
-    
+  let [themes, setThemes] = useState<Themes_Type>({ dialogDynamic: '', firstScroller: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDynamic: '', msgUserDynamic: '', dialogAreaBackgroundNSecondScroll: '', textAreaDynamic: '', sendBTNDynamic: '' })
+  useEffect(() => {
+    switch (state.colorTheme) {
+      case 'NIGHT': return setThemes({
+        ...themes, dialogDynamic: stl.dialogN, firstScroller: stl.dialogListN, talkerBlockTheme: stl.talkerBlockN, activeLink: stl.activeLinkN, talkerBlockA: stl.talkerBlockA_N, msgMeDynamic: stl.myMsgN,
+        msgUserDynamic: stl.userMsgN, dialogAreaBackgroundNSecondScroll: stl.dialogAreaN, textAreaDynamic: stl.textareaN, sendBTNDynamic: stl.sendBTN_N,
+      });
+      case 'MORNING': return setThemes({
+        ...themes, dialogDynamic: stl.dialogM, firstScroller: stl.dialogListM, talkerBlockTheme: stl.talkerBlockM, activeLink: stl.activeLinkM, talkerBlockA: stl.talkerBlockA_M, msgMeDynamic: stl.myMsgM,
+        msgUserDynamic: stl.userMsgM, dialogAreaBackgroundNSecondScroll: stl.dialogAreaM, textAreaDynamic: stl.textareaM, sendBTNDynamic: stl.sendBTN_M,
+      });
+      case 'DAY': return setThemes({
+        ...themes, dialogDynamic: stl.dialogD, firstScroller: stl.dialogListD, talkerBlockTheme: stl.talkerBlockD, activeLink: stl.activeLinkD, talkerBlockA: stl.talkerBlockA_D, msgMeDynamic: stl.myMsgD,
+        msgUserDynamic: stl.userMsgD, dialogAreaBackgroundNSecondScroll: stl.dialogAreaD, textAreaDynamic: stl.textareaD, sendBTNDynamic: stl.sendBTN_D,
+      });
+      case 'EVENING': return setThemes({
+        ...themes, dialogDynamic: stl.dialogE, firstScroller: stl.dialogListE, talkerBlockTheme: stl.talkerBlockE, activeLink: stl.activeLinkE, talkerBlockA: stl.talkerBlockA_E, msgMeDynamic: stl.myMsgE,
+        msgUserDynamic: stl.userMsgE, dialogAreaBackgroundNSecondScroll: stl.dialogAreaE, textAreaDynamic: stl.textareaE, sendBTNDynamic: stl.sendBTN_E,
+      });
+    }
+  }, [state.colorTheme])
 
-    return themes.dialogDynamic && <Dialogs
-        // dialogIsLoading            =  { props.state.dialogIsLoading     }
-        state       =  { state.props         }
-        userIdInURL =  { match.params.userId }
-        myId        =  { state.myId          }
-        themes      =  { themes              }
-        actions     =  { actions             }                 
-    />;
+
+  return themes.dialogDynamic && <Dialogs
+    // dialogIsLoading            =  { props.state.dialogIsLoading     }
+    state={state.props}
+    userIdInURL={match.params.userId}
+    myId={state.myId}
+    themes={themes}
+    actions={actions}
+  />;
 }
 
 type DialogsProps_type = {
-    myId:        null|number
-    state:       InitialDialogsState_Type
-    themes:      Themes_Type 
-    userIdInURL: undefined | string                                                                                   
-    actions:     MRGProps_Type['actions']                                                                    
+  myId: null | number
+  state: InitialDialogsState_Type
+  themes: Themes_Type
+  userIdInURL: undefined | string
+  actions: MRGProps_Type['actions']
 }
 
 
-let Dialogs:React.FC<DialogsProps_type> =({myId,state,themes,userIdInURL,actions}) => {
-    // console.log(typeof stl.visibility)
+let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, actions }) => {
+  // console.log(typeof stl.visibility)
 
-    const dialogArea  = useRef<HTMLDivElement>(null);
-    const bufferBlock = useRef<HTMLDivElement>(null);
+  const dialogArea = useRef<HTMLDivElement>(null);
+  const bufferBlock = useRef<HTMLDivElement>(null);
 
-    interface AreaHeight {}
-    type Error_Type   = {text?:string}
+  interface AreaHeight { }
+  type Error_Type = { text?: string }
 
-    let [dialogId,         setDialogId]         = useState(userIdInURL===undefined ? 0 : +userIdInURL);
-    let [visibility,       setVisibility]       = useState<any>(stl.visibility); // !!!normally must be  stl.visibility !! else - null
-    let [pageNumber,       setPageNumber]       = useState(2);
-    let [msgsMapDone,      setMsgsMapDone]      = useState(false);
-    let [dialogAreaHeight, setDialogAreaHeight] = useState<AreaHeight|any>(0);
-    let [userNameInHeader, setUserNameInHeader] = useState('');
+  let [dialogId, setDialogId] = useState(userIdInURL === undefined ? 0 : +userIdInURL);
+  let [visibility, setVisibility] = useState<any>(stl.visibility); // !!!normally must be  stl.visibility !! else - null
+  let [pageNumber, setPageNumber] = useState(2);
+  let [msgsMapDone, setMsgsMapDone] = useState(false);
+  let [dialogAreaHeight, setDialogAreaHeight] = useState<AreaHeight | any>(0);
+  let [userNameInHeader, setUserNameInHeader] = useState('');
 
-    type usePrevious = {current:number}
+  type usePrevious = { current: number }
 
-    // let usePrevious=(value:number)=> {let ref=useRef<object>();useEffect(()=>{ref.current=value});return ref.current;};             // пересмотреть логику работы!!
-    // let prevCount:number = usePrevious(dialogAreaHeight);
-    let prevCount = 0;
-    let sendMessageListener = (userId:number,msg:string)=>{
-        setDialogId(dialogId=userId);actions.sendMessageToUserThunk(userId,msg.substring(0, msg.length-1),'','')};
-    let getTalk = (userId:number) => {setDialogId(dialogId=userId); actions.getTalkWithUserThunk(dialogId)};
-    let scrollToDown = (bufferBlock:any) => {bufferBlock.current&&bufferBlock.current.scrollIntoView({behavior: "auto"})};
+  // let usePrevious=(value:number)=> {let ref=useRef<object>();useEffect(()=>{ref.current=value});return ref.current;};             // пересмотреть логику работы!!
+  // let prevCount:number = usePrevious(dialogAreaHeight);
+  let prevCount = 0;
 
-    let oldMsgLazyLoader=()=>{let msgCount=5;actions.addPrevMessagesThunk(dialogId,msgCount,pageNumber);setPageNumber(pageNumber+1)};
+  let getTalk = (userId: number) => { setDialogId(dialogId = userId); actions.getTalkWithUserThunk(dialogId) };
+  let scrollToDown = (bufferBlock: any) => { bufferBlock.current && bufferBlock.current.scrollIntoView({ behavior: "auto" }) };
 
-    useEffect(()=>{dialogArea?.current &&
-        !state.prevMsgsIsLoading && dialogArea.current.scrollTo(0,dialogAreaHeight-prevCount)
-    },[state.prevMsgsIsLoading])
+  let oldMsgLazyLoader = () => { let msgCount = 5; actions.addPrevMessagesThunk(dialogId, msgCount, pageNumber); setPageNumber(pageNumber + 1) };
 
-    useEffect(()=>{dialogArea?.current &&
-        setDialogAreaHeight(dialogAreaHeight=dialogArea.current.scrollHeight);
+  useEffect(() => {
+    dialogArea?.current &&
+      !state.prevMsgsIsLoading && dialogArea.current.scrollTo(0, dialogAreaHeight - prevCount)
+  }, [state.prevMsgsIsLoading])
+
+  useEffect(() => {
+    dialogArea?.current &&
+      setDialogAreaHeight(dialogAreaHeight = dialogArea.current.scrollHeight);
     return setDialogAreaHeight(0);
-    }, [state] );
-    useEffect(()=>{ /*msgsMapDone &&*/ scrollToDown(bufferBlock)},[msgsMapDone])
+  }, [state]);
+  useEffect(() => { /*msgsMapDone &&*/ scrollToDown(bufferBlock) }, [msgsMapDone])
 
-    // console.log(props.state.certainDialog);
+  // console.log(props.state.certainDialog);
 
-    let submitter = (values:any) => {
-        console.log(values)
-    };
+  type Value_Type = { text: string }
+  let submitter = (values: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+    // actions.sendMessageToUserThunk(dialogId, values.text.substring(0, values.text.length - 1), '', '')
+    actions.sendMessageToUserThunk(dialogId, values.text, '', ''); values.text = ''; setSubmitting(false);
+  }
 
-    // console.log( props.state.certainDialog )
+  let keyCodeChecker = (e: KeyboardEvent, values: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+    if (e.keyCode == 13 && e.shiftKey) { return } // для переноса строки =)
+    else if (e.keyCode === 13) {
+      submitter(values, { setSubmitting })
+    }
+  }
 
-    return <>
-        <div className={`${stl.dialogsPage} ${themes.dialogDynamic}`}>
-            <div className={stl.dialogListAndArea}>
-                <div className={`${stl.dialogList} ${themes.firstScroller}`}>
-                {state.dialogsList.length=== 0  && !state.errNegotiatorsListGet ?
-                    <img className={stl.certainLoader} src={state.allDialogsLoader} alt="Err"/>
-                    :
-                    state.errNegotiatorsListGet?
-                        <div className={stl.errorBlock}>
-                            <h2>Error!</h2>
-                            <div>
-                                <img /* onLoad={true} */ src={state.errNegotiatorsListPIC} alt="Err"/>
-                            </div>
-                            <p>{state.errNegotiatorsListGet} Connection lost!</p>
-                            <button className={`${stl.errBTN} ${themes.sendBTNDynamic}`}
-                                    onClick={()=>actions.getMyNegotiatorsListThunk()}
-                            >Try again</button>
-                        </div>
-                    :
-                     state.dialogsList
-                    .map((user, i) =>
-                        <div className={`${stl.talkerBlock} ${themes.talkerBlockTheme}`} key={i} >
-                            <NavLink to={`/profile/${user.id}`} >
-                                <img  src={user.photos.large || state.defaultAvatar} alt="err"/>
-                            </NavLink>
-                            <NavLink to={`/dialogs/${user.id}`}
-                                     onClick={() => {getTalk(user.id); setVisibility(stl.visibility);setUserNameInHeader(user.userName)}}
-                                     className={themes.talkerBlockA}
-                                     activeClassName={themes.activeLink}>
-                                {user.userName}{user.hasNewMessages &&
-                            <span>({user.newMessagesCount})</span> }
-                            </NavLink>
-                        </div>)}
-            </div>
-                <div className={stl.dialogsAreaAndSender}>
-                    <div className={stl.editWrapper}>
-                        <h2>{userNameInHeader}</h2>
-                    <div className={ `${stl.editBlock} ${visibility}` } >
-                        <h3>On button click makes immediate action</h3>
-                    </div>
-                </div>
-                <div className={`${stl.dialogArea} ${themes.dialogAreaBackgroundNSecondScroll}`}
-                     ref={dialogArea} 
-                     onScroll={()=>!dialogArea?.current?.scrollTop && oldMsgLazyLoader()}
-                     >
-                <div className={stl.oldMsgsLoader}>
-                    {state.prevMsgsIsLoading && <img src={state.prevMsgsLoader} alt=""/>}
-                </div>
+  let validator = (values: Value_Type) => { let errors: Error_Type = {}; if (!values.text) { errors.text = 'Required' } return errors }
 
-                { state.certainDialogIsLoading ? <img src={state.certainDialogLoader} alt="err"/>                                                         :
-                  state.errCertainDialogGet  ? <div className={stl.errorBlock}> {state.errCertainDialogGet}</div> :
-                  state?.certainDialog?.items
-                   .map((msg, i,arr) =>{
-                      if(msgsMapDone===false&&i===arr.length-1){return setMsgsMapDone(true)}
-                      if(i===arr.length-1){scrollToDown(bufferBlock)}
-                      return <div
-                           key={i} 
-                           className={myId!==null && +msg.senderId === +myId ?
-                           `${stl.messageBlockMe} ${themes.msgMeDynamic} ` : `${stl.messageBlockUser} ${themes.msgUserDynamic}`}
-                           id={msg.id}
-                           onDoubleClick={()=> visibility ? setVisibility(null) : setVisibility(stl.visibility) }
-                      >
-                          <p className={stl.messageBody} >{msg.body}</p>
-                          <p className={myId!==null && +msg.senderId === +myId ?
-                              stl.messageBlockTimeMe : stl.messageBlockTimeUser} >{msg.addedAt}, {msg.viewed ? 'seen':'x'}</p>
-                          <div className={stl.editWrapper}>
-                              <div className={visibility}>
-                                  <button onClick={()=> actions.deleteMessageThunk(msg.id,0)} > Delete now! </button>             {/* second argument is fake!!! */}
-                                  {myId!==null && +msg.senderId !== +myId &&
-                                  <button onClick={()=>actions.setSpamMessagesThunk(msg.id,0)}> To spam now!</button>}            {/* second argument is fake!!! */}
-                              </div>
-                          </div>
-                      </div>
-                   })}
-                    <div ref={bufferBlock}/>
+  return <>
+    <div className={`${stl.dialogsPage} ${themes.dialogDynamic}`}>
+      <div className={stl.dialogListAndArea}>
+        <div className={`${stl.dialogList} ${themes.firstScroller}`}>
+          {state.dialogsList.length === 0 && !state.errNegotiatorsListGet ?
+            <img className={stl.certainLoader} src={state.allDialogsLoader} alt="Err" />
+            :
+            state.errNegotiatorsListGet ?
+              <div className={stl.errorBlock}>
+                <h2>Error!</h2>
+                <div>
+                  <img /* onLoad={true} */ src={state.errNegotiatorsListPIC} alt="Err" />
                 </div>
-                    <div className={stl.sender}>
-                    <Formik initialValues={{text:''}} validate={values=>{const errors:Error_Type={};if(!values.text){errors.text='Required'} return errors}}
-                            // onSubmit={(values,{setSubmitting})=>{sendMessageListener(dialogId,values.text);values.text='';setSubmitting(false);
-                            onSubmit={ (values)=> submitter(values) }
-                                >
-                        {({values, errors,handleChange,handleSubmit,isSubmitting,}) => (
-                            <form onSubmit={handleSubmit}>
-                                <textarea name="text" onChange={handleChange} value={values.text} placeholder={errors.text}
-                                className={`${themes.textAreaDynamic}`}
-                                // onKeyUp={e=>{e.keyCode===13&&sendMessageListener(dialogId,values.text);values.text=''}}
-                                />
-                                <button type="submit" disabled={isSubmitting} className={`${stl.sendBTN} ${themes.sendBTNDynamic}` }
-                                // onClick={()=>sendMessageListener(dialogId,values.text)}
-                                > Send </button>
-                            </form>
-                        )}
-                    </Formik>
-                </div>
-                </div>
-            </div>
+                <p>{state.errNegotiatorsListGet} Connection lost!</p>
+                <button className={`${stl.errBTN} ${themes.sendBTNDynamic}`}
+                  onClick={() => actions.getMyNegotiatorsListThunk()}
+                >Try again</button>
+              </div>
+              :
+              state.dialogsList
+                .map((user, i) =>
+                  <div className={`${stl.talkerBlock} ${themes.talkerBlockTheme}`} key={i} >
+                    <NavLink to={`/profile/${user.id}`} >
+                      <img src={user.photos.large || state.defaultAvatar} alt="err" />
+                    </NavLink>
+                    <NavLink to={`/dialogs/${user.id}`}
+                      onClick={() => { getTalk(user.id); setVisibility(stl.visibility); setUserNameInHeader(user.userName) }}
+                      className={themes.talkerBlockA}
+                      activeClassName={themes.activeLink}>
+                      {user.userName}{user.hasNewMessages &&
+                        <span>({user.newMessagesCount})</span>}
+                    </NavLink>
+                  </div>)}
         </div>
-    </>
+        <div className={stl.dialogsAreaAndSender}>
+          <div className={stl.editWrapper}>
+            <h2>{userNameInHeader}</h2>
+            <div className={`${stl.editBlock} ${visibility}`} >
+              <h3>On button click makes immediate action</h3>
+            </div>
+          </div>
+          <div className={`${stl.dialogArea} ${themes.dialogAreaBackgroundNSecondScroll}`}
+            ref={dialogArea}
+            onScroll={() => !dialogArea?.current?.scrollTop && oldMsgLazyLoader()}
+          >
+            <div className={stl.oldMsgsLoader}>
+              {state.prevMsgsIsLoading && <img src={state.prevMsgsLoader} alt="" />}
+            </div>
+
+            {state.certainDialogIsLoading ? <img src={state.certainDialogLoader} alt="err" /> :
+              state.errCertainDialogGet ? <div className={stl.errorBlock}> {state.errCertainDialogGet}</div> :
+                state?.certainDialog?.items
+                  .map((msg, i, arr) => {
+                    if (msgsMapDone === false && i === arr.length - 1) { return setMsgsMapDone(true) }
+                    if (i === arr.length - 1) { scrollToDown(bufferBlock) }
+                    return <div
+                      key={i}
+                      className={myId !== null && +msg.senderId === +myId ?
+                        `${stl.messageBlockMe} ${themes.msgMeDynamic} ` : `${stl.messageBlockUser} ${themes.msgUserDynamic}`}
+                      id={msg.id}
+                      onDoubleClick={() => visibility ? setVisibility(null) : setVisibility(stl.visibility)}
+                    >
+                      <p className={stl.messageBody} >{msg.body}</p>
+                      <p className={myId !== null && +msg.senderId === +myId ?
+                        stl.messageBlockTimeMe : stl.messageBlockTimeUser} >{msg.addedAt}, {msg.viewed ? 'seen' : 'x'}</p>
+                      <div className={stl.editWrapper}>
+                        <div className={visibility}>
+                          <button onClick={() => actions.deleteMessageThunk(msg.id, 0)} > Delete now! </button>             {/* second argument is fake!!! */}
+                          {myId !== null && +msg.senderId !== +myId &&
+                            <button onClick={() => actions.setSpamMessagesThunk(msg.id, 0)}> To spam now!</button>}            {/* second argument is fake!!! */}
+                        </div>
+                      </div>
+                    </div>
+                  })}
+            <div ref={bufferBlock} />
+          </div>
+          <div className={stl.sender}>
+
+            <Formik initialValues={{ text: '' }} validate={validator} onSubmit={submitter} >
+              {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
+                <form onSubmit={handleSubmit} >
+                  <Field name="text" onChange={handleChange} value={values.text} placeholder={errors.text} as='textarea' className={`${stl.txtAreaField} ${themes.textAreaDynamic}`} disabled={!dialogId}
+                    onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, values, {
+                      setSubmitting
+                    }))}
+                  />
+                  {dialogId ?
+                    <button disabled={isSubmitting} className={`${stl.sendBTN} ${themes.sendBTNDynamic}`}
+                    > Send </button> : null}
+                </form>
+              )}
+            </Formik>
+          </div>
+        </div>
+      </div>
+    </div>
+  </>
 };
+
+
+{/* <Field
+      name="text"
+      onChange={handleChange}
+      value={values.text}
+      placeholder={errors.text}
+      as='textarea'
+      className={`${stl.txtAreaField} ${themes.textAreaDynamic}`}
+                                    /> */}
+
+{/* <textarea name="text" onChange={handleChange} value={values.text} placeholder={errors.text}
+                                        className={`${themes.textAreaDynamic}`}
+                                    // onKeyUp = {(e:any)=>{e.keyCode===13&& sendMessageListener(dialogId,values.text)}}
+                                    // onSubmit = {(e:any)=>{console.log(e)}}
+                                    // onKeyUp = {(e:any)=>{e.keyCode===13&& tabIndex =1}}
+                                    /> */}
+
+
+{/* <Formik initialValues={{text:''}}validate={values=>{const errors:Error_Type={};if(!values.text){errors.text='Write some words...'}return errors}}
+onSubmit={(values,{setSubmitting})=>{addPostListener(values.text);values.text='';setSubmitting(false);
+}}>
+{({values,errors,handleChange,handleSubmit,isSubmitting})=>(
+<form onSubmit={handleSubmit}>
+    <textarea name="text" className={stl.talkTextarea}
+              onChange={handleChange} value={values.text} placeholder={errors.text} />
+    <button type="submit" disabled={isSubmitting} className={`${props.themes.BTNs}`}> Send Msg </button>
+ </form>
+)}
+</Formik> */}
 
 type MSTP_Type = {
-    props:      InitialDialogsState_Type 
-    dialogACs:  DialogActions_Type
-    myId:       null|number  
-    colorTheme: string 
+  props: InitialDialogsState_Type
+  dialogACs: DialogActions_Type
+  myId: null | number
+  colorTheme: string
 }
 
-let mapStateToProps = (state:AppStateType):MSTP_Type => {
-    return {
-        // props:      getDialogsReducer         (state),
-        props:      getSmartDialogsReducer    (state),
-        dialogACs:  getDialogsACs_compDialogs (state),
-        myId:       getMyId                   (state),
-        colorTheme: getColorTheme             (state),
-    }
+let mapStateToProps = (state: AppStateType): MSTP_Type => {
+  return {
+    // props:      getDialogsReducer         (state),
+    props: getSmartDialogsReducer(state),
+    dialogACs: getDialogsACs_compDialogs(state),
+    myId: getMyId(state),
+    colorTheme: getColorTheme(state),
+  }
 };
 
-type DispatchProps_Type = {dispatch: (action:any)=> void}
+type DispatchProps_Type = { dispatch: (action: any) => void }
 
 type MRGProps_Type = {
-    state : MSTP_Type
-    actions: {
-    getMyNegotiatorsListThunk:() => void
-    getTalkWithUserThunk     :(userId:number) => void
-    sendMessageToUserThunk   :(userId:number,msg:string,actionKey:string,userName:string) => void                      
-    talkedBeforeThunk        :(userId:number) => void
-    setSelectedMessages      :(messageId:string) => void
-    setSpamMessagesThunk     :(messageId:string, index:number) => void
-    deleteMessageThunk       :(messageId:string, index:number) => void
-    addPrevMessagesThunk     :(dialogId:number, msgCount:number, pageNumber:number) => void
-    }
+  state: MSTP_Type
+  actions: {
+    getMyNegotiatorsListThunk: () => void
+    getTalkWithUserThunk: (userId: number) => void
+    sendMessageToUserThunk: (userId: number, msg: string, actionKey: string, userName: string) => void
+    talkedBeforeThunk: (userId: number) => void
+    setSelectedMessages: (messageId: string) => void
+    setSpamMessagesThunk: (messageId: string, index: number) => void
+    deleteMessageThunk: (messageId: string, index: number) => void
+    addPrevMessagesThunk: (dialogId: number, msgCount: number, pageNumber: number) => void
+  }
 }
 
-let mergeProps = (stateProps:MSTP_Type, dispatchProps:DispatchProps_Type):MRGProps_Type => {     
-    const  state  = stateProps; const { dispatch } = dispatchProps;
-    const getMyNegotiatorsListThunk = ()           => dispatch(state.dialogACs.getMyNegotiatorsListThunkAC ()          );
-    const getTalkWithUserThunk      = (userId:number)     => dispatch(state.dialogACs.getTalkWithUserThunkAC      (userId)    );
-    const sendMessageToUserThunk    = (userId:number,msg:string,actionKey:string,userName:string) => 
-                                         dispatch(state.dialogACs.sendMessageToUserThunkAC    (userId,msg,actionKey,userName));
-    const talkedBeforeThunk         = (userId:number)     => dispatch(state.dialogACs.talkedBeforeThunkAC         (userId)    );
-    const setSelectedMessages       = (messageId:string)  => dispatch(state.dialogACs.setSelectedMessagesAC       (messageId) );
-    const setSpamMessagesThunk      = (messageId:string, index:number)  => dispatch(state.dialogACs.setSpamMessagesThunkAC (messageId,index) );
-    const deleteMessageThunk        = (messageId:string, index:number)  => dispatch(state.dialogACs.deleteMessageThunkAC   (messageId,index) );
-    const addPrevMessagesThunk      = (dialogId:number, msgCount:number, pageNumber:number) =>
-                                       dispatch(state.dialogACs.addPrevMessagesThunkAC(dialogId, msgCount, pageNumber) );
-    const actions = {getMyNegotiatorsListThunk, getTalkWithUserThunk, sendMessageToUserThunk,
-        talkedBeforeThunk, setSelectedMessages, setSpamMessagesThunk, deleteMessageThunk, addPrevMessagesThunk}
+let mergeProps = (stateProps: MSTP_Type, dispatchProps: DispatchProps_Type): MRGProps_Type => {
+  const state = stateProps; const { dispatch } = dispatchProps;
+  const getMyNegotiatorsListThunk = () => dispatch(state.dialogACs.getMyNegotiatorsListThunkAC());
+  const getTalkWithUserThunk = (userId: number) => dispatch(state.dialogACs.getTalkWithUserThunkAC(userId));
+  const sendMessageToUserThunk = (userId: number, msg: string, actionKey: string, userName: string) =>
+    dispatch(state.dialogACs.sendMessageToUserThunkAC(userId, msg, actionKey, userName));
+  const talkedBeforeThunk = (userId: number) => dispatch(state.dialogACs.talkedBeforeThunkAC(userId));
+  const setSelectedMessages = (messageId: string) => dispatch(state.dialogACs.setSelectedMessagesAC(messageId));
+  const setSpamMessagesThunk = (messageId: string, index: number) => dispatch(state.dialogACs.setSpamMessagesThunkAC(messageId, index));
+  const deleteMessageThunk = (messageId: string, index: number) => dispatch(state.dialogACs.deleteMessageThunkAC(messageId, index));
+  const addPrevMessagesThunk = (dialogId: number, msgCount: number, pageNumber: number) =>
+    dispatch(state.dialogACs.addPrevMessagesThunkAC(dialogId, msgCount, pageNumber));
+  const actions = {
+    getMyNegotiatorsListThunk, getTalkWithUserThunk, sendMessageToUserThunk,
+    talkedBeforeThunk, setSelectedMessages, setSpamMessagesThunk, deleteMessageThunk, addPrevMessagesThunk
+  }
 
-    return { state, actions }
+  return { state, actions }
 };
 
-export default compose (
+export default compose(
   //@ts-ignore
-    connect<MSTP_Type, {}, MRGProps_Type, AppStateType>(mapStateToProps, null, mergeProps),
-    withRouter
-    )(DialogFuncContainer);
+  connect<MSTP_Type, {}, MRGProps_Type, AppStateType>(mapStateToProps, null, mergeProps),
+  withRouter
+)(DialogFuncContainer);
 
 
 

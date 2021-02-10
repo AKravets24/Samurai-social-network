@@ -476,7 +476,7 @@
     align-items: center;
 }
 
-.sender textarea {
+.txtAreaField{
     /*text-indent: 25px;*/
     width: 93%;
     padding-left: 2%;

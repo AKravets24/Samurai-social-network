@@ -1,106 +1,106 @@
-import React,{lazy, Suspense}        from "react";
-import { Route,Redirect,withRouter } from "react-router-dom";
-import { connect }                   from 'react-redux';
-import { compose }                   from 'redux';
-import stl                           from './content.module.css';
+import React, { lazy, Suspense } from "react";
+import { Route, Redirect, withRouter } from "react-router-dom";
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import stl from './content.module.css';
 // import  NotFound                     from "./404/404";
-import { getSmartIdAndIsAuth }       from "../../redux/selectors";
-import { withSuspense }              from './HOC/withSuspense';
-import { AppStateType }              from '../../redux/redux-store';
+import { getSmartIdAndIsAuth } from "../../redux/selectors";
+import { withSuspense } from './HOC/withSuspense';
+import { AppStateType } from '../../redux/redux-store';
 // import {withAuthRedirect} from "./HOC/withAuthRedirect";  // ? нужен ли
 
 
 // const ProfileComposer = lazy(()=> import("./profile/profileCompWithContainer").then((m:any) => ({default: m.ProfileComposer}))) // as React.ComponentType
-    
+
 //@ts-ignore
-const ProfileComposer = lazy(()=> import("./profile/profileCompWithContainer")) as React.LazyExoticComponent<React.ComponentType<any>> ;
+const ProfileComposer = lazy(() => import("./profile/profileCompWithContainer")) as React.LazyExoticComponent<React.ComponentType<any>>;
 //@ts-ignore
-const FriendsComposer = lazy(()=> import("./friends/friendsContainer"));
+const FriendsComposer = lazy(() => import("./friends/friendsContainer"));
 //@ts-ignore
-const DialogsComposer = lazy(()=> import("./dialogs/dialogs"));
+const DialogsComposer = lazy(() => import("./dialogs/dialogs"));
 //@ts-ignore
-const UsersComposer   = lazy(()=> import("./users/usersContainer"));
-const News            = lazy(()=> import('./news/News'));
-const Music           = lazy(()=> import('./news/News'));
-const Settings        = lazy(()=> import("./settings/settings"));
-const UnAuthorised    = lazy(()=> import("./unAuthorised/unAuthorised"));
-const NotFound        = lazy(()=> import("./404/404"));
+const UsersComposer = lazy(() => import("./users/usersContainer"));
+const News = lazy(() => import('./news/News'));
+const Music = lazy(() => import('./news/News'));
+const Settings = lazy(() => import("./settings/settings"));
+const UnAuthorised = lazy(() => import("./unAuthorised/unAuthorised"));
+const NotFound = lazy(() => import("./404/404"));
 
 
-let mapStateToProps = (state:AppStateType)=> {  
-    // console.log(state);
-    return { smartData: getSmartIdAndIsAuth(state),}};
+let mapStateToProps = (state: AppStateType) => {
+  // console.log(state);
+  return { smartData: getSmartIdAndIsAuth(state), }
+};
 
 
-const ContentComposer =  compose<React.ComponentType>( connect(mapStateToProps), withRouter,)(ContentCompContainer) ;
+const ContentComposer = compose<React.ComponentType>(connect(mapStateToProps), withRouter,)(ContentCompContainer);
 export default ContentComposer
 
 type ContainerProps = {
-    smartData: {
-        isAuth: boolean,
-        id:     number
-    }
-    location: {
-        hash:     string
-        key:      string
-        pathname: string
-        search:   string
-        state:    undefined|any
-    }
+  smartData: {
+    isAuth: boolean,
+    id: null | number
+  }
+  location: {
+    hash: string
+    key: string
+    pathname: string
+    search: string
+    state: undefined | any
+  }
 }
 
-let ProfileComp  = withSuspense(ProfileComposer)
-let FriendsComp  = withSuspense(FriendsComposer)
-let DialogsComp  = withSuspense(DialogsComposer)
-let UsersComp    = withSuspense(UsersComposer)
-let NewsComp     = withSuspense(News)
-let MusicComp    = withSuspense(Music)
+let ProfileComp = withSuspense(ProfileComposer)
+let FriendsComp = withSuspense(FriendsComposer)
+let DialogsComp = withSuspense(DialogsComposer)
+let UsersComp = withSuspense(UsersComposer)
+let NewsComp = withSuspense(News)
+let MusicComp = withSuspense(Music)
 let SettingsComp = withSuspense(Settings)
 let NotFoundComp = withSuspense(NotFound)
 
-function ContentCompContainer (props:ContainerProps){  //console.log(props)
-    let {id,isAuth}=props.smartData;
-    return <Content myId={id} isAuth={isAuth} pathname={props.location.pathname}/>
+function ContentCompContainer(props: ContainerProps) {  //console.log(props)
+  let { id, isAuth } = props.smartData;
+  return <Content myId={id} isAuth={isAuth} pathname={props.location.pathname} />
 };
 
-type PropsType = {isAuth: boolean, myId: number, pathname: string}
+type PropsType = { isAuth: boolean, myId: null | number, pathname: string }
 
-function Content(props:PropsType) {                                                                                               // два рендера - первичный и из-за withRouter
-    // console.log(props);
-    
-    //users?count=${pageSize}&page=${currentPage}
-    let loginChecker = () => {
-        if (props.isAuth&&props.myId) {         // ЗАЛОГИНЕН
-            // console.log(props)
-            if ( props.pathname.match(/^\/login$|^\/$/) ) return <Redirect to={`profile/${props.myId}`      }/>
-            if (!props.pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/))
-                return <Redirect to='/404'/>
-            return  <>
-                <Route onLoad={true} exact path='/profile/:userId?' render={()=> <ProfileComp />} />
-                <Route onLoad={true} exact path='/friends'          render={()=> <FriendsComp />} />
-                <Route onLoad={true} exact path={`/dialogs/:userId?/:messages?` }
-                                                                    render={()=> <DialogsComp/> } />
-                <Route onLoad={true} exact path={`/users`}          render={()=> <UsersComp  /> } />
-                <Route onLoad={true} exact path='/news'             render={()=> <NewsComp />   } />
-                <Route onLoad={true} exact path='/music'            render={()=> <MusicComp/>   } />
-                <Route onLoad={true} exact path='/settings'         render={()=> <SettingsComp/>} />
-                <Route onLoad={true} exact path='/404'              render={()=> <NotFoundComp/>} />
-            </>
-        }
-        else {                      // НЕ ЗАЛОГИНЕН
-            if ( props.pathname.match(/^\/profile\/\d{1,4}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\b$|^\/friends$|^\/users$|^\/$/))return <Redirect to='/login'/>
-            if (!props.pathname.match(/^\/news$|^\/music$|^\/settings$|^\/$|^\/login$|^\/404$/))return <Redirect to='/404'/>
-            console.log(2)
-            return <>
-                <Route onLoad={true} exact path='/login'            render={withSuspense(UnAuthorised)}    />
-                <Route onLoad={true} exact path='/news'             render={withSuspense(News)}            />
-                <Route onLoad={true} exact path='/music'            render={withSuspense(Music)}           />
-                <Route onLoad={true} exact path='/settings'         render={withSuspense(Settings)}        />
-                <Route onLoad={true} exact path='/404'              render={withSuspense(NotFound)}        />
-            </>
-        }
-    };
-    return  <div className={stl.content2}> { loginChecker () } </div>
+function Content(props: PropsType) {                                                                                               // два рендера - первичный и из-за withRouter
+  // console.log(props);
+
+  //users?count=${pageSize}&page=${currentPage}
+  let loginChecker = () => {
+    if (props.isAuth && props.myId) {         // ЗАЛОГИНЕН
+      // console.log(props)
+      if (props.pathname.match(/^\/login$|^\/$/)) return <Redirect to={`profile/${props.myId}`} />
+      if (!props.pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/))
+        return <Redirect to='/404' />
+      return <>
+        <Route onLoad={true} exact path='/profile/:userId?' render={() => <ProfileComp />} />
+        <Route onLoad={true} exact path='/friends' render={() => <FriendsComp />} />
+        <Route onLoad={true} exact path={`/dialogs/:userId?/:messages?`} render={() => <DialogsComp />} />
+        <Route onLoad={true} exact path={`/users`} render={() => <UsersComp />} />
+        <Route onLoad={true} exact path='/news' render={() => <NewsComp />} />
+        <Route onLoad={true} exact path='/music' render={() => <MusicComp />} />
+        <Route onLoad={true} exact path='/settings' render={() => <SettingsComp />} />
+        <Route onLoad={true} exact path='/404' render={() => <NotFoundComp />} />
+      </>
+    }
+    else {                      // НЕ ЗАЛОГИНЕН
+      if (props.pathname.match(/^\/profile\/\d{1,4}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\b$|^\/friends$|^\/users$|^\/$/)) return <Redirect to='/login' />
+      if (!props.pathname.match(/^\/news$|^\/music$|^\/settings$|^\/$|^\/login$|^\/404$/)) return <Redirect to='/404' />
+      console.log(2)
+      return <>
+        <Route onLoad={true} exact path='/login' render={withSuspense(UnAuthorised)} />
+        <Route onLoad={true} exact path='/news' render={withSuspense(News)} />
+        <Route onLoad={true} exact path='/music' render={withSuspense(Music)} />
+        <Route onLoad={true} exact path='/settings' render={withSuspense(Settings)} />
+        <Route onLoad={true} exact path='/404' render={withSuspense(NotFound)} />
+      </>
+    }
+  };
+  return <div className={stl.content2}> {loginChecker()} </div>
 }
 
 
