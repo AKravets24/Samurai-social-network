@@ -71,7 +71,7 @@ function Content(props: PropsType) {                                            
 
   //users?count=${pageSize}&page=${currentPage}
   let loginChecker = () => {
-    if (props.isAuth && props.myId) {         // ЗАЛОГИНЕН
+    if (props.isAuth) {         // ЗАЛОГИНЕН
       // console.log(props)
       if (props.pathname.match(/^\/login$|^\/$/)) return <Redirect to={`profile/${props.myId}`} />
       if (!props.pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/))

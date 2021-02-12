@@ -65,7 +65,6 @@ window.store = store;
 
 
 
-
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunkMiddleWare from 'redux-thunk';
 import { profileReducer, profileACs, profilePics } from "./profileReducer";

@@ -246,10 +246,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                               <form onSubmit={handleSubmit}>
                                 <Field name="text" className={stl.talkTextarea} as='textarea'
                                   onChange={handleChange} value={values.text} placeholder={errors.text}
-                                  onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, user.id, values, user.name, {
-                                    setSubmitting
-                                  }))}
-
+                                  onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, user.id, values, user.name, { setSubmitting }))}
                                 />
                                 <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                                 > Send Msg </button>
