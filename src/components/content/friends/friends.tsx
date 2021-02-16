@@ -3,9 +3,10 @@ import { NavLink } from 'react-router-dom';
 import stl from './../users/users.module.css'
 import { Field, Form, Formik } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
-import { PalsThemes_Type, MRGProps_Type } from './friendsContainer';
+import { PalsThemes_Type, FriendsActions_Type } from './friendsContainer';
 import { InitialFriendsInfo_Type } from '../../../redux/friendsReducer';
 import { UsersArr } from '../../../redux/app';
+
 
 // export const Friends1 = React.memo(function MyComponent(props) {
 //     // console.log(props)
@@ -140,12 +141,12 @@ import { UsersArr } from '../../../redux/app';
 
 type FriendsProps_Type = {
   themes: PalsThemes_Type
-  palsFuncs: MRGProps_Type['actions']
+  palsFuncs: FriendsActions_Type
   palsInfo: InitialFriendsInfo_Type
 }
 
 export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo }) => {
-  // console.log(palsFuncs)
+  console.log(palsFuncs)
 
   type Error_Type = { text?: string }
 
@@ -278,150 +279,3 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
   </>
 };
 
-
-// export function Friends (props) {
-//     console.log(props)
-
-//     let [isDisabled, setIsDisabled]       = useState(false);
-//     let [userName, setUserName]           = useState('');
-//     let [msgStat, setMsgStat]             = useState(null);
-//     let [feedBack,setFeedBack]            = useState(false);
-//     let [feedBackClass, setFeedBackClass] = useState(stl.feedBackVisible); // false normal
-//     let [wrapperLocker, setWrapperLocker] = useState('');
-
-//     let firstBlockClass  = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
-//     let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
-
-//     let writeMsg = (userId,text,userName)=> {
-//         setUserName(userName)
-//         props.sendMessageToUserThunk(userId, text);
-//         setWrapperLocker('');
-//         setIsDisabled(false);
-//     };
-//     let userIdTalkModeOff =e=> {
-//         setWrapperLocker('');
-//         setIsDisabled(false);
-//         e.target.parentElement.parentElement.parentElement.children[0].className=firstBlockClass;
-//         e.target.parentElement.parentElement.parentElement.children[1].className=stl.userUnitHidden;
-//     };
-//     let userIdTalkModeOn  =e=> {
-//         setWrapperLocker(stl.wrapperLocked);
-//         setIsDisabled(true);
-//         e.target.parentElement.parentElement.parentElement.parentElement.children[0].className=stl.userUnitHidden;
-//         e.target.parentElement.parentElement.parentElement.parentElement.children[1].className=secondBlockClass;
-//     };
-
-//     // console.log(props)
-
-//     return <>
-//         {props.errOnGettingFriends ?
-//             <div className={`${stl.Houston} ${themes.friendsGeneralDnmc}` }>
-//                 <h2>Houston, we've got a problem...</h2>
-//                 <h2>{props.errOnGettingFriends}</h2>
-//                 <button
-//                     className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
-//                     onClick={()=>props.getMyFriendsList() }
-//                 >Try again
-//                 </button>
-//             </div>
-//             :
-//             <div className={`${stl.friendsGeneral} ${themes.friendsGeneralDnmc}`}>
-//                 <h2 className={stl.userHeader}>Friends</h2>
-//                 <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
-//                     {props.friendsList.map((user, i) =>
-//                         <div className={stl.userUnitContainer} key={user.id}>
-//                             <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`}>
-//                                 <div className={stl.avaDiv}>
-//                                     <NavLink to={`/profile/${user.id}`}>
-//                                         <img src={user.photos.large || props.usersInfo.defaultAvatar} alt='err'
-//                                              className={`${themes.userAvaDnmc}`}/>
-//                                     </NavLink>
-//                                 </div>
-//                                 <div className={stl.nameStateBTNs}>
-//                                     <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}>
-//                                         <NavLink to={`/profile/${user.id}`}>
-//                                             <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
-//                                         </NavLink>
-//                                         <p className={`${themes.userNameDnmc}`}>{user.status}</p>
-//                                     </div>
-//                                     <div className={stl.followNWriteBTNS}>
-//                                         <button
-//                                             disabled={props.usersInfo.followingInProgress.some(id => id == user.id)}
-//                                             id={user.id}
-//                                             className={`${stl.followBTN} ${themes.followBTNDnmc} 
-//                                                     ${user.error && themes.followBTN_ERR_DNMC}`}
-//                                             onClick={() => props.followThunkToggler(user.id, user.followed)}
-//                                         >
-//                                             {user.error ? user.error : user.followed ? 'unFollow' : 'Follow'}
-//                                         </button>
-//                                         <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-//                                                 disabled={isDisabled}
-//                                                 onClick={e => userIdTalkModeOn(e, user.id, user.name)}
-//                                         >
-//                                             Write message
-//                                         </button>
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                             <div className={`${stl.userUnitHidden}`}>
-//                                 <div className={stl.miniHeadWrapper}>
-//                                     <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
-//                                     <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
-//                                     <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
-//                                             onClick={e => {userIdTalkModeOff(e)}}
-//                                     >X
-//                                     </button>
-//                                 </div>
-//                                 <div className={stl.textAreaWrapper}>
-//                                     <Formik initialValues={{text: ''}} validate={values => {
-//                                         const errors = {};
-//                                         if (!values.text) {
-//                                             errors.text = 'Required'
-//                                         }
-//                                         return errors
-//                                     }}
-//                                             onSubmit={(values, {setSubmitting}) => {
-//                                                 writeMsg(user.id, values.text, user.name);
-//                                                 values.text = '';
-//                                                 setSubmitting(false);
-//                                             }}>
-//                                         {({values, errors, handleChange, handleSubmit, isSubmitting}) => (
-//                                             <form onSubmit={handleSubmit}>
-//                                                 <textarea name="text" className={stl.talkTextarea}
-//                                                           onChange={handleChange} value={values.text}
-//                                                           placeholder={errors.text}/>
-//                                                 <button type="submit" disabled={isSubmitting}
-//                                                         className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-//                                                 > Send Msg
-//                                                 </button>
-//                                             </form>
-//                                         )}
-//                                     </Formik>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     )}
-//                 </div>
-//             </div>
-//         }
-//         </>
-// };
-
-//==========================================================================================
-
-// {user.followed
-//     ?
-//     <button
-//         disabled={props.followingInProgress.some(id => id == user.id)}
-//         id={user.id}
-//         className={stl.followBTN}
-//         onClick={()=>unFollowListener(user.id)}>unFollow
-//     </button>
-//     :
-//     <button
-//         disabled={props.followingInProgress.some(id => id == user.id)}
-//         id={user.id}
-//         className={stl.followBTN}
-//         onClick={()=>followListener(user.id)}>Follow
-//     </button>
-// }
