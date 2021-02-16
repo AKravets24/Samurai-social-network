@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from "react";
-// import { Profile }                from './profile';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { withRouter, NavLink, useLocation, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
 import { withAuthRedirect } from "../HOC/withAuthRedirect";
-import { compose } from 'redux';
-import {
-  getMyId,
-  getProfileACs,
-  getProfilePics,
-  getSmartProfileMediaData,
-  getSmartPicsNLoaders,
-  getColorTheme,
-} from "../../../redux/selectors";
+import { getMyId, getProfileACs, getProfilePics, getSmartProfileMediaData, getSmartPicsNLoaders, getColorTheme } from "../../../redux/selectors";
 import { Formik, Field } from 'formik';
 import stl from './profile.module.css';
 import Post from './post/post';
@@ -19,15 +10,8 @@ import { StatusCompFunc } from "./statusBlock";
 import { v4 as uuidv4 } from 'uuid';
 import { InitialProfileState_Type, profileACs_Type, ProfilePicturesTypes } from "../../../redux/profileReducer";
 import { ProfileThemes_Type } from '../../../redux/backGroundSetter'
+import { HistoryHook_Type, MatchHook_Type } from '../../RouterHooksTypes'
 
-
-type ContainerProps_Type = {
-  staticContext: any
-  history: any
-  isAuth: boolean
-  location: any
-  match: any
-}
 
 type Themes_Type = {
   profileDnmc: string,
@@ -46,7 +30,6 @@ type ProfileState_Type = {
   profileACs: profileACs_Type
   colorTheme: string
 }
-
 type ProfileActions_Type = {
   addPost: (finalPost: string) => void
   getProfileThunk: (userId: null | number, isMe: boolean) => void
@@ -58,13 +41,10 @@ type ProfileActions_Type = {
   profileGetter: () => void
 }
 
-let ProfileFuncContainer: React.FC<ContainerProps_Type> = ({ match, history }) => {
-  // console.log(props)
+let ProfileFuncContainer = () => {
 
-  const location = useLocation();
-  const history1 = useHistory();
-  // console.log(location);
-  // console.log(history1);
+  let history: HistoryHook_Type = useHistory();
+  let match: MatchHook_Type | any = useRouteMatch(); //потому что ТС, постоянно пишет object possibly undefined
 
 
   let profileMedia = useSelector(getSmartProfileMediaData);
@@ -73,6 +53,8 @@ let ProfileFuncContainer: React.FC<ContainerProps_Type> = ({ match, history }) =
   let profilePics = useSelector(getProfilePics);
   let profileACs = useSelector(getProfileACs);
   let colorTheme = useSelector(getColorTheme);
+
+  let comparativeId = +match?.params?.userId;
 
   let profileState = { profileMedia, picsNLoaders, myId, profilePics, profileACs, colorTheme }
 
@@ -95,9 +77,8 @@ let ProfileFuncContainer: React.FC<ContainerProps_Type> = ({ match, history }) =
         profileActions.getProfileThunk(myId, true); history.push(`/profile/${myId}`);                                    // протестить когда сервер реально выдаст ошибку
       } else if (+comparativeId && +comparativeId !== myId) { profileActions.getProfileThunk(comparativeId, false); }    // если что, вернуть эти две строчки в юзЭффект
     }
-  }
 
-  let comparativeId = +match.params.userId;
+  }
   let panoramaPicSrc = picsNLoaders.panoramaPic;
 
   useEffect(() => { profileActions.profileGetter(); }, [myId, comparativeId]);
@@ -349,4 +330,4 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
   </>
 };
 
-export default compose(withRouter)(ProfileFuncContainer)
+export default ProfileFuncContainer;

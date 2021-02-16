@@ -9,13 +9,6 @@ import { InitialFriendsInfo_Type, FriendsACs } from "../../../redux/friendsReduc
 import { DialogActions_Type } from "../../../redux/dialogsReducer";
 
 
-type FriendsContProps_Type = {
-  history: any  //comes from withRouter
-  location: any  //comes from withRouter
-  match: any  //comes from withRouter
-  staticContext: any  //comes from withRouter    
-}
-
 export type PalsThemes_Type = {
   friendsGeneralDnmc: string, pagBTNDnmc: string, paginationSelectedDnmc: string, paginationDnmc: string, searchInputDnmc: string, userAvaDnmc: string,
   followBTNDnmc: string, followBTN_ERR_DNMC: string, userNameDnmc: string, mapWrapperDnmc: string, userUnitDnmc: string, userWriteModeDnmc: string, moreUserUnitsDnmc: string
@@ -27,8 +20,7 @@ export type FriendsActions_Type = {
   sendMessageToUserThunk: (userId: number, body: string, actionKey: string, userName: string) => void
 }
 
-let FriendsFuncContainer: React.FC<FriendsContProps_Type> = (props) => {
-  // console.log(props)
+let FriendsFuncContainer = () => {
 
   let colorTheme = useSelector(getColorTheme)
   let palsInfo: InitialFriendsInfo_Type = useSelector(GetSmartFriendsReducer)
@@ -127,8 +119,6 @@ let FriendsFuncContainer: React.FC<FriendsContProps_Type> = (props) => {
   return <Friends themes={themes} palsFuncs={palsFuncs} palsInfo={palsInfo} />
 }
 
-let someThing = { a: 10, b: 'Arttm' }
-
-export default compose(withRouter)(FriendsFuncContainer);
+export default FriendsFuncContainer;
 
 

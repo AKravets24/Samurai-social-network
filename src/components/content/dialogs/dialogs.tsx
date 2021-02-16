@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { compose } from 'redux';
-import { withRouter, NavLink } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { withRouter, NavLink, useRouteMatch } from 'react-router-dom';
 import { Field, Formik } from 'formik';
 import stl from './dialogs.module.css';
 import {
@@ -9,6 +8,7 @@ import {
   getMyId, getSmartDialogsReducer
 } from "../../../redux/selectors";
 import { DialogActions_Type, InitialDialogsState_Type } from '../../../redux/dialogsReducer'
+import { MatchHook_Type } from "../../RouterHooksTypes";
 
 type DialogsActions_Types = {
   getMyNegotiatorsListThunk: () => void
@@ -21,19 +21,12 @@ type DialogsActions_Types = {
   addPrevMessagesThunk: (dialogId: number, msgCount: number, pageNumber: number) => void
 }
 
-type DialogContainerProps_Type = {
-  history: any                                                              // comes from WithRouter
-  location: { pathname: string, search: string, hash: string, state: any }         // comes from WithRouter
-  match: any                                                              // comes from WithRouter
-  staticContext: any                                                         // comes from WithRouter ?
-
-}
-
 type Themes_Type = {
   activeLink: string, dialogAreaBackgroundNSecondScroll: string, dialogDynamic: string, firstScroller: string, msgMeDynamic: string, msgUserDynamic: string, sendBTNDynamic: string, talkerBlockA: string, talkerBlockTheme: string, textAreaDynamic: string
 }
 
-let DialogFuncContainer: React.FC<DialogContainerProps_Type> = ({ match }) => {
+let DialogFuncContainer = () => {
+  let match: MatchHook_Type = useRouteMatch();
   // console.log(match)
 
   let dialogsInfo = useSelector(getSmartDialogsReducer);
@@ -58,7 +51,7 @@ let DialogFuncContainer: React.FC<DialogContainerProps_Type> = ({ match }) => {
 
 
   useEffect(() => {
-    match.params.userId ? dialogActions.talkedBeforeThunk(match.params.userId) : dialogActions.getMyNegotiatorsListThunk();
+    match?.params?.userId ? dialogActions.talkedBeforeThunk(+match.params.userId) : dialogActions.getMyNegotiatorsListThunk();
   }, [])
 
   let [themes, setThemes] = useState<Themes_Type>({ dialogDynamic: '', firstScroller: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDynamic: '', msgUserDynamic: '', dialogAreaBackgroundNSecondScroll: '', textAreaDynamic: '', sendBTNDynamic: '' })
@@ -86,7 +79,7 @@ let DialogFuncContainer: React.FC<DialogContainerProps_Type> = ({ match }) => {
 
   return themes.dialogDynamic ? <Dialogs
     state={dialogsInfo}
-    userIdInURL={match.params.userId}
+    userIdInURL={match?.params?.userId}
     myId={myId}
     themes={themes}
     actions={dialogActions}
@@ -97,7 +90,7 @@ type DialogsProps_type = {
   myId: null | number
   state: InitialDialogsState_Type
   themes: Themes_Type
-  userIdInURL: undefined | string
+  userIdInURL: undefined | string | number
   actions: DialogsActions_Types
 }
 
@@ -257,6 +250,7 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
 };
 
 
-export default compose(withRouter)(DialogFuncContainer);
+// export default compose(withRouter)(DialogFuncContainer);
+export default DialogFuncContainer;
 
 

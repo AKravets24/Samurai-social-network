@@ -3,13 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import stl from './App.module.css';
 import { HeaderContainer } from './header/header';
 import NavBarConnector from './navBar/navBar';
-import ContentComposer from './content/contentComp';
+import { ContentCompContainer } from './content/contentComp';
 import StoreContext from './storeContext';
 import {
   getAppACs, getBackGroundSetterACs,
   getInitialized, getSmartBackGroundReducer, GetSmartBGR_type
 } from "../redux/selectors";
-import { type } from 'os';
 
 
 export let AppTimeDeterminationContainer = () => {
@@ -52,7 +51,6 @@ let AppContainer = () => {
 
 type AppProps_Type = { appInitialized: boolean, auth_LDR_GIF: string }
 let App: React.FC<AppProps_Type> = ({ appInitialized, auth_LDR_GIF }) => {
-  console.log(1)
   return <>
     <StoreContext.Consumer>
       {() => {
@@ -65,7 +63,7 @@ let App: React.FC<AppProps_Type> = ({ appInitialized, auth_LDR_GIF }) => {
           <div className={stl.container}>
             <div className={stl.header}> <HeaderContainer /> </div>
             <div className={stl.navBar}> <NavBarConnector /> </div>
-            <div className={stl.content1}> <ContentComposer /> </div>
+            <div className={stl.content1}> <ContentCompContainer /> </div>
           </div>
       }}
     </StoreContext.Consumer>
