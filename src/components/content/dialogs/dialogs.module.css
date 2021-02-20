@@ -312,6 +312,11 @@
     cursor: pointer;
 }
 
+.contextMenu {
+    position: absolute;
+    z-index:  5;
+}
+
 .messageBlockMe {
     border-radius: 15px 15px 5px 15px;
     margin: 15px 25px 25px auto;
@@ -516,3 +521,5 @@
 .sendBTN_E          {background-color: indianred;}
 .sendBTN_E:hover    {background-color: darkred; color:white}
 .sendBTN_E:active   {background-color: red; color:white}
+
+

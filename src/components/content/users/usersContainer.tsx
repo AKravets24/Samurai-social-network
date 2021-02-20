@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Users } from './users';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { withAuthRedirect } from "../HOC/withAuthRedirect";
-import { withRouter } from 'react-router-dom';
+import { useHistory, useLocation, useParams, useRouteMatch, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import stl from "./users.module.css";
 import {
@@ -10,13 +10,7 @@ import {
   getDialogsACs_compUsers,
   getSmartUsersMediaData,
 } from "../../../redux/selectors";
-
-type UserContProps_Type = {
-  history: any          // comes from WithRouter                                      
-  location: any          // comes from WithRouter
-  match: any          // comes from WithRouter                                      
-  staticContext: any          // comes from WithRouter
-};
+import * as queryString from 'querystring'
 
 export type UsersThemes_Type = {
   userPageDnmc: string, generalHeaderDnmc: string, pagBTNDnmc: string, paginationSelectedDnmc: string, paginationDnmc: string, searchInputDnmc: string,
@@ -29,14 +23,13 @@ export type usersActions_Type = {
   setCurrentPageThunk: (pageSize: number, currentPage: number) => void
   followThunkToggler: (userId: number, isFollowed: boolean) => void
   getCertainUserThunk: (pageSize: number, userName: string, pageOfEquals: number) => void
-  updateSearchField: (text: string) => void
   sendMessageToUserThunk: (userId: number, body: string, actionKey: string, userName: string) => void
   feedBackWindowCloser: (arrIndex: number) => void
   feedbackRefPush: (el_id: number) => void
   setErrorToNull: () => void
 }
 
-let UsersFuncContainer: React.FC<UserContProps_Type> = ({ history }) => {
+export let UsersFuncContainer = () => {
 
 
   let smartData = useSelector(getSmartUsersMediaData);
@@ -50,21 +43,39 @@ let UsersFuncContainer: React.FC<UserContProps_Type> = ({ history }) => {
     setCurrentPageThunk: (pageSize: number, currentPage: number) => dispatch(usersACs.setCurrentPageThunkAC(pageSize, currentPage)),
     followThunkToggler: (userId: number, isFollowed: boolean) => dispatch(usersACs.followThunkTogglerAC(userId, isFollowed)),
     getCertainUserThunk: (pageSize: number, userName: string, pageOfEquals: number) => { dispatch(usersACs.getCertainUserThunkAC(pageSize, userName, pageOfEquals)) },
-    updateSearchField: (text: string) => dispatch(usersACs.updateSearchFieldAC(text)),
     sendMessageToUserThunk: (userId: number, body: string, actionKey: string, userName: string) => dispatch(dialogsACs.sendMessageToUserThunkAC(userId, body, actionKey, userName)),
     feedBackWindowCloser: (arrIndex: number) => dispatch(dialogsACs.feedBackWindowCloserAC(arrIndex)),
     feedbackRefPush: (el_id: number) => dispatch(dialogsACs.feedbackRefPushAC(el_id)),
     setErrorToNull: () => dispatch(usersACs.setErrorToNullAC()),
   }
 
+  let { pageSize, currentPage } = smartData;
 
-  let pageSize: number = smartData.pageSize;
-  let currentPage: number = smartData.currentPage;
+  let history = useHistory();
+  let queryRequest = useLocation().search;
+  const parsedString = queryString.parse(queryRequest);
+
+  console.log(parsedString)
+
+  let [wasClicked, setWasClicked] = useState(false)
+
 
   useEffect(() => {
-    usersActions.getUsersThunk(pageSize, currentPage)
-    history.push(`users?page=${currentPage}`)
-  }, [currentPage]);
+    if (parsedString['?page'] && Number.isInteger(+parsedString['?page']) && !wasClicked) { // выполняет ветку один раз - инфа  берется из линка
+      let pageFromLink = +parsedString['?page']
+      usersActions.getUsersThunk(pageSize, pageFromLink)
+      history.push({ pathname: 'users', search: `?page=${pageFromLink}` })
+      setWasClicked(true)
+      // @ts-ignore
+    } else if (!parsedString['?page'] || !Number.isInteger(+parsedString['?page']) && !wasClicked) {
+      history.push({ pathname: 'users', search: `?page=${currentPage}` })
+      usersActions.getUsersThunk(pageSize, currentPage)
+      setWasClicked(true)
+    } else {
+      history.push({ pathname: 'users', search: `?page=${currentPage}` })
+    }
+  }, [currentPage])
+
 
 
   let [themes, setThemes] = useState<UsersThemes_Type>({
@@ -156,5 +167,5 @@ let UsersFuncContainer: React.FC<UserContProps_Type> = ({ history }) => {
     /> : null
 }
 
-export default compose(withRouter, /* withAuthRedirect, */)(UsersFuncContainer);
-
+// export default compose(withRouter, /* withAuthRedirect, */)(UsersFuncContainer);
+export default UsersFuncContainer;

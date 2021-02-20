@@ -24,6 +24,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
   let [wrapperLocker, setWrapperLocker] = useState('');
   let [portionNumber, setPortionNumber] = useState(1);
   let [searchMode, setSearchMode] = useState(false);
+  let [userSearchName, setUserSearchName] = useState<string>('')
 
   let paginator = () => {
     let pageStep = 10;
@@ -42,12 +43,11 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
         .map(p => {
           return <span key={p} className={usersInfo.currentPage === p ? `${stl.paginationSelected} ${themes.paginationSelectedDnmc}` :
             `${stl.pagination} ${themes.paginationDnmc}`}
-            onClick={() => {/* debugger; */
-              usersInfo.userSearchField && searchMode ?
-                usersInfo.currentPage !== p && usersFuncs.getCertainUserThunk(usersInfo.pageSize, usersInfo.userSearchField, p) :
+            onClick={() => { //debugger;
+              searchMode ?
+                usersInfo.currentPage !== p && usersFuncs.getCertainUserThunk(usersInfo.pageSize, userSearchName, p) :
                 usersInfo.currentPage !== p && setPageListener(usersInfo.pageSize, p)
-            }
-            }
+            }}
           >{p}
           </span>
         })}
@@ -59,24 +59,24 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
     </div>
   };
 
-  let userName = usersInfo.userSearchField;
+  // let userName = usersInfo.userSearchField;
 
   let setPageListener = (pageSize: number, page: number) => {
     usersFuncs.setCurrentPageThunk(pageSize, page);
     wrapperLocker && setWrapperLocker(''); isDisabled && setIsDisabled(false);
   };
-  let onChangeListener = ({ target }: any) => { let { value } = target; usersFuncs.updateSearchField(value) };
-  let keyUpListener = (e: any) => { if (e.keyCode === 13) { usersFuncs.getCertainUserThunk(0, userName, 0) } };
-  let searchListener = () => {
+
+  let friendsSeekerSubmitter = (values: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     setSearchMode(true)
-    let pageSize = usersInfo.pageSize;
-    usersFuncs.getCertainUserThunk(pageSize, userName, 1);
-  };
-  let searchModeCloseListener = () => {
-    searchMode && usersFuncs.setCurrentPageThunk(0, 1); usersFuncs.setErrorToNull(); usersFuncs.updateSearchField('');
-    /*searchMode&&
-    setSearchMode(false)*/
-  };
+    setUserSearchName(values.text)
+    let { pageSize } = usersInfo;
+    usersFuncs.getCertainUserThunk(pageSize, values.text, 1)
+    setSubmitting(false);
+  }
+
+  let searchModeCloseListener = () => { if (searchMode) { usersFuncs.setCurrentPageThunk(50, 1); setSearchMode(false) } usersFuncs.setErrorToNull(); };
+
+
   // useEffect(()=>{
   //     // console.log(feedbackArr)
   //     let index = feedbackArr.findIndex(el=>{ return el && el.id===feedBackRef.current.id });
@@ -143,9 +143,8 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
   let formSubmitter = (userId: number, textValue: Value_Type, userName: string, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     let actionKey: string = uuidv4()
     usersFuncs.sendMessageToUserThunk(userId, textValue.text, actionKey, userName);
-    setIsDisabled(false); textValue.text = ''; setSubmitting(false);
+    textValue.text = ''; setSubmitting(false);
   }
-
   let keyCodeChecker = (e: KeyboardEvent, userId: number, values: Value_Type, userName: string, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     if (e.keyCode == 13 && e.shiftKey) { return } // для переноса строки =)
     else if (e.keyCode === 13) { formSubmitter(userId, values, userName, { setSubmitting }) }
@@ -160,13 +159,15 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
           {paginator()}
 
           <div className={stl.searchBlock} >
-            <input type="text"
-              value={usersInfo.userSearchField}
-              onChange={onChangeListener}
-              onKeyUp={keyUpListener}
-              className={`${stl.searchInput} ${themes.searchInputDnmc}`} />
-            <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchListener}>Find!</button>
-            <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={searchModeCloseListener}>X</button>
+            <Formik initialValues={{ text: '' }} validate={validator} onSubmit={friendsSeekerSubmitter}>
+              {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting, handleReset }) => (
+                <form onSubmit={handleSubmit} onReset={handleReset}>
+                  <Field name="text" type="text" value={values.text} onChange={handleChange} placeholder={errors.text} className={`${stl.searchInput} ${themes.searchInputDnmc}`} />
+                  <button type="submit" disabled={isSubmitting} className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} >Find!</button>
+                  <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} type="reset" onClick={searchModeCloseListener} >X</button>
+                </form>
+              )}
+            </Formik>
           </div>
         </div>
         {/*props.usersInfo.usersGettingError*/}
@@ -213,8 +214,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                             <button
                               disabled={usersInfo.followingInProgress.some((id: any) => id == user.id)}
                               id={user.id}
-                              className={`${stl.followBTN} ${themes.followBTNDnmc} 
-                                                    ${user.error && themes.followBTN_ERR_DNMC}`}
+                              className={`${stl.followBTN} ${themes.followBTNDnmc} ${user.error && themes.followBTN_ERR_DNMC}`}
                               onClick={() => usersFuncs.followThunkToggler(user.id, user.followed)}
                             >
                               {user.error ? user.error : user.followed ? 'unFollow' : 'Follow'}
@@ -223,9 +223,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                               disabled={isDisabled}
                               // onClick={e=>userIdTalkModeOn(e,user.id, user.name)}
                               onClick={e => userIdTalkModeOn(e)}
-                            >
-                              Write message
-                                                </button>
+                            >Write message </button>
                           </div>
                         </div>
                       </div>

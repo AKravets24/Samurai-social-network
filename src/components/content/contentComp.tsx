@@ -31,8 +31,8 @@ let NotFoundComp = withSuspense(NotFound)
 
 export function ContentCompContainer() {
   let smartData = useSelector(getSmartIdAndIsAuth);
-  let location = useLocation();
-  let pathname = location.pathname
+  let pathname = useLocation().pathname;
+
 
   return <Content authData={smartData} pathname={pathname} />
 };
@@ -40,15 +40,13 @@ export function ContentCompContainer() {
 type PropsType = { authData: { isAuth: boolean, id: null | number }, pathname: string }
 
 let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname }) => {                       // два рендера - первичный и из-за withRouter
-  // console.log(props);
 
   //users?count=${pageSize}&page=${currentPage}
-  let loginChecker = () => {
+  let loginChecker = () => { // console.log(props)
     if (isAuth) {         // ЗАЛОГИНЕН
-      // console.log(props)
+
       if (pathname.match(/^\/login$|^\/$/)) return <Redirect to={`profile/${myId}`} />
-      if (!pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/))
-        return <Redirect to='/404' />
+      if (!pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/)) return <Redirect to='/404' />
       return <>
         <Route onLoad={true} exact path='/profile/:userId?' render={() => <ProfileComp />} />
         <Route onLoad={true} exact path='/friends' render={() => <FriendsComp />} />
@@ -61,9 +59,8 @@ let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname }
       </>
     }
     else {                      // НЕ ЗАЛОГИНЕН
-      if (pathname.match(/^\/profile\/\d{1,4}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\b$|^\/friends$|^\/users$|^\/$/)) return <Redirect to='/login' />
+      if (pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\b$|^\/friends$|^\/users$|^\/$/)) return <Redirect to='/login' />
       if (!pathname.match(/^\/news$|^\/music$|^\/settings$|^\/$|^\/login$|^\/404$/)) return <Redirect to='/404' />
-      console.log(2)
       return <>
         <Route onLoad={true} exact path='/login' render={withSuspense(UnAuthorised)} />
         <Route onLoad={true} exact path='/news' render={withSuspense(News)} />

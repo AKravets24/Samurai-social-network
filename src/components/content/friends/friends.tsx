@@ -10,8 +10,8 @@ import { UsersArr } from '../../../redux/app';
 
 type FriendsProps_Type = {
   themes: PalsThemes_Type
-  palsFuncs: FriendsActions_Type
   palsInfo: InitialFriendsInfo_Type
+  palsFuncs: FriendsActions_Type
 }
 
 export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo }) => {

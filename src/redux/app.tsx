@@ -99,8 +99,8 @@ export const usersApi = {
   deleteMessage(messageId: string) { return instance.delete<DeleteMSG_Type>(`dialogs/messages/${messageId}`) },
   setAsSpamMessage(messageId: string) { return instance.post<SetAsSpamMSG_Type>(`dialogs/messages/${messageId}/spam`) },
   // USERS --------------------------------------------------------------------------------------------------------------------- USERS
-  getUsers(pageSize = 10, currentPage = 1) { return instance.get<UsersListData_Type>(`users?count=${pageSize}&page=${currentPage}`) },
-  getCertainUser(pageSize: number | null, userName: string, pageOfEquals: number = 1) { return instance.get<UsersListData_Type>(`users?count=${pageSize}&term=${userName}&page=${pageOfEquals}`) },
+  getUsers(pageSize = 10, currentPage: number = 1) { /* debugger; */ return instance.get<UsersListData_Type>(`users?count=${pageSize}&page=${currentPage}`) },
+  getCertainUser(pageSize: number | null, userName: string, pageOfEquals: number = 1) { /* debugger; */ return instance.get<UsersListData_Type>(`users?count=${pageSize}&term=${userName}&page=${pageOfEquals}`) },
   followRequest(userId: null | number) { return instance.post<Un_Follow_Type>(`follow/${userId}`) },
   unFollowRequest(userId: null | number) { return instance.delete<Un_Follow_Type>(`follow/${userId}`) },
 };

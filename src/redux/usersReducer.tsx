@@ -7,7 +7,6 @@ import { ThunkAction } from 'redux-thunk';
 
 
 type SetErrorToNullAC_Type = { type: 'ERROR_NULLIFIER' }
-type UpdateSearchFieldAC_Type = { type: 'UPDATE_SEARCH_FIELD', text: string }
 
 const actions = {
   followBTNTogglerAC: (userId: number, isFollowed: boolean) => ({ type: 'FOLLOW_ACTION_TOGGLER', userId, isFollowed } as const),
@@ -19,7 +18,6 @@ const actions = {
   errCatcherAtUsersFindAC: (usersFindingError: string) => ({ type: 'AT_FINDING_USERS_ERROR_CAUGHT', usersFindingError } as const),
   setErrorToNullAC: () => ({ type: 'ERROR_NULLIFIER' } as const),
   errCatcherAtFollowingAC: (userId: number, errorCode: number) => ({ type: 'ERROR_AT_FOLLOWING_TOGGLER', userId, errorCode } as const),
-  updateSearchFieldAC: (text: string) => ({ type: 'UPDATE_SEARCH_FIELD', text } as const),
 }
 
 
@@ -32,6 +30,7 @@ type ThunkAction_type = ThunkAction<Promise<void>, AppStateType, unknown, Action
 const getUsersThunkAC = (pageSize: number, currentPage: number): ThunkAction_type => // после скобок - типизация в сооотв с документашкой
   async (dispatch: Dispatch_Type, getState: GetState_Type) => {    // getState это необязательный  доп аргумент, который в данной реализации проекта не используется
     dispatch(actions.toggleIsLoadingAC(true));
+    dispatch(actions.setCurrentPageAC(currentPage));
     try {
       let response = await usersApi.getUsers(pageSize, currentPage);
       if (response.status === 200) dispatch(actions.setUsersAC(response.data.items, response.data.totalCount))
@@ -73,7 +72,6 @@ const followThunkTogglerAC = (userId: number, isFollowed: boolean): ThunkAction_
 
 export type UsersACs_Type = {
   setErrorToNullAC: () => SetErrorToNullAC_Type
-  updateSearchFieldAC: (text: string) => UpdateSearchFieldAC_Type
   getUsersThunkAC: (pageSize: number, currentPage: number) => ThunkAction_type
   setCurrentPageThunkAC: (pageSize: number, currentPage: number) => ThunkAction_type
   followThunkTogglerAC: (userId: number, isFollowed: boolean) => ThunkAction_type
@@ -82,7 +80,7 @@ export type UsersACs_Type = {
 
 const actionCreators: UsersACs_Type = {
   getUsersThunkAC, setCurrentPageThunkAC,
-  getCertainUserThunkAC, updateSearchFieldAC: actions.updateSearchFieldAC, setErrorToNullAC: actions.setErrorToNullAC, followThunkTogglerAC
+  getCertainUserThunkAC, setErrorToNullAC: actions.setErrorToNullAC, followThunkTogglerAC
 };
 export const usersACs = (state = actionCreators) => { return state };
 
@@ -96,7 +94,6 @@ const initialUsersInfo = {
   defaultAvatar: maleProfilePic as string,
   followingInProgress: [] as number[],
   userSearchMode: false as boolean,
-  userSearchField: '' as string,
   usersGettingError: '' as string,
   userNotFound: '' as string,
   userFindingError: '' as string,
@@ -141,9 +138,6 @@ export const usersReducer = (state = initialUsersInfo, action: ActionTypes): Ini
           ? [...state.followingInProgress, action.userId]
           : [...state.followingInProgress.filter(id => id != action.userId)]
       };
-    case 'UPDATE_SEARCH_FIELD':
-      console.log('UPDATE_SEARCH_FIELD');
-      return { ...state, userSearchField: action.text };
     case 'AT_GETTING_USERS_ERROR_CAUGHT':
       console.log('AT_GETTING_USERS_ERROR_CAUGHT');
       // action.usersGettingError.substr(1, action.usersGettingError.length-1)
@@ -155,8 +149,7 @@ export const usersReducer = (state = initialUsersInfo, action: ActionTypes): Ini
       // console.log('ERROR_NULLIFIER');
       return { ...state, usersGettingError: '', userFindingError: '', }
 
-    default:
-      return { ...state };
+    default: return { ...state };
   }
 };
 
