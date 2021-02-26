@@ -11,6 +11,7 @@ import { DialogActions_Type, InitialDialogsState_Type } from '../../../redux/dia
 import { MatchHook_Type } from "../../RouterHooksTypes";
 import { MessageData_Type } from "../../../redux/app";
 import { v4 as uuidv4 } from 'uuid';
+import { type } from "os";
 
 type DialogsActions_Types = {
   getMyNegotiatorsListThunk: () => void
@@ -127,7 +128,6 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
     dialogArea?.current &&
       !state.prevMsgsIsLoading && dialogArea.current.scrollTo(0, dialogAreaHeight - prevCount)
   }, [state.prevMsgsIsLoading])
-
   useEffect(() => {
     dialogArea?.current &&
       setDialogAreaHeight(dialogAreaHeight = dialogArea.current.scrollHeight);
@@ -151,55 +151,26 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
   }
   let validator = (values: Value_Type) => { let errors: Error_Type = {}; if (!values.text) { errors.text = 'Required' } return errors }
 
-  // let [array, setArray] = useState<any>([])
-  // let clickedItem = [] as number[]
-  // let onRightClickListener = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, msg: MessageData_Type, i: number, arr: MessageData_Type[]) => {
-  //   e.preventDefault();
-  //   console.log(arr);
-  //   // let finalState = { array: arr, clickedElem: i }
 
-  //   clickedItem.push(i)
-  //   console.log(clickedItem.includes(i))
-  //   console.log(clickedItem)
-
-  //   let finalState = { array: arr, clickedElem: i }
-  //   setArray(array = finalState)
-  //   // array[i].flag = true
-  //   console.log(finalState);
-  // }
-
-
-  // let [array, setArray] = useState<any>({ msgArr: [], clickedIndex: [] })
-  // let onRightClickListener = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, msg: MessageData_Type, i: number, arr: MessageData_Type[]) => {
-  //   e.preventDefault();
-  //   // let finalState = { array: arr, clickedElem: i }
-  //   // debugger
-  //   let newArr = [...array.clickedIndex];
-  //   let result = newArr.findIndex(item => item === i)
-  //   if (result === -1) { newArr.push(i) }
-  //   else { newArr.splice(result, 1) }
-
-
-  //   let finalState = { msgArr: arr, clickedIndex: newArr }
-  //   setArray(array = finalState)
-
-  //   console.log(state?.certainDialog?.items);
-  //   console.log(finalState.clickedIndex);
-  // }
-
-
-
-  let [array, setArray] = useState<any>({ msgArr: [] })
+  type ModalMsgs_Type = { msgArr: MessageData_Type[], servInfo: { clientX?: number, clientY?: number, flag?: boolean, isMyMsg?: boolean }[] }
+  let [modalMsggs, setModalMsggs] = useState<ModalMsgs_Type>({ msgArr: [], servInfo: [] })
   let onRightClickListener = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, i: number, arr: MessageData_Type[]) => {
     e.preventDefault();
-    let newArr: any = [...arr]
-    if (newArr[i].flag === undefined) { newArr[i].flag = true; }
-    else if (newArr[i].flag === true) { newArr[i].flag = false; }
-    else if (newArr[i].flag === false) { newArr[i].flag = true; }
-    let finalState = { msgArr: newArr }
-    setArray(array = finalState)
-  }
+    let newArr: MessageData_Type[] = [...arr]
+    let newServInfo = [...modalMsggs.servInfo]
 
+    if (newServInfo[i] === undefined) { newServInfo[i] = {} }
+    if (newServInfo[i]?.flag === undefined) { newServInfo[i].flag = true; }
+    else if (newServInfo[i].flag === true) { newServInfo[i].flag = false; }
+    else if (newServInfo[i].flag === false) { newServInfo[i].flag = true; }
+    newServInfo[i].clientX = e.clientX;
+    newServInfo[i].clientY = e.clientY;
+    let isMyMsg = myId === arr[i].senderId
+    newServInfo[i].isMyMsg = isMyMsg;
+
+    let finalState = { msgArr: newArr, servInfo: newServInfo }
+    setModalMsggs(modalMsggs = finalState)
+  }
 
   return <>
     <div className={`${stl.dialogsPage} ${themes.dialogDynamic}`}>
@@ -256,9 +227,10 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
                 state?.certainDialog?.items
                   .map((msg, i, arr) => {
                     if (msgsMapDone === false && i === arr.length - 1) { return setMsgsMapDone(true) }
-                    if (i === arr.length - 1) { scrollToDown(bufferBlock) }
+                    // if (i === arr.length - 1) { scrollToDown(bufferBlock) }
+
                     return <div
-                      key={uuidv4()}
+                      key={msg.id}
                       className={myId !== null && +msg.senderId === +myId ?
                         `${stl.messageBlockMe} ${themes.msgMeDynamic} ` : `${stl.messageBlockUser} ${themes.msgUserDynamic}`}
                       id={msg.id}
@@ -275,11 +247,7 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
                             <button onClick={() => actions.setSpamMessagesThunk(msg.id, 0)}> To spam now!</button>}            {/* second argument is fake!!! */}
                         </div>
                       </div>
-
-                      {/* {i === array.clickedElem ? <Contexter /> : null} */}
-                      {/* {i === array.clickedIndex[i] ? <Contexter /> : null} */}
-                      {array.msgArr[i]?.flag ? <Contexter /> : null}
-
+                      {modalMsggs.servInfo[i]?.flag ? <ModalMenu index={i} msgs={arr[i]} servInfo={modalMsggs.servInfo[i]} deleteMsg={actions.deleteMessageThunk} markAsSpam={actions.setSpamMessagesThunk} /> : null}
                     </div>
                   })}
             <div ref={bufferBlock} />
@@ -306,16 +274,44 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
   </>
 };
 
-let Contexter = () => {
-  // let [context, setContext] = useState(false)
-  // setContext(true)
+let ModalMenu = React.memo((props: any) => {
 
-  // console.log(1234)
-  return <> <div className={stl.contextMenu}> 123 </div></>
-}
+  console.log(props)
+
+  let [isOpen, setIsOpen] = useState(true)
+
+  let spamMarker = (msgId: string, index: number) => { props.markAsSpam(msgId, index); setIsOpen(false) }
+  let msgDeleter = (msgId: string, index: number) => { props.deleteMsg(msgId, index); setIsOpen(false) }
+
+  return isOpen ? <div className={props.servInfo.isMyMsg ? `${stl.contextMenu} ${stl.contMenuMyMsg}` : `${stl.contextMenu} ${stl.contMenuFriendMsg}`}>
+    <div className={stl.contextMenuUpper} >
+      <div className={stl.repeatNSpam} onClick={() => spamMarker(props.msgs.id, props.index)}>Mark as spam</div>
+      <button onClick={() => setIsOpen(false)}>X</button>
+    </div>
+    <div className={stl.deleteMsg} onClick={() => msgDeleter(props.msgs.id, props.index)}>Delete message</div>
+  </div>
+    : null
+})
+
+// let ModalMenu = ({ index }: any) => {
+
+//   console.log('modalMenu')
+//   return <> <div className={stl.contextMenu}> 123 </div></>
+// }
 
 
 // export default compose(withRouter)(DialogFuncContainer);
 export default DialogFuncContainer;
 
+
+  // let [array, setArray] = useState<any>({ msgArr: [] })
+  // let onRightClickListener = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, i: number, arr: MessageData_Type[]) => {
+  //   e.preventDefault();
+  //   let newArr: any = [...arr]
+  //   if (newArr[i].flag === undefined) { newArr[i].flag = true; }
+  //   else if (newArr[i].flag === true) { newArr[i].flag = false; }
+  //   else if (newArr[i].flag === false) { newArr[i].flag = true; }
+  //   let finalState = { msgArr: newArr }
+  //   setArray(array = finalState)
+  // }
 

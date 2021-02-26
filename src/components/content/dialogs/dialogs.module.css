@@ -313,8 +313,46 @@
 }
 
 .contextMenu {
+    width: 200px;
+    height: auto;
+    border: 2px solid red;
+    font-size: 25px;
+    background-color: wheat;
+    border-radius: 10px;
     position: absolute;
-    z-index:  5;
+}
+.contMenuMyMsg {
+    top: 0;
+    left: -210px;
+    z-index:  50;
+}
+.contMenuFriendMsg {
+    top: 0;
+    right: -220px;
+    z-index:  50;
+}
+
+
+.contextMenuUpper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.contextMenuUpper button {
+    border-radius: 50%;
+}
+
+.repeatNSpam {
+    width: auto;
+}
+
+.deleteMsg {
+    border-top: 2px solid red;
+}
+
+.contextMenuUpper:hover, 
+.deleteMsg:hover{ 
+    background-color: red;
 }
 
 .messageBlockMe {

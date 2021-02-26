@@ -123,7 +123,7 @@ export const usersReducer = (state = initialUsersInfo, action: ActionTypes): Ini
         })
       }
     case 'SET_USERS': {
-      console.log(action)
+      // console.log(action)
       return !action.totalCount ?
         { ...state, initialUsersList: action.users, userNotFound: 'Nobody was found', totalCount: action.totalCount } :
         { ...state, initialUsersList: action.users, totalCount: action.totalCount }

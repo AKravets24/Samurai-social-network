@@ -19,6 +19,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
   // console.log(usersInfo)
 
   type Error_Type = { text?: string }
+  type Value_Type = { text: string }
 
   let [isDisabled, setIsDisabled] = useState(false);
   let [wrapperLocker, setWrapperLocker] = useState('');
@@ -124,11 +125,11 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
     e.target.parentElement.parentElement.parentElement.children[0].className = firstBlockClass;
     e.target.parentElement.parentElement.parentElement.children[1].className = stl.userUnitHidden;
   };
-  let userIdTalkModeOn = (e: any) => {
+  let userIdTalkModeOn1 = (e: any) => {
     setWrapperLocker(stl.wrapperLocked);
     setIsDisabled(true);
     e.target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
-    e.target.parentElement.parentElement.parentElement.parentElement.children[1].className = secondBlockClass;
+    // e.target.parentElement.parentElement.parentElement.parentElement.children[1].className = secondBlockClass;
   };
 
   let [isHidden, setIsHidden] = useState<null | string>(null)
@@ -137,7 +138,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
 
   // console.log(usersInfo.onSendMSGStatArr)
 
-  type Value_Type = { text: string }
   let validator = (values: Value_Type) => { const errors: Error_Type = {}; if (!values.text) { errors.text = 'Required' } return errors }
 
   let formSubmitter = (userId: number, textValue: Value_Type, userName: string, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
@@ -150,14 +150,84 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
     else if (e.keyCode === 13) { formSubmitter(userId, values, userName, { setSubmitting }) }
   }
 
+
+  // type ModalMsgs_Type = { servInfo: { clientX?: number, clientY?: number, flag?: boolean, closer?: any }[] }
+  // let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
+  // let userIdTalkModeOn = (e: any, i: number, arr: any) => {
+
+  //   // setWrapperLocker(stl.wrapperLocked);
+  //   // setIsDisabled(true);
+
+  //   e.target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
+
+  //   let newServInfo = [...writeMsgMode.servInfo]
+
+  //   if (newServInfo[i] === undefined) { newServInfo[i] = {} }
+  //   if (newServInfo[i]?.flag === undefined) { newServInfo[i].flag = true; }
+  //   else if (newServInfo[i].flag === true) { newServInfo[i].flag = false; }
+  //   else if (newServInfo[i].flag === false) { newServInfo[i].flag = true; }
+
+  //   let modalCloser = (i: number, evt: any) => {
+  //     newServInfo[i].flag = false
+  //     let finalState = { servInfo: newServInfo }
+  //     // console.log(evt?.target?.parentElement.parentElement.parentElement.parentElement.children[i].children[0].className)
+  //     evt.target.parentElement.parentElement.parentElement.parentElement.children[i].children[0].className = firstBlockClass
+  //     setWriteMsgMode(writeMsgMode = finalState)
+  //     // console.log(e.target.parentElement.parentElement.parentElement)
+  //     setWrapperLocker(stl.wrapperUnlocked);
+  //     setIsDisabled(false);
+  //   }
+  //   newServInfo[i].closer = modalCloser
+  //   console.log(newServInfo)
+
+  //   let finalState = { servInfo: newServInfo }
+  //   setWriteMsgMode(writeMsgMode = finalState)
+  // }
+
+
+
+  type ModalMsgs_Type = { servInfo: { clientX?: number, clientY?: number, flag?: boolean, closer?: any }[] }
+  let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
+  let userIdTalkModeOn = (e: any, i: number, arr: any) => {
+    setWrapperLocker(stl.wrapperLocked);
+    // setIsDisabled(true);
+    e.target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
+    let newServInfo = [...writeMsgMode.servInfo]
+    if (newServInfo[i] === undefined) { newServInfo[i] = {} }
+    if (newServInfo[i]?.flag === undefined) { newServInfo[i].flag = true; }
+    else if (newServInfo[i].flag === true) { newServInfo[i].flag = false; }
+    else if (newServInfo[i].flag === false) { newServInfo[i].flag = true; }
+    newServInfo[i].closer = (index: number, event: any) => modalCloser(index, event)
+    let finalState = { servInfo: newServInfo }
+    setWriteMsgMode(writeMsgMode = finalState)
+  }
+
+  type indexEl_Type = { index: number, elem: any }  // хз какой тип элемента должен быть
+  let [indexEl, setIndexEl] = useState<indexEl_Type>({ index: -1, elem: '' })
+  useEffect(() => {
+    if (indexEl.index >= 0) {
+      let newServInfo = [...writeMsgMode.servInfo]
+      newServInfo[indexEl.index].flag = false
+      let finalState = { servInfo: newServInfo }
+      indexEl.elem.className = firstBlockClass
+      setWriteMsgMode(writeMsgMode = finalState)
+      setWrapperLocker(stl.wrapperUnlocked);
+      setIsDisabled(false);
+    }
+  }, [indexEl])
+
+  let modalCloser = (i: number, e: any) => { setIndexEl({ index: i, elem: e }) }
+
+
+
+
+
   return <>
-    <div className={`${stl.usersPage} ${themes.userPageDnmc}`}>
+    <div className={`${stl.usersPage} ${themes.userPageDnmc}`} >
       <div className={stl.userInfo}>
         <div className={`${stl.generalHeader} ${themes.generalHeaderDnmc}`}>
           <h2 className={stl.userHeader}>Users</h2>
-
           {paginator()}
-
           <div className={stl.searchBlock} >
             <Formik initialValues={{ text: '' }} validate={validator} onSubmit={friendsSeekerSubmitter}>
               {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting, handleReset }) => (
@@ -193,8 +263,8 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
 
               <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
                 {usersInfo?.initialUsersList
-                  .map((user: any) =>
-                    <div className={stl.userUnitContainer} key={user.id}>
+                  .map((user, i, users) =>
+                    <div className={stl.userUnitContainer} key={i}>
                       <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`} >
                         <div className={stl.avaDiv}>
                           <NavLink to={`/profile/${user.id}`}>
@@ -222,37 +292,19 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                             <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                               disabled={isDisabled}
                               // onClick={e=>userIdTalkModeOn(e,user.id, user.name)}
-                              onClick={e => userIdTalkModeOn(e)}
+                              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => userIdTalkModeOn(e, i, users)}
                             >Write message </button>
                           </div>
                         </div>
                       </div>
-                      <div className={`${stl.userUnitHidden}`}>
-                        <div className={stl.miniHeadWrapper}>
-                          <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
-                          <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
-                          <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
-                            onClick={e => { userIdTalkModeOff(e) }}
-                          >X</button>
-                        </div>
-                        <div className={stl.textAreaWrapper}>
-                          <Formik initialValues={{ text: '' }} validate={validator}
-                            onSubmit={(values, { setSubmitting }) => {
-                              formSubmitter(user.id, values, user.name, { setSubmitting }); values.text = ''; setSubmitting(false);
-                            }}>
-                            {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
-                              <form onSubmit={handleSubmit}>
-                                <Field name="text" className={stl.talkTextarea} as='textarea'
-                                  onChange={handleChange} value={values.text} placeholder={errors.text}
-                                  onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, user.id, values, user.name, { setSubmitting }))}
-                                />
-                                <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                                > Send Msg </button>
-                              </form>
-                            )}
-                          </Formik>
-                        </div>
-                      </div>
+                      {writeMsgMode.servInfo[i]?.flag ?
+                        <WriterMode
+                          themes={themes}
+                          userEl={users[i]}
+                          sendMsg={usersFuncs.sendMessageToUserThunk}
+                          index={i}
+                          srvInfo={writeMsgMode.servInfo[i]}
+                        /> : null}
                     </div >
                   )}
               </div>
@@ -271,6 +323,62 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
     />
   </>
 }
+
+// let WriterMode = ({ themes }: UsersThemes_Type) => {
+let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo }: any) => {
+  console.log(1)
+
+  type Error_Type = { text?: string }
+  type Value_Type = { text: string }
+  let validator = (values: Value_Type) => { const errors: Error_Type = {}; if (!values.text) { errors.text = 'Required' } return errors }
+
+  let formSubmitter = (userId: number, textValue: Value_Type, userName: string, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+    let actionKey: string = uuidv4()
+    sendMsg(userId, textValue.text, actionKey, userName);
+    textValue.text = ''; setSubmitting(false);
+  }
+  let keyCodeChecker = (e: KeyboardEvent, userId: number, values: Value_Type, userName: string, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+    if (e.keyCode == 13 && e.shiftKey) { return } // для переноса строки =)
+    else if (e.keyCode === 13) { formSubmitter(userId, values, userName, { setSubmitting }) }
+  }
+
+  let closeAction = (index: number, elem: any) => {
+    // let element = elem.parentElement.parentElement.parentElement.parentElement.children[index].children[0]
+    let element = elem.parentElement.parentElement.parentElement.parentElement.children[index].children[0]
+    // console.log(elem.parentElement.parentElement.parentElement.parentElement.children[index].children[0].className)
+    srvInfo.closer(index, element)
+  }
+
+  return <div className={`${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`}>
+
+    <div className={stl.miniHeadWrapper}>
+      <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{userEl.name}</h2>
+      <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>   {/* // добавить логику перехода в чат */}
+      <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
+        // onClick={e => { userIdTalkModeOff(e) }}
+        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => { closeAction(index, e.target) }}
+      >X</button>
+    </div>
+    <div className={stl.textAreaWrapper}>
+      <Formik initialValues={{ text: '' }} validate={validator}
+        onSubmit={(values, { setSubmitting }) => {
+          formSubmitter(userEl.id, values, userEl.name, { setSubmitting }); values.text = ''; setSubmitting(false);
+        }}>
+        {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
+          <form onSubmit={handleSubmit}>
+            <Field name="text" className={stl.talkTextarea} as='textarea'
+              onChange={handleChange} value={values.text} placeholder={errors.text}
+              onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, userEl.id, values, userEl.name, { setSubmitting }))}
+            />
+            <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+            > Send Msg </button>
+          </form>
+        )}
+      </Formik>
+    </div>
+  </div>
+
+})
 
 interface FBProps_Type {
   sendingMSGStatArr: any[]
@@ -329,8 +437,7 @@ const FeedBacker = React.memo(({ sendingMSGStatArr, feedBackWindowCloser }: FBPr
 },
   function areEqual(prevProps, nextProps) {
     return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
-  }
-)
+  })
 
 
 

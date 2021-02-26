@@ -55,7 +55,7 @@ export let UsersFuncContainer = () => {
   let queryRequest = useLocation().search;
   const parsedString = queryString.parse(queryRequest);
 
-  console.log(parsedString)
+  // console.log(parsedString)
 
   let [wasClicked, setWasClicked] = useState(false)
 
