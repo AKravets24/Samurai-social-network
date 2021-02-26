@@ -143,7 +143,6 @@ export const usersReducer = (state = initialUsersInfo, action: ActionTypes): Ini
       // action.usersGettingError.substr(1, action.usersGettingError.length-1)
       return { ...state, usersGettingError: action.usersGettingError.substr(1, action.usersGettingError.length - 2) };
     case 'AT_FINDING_USERS_ERROR_CAUGHT':
-      console.log('AT_FINDING_USERS_ERROR_CAUGHT')
       return { ...state, userFindingError: action.usersFindingError.substr(1, action.usersFindingError.length - 2) };
     case 'ERROR_NULLIFIER':
       // console.log('ERROR_NULLIFIER');

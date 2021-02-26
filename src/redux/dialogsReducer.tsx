@@ -216,6 +216,7 @@ import radioTowerPIC from './img/dialogs/radioTower1.png';
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType, InferActionsTypes } from './redux-store';
+import { setIn } from 'formik';
 
 
 type FeedBackWindowCloserAC_Type = { type: 'FEEDBACK_WINDOW_CLOSER', arrIndex: number }
@@ -326,14 +327,27 @@ const getNewMessagesRequestThunkAC = (): ThunkAC_Type => async (dispatch: Dispat
   }
   catch (err) { dispatch(actions.newMsgActonCombiner(0, false, true)) };
 };
+
 const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: string, userName: string): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.onSendingMSGEStatusAC(0, userId, actionKey, userName));
-  let response = await usersApi.sendMsgToTalker(userId, body)
-  console.log(response.data);
-  response.status === 200 ?
-    dispatch(actions.onSendingMSGEStatusAC(1, userId, actionKey, userName)) && dispatch(actions.sendMsgAC(response.data.data.message.body)) :
-    dispatch(actions.onSendingMSGEStatusAC(2, userId, actionKey, userName))
+  try {
+    let response = await usersApi.sendMsgToTalker(userId, body)
+    console.log(response.data);
+    if (response.status === 200) dispatch(actions.onSendingMSGEStatusAC(1, userId, actionKey, userName)) && dispatch(actions.sendMsgAC(response.data.data.message.body))
+  }
+  catch (err) {
+    dispatch(actions.onSendingMSGEStatusAC(2, userId, actionKey, userName)) && console.log('error')
+  }
 };
+
+// const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: string, userName: string): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
+//   dispatch(actions.onSendingMSGEStatusAC(0, userId, actionKey, userName));
+//   let response = await usersApi.sendMsgToTalker(userId, body)
+//   console.log(response.data);
+//   response.status === 200 ?
+//     dispatch(actions.onSendingMSGEStatusAC(1, userId, actionKey, userName)) && dispatch(actions.sendMsgAC(response.data.data.message.body)) :
+//     dispatch(actions.onSendingMSGEStatusAC(2, userId, actionKey, userName)) && console.log('error')
+// };
 
 export type DialogActions_Type = {
   getMyNegotiatorsListThunkAC: () => ThunkAC_Type
@@ -373,9 +387,9 @@ let initialDialogsState = {
   prevMsgsLoader: meetLinesGIF as string,
   onError: errorPic as string,
   errGettingNewMSGSCount: false as boolean,
-  onSendMSGStatArr: [] as any[],
+  onSendMSGStatArr: [] as any[],  // вроде как нафиг не нужен
   keyArr: [] as string[],
-  feedbackArr: [] as string[],
+  feedbackArr: [] as { statNum: number, userId: number, userName: string, actionKey: string }[],
   errNegotiatorsListGet: 0 as number,
   errNegotiatorsListPIC: radioTowerPIC as string,
   errCertainDialogGet: '' as string,
@@ -384,7 +398,7 @@ let initialDialogsState = {
 export type InitialDialogsState_Type = typeof initialDialogsState;
 
 let ForUsersSomeAttrs1 = {
-  onSendMSGStatArr: initialDialogsState.onSendMSGStatArr,
+  // onSendMSGStatArr: initialDialogsState.onSendMSGStatArr,
   feedbackArr: initialDialogsState.feedbackArr,
 }
 export type ForUsersSomeAttrs = typeof ForUsersSomeAttrs1
@@ -446,27 +460,50 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       return { ...state, prevMsgsIsLoading: action.prevMsgsIsLoading };
 
     case 'ON_SENDING_MSG_STATUS':
-      let index = state.keyArr.findIndex((el) => (el === action.actionKey));
+      // let index = state.keyArr.findIndex((el) => (el === action.actionKey));
+      let index = state.feedbackArr.findIndex((el) => (el.actionKey === action.actionKey));
+      console.log(action);
 
-      if (index === -1) {
-        state.keyArr.unshift(action.actionKey);
-        state.onSendMSGStatArr.unshift({ statNum: action.number, userId: action.userId, userName: action.userName });
-      } else {
-        for (let key in state.onSendMSGStatArr[index]) {
-          state.onSendMSGStatArr[index].statNum = action.number;
-          state.onSendMSGStatArr[index].userId = action.userId;
-          state.onSendMSGStatArr[index].userName = action.userName;
-        }
-      }
-      return { ...state };
+
+      let newFeedbackArr = [...state.feedbackArr]
+
+      index === -1 ?
+        newFeedbackArr.unshift({ statNum: action.number, userId: action.userId, userName: action.userName, actionKey: action.actionKey }) :
+        newFeedbackArr[index].statNum = action.number;
+      return { ...state, feedbackArr: newFeedbackArr };
+
+
+    // case 'ON_SENDING_MSG_STATUS':
+    //   // let index = state.keyArr.findIndex((el) => (el === action.actionKey));
+    //   let index = state.keyArr.findIndex((el) => (el === action.actionKey));
+    //   console.log(action)
+    //   console.log(index)
+
+    //   let newKeyArr = [...state.keyArr]
+
+    //   if (index === -1) {
+    //     state.keyArr.unshift(action.actionKey);
+    //     state.onSendMSGStatArr.unshift({ statNum: action.number, userId: action.userId, userName: action.userName });
+    //   } else {
+    //     // for (let key in state.onSendMSGStatArr[index]) {
+    //     state.onSendMSGStatArr[index].statNum = action.number;
+    //     state.onSendMSGStatArr[index].userId = action.userId;
+    //     state.onSendMSGStatArr[index].userName = action.userName;
+    //     // }
+    //   }
+    //   return { ...state };
 
     case 'FEEDBACK_WINDOW_CLOSER':
-      state.onSendMSGStatArr.splice(action.arrIndex, 1);
-      state.keyArr.splice(action.arrIndex, 1);
-      return { ...state };
+      console.log(1);
+      let arrDelItem = [...state.feedbackArr]
+      arrDelItem.splice(action.arrIndex, 1)
+      // state.onSendMSGStatArr.splice(action.arrIndex, 1);
+      // state.keyArr.splice(action.arrIndex, 1);
+      return { ...state, feedbackArr: arrDelItem };
 
     case 'FEEDBACK_REF_PUSH':
-      state.feedbackArr.push(action.el)
+      console.log(2);
+      // state.feedbackArr.push(action.el)
       return { ...state }
 
     default: return stateCopy;

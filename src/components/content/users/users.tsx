@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, SyntheticEvent } from "react";
+import React, { useState, useEffect, useRef, SyntheticEvent, Fragment } from "react";
 import stl from './users.module.css';
 import { NavLink } from 'react-router-dom';
 import { Field, Formik } from 'formik';
@@ -16,7 +16,8 @@ type UsersProps_Type = {
 }
 
 export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }) => {
-  // console.log(usersInfo)
+  // console.log(usersInfo.onSendMSGStatArr)
+  // console.log(usersInfo.feedbackArr)
 
   type Error_Type = { text?: string }
   type Value_Type = { text: string }
@@ -77,6 +78,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
 
   let searchModeCloseListener = () => { if (searchMode) { usersFuncs.setCurrentPageThunk(50, 1); setSearchMode(false) } usersFuncs.setErrorToNull(); };
 
+  // let feedbackArr = usersInfo.feedbackArr;
 
   // useEffect(()=>{
   //     // console.log(feedbackArr)
@@ -85,52 +87,32 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
   //     if (index ===-1 && feedBackRef.current ) setFeedBackArr(feedbackArr.concat(feedBackRef.current));
   //     // console.log(feedbackArr)
   //     for (let i=0; i<=feedbackArr.length; i++){
-  //
+
   //         // props.feedbackArr[i]&&console.log(feedbackArr[i].className)
   //         if (feedbackArr[i])  {feedbackArr[i].className = `${stl.feedbackHidden}`
   //             console.log(feedbackArr[i].className)}
-  //
+
   //         // props.feedbackArr[i] && console.log(props.feedbackArr[i].className)
   //         // props.feedbackArr[i] && setTimeout( ()=> { localFeedbackArr[i].className = `${localFeedbackArr[i].className} ${stl.feedbackHidden}`},3000);
   //         // if (props.feedbackArr[i]) {
   //         //     localFeedbackArr[i].className = `${localFeedbackArr[i].className} ${stl.feedbackHidden}`;
-  //
+
   //         //     console.log(localFeedbackArr[i].className)
   //         // }
   //         // if (props.feedbackArr[i]) props.feedbackArr[i].className = `${feedBackRef.current.className} ${stl.feedbackHidden}`;
-  //
+
   //         // setTimeout(()=>{ if(feedBackRef.current !== null) feedBackRef.current.className = `${feedBackRef.current.className} ${stl.feedbackHidden}`},4000);  //через 5 сек анимация плавного убирания на 3 секунды
   //         // setTimeout(()=>{ props.feedBackWindowCloser(i) },7000);  // через 8 секунд объект удаляется из DOM
   //         }
   //         // console.log(feedbackArr)
   //     // }
-  //
-  // },[props.sendingMSGStatArr.length]);
+
+  // },[usersInfo.onSendMSGStatArr.length]);
 
   // setTimeout( ()=> {console.log(feedbackArr)},9000 )
 
   let firstBlockClass = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
   let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
-
-  let writeMsg = (userId: number, text: string, userName: string) => {
-
-    let actionKey = uuidv4()
-    usersFuncs.sendMessageToUserThunk(userId, text, actionKey, userName);
-    setWrapperLocker('');
-    setIsDisabled(false);
-  };
-  let userIdTalkModeOff = (e: any) => {
-    setWrapperLocker('');
-    setIsDisabled(false);
-    e.target.parentElement.parentElement.parentElement.children[0].className = firstBlockClass;
-    e.target.parentElement.parentElement.parentElement.children[1].className = stl.userUnitHidden;
-  };
-  let userIdTalkModeOn1 = (e: any) => {
-    setWrapperLocker(stl.wrapperLocked);
-    setIsDisabled(true);
-    e.target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
-    // e.target.parentElement.parentElement.parentElement.parentElement.children[1].className = secondBlockClass;
-  };
 
   let [isHidden, setIsHidden] = useState<null | string>(null)
 
@@ -145,46 +127,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
     usersFuncs.sendMessageToUserThunk(userId, textValue.text, actionKey, userName);
     textValue.text = ''; setSubmitting(false);
   }
-  let keyCodeChecker = (e: KeyboardEvent, userId: number, values: Value_Type, userName: string, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
-    if (e.keyCode == 13 && e.shiftKey) { return } // для переноса строки =)
-    else if (e.keyCode === 13) { formSubmitter(userId, values, userName, { setSubmitting }) }
-  }
-
-
-  // type ModalMsgs_Type = { servInfo: { clientX?: number, clientY?: number, flag?: boolean, closer?: any }[] }
-  // let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
-  // let userIdTalkModeOn = (e: any, i: number, arr: any) => {
-
-  //   // setWrapperLocker(stl.wrapperLocked);
-  //   // setIsDisabled(true);
-
-  //   e.target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
-
-  //   let newServInfo = [...writeMsgMode.servInfo]
-
-  //   if (newServInfo[i] === undefined) { newServInfo[i] = {} }
-  //   if (newServInfo[i]?.flag === undefined) { newServInfo[i].flag = true; }
-  //   else if (newServInfo[i].flag === true) { newServInfo[i].flag = false; }
-  //   else if (newServInfo[i].flag === false) { newServInfo[i].flag = true; }
-
-  //   let modalCloser = (i: number, evt: any) => {
-  //     newServInfo[i].flag = false
-  //     let finalState = { servInfo: newServInfo }
-  //     // console.log(evt?.target?.parentElement.parentElement.parentElement.parentElement.children[i].children[0].className)
-  //     evt.target.parentElement.parentElement.parentElement.parentElement.children[i].children[0].className = firstBlockClass
-  //     setWriteMsgMode(writeMsgMode = finalState)
-  //     // console.log(e.target.parentElement.parentElement.parentElement)
-  //     setWrapperLocker(stl.wrapperUnlocked);
-  //     setIsDisabled(false);
-  //   }
-  //   newServInfo[i].closer = modalCloser
-  //   console.log(newServInfo)
-
-  //   let finalState = { servInfo: newServInfo }
-  //   setWriteMsgMode(writeMsgMode = finalState)
-  // }
-
-
 
   type ModalMsgs_Type = { servInfo: { clientX?: number, clientY?: number, flag?: boolean, closer?: any }[] }
   let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
@@ -218,9 +160,12 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
 
   let modalCloser = (i: number, e: any) => { setIndexEl({ index: i, elem: e }) }
 
-
-
-
+  // newFeedbackArr.forEach((el, i) => {
+  //   if (el.statNum !== 0) {
+  //     debugger
+  //     setTimeout(() => { newFeedbackArr.splice(i, 1) }, 3000)
+  //   }
+  // })
 
   return <>
     <div className={`${stl.usersPage} ${themes.userPageDnmc}`} >
@@ -291,20 +236,13 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                             </button>
                             <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                               disabled={isDisabled}
-                              // onClick={e=>userIdTalkModeOn(e,user.id, user.name)}
                               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => userIdTalkModeOn(e, i, users)}
                             >Write message </button>
                           </div>
                         </div>
                       </div>
                       {writeMsgMode.servInfo[i]?.flag ?
-                        <WriterMode
-                          themes={themes}
-                          userEl={users[i]}
-                          sendMsg={usersFuncs.sendMessageToUserThunk}
-                          index={i}
-                          srvInfo={writeMsgMode.servInfo[i]}
-                        /> : null}
+                        <WriterMode themes={themes} userEl={users[i]} sendMsg={usersFuncs.sendMessageToUserThunk} index={i} srvInfo={writeMsgMode.servInfo[i]} /> : null}
                     </div >
                   )}
               </div>
@@ -316,17 +254,21 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                 </button>
       </div>
     </div>
+    {usersInfo.feedbackArr.map((el, i, arr) => {
+      // console.log(1);
 
-    <FeedBacker
-      sendingMSGStatArr={usersInfo.onSendMSGStatArr}
-      feedBackWindowCloser={usersFuncs.feedBackWindowCloser}
-    />
+      return <FeedBacker key={el.actionKey}
+        feedBackWindowCloser={usersFuncs.feedBackWindowCloser}
+        statInfo={arr[i]}
+        index={i}
+      />
+    })}
   </>
 }
 
 // let WriterMode = ({ themes }: UsersThemes_Type) => {
-let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo }: any) => {
-  console.log(1)
+let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo }: any) => {  // Прикруитть нормальную типизацию
+  // console.log(1)
 
   type Error_Type = { text?: string }
   type Value_Type = { text: string }
@@ -343,9 +285,7 @@ let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo }: any) =
   }
 
   let closeAction = (index: number, elem: any) => {
-    // let element = elem.parentElement.parentElement.parentElement.parentElement.children[index].children[0]
     let element = elem.parentElement.parentElement.parentElement.parentElement.children[index].children[0]
-    // console.log(elem.parentElement.parentElement.parentElement.parentElement.children[index].children[0].className)
     srvInfo.closer(index, element)
   }
 
@@ -380,64 +320,105 @@ let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo }: any) =
 
 })
 
+
 interface FBProps_Type {
-  sendingMSGStatArr: any[]
   feedBackWindowCloser: (arrIndex: number) => void
+  statInfo: any
+  index: number
 }
 
-const FeedBacker = React.memo(({ sendingMSGStatArr, feedBackWindowCloser }: FBProps_Type) => {
-  // console.log(sendingMSGStatArr)
-  let feedBackRef = useRef<HTMLDivElement | null>(null);
+const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProps_Type) => {
 
-  let feedBackNamer = (i: number, statNum: number, /* feedBackRef:HTMLDivElement */) => {
-
-    // feedBackRef.current && console.log(feedBackRef.current.getAttribute('data-name'));
-    // feedBackRef.current && feedBackRef.current.setAttribute('data-name', 'fuck-off блять!!!');
-    // feedBackRef.current && console.log(feedBackRef.current.getAttribute('data-name'));
-
-    // feedBackRef.current && console.log(feedBackRef.current.attributes.getNamedItem('data-name'));
-    // feedBackRef.current && console.log(feedBackRef.current.attributes[0].nodeValue);
-    // feedBackRef.current && feedBackRef.current.attributes.setNamedItem({'data-name': 'on'});
-    // feedBackRef.current && console.log(feedBackRef.current.attributes.getNamedItem('data'));
-    // feedBackRef.current && console.log(feedBackRef.current.attributes.attributes[0]);
-
-    if (i === 0) { return `${stl.feedbackWindow0}`; }
-
-    if (statNum === 0) { }
-    // console.log(1); /*feedBackCloserTimeOut(i);*/}
-    if (i === 1) return stl.feedbackWindow1
-    if (i >= 2) return stl.feedbackWindow2
+  console.log(index)
+  let feedBackNamer = (i: number) => {
+    if (i === 0) return `${stl.feedbackWindow0}`
+    else if (i === 1) return `${stl.feedbackWindow1}`
+    else if (i >= 2) return `${stl.feedbackWindow2}`
   }
 
-  let attributer = (i: number) => { feedBackCloserTimeOut(i); return 'off' }
+  useEffect(() => { statInfo.statNum !== 0 && setTimeout(() => { feedBackWindowCloser(index) }, 3000) }, [statInfo.statNum])
+
 
   let feedBackCloser = (i: number) => { feedBackWindowCloser(i) }
 
-  let feedBackCloserTimeOut = (i: number) => { setTimeout(() => { feedBackWindowCloser(i) }, 5000) }
 
-  return <>
-    {sendingMSGStatArr.map((el, i) => {
-      let cycleId = uuidv4()
-      // feedBackRef.current && el.statNum !== 0 && attributer(feedBackRef, cycleId)
-
-      return <div ref={feedBackRef}
-        data-flag={attributer(i)}
-        key={cycleId}
-        id={cycleId}
-        className={feedBackNamer(i, el.statNum)}
-      >
-        <button onClick={() => feedBackCloser(i)}> X</button>
-        <p>{el.statNum === 0 && 'Sending message...' ||
-          el.statNum === 1 && `Message delivered to ${el.userName}` ||
-          el.statNum === 2 && `Failed to deliver message to ${el.userName} `}
-        </p>
-      </div>
-    })}
-  </>
+  return <div className={feedBackNamer(index)}>
+    <button onClick={() => feedBackCloser(index)}> X</button>
+    <p>{statInfo.statNum === 0 && 'Sending message...' ||
+      statInfo.statNum === 1 && `Message delivered to ${statInfo.userName}` ||
+      statInfo.statNum === 2 && `Failed to deliver message to ${statInfo.userName} `}
+    </p>
+  </div>
 },
   function areEqual(prevProps, nextProps) {
-    return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
+    // return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
+    return false
   })
+
+
+
+
+
+
+
+
+
+
+
+// const FeedBacker = React.memo(({ sendingMSGStatArr, feedBackWindowCloser }: FBProps_Type) => {
+//   // console.log(sendingMSGStatArr)
+//   console.log(123)
+//   let feedBackRef = useRef<HTMLDivElement | null>(null);
+
+//   let feedBackNamer = (i: number, statNum: number, /* feedBackRef:HTMLDivElement */) => {
+
+//     // feedBackRef.current && console.log(feedBackRef.current.getAttribute('data-name'));
+//     // feedBackRef.current && feedBackRef.current.setAttribute('data-name', 'fuck-off блять!!!');
+//     // feedBackRef.current && console.log(feedBackRef.current.getAttribute('data-name'));
+
+//     // feedBackRef.current && console.log(feedBackRef.current.attributes.getNamedItem('data-name'));
+//     // feedBackRef.current && console.log(feedBackRef.current.attributes[0].nodeValue);
+//     // feedBackRef.current && feedBackRef.current.attributes.setNamedItem({'data-name': 'on'});
+//     // feedBackRef.current && console.log(feedBackRef.current.attributes.getNamedItem('data'));
+//     // feedBackRef.current && console.log(feedBackRef.current.attributes.attributes[0]);
+
+//     if (i === 0) { return `${stl.feedbackWindow0}`; }
+
+//     if (statNum === 0) { }
+//     // console.log(1); /*feedBackCloserTimeOut(i);*/}
+//     if (i === 1) return stl.feedbackWindow1
+//     if (i >= 2) return stl.feedbackWindow2
+//   }
+
+//   let attributer = (i: number) => { feedBackCloserTimeOut(i); return 'off' }
+
+//   let feedBackCloser = (i: number) => { feedBackWindowCloser(i) }
+
+//   let feedBackCloserTimeOut = (i: number) => { setTimeout(() => { feedBackWindowCloser(i) }, 5000) }
+
+//   return <>
+//     {sendingMSGStatArr.map((el, i) => {
+//       let cycleId = uuidv4()
+//       // feedBackRef.current && el.statNum !== 0 && attributer(feedBackRef, cycleId)
+
+//       return <div ref={feedBackRef}
+//         data-flag={attributer(i)}
+//         key={cycleId}
+//         id={cycleId}
+//         className={feedBackNamer(i, el.statNum)}
+//       >
+//         <button onClick={() => feedBackCloser(i)}> X</button>
+//         <p>{el.statNum === 0 && 'Sending message...' ||
+//           el.statNum === 1 && `Message delivered to ${el.userName}` ||
+//           el.statNum === 2 && `Failed to deliver message to ${el.userName} `}
+//         </p>
+//       </div>
+//     })}
+//   </>
+// },
+//   function areEqual(prevProps, nextProps) {
+//     return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
+//   })
 
 
 
