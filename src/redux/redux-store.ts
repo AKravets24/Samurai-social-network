@@ -69,6 +69,7 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunkMiddleWare from 'redux-thunk';
 import { profileReducer, profileACs, profilePics } from "./profileReducer";
 import { dialogsReducer, dialogACs } from "./dialogsReducer";
+import { chatReducer, chatACs } from './chatReducer'
 import { usersReducer, usersACs } from "./usersReducer";
 import { backgroundReducer, backGroundSetterACs } from "./backGroundSetter";
 import { headerAC } from "./headerReducer";
@@ -84,6 +85,7 @@ let rootReducer = combineReducers({
   backgroundReducer, backGroundSetterACs,
   headerAC,
   appAC, appAuthReducer,
+  chatReducer, chatACs
 });
 
 type RootReducersType = typeof rootReducer;

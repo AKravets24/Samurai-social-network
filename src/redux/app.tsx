@@ -69,7 +69,8 @@ import axios, { AxiosResponse } from "axios";
 const instance = axios.create({
   withCredentials: true,
   baseURL: 'https://social-network.samuraijs.com/api/1.0/',
-  headers: { "API-KEY": "83df008c-c6eb-4d84-acd3-e62be0f407d9" },
+  headers: { "API-KEY": "83df008c-c6eb-4d84-acd3-e62be0f407d9" },// kravArt24 acc
+  // headers: { "API-KEY": "2209078f-8a88-4842-bf3c-feed239cd899" },//jKarver24 acc
 });
 
 export const usersApi = {
@@ -94,7 +95,7 @@ export const usersApi = {
   // DIALOGS ------------------------------------------------------------------------------------------------------------------- DIALOGS
   getMyNegotiatorsList() { return instance.get<DialogsList_Type[]>(`dialogs`) },
   getTalkWithUser(userId: number, msgCount: number = 20, pageNumber: number = 1) { return instance.get<CertainDialog_Type>(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`) },
-  sendMsgToTalker(userId: null | number, body: string) { return instance.post<SendMsgToTalker_Type>(`dialogs1/${userId}/messages`, { body }) },
+  sendMsgToTalker(userId: null | number, body: string) { return instance.post<SendMsgToTalker_Type>(`dialogs/${userId}/messages`, { body }) },
   getNewMessages() { return instance.get<number>(`dialogs/messages/new/count`) },
   deleteMessage(messageId: string) { return instance.delete<DeleteMSG_Type>(`dialogs/messages/${messageId}`) },
   setAsSpamMessage(messageId: string) { return instance.post<SetAsSpamMSG_Type>(`dialogs/messages/${messageId}/spam`) },
@@ -104,6 +105,34 @@ export const usersApi = {
   followRequest(userId: null | number) { return instance.post<Un_Follow_Type>(`follow/${userId}`) },
   unFollowRequest(userId: null | number) { return instance.delete<Un_Follow_Type>(`follow/${userId}`) },
 };
+
+export type SocketAPI_Type = {
+  // ws: null | WebSocket
+  // readyStatus: 'undefined' | 'pending' | 'opened' | 'closed',
+  createChannel: () => WebSocket,
+}
+
+export let socketAPI: SocketAPI_Type = {
+  // CHAT --------------------------------------------------------------------------------------------------------------------- CHAT
+  createChannel: () => {
+    let wsChannel = new WebSocket(`wss://social-network.samuraijs.com/handlers/ChatHandler.ashx`)
+    return wsChannel
+  }
+}
+
+// export let socketAPI: SocketAPI_Type = {
+//   // CHAT --------------------------------------------------------------------------------------------------------------------- CHAT
+//   ws: null,
+//   readyStattus: 'undefined',
+//   createChannel: () => {
+//     if (socketAPI.ws !== null) { socketAPI.ws?.removeEventListener('close', socketAPI.createChannel); socketAPI.ws?.close() }
+//     let newWs = new WebSocket(`wss://social-network.samuraijs.com/handlers/ChatHandler.ashx`)
+//     socketAPI.ws?.addEventListener('close', () => { socketAPI.readyStattus = 'closed'; setTimeout(socketAPI.createChannel, 3000) })
+//     socketAPI.ws = newWs
+//   }
+// }
+
+
 
 type SetMeLogin_Type = { data: { id: number, login: string, email: string }, fieldsErrors: string[], messages: string[], resultCode: number };
 type GetCaptcha_Type = { url: string };

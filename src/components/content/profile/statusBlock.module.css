@@ -86,21 +86,28 @@
     cursor: pointer;
 }
 
+.myStatusWrapper,
 .statusWrapper {
     margin: 15px 0 15px 0;
-    /*text-align: center;*/
+    padding: 0 5px 0 5px;
     font-size: 22px;
+    overflow: hidden;
 }
 
-.statusWrapper:hover {
+.myStatusWrapper:hover {
     background-color: lightgrey;
     border-radius: 10px;
-    cursor: pointer;
-
+    cursor: pointer; 
 }
 
 .statusField {
-    display: inline;
+    display: flex;
+    /* overflow: hidden; */
+    word-break: break-all;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto
+
 }
 
 .statusError {

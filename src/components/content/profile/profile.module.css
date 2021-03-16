@@ -205,6 +205,7 @@
     text-overflow: ellipsis;
     text-decoration: none;
     color: #613233;
+    overflow: hidden;
 
 }
 

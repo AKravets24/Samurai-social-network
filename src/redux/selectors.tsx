@@ -186,6 +186,7 @@ const getInitialUserList = (state: AppStateType) => state.usersReducer.initialUs
 const getPageSize = (state: AppStateType) => state.usersReducer.pageSize;
 const getTotalCount = (state: AppStateType) => state.usersReducer.totalCount;
 const getCurrentPage = (state: AppStateType) => state.usersReducer.currentPage;
+const getLinkTermName = (state: AppStateType) => state.usersReducer.linkTermName;
 const getIsLoading_compUsers = (state: AppStateType) => state.usersReducer.isLoading;
 const getDefaultAvatar = (state: AppStateType) => state.usersReducer.defaultAvatar;
 const getFollowingInProgress = (state: AppStateType) => state.usersReducer.followingInProgress;
@@ -199,12 +200,12 @@ const getFeedbackArr = (state: AppStateType) => state.dialogsReducer.feedbackArr
 const getGeneralLDR_GIF = (state: AppStateType) => state.backgroundReducer.usersThemes.generalLDR_GIF;
 
 
-const UsersReducerPart_1 = createSelector(getInitialUserList, getPageSize, getTotalCount, getCurrentPage, getIsLoading_compUsers,
+const UsersReducerPart_1 = createSelector(getInitialUserList, getPageSize, getTotalCount, getCurrentPage,/* */getLinkTermName,/* */getIsLoading_compUsers,
     getDefaultAvatar, getFollowingInProgress, getUserSearchMode, getUsersGettingError, getUserNotFound,
-    (initialUsersList, pageSize, totalCount, currentPage, isLoading, defaultAvatar, followingInProgress, userSearchMode,
+    (initialUsersList, pageSize, totalCount, currentPage, linkTermName, isLoading, defaultAvatar, followingInProgress, userSearchMode,
         usersGettingError, userNotFound,) => {
         let UsersPart_1 = {
-            initialUsersList, pageSize, totalCount, currentPage, isLoading, defaultAvatar, followingInProgress, userSearchMode,
+            initialUsersList, pageSize, totalCount, currentPage, linkTermName, isLoading, defaultAvatar, followingInProgress, userSearchMode,
             usersGettingError, userNotFound,
         }
         return UsersPart_1
@@ -238,3 +239,16 @@ export const GetSmartFriendsReducer = createSelector(getFiendsList, getDefaultAv
         return { friendsList, defaultAvatar, followingInProgress, errOnGettingFriends }
     })
 
+
+// CHAT RESELECTORS===============================================================================================================CHAT RESELECTORS==============
+
+export const getChatACs = (state: AppStateType) => state.chatACs;
+
+const getChatArr = (state: AppStateType) => state.chatReducer.chatArr;
+const getreadyStatus = (state: AppStateType) => state.chatReducer.readyStatus;
+const getWebSocket = (state: AppStateType) => state.chatReducer.webSocket;
+const getDefaultAvatar_compChat = (state: AppStateType) => state.chatReducer.defaultAvatar;
+
+export const getSmartChatReducer = createSelector(getChatArr, getreadyStatus, getWebSocket, getDefaultAvatar_compChat, (chatArr, readyStatus, webSocket, defaultAvatar) => {
+    return { chatArr, readyStatus, webSocket, defaultAvatar }
+})

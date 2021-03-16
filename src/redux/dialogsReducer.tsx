@@ -216,7 +216,6 @@ import radioTowerPIC from './img/dialogs/radioTower1.png';
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType, InferActionsTypes } from './redux-store';
-import { setIn } from 'formik';
 
 
 type FeedBackWindowCloserAC_Type = { type: 'FEEDBACK_WINDOW_CLOSER', arrIndex: number }
@@ -254,10 +253,12 @@ const getMyNegotiatorsListThunkAC = (): ThunkAC_Type => async (dispatch: Dispatc
   dispatch(actions.setDialogsAreLoadingToggleAC(true, false))
   try {
     let response = await usersApi.getMyNegotiatorsList();
+    console.log(response)
     if (response.status === 200) dispatch(actions.setMyCompanions(response.data))
   }
   catch (err) {
-    dispatch(actions.setErrMyNegotiatorsList(parseInt(JSON.stringify(err).replace(/\D+/g, "")))); // errorCode
+    // console.log(JSON.stringify(err.message).replace(/\D+/g, ""))
+    dispatch(actions.setErrMyNegotiatorsList(parseInt(JSON.stringify(err.message).replace(/\D+/g, "")))); // errorCode
   }
   // dispatch(setErrMyNegotiatorsList(parseInt(JSON.stringify(response.message).replace(/\D+/g,"")))); // errorCode
   dispatch(actions.setDialogsAreLoadingToggleAC(false, false))
@@ -372,6 +373,8 @@ const dialogActions: DialogActions_Type = {
 
 export const dialogACs = (state = dialogActions) => { return state };
 
+
+
 let initialDialogsState = {
   dialogsList: [] as DialogsList_Type[],
   certainDialog: { items: [] } as CertainDialog_Type,
@@ -418,7 +421,7 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
     //     stateCopy.certainDialog.items.push(message); return stateCopy;
     case 'SET_MY_COMPANIONS_LIST': return { ...state, dialogsList: action.data };
     case 'ERR_NEGOTIATORS_LIST_GET': return { ...state, errNegotiatorsListGet: action.errorCode };
-    case 'DIALOGS_ARE_LOADING_TOGGLER': return { ...state, certainDialogIsLoading: action.certainDialog }
+    case 'DIALOGS_ARE_LOADING_TOGGLER': return { ...state, allDialogsIsLoading: action.allDialogs, certainDialogIsLoading: action.certainDialog }
     case 'ERR_CERTAIN_DIALOG_GET': return { ...state, errCertainDialogGet: action.error.substr(1, action.error.length - 2) };
     case 'SET_TALK_WITH_USER': return { ...state, certainDialog: action.data };
     case 'CREATE_AND_SET_NEW_DIALOG':

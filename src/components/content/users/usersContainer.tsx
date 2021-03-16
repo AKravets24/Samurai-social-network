@@ -49,32 +49,59 @@ export let UsersFuncContainer = () => {
     setErrorToNull: () => dispatch(usersACs.setErrorToNullAC()),
   }
 
-  let { pageSize, currentPage } = smartData;
+  let { pageSize, currentPage, linkTermName } = smartData;
 
   let history = useHistory();
   let queryRequest = useLocation().search;
-  const parsedString = queryString.parse(queryRequest);
 
-  // console.log(parsedString)
+
+  const parsedString = queryString.parse(queryRequest);
 
   let [wasClicked, setWasClicked] = useState(false)
 
-
   useEffect(() => {
-    if (parsedString['?page'] && Number.isInteger(+parsedString['?page']) && !wasClicked) { // выполняет ветку один раз - инфа  берется из линка
-      let pageFromLink = +parsedString['?page']
+    console.log(1);
+
+    if (parsedString['?page'] && Number.isInteger(+parsedString['?page']) && !wasClicked && !parsedString['term']) { // выполняет ветку один раз - инфа  берется из линка
+      let pageFromLink = Math.trunc(+parsedString['?page'])
+      if (pageFromLink <= 0) pageFromLink = 1;
       usersActions.getUsersThunk(pageSize, pageFromLink)
       history.push({ pathname: 'users', search: `?page=${pageFromLink}` })
       setWasClicked(true)
-      // @ts-ignore
     } else if (!parsedString['?page'] || !Number.isInteger(+parsedString['?page']) && !wasClicked) {
       history.push({ pathname: 'users', search: `?page=${currentPage}` })
       usersActions.getUsersThunk(pageSize, currentPage)
       setWasClicked(true)
+    } else if (parsedString['term'] && parsedString['term'] !== '' && !wasClicked) { // проверка второго необязательного параметра
+      history.push({ pathname: 'users', search: `?page=${currentPage}&term=${parsedString['term']}` })
+      let termValue = parsedString.term as string
+      usersActions.getCertainUserThunk(pageSize, termValue, currentPage)
+      setWasClicked(true)
+    } else if (parsedString['term'] && parsedString['term'] !== '' && wasClicked) {
+      history.push({ pathname: 'users', search: `?page=${currentPage}&term=${parsedString['term']}` })
     } else {
       history.push({ pathname: 'users', search: `?page=${currentPage}` })
     }
+
+
   }, [currentPage])
+
+
+  // useEffect(() => {
+  //   if (parsedString['?page'] && Number.isInteger(+parsedString['?page']) && !wasClicked) { // выполняет ветку один раз - инфа  берется из линка
+  //     let pageFromLink = +parsedString['?page']
+  //     usersActions.getUsersThunk(pageSize, pageFromLink)
+  //     history.push({ pathname: 'users', search: `?page=${pageFromLink}` })
+  //     setWasClicked(true)
+  //     // @ts-ignore
+  //   } else if (!parsedString['?page'] || !Number.isInteger(+parsedString['?page']) && !wasClicked) {
+  //     history.push({ pathname: 'users', search: `?page=${currentPage}` })
+  //     usersActions.getUsersThunk(pageSize, currentPage)
+  //     setWasClicked(true)
+  //   } else {
+  //     history.push({ pathname: 'users', search: `?page=${currentPage}` })
+  //   }
+  // }, [currentPage, linkTermName])
 
 
 

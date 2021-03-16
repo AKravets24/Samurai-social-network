@@ -79,7 +79,6 @@ let DialogFuncContainer = () => {
     }
   }, [colorTheme])
 
-
   return themes.dialogDynamic ? <Dialogs
     state={dialogsInfo}
     userIdInURL={match?.params?.userId}
@@ -172,11 +171,14 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
     setModalMsggs(modalMsggs = finalState)
   }
 
+  console.log(state.certainDialogIsLoading)
+
   return <>
     <div className={`${stl.dialogsPage} ${themes.dialogDynamic}`}>
       <div className={stl.dialogListAndArea}>
         <div className={`${stl.dialogList} ${themes.firstScroller}`}>
-          {state.dialogsList.length === 0 && !state.errNegotiatorsListGet ?
+          {/* {state.dialogsList.length === 0 && !state.errNegotiatorsListGet ? */}
+          {state.allDialogsIsLoading ?
             <img className={stl.certainLoader} src={state.allDialogsLoader} alt="Err" />
             :
             state.errNegotiatorsListGet ?

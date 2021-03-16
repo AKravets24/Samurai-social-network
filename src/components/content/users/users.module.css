@@ -1,1 +1,572 @@
-.usersPage,.friendsGeneral{    display: grid;    grid-gap: 10px;    grid-template-rows: 1fr;    /*background-color: lightyellow;*/    opacity: 0.9;    border-radius: 0 0 25px 0;    /*min-height: calc(100vh - 270px);*/    min-height: 600px;    /*height: calc(100vh - 170px);*/}.usersPageN,.friendsGeneralN { background-color: #cfedff;     /*transition: 5000ms;*/ }.usersPageM,.friendsGeneralM { background-color: #fbc498;     /*transition: 5000ms;*/ }.usersPageD,.friendsGeneralD { background-color: lightyellow; /*transition: 5000ms;*/ }.usersPageE,.friendsGeneralE { background-color: #fef0f0;     /*transition: 5000ms;*/ }.userInfo {}.generalHeader {    display: flex;    justify-content: space-between;    align-items: center;    width: 90%;    margin: 15px auto;    border-bottom: 1px solid green;    height: 50px;}.generalHeaderN {border-bottom: 1px solid blue;      transition: 5000ms; }.generalHeaderM {border-bottom: 1px solid orangered; transition: 5000ms; }.generalHeaderD {border-bottom: 1px solid green;     transition: 5000ms; }.generalHeaderE {border-bottom: 1px solid darkred;   transition: 5000ms; }.userHeader {    color: red;    /*margin-left: 30px;*/    /*width: 100px;*/    margin: 0;    display: inline;}.paginationBlockOutside {    display: flex;    width: 52%;    height: 45px;    margin: 0 auto;}.pagBTN {    /*background-color: lightgreen;*/    height: 40px;    cursor: pointer;    border-radius: 10px;    outline: none;}.pagBTN_N          {background-color: #4967ff;                }.pagBTN_N:hover    {background-color: midnightblue;color:white}.pagBTN_N:active   {background-color: darkblue;color:white    }.pagBTN_M          {background-color: #ff8151;                }.pagBTN_M:hover    {background-color: #ff5818;color:white     }.pagBTN_M:active   {background-color: #f12a11;color:white     }.pagBTN_D          {background-color: lightgreen;             }.pagBTN_D:hover    {background-color: #4dd14d;    color:black }.pagBTN_D:active   {background-color: #08ac08;    color:black }.pagBTN_E          {background-color: indianred;              }.pagBTN_E:hover    {background-color: darkred; color:white    }.pagBTN_E:active   {background-color: red; color:white        }.paginationSelected,.pagination {    font-size: 25px;    width: 45px;    height: 40px;    text-align: center;}.pagination {    cursor: pointer;}.paginationN           {}.paginationN:hover     {}.paginationN:active    {}.paginationSelectedN   {color: red}.paginationM           {color: black;}.paginationM:hover     {color: saddlebrown;}.paginationM:active    {color: red;}.paginationSelectedM   {color: red}.paginationD           {color: green;}.paginationD:hover     {color: red}.paginationD:active    {}.paginationSelectedD   {color: red}.paginationE           {color: black;}.paginationE:hover     {color: orangered;}.paginationE:active    {color: red}.paginationSelectedE   {color: red}.searchBlock {}.searchInput {    cursor: text;    border-radius: 10px;    outline: none;    height: 35px;    font-size: 20px;}.searchInputN       {background-color: #fdfdfd     ; transition: 5000ms; }.searchInputM       {background-color: #faffd3     ; transition: 5000ms; }.searchInputD       {background-color: lightyellow ; transition: 5000ms; }.searchInputE       {background-color: #ffe1e1     ; transition: 5000ms; }.friendsGeneral li,.userInfo ul {    list-style-type: none;    margin: 0;    padding: 0;}.loaderDiv {    margin: 150px auto;    display: flex;}.Houston {    width: 100%;    height: 100%;    display: flex;    text-align: center;    align-items: center;    color: darkred;    justify-content: center;    flex-direction: column;    border-radius: 0 0 20px 0;}.Houston h2 {    width: 100%;    margin: 0;    font-size: 30px;}.loader{    height: 250px;    margin: 150px auto;}.nobodyFound {    height: 90%;    display: flex;    justify-content: center;    flex-direction: column;    align-items: center;}.nobodyFound h2 {    display: inline;    margin: 0;}.mapWrapper {    width: 100%;    /*outline: 2px solid blue;*/    display: flex;    flex-wrap: wrap;    margin: 0 auto;    min-height: 500px;    height: auto!important;    max-height: calc(100vh - 270px);    overflow: auto;}.wrapperLocked {    overflow: hidden;}.mapWrapper::-webkit-scrollbar {    width:   15px;    height:  70%;    background-color: lightyellow;    margin-right: 5px;}.mapWrapper::-webkit-scrollbar-button {    height: 2%;    background-color: lightgreen;    /*border-radius: 10px;*/}.mapWrapper::-webkit-scrollbar-thumb {    width: 20px;    background-color: lightgreen;    border-radius: 4px;}.mapWrapperN::-webkit-scrollbar          {background-color: lightyellow; transition: 5000ms; }.mapWrapperN::-webkit-scrollbar-button   {background-color: deepskyblue; transition: 5000ms; }.mapWrapperN::-webkit-scrollbar-thumb    {background-color: deepskyblue; transition: 5000ms; }.mapWrapperM::-webkit-scrollbar          {background-color: lightyellow; transition: 5000ms; }.mapWrapperM::-webkit-scrollbar-button   {background-color: orangered;   transition: 5000ms; }.mapWrapperM::-webkit-scrollbar-thumb    {background-color: orangered;   transition: 5000ms; }.mapWrapperD::-webkit-scrollbar          {background-color: lightyellow; transition: 5000ms; }.mapWrapperD::-webkit-scrollbar-button   {background-color: lightgreen;  transition: 5000ms; }.mapWrapperD::-webkit-scrollbar-thumb    {background-color: lightgreen;  transition: 5000ms; }.mapWrapperE::-webkit-scrollbar          {background-color: lightyellow; transition: 5000ms; }.mapWrapperE::-webkit-scrollbar-button   {background-color: darkred;     transition: 5000ms; }.mapWrapperE::-webkit-scrollbar-thumb    {background-color: darkred;     transition: 5000ms; }.userUnitContainer {    width: 47%;    margin: 10px auto;    height: 148px;}.userUnit {    border-radius: 15px;    /*width: 100%;*/    height: 148px;}.userUnitHidden {    display: none;}.userUnitShowed {    display: flex;}.userUnitN       {border: 4px solid blue;     }.userUnitM       {border: 4px solid orangered;}.userUnitD       {border: 4px solid green;    }.userUnitE       {border: 4px solid darkred;  }.userUnitN:hover {background-color: white     }.userUnitM:hover {background-color: #ffb469;  }.userUnitD:hover {background-color: #adffaf;  }.userUnitE:hover {background-color: #ffafc6;  }.avaDiv {    /*outline: 2px solid black;*/    height: 100%;    width: 30%;    display: flex;    justify-content: center;    align-items: flex-end;}.avaDiv img {    width: 120px;    border-radius: 50%;}.userAvaN          { border: 6px solid transparent;  background-color: #4967ff;     }.userAvaN:hover    { border: 6px solid midnightblue; background-color: transparent; }.userAvaN:active   { border: 6px solid darkblue;     background-color: transparent; }.userAvaM          { border: 6px solid transparent;  background-color: #ff8151;     }.userAvaM:hover    { border: 6px solid #ff8151;      background-color: transparent; }.userAvaM:active   { border: 6px solid #f12a11;      background-color: transparent; }.userAvaD          { border: 6px solid transparent;  background-color: lightgreen;  }.userAvaD:hover    { border: 6px solid green;        background-color: transparent; }.userAvaD:active   { border: 6px solid darkgreen;    background-color: transparent; }.userAvaE          { border: 6px solid transparent;  background-color: indianred;   }.userAvaE:hover    { border: 6px solid darkred;      background-color: transparent; }.userAvaE:active   { border: 6px solid red;          background-color: transparent; }.nameStateBTNs{    display: flex;    flex-direction: column;}.followBTN {    width: 150px;    height: 30px;    /*margin-top: 10px;*/    /*background-color: lightgreen;*/    outline: none;    border-radius: 10px;    /*border: 2px solid green;*/    cursor: pointer;    font-size: 17px;}.followBTN_N            {background-color: #4967ff;                              }.followBTN_N:hover      {background-color: midnightblue; color:white;            }.followBTN_N:active     {background-color: darkblue;     color:white;            }.followBTN_M            {background-color: #ff8151;                              }.followBTN_M:hover      {background-color: #ff5818; color:white;                 }.followBTN_M:active     {background-color: #f12a11; color:white;                 }.followBTN_D            {background-color: lightgreen; border: 2px solid green;  }.followBTN_D:hover      {background-color: #4dd14d;    color:black               }.followBTN_D:active     {background-color: #08ac08;    color:black               }.followBTN_E            {background-color: indianred;                            }.followBTN_E:hover      {background-color: darkred; color:white                  }.followBTN_E:active     {background-color: red; color:white                      }.followBTN_ERR_N        {border: 1px solid #ff5f5f; box-shadow: #ff5f5f 0 0 19px 10px; background-color: #ff3b3b; color: white; font-weight: bold; }.followBTN_ERR_N:hover  {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }.followBTN_ERR_N:active {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred;                                  }.followBTN_ERR_M        {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred; color: white; font-weight: bold; }.followBTN_ERR_M:hover  {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }.followBTN_ERR_M:active {border: 1px solid #ff3b3b; box-shadow: #ff3b3b 0 0 19px 10px; background-color: #ff3b3b;                                  }.followBTN_ERR_D        {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred; font-weight: bold;               }.followBTN_ERR_D:hover  {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }.followBTN_ERR_D:active {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }.followBTN_ERR_E        {border: 1px solid red;     box-shadow: red 0 0 19px 15px;     background-color: white;   color: red;   font-weight: bold; }.followBTN_ERR_E:hover  {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred;                                  }.followBTN_ERR_E:active {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred;                                  }.msgSender {    display: flex;    flex-direction: column;    width: 100%;    height: 148px;}.userWriteMode {    border-radius: 15px;    width: 100%;    height: 148px;    display: flex;    flex-direction: column;}.userWriteModeN       {border: 4px solid blue;     background-color: white;   transition: 5000ms; }.userWriteModeM       {border: 4px solid orangered;background-color: #ffb469; transition: 5000ms; }.userWriteModeD       {border: 4px solid green;    background-color: #adffaf; transition: 5000ms; }.userWriteModeE       {border: 4px solid darkred;  background-color: #ffafc6; transition: 5000ms; }/*.userUnitN:hover {background-color: white    } *//*.userUnitM:hover {background-color: #ffb469; }*//*.userUnitD:hover {background-color: #adffaf; }*//*.userUnitE:hover {background-color: #ffafc6; }*/.miniHeadWrapper {    display: flex;    justify-content: space-around;    align-items: flex-end;    height: 30px;    margin-top: 5px;}.miniHeadWrapper h2 {    margin: 0;    padding: 0;    font-size: 25px;    cursor: default;    max-width: 310px;    height: 30px;}.closeBTN {    width: 35px;    text-align: center;}.textAreaWrapper {    /*margin: 0  auto;*/    /*display: flex;*/    /*justify-content: center;*/}.textAreaWrapper form {    display: flex;    flex-direction: column;}.talkTextarea {    resize: none;    outline: none;    width: 95%;    height: 60px;    border-radius: 10px;    font-size: 22px;    /*margin-top: 5px;*/    margin: 5px auto;}.textAreaWrapper form button {    margin: 0 auto;}.feedbackWindow0,.feedbackWindow1,.feedbackWindow2,.feedbackWindow {    position: absolute;    height: 110px;    width: 300px;    border: 2px solid black;    border-radius: 10px;    background-color: #4f4f4f;    /*left: 10px;*/    /*bottom: 10px;*/}.feedbackWindow0 {    left: 10px;    bottom: 10px;}.feedbackWindow1 {    left: 10px;    bottom: 140px;}.feedbackWindow2 {    left: 10px;    bottom: 270px;}.feedBackVisible{    opacity: 1;    transition:  3s;}.feedbackHidden{    opacity: 0;    transition:  3s;}.feedbackWindow:hover {    /*background-color: black;*/}.feedbackWindow0 button,.feedbackWindow1 button,.feedbackWindow2 button {    width: 25px;    border-radius: 5px;    display: flex;    margin: 5px 0 0 270px;}.feedbackWindow0 button:hover,.feedbackWindow1 button:hover,.feedbackWindow2 button:hover {    background-color: #613233;    cursor: pointer;}.feedbackWindow0 p,.feedbackWindow1 p,.feedbackWindow2 p {    text-align: center;    /*margin-top: 5px;*/    margin: 0 ;    color: white;    font-size: 22px;}.userBlockInfo {    /*width: 80%;*/    /*outline: 2px solid red;*/    border-radius: 15px;    display: flex;    flex-direction: column;    height: 90px;    overflow-y: hidden;}.userBlockInfo a {    text-decoration: none;    height: 0;}.userBlockInfo p {    /*overflow: hidden;*/    height: 30px;    /*overflow-y: hidden;*/}.userBlockInfo p,.userName {    margin-left: 10px;    margin-top: 60px;}.userName {    margin-top: 10px;    margin-bottom:  0;    display: inline-block;}.userNameN          {color: #4967ff;      }.userNameN:hover    {color: midnightblue; }.userNameN:active   {color: darkblue;     }.userNameM          {color: #ff652a;      }.userNameM:hover    {color: #ff5b1d;      }.userNameM:active   {color :#ff4700;      }.userNameD          {color: green;        }.userNameD:hover    {color: darkgreen;    }/*.userNameD:active   {color: #08ac08;      }*/.userNameD:active   {color: #034b03;      }.userNameE          {color: darkred;      }.userNameE:hover    {color: indianred;    }.userNameE:active   {color: red;          }.followNWriteBTNS {    /*outline: 2px solid blue;*/    height: 50px;}.followNWriteBTNS button {    margin-left: 10px;    margin-top: 20px;}.moreUserUnits {    width: 90%;    border-top: 1px solid green;    margin: 0 auto;    display: flex;    justify-content: center;}.moreUserUnitsN { border-top: 1px solid blue;      transition: 5000ms; }.moreUserUnitsM { border-top: 1px solid orangered; transition: 5000ms; }.moreUserUnitsD { border-top: 1px solid green;     transition: 5000ms; }.moreUserUnitsE { border-top: 1px solid darkred;   transition: 5000ms; }.moreUsersShower {    width: 200px;    height: 50px;    margin-top: 10px;    border-radius: 10px;    outline: none;    font-size: 20px ;    cursor: pointer;}
+.usersPage,
+.friendsGeneral{
+    display: grid;
+    grid-gap: 10px;
+
+    grid-template-rows: 1fr;
+
+    /*background-color: lightyellow;*/
+    opacity: 0.9;
+    border-radius: 0 0 25px 0;
+
+    /*min-height: calc(100vh - 270px);*/
+    min-height: 600px;
+    /*height: calc(100vh - 170px);*/
+}
+
+.usersPageN,.friendsGeneralN { background-color: #cfedff;     /*transition: 5000ms;*/ }
+.usersPageM,.friendsGeneralM { background-color: #fbc498;     /*transition: 5000ms;*/ }
+.usersPageD,.friendsGeneralD { background-color: lightyellow; /*transition: 5000ms;*/ }
+.usersPageE,.friendsGeneralE { background-color: #fef0f0;     /*transition: 5000ms;*/ }
+
+.userInfo {}
+
+.generalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 15px auto;
+    border-bottom: 1px solid green;
+    height: 50px;
+}
+
+.generalHeaderN {border-bottom: 1px solid blue;      transition: 5000ms; }
+.generalHeaderM {border-bottom: 1px solid orangered; transition: 5000ms; }
+.generalHeaderD {border-bottom: 1px solid green;     transition: 5000ms; }
+.generalHeaderE {border-bottom: 1px solid darkred;   transition: 5000ms; }
+
+.userHeader {
+    color: red;
+    /*margin-left: 30px;*/
+    /*width: 100px;*/
+    margin: 0;
+    display: inline;
+}
+
+.paginationBlockOutside {
+    display: flex;
+    width: 52%;
+    height: 45px;
+    margin: 0 auto;
+}
+
+.pagBTN {
+    /*background-color: lightgreen;*/
+    height: 40px;
+    cursor: pointer;
+    border-radius: 10px;
+    outline: none;
+
+}
+.pagBTN_N          {background-color: #4967ff;                }
+.pagBTN_N:hover    {background-color: midnightblue;color:white}
+.pagBTN_N:active   {background-color: darkblue;color:white    }
+
+.pagBTN_M          {background-color: #ff8151;                }
+.pagBTN_M:hover    {background-color: #ff5818;color:white     }
+.pagBTN_M:active   {background-color: #f12a11;color:white     }
+
+.pagBTN_D          {background-color: lightgreen;             }
+.pagBTN_D:hover    {background-color: #4dd14d;    color:black }
+.pagBTN_D:active   {background-color: #08ac08;    color:black }
+
+.pagBTN_E          {background-color: indianred;              }
+.pagBTN_E:hover    {background-color: darkred; color:white    }
+.pagBTN_E:active   {background-color: red; color:white        }
+
+
+.paginationSelected,
+.pagination {
+    font-size: 25px;
+    width: 45px;
+    height: 40px;
+    text-align: center;
+}
+
+.pagination {
+    cursor: pointer;
+}
+
+.paginationN           {}
+.paginationN:hover     {}
+.paginationN:active    {}
+.paginationSelectedN   {color: red}
+
+
+.paginationM           {color: black;}
+.paginationM:hover     {color: saddlebrown;}
+.paginationM:active    {color: red;}
+.paginationSelectedM   {color: red}
+
+
+.paginationD           {color: green;}
+.paginationD:hover     {color: red}
+.paginationD:active    {}
+.paginationSelectedD   {color: red}
+
+
+.paginationE           {color: black;}
+.paginationE:hover     {color: orangered;}
+.paginationE:active    {color: red}
+.paginationSelectedE   {color: red}
+
+
+.searchBlock {}
+.searchInput {
+    cursor: text;
+    border-radius: 10px;
+    outline: none;
+    height: 35px;
+    font-size: 20px;
+}
+
+.searchInputN       {background-color: #fdfdfd     ; transition: 5000ms; }
+.searchInputM       {background-color: #faffd3     ; transition: 5000ms; }
+.searchInputD       {background-color: lightyellow ; transition: 5000ms; }
+.searchInputE       {background-color: #ffe1e1     ; transition: 5000ms; }
+
+
+.friendsGeneral li,
+.userInfo ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.loaderDiv {
+    margin: 150px auto;
+    display: flex;
+}
+
+.Houston {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    color: darkred;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 0 0 20px 0;
+}
+.Houston h2 {
+    width: 100%;
+    margin: 0;
+    font-size: 30px;
+}
+
+
+.loader{
+    height: 250px;
+    margin: 150px auto;
+}
+
+.nobodyFound {
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nobodyFound h2 {
+    display: inline;
+    margin: 0;
+}
+
+.mapWrapper {
+    width: 100%;
+    /*outline: 2px solid blue;*/
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    min-height: 500px;
+    height: auto!important;
+    max-height: calc(100vh - 270px);
+
+    overflow: auto;
+}
+.wrapperLocked {
+    overflow: hidden;
+}
+
+.mapWrapper::-webkit-scrollbar {
+    width:   15px;
+    height:  70%;
+    background-color: lightyellow;
+    margin-right: 5px;
+}
+
+.mapWrapper::-webkit-scrollbar-button {
+    height: 2%;
+    background-color: lightgreen;
+    /*border-radius: 10px;*/
+}
+
+
+.mapWrapper::-webkit-scrollbar-thumb {
+    width: 20px;
+    background-color: lightgreen;
+    border-radius: 4px;
+}
+
+.mapWrapperN::-webkit-scrollbar          {background-color: lightyellow; transition: 5000ms; }
+.mapWrapperN::-webkit-scrollbar-button   {background-color: deepskyblue; transition: 5000ms; }
+.mapWrapperN::-webkit-scrollbar-thumb    {background-color: deepskyblue; transition: 5000ms; }
+
+.mapWrapperM::-webkit-scrollbar          {background-color: lightyellow; transition: 5000ms; }
+.mapWrapperM::-webkit-scrollbar-button   {background-color: orangered;   transition: 5000ms; }
+.mapWrapperM::-webkit-scrollbar-thumb    {background-color: orangered;   transition: 5000ms; }
+
+.mapWrapperD::-webkit-scrollbar          {background-color: lightyellow; transition: 5000ms; }
+.mapWrapperD::-webkit-scrollbar-button   {background-color: lightgreen;  transition: 5000ms; }
+.mapWrapperD::-webkit-scrollbar-thumb    {background-color: lightgreen;  transition: 5000ms; }
+
+.mapWrapperE::-webkit-scrollbar          {background-color: lightyellow; transition: 5000ms; }
+.mapWrapperE::-webkit-scrollbar-button   {background-color: darkred;     transition: 5000ms; }
+.mapWrapperE::-webkit-scrollbar-thumb    {background-color: darkred;     transition: 5000ms; }
+
+.userUnitContainer {
+    width: 47%;
+    margin: 10px auto;
+    height: 148px;
+}
+
+.userUnit {
+    border-radius: 15px;
+    /*width: 100%;*/
+    height: 148px;
+
+}
+
+.userUnitHidden {
+    display: none;
+}
+.userUnitShowed {
+    display: flex;
+
+}
+
+.userUnitN       {border: 4px solid blue;     }
+.userUnitM       {border: 4px solid orangered;}
+.userUnitD       {border: 4px solid green;    }
+.userUnitE       {border: 4px solid darkred;  }
+
+.userUnitN:hover {background-color: white     }
+.userUnitM:hover {background-color: #ffb469;  }
+.userUnitD:hover {background-color: #adffaf;  }
+.userUnitE:hover {background-color: #ffafc6;  }
+
+.avaDiv {
+    /*outline: 2px solid black;*/
+    height: 100%;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.avaDiv img {
+    width: 120px;
+    border-radius: 50%;
+}
+
+.userAvaN          { border: 6px solid transparent;  background-color: #4967ff;     }
+.userAvaN:hover    { border: 6px solid midnightblue; background-color: transparent; }
+.userAvaN:active   { border: 6px solid darkblue;     background-color: transparent; }
+
+.userAvaM          { border: 6px solid transparent;  background-color: #ff8151;     }
+.userAvaM:hover    { border: 6px solid #ff8151;      background-color: transparent; }
+.userAvaM:active   { border: 6px solid #f12a11;      background-color: transparent; }
+
+.userAvaD          { border: 6px solid transparent;  background-color: lightgreen;  }
+.userAvaD:hover    { border: 6px solid green;        background-color: transparent; }
+.userAvaD:active   { border: 6px solid darkgreen;    background-color: transparent; }
+
+.userAvaE          { border: 6px solid transparent;  background-color: indianred;   }
+.userAvaE:hover    { border: 6px solid darkred;      background-color: transparent; }
+.userAvaE:active   { border: 6px solid red;          background-color: transparent; }
+
+.nameStateBTNs{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.followBTN {
+    width: 150px;
+    height: 30px;
+    /*margin-top: 10px;*/
+    /*background-color: lightgreen;*/
+    outline: none;
+    border-radius: 10px;
+    /*border: 2px solid green;*/
+    cursor: pointer;
+    font-size: 17px;
+}
+
+
+.followBTN_N            {background-color: #4967ff;                              }
+.followBTN_N:hover      {background-color: midnightblue; color:white;            }
+.followBTN_N:active     {background-color: darkblue;     color:white;            }
+
+
+.followBTN_M            {background-color: #ff8151;                              }
+.followBTN_M:hover      {background-color: #ff5818; color:white;                 }
+.followBTN_M:active     {background-color: #f12a11; color:white;                 }
+
+
+.followBTN_D            {background-color: lightgreen; border: 2px solid green;  }
+.followBTN_D:hover      {background-color: #4dd14d;    color:black               }
+.followBTN_D:active     {background-color: #08ac08;    color:black               }
+
+
+.followBTN_E            {background-color: indianred;                            }
+.followBTN_E:hover      {background-color: darkred; color:white                  }
+.followBTN_E:active     {background-color: red; color:white                      }
+
+
+.followBTN_ERR_N        {border: 1px solid #ff5f5f; box-shadow: #ff5f5f 0 0 19px 10px; background-color: #ff3b3b; color: white; font-weight: bold; }
+.followBTN_ERR_N:hover  {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }
+.followBTN_ERR_N:active {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred;                                  }
+
+
+.followBTN_ERR_M        {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred; color: white; font-weight: bold; }
+.followBTN_ERR_M:hover  {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }
+.followBTN_ERR_M:active {border: 1px solid #ff3b3b; box-shadow: #ff3b3b 0 0 19px 10px; background-color: #ff3b3b;                                  }
+
+
+.followBTN_ERR_D        {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred; font-weight: bold;               }
+.followBTN_ERR_D:hover  {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }
+.followBTN_ERR_D:active {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }
+
+
+.followBTN_ERR_E        {border: 1px solid red;     box-shadow: red 0 0 19px 15px;     background-color: white;   color: red;   font-weight: bold; }
+.followBTN_ERR_E:hover  {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred;                                  }
+.followBTN_ERR_E:active {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred;                                  }
+
+
+.msgSender {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 148px;
+}
+
+.userWriteMode {
+    border-radius: 15px;
+    width: 100%;
+    height: 148px;
+    display: flex;
+    flex-direction: column;
+}
+.userWriteModeN       {border: 4px solid blue;     background-color: white;   transition: 5000ms; }
+.userWriteModeM       {border: 4px solid orangered;background-color: #ffb469; transition: 5000ms; }
+.userWriteModeD       {border: 4px solid green;    background-color: #adffaf; transition: 5000ms; }
+.userWriteModeE       {border: 4px solid darkred;  background-color: #ffafc6; transition: 5000ms; }
+
+/*.userUnitN:hover {background-color: white    } */
+/*.userUnitM:hover {background-color: #ffb469; }*/
+/*.userUnitD:hover {background-color: #adffaf; }*/
+/*.userUnitE:hover {background-color: #ffafc6; }*/
+
+
+.miniHeadWrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 30px;
+    margin-top: 5px;
+}
+.miniHeadWrapper h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+    cursor: default;
+    max-width: 310px;
+    height: 30px;
+}
+
+.closeBTN {
+    width: 35px;
+    text-align: center;
+}
+
+.textAreaWrapper {
+    /*margin: 0  auto;*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+}
+
+.textAreaWrapper form {
+    display: flex;
+    flex-direction: column;
+}
+
+.talkTextarea {
+    resize: none;
+    outline: none;
+    width: 95%;
+    height: 60px;
+    border-radius: 10px;
+    font-size: 22px;
+    /*margin-top: 5px;*/
+    margin: 5px auto;
+}
+
+.textAreaWrapper form button {
+    margin: 0 auto;
+}
+
+
+.feedbackWindow0,
+.feedbackWindow1,
+.feedbackWindow2,
+.feedbackWindow {
+    position: absolute;
+    height: 110px;
+    width: 300px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #4f4f4f;
+    /*left: 10px;*/
+    /*bottom: 10px;*/
+}
+
+.feedbackWindow0 {
+    left: 10px;
+    bottom: 10px;
+}
+.feedbackWindow1 {
+    left: 10px;
+    bottom: 140px;
+}
+.feedbackWindow2 {
+    left: 10px;
+    bottom: 270px;
+}
+
+.feedBackVisible{
+    opacity: 1;
+    transition:  3s;
+}
+.feedbackHidden{
+    opacity: 0;
+    transition:  3s;
+}
+.feedbackWindow:hover {
+    /*background-color: black;*/
+}
+.feedbackWindow0 button,
+.feedbackWindow1 button,
+.feedbackWindow2 button {
+    width: 25px;
+    border-radius: 5px;
+    display: flex;
+    margin: 5px 0 0 270px;
+}
+.feedbackWindow0 button:hover,
+.feedbackWindow1 button:hover,
+.feedbackWindow2 button:hover {
+    background-color: #613233;
+    cursor: pointer;
+}
+.feedbackWindow0 p,
+.feedbackWindow1 p,
+.feedbackWindow2 p {
+    text-align: center;
+    /*margin-top: 5px;*/
+    margin: 0 ;
+    color: white;
+    font-size: 22px;
+}
+
+.userBlockInfo {
+    /*width: 80%;*/
+    /*outline: 2px solid red;*/
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    height: 90px;
+    overflow-y: hidden;
+}
+.userBlockInfo a {
+    text-decoration: none;
+    height: 0;
+}
+
+.userBlockInfo p {
+    /*overflow: hidden;*/
+    height: 30px;
+    word-break: break-all;
+    width: 90%;
+    /*overflow-y: hidden;*/
+}
+
+.userBlockInfo p,
+.userName {
+    margin-left: 10px;
+    margin-top: 65px;
+}
+
+.userName {
+    margin-top: 10px;
+    margin-bottom:  0;
+    display: inline-block;
+}
+
+.userNameN          {color: #4967ff;      }
+.userNameN:hover    {color: midnightblue; }
+.userNameN:active   {color: darkblue;     }
+
+
+.userNameM          {color: #ff652a;      }
+.userNameM:hover    {color: #ff5b1d;      }
+.userNameM:active   {color :#ff4700;      }
+
+
+.userNameD          {color: green;        }
+.userNameD:hover    {color: darkgreen;    }
+/*.userNameD:active   {color: #08ac08;      }*/
+.userNameD:active   {color: #034b03;      }
+
+
+.userNameE          {color: darkred;      }
+.userNameE:hover    {color: indianred;    }
+.userNameE:active   {color: red;          }
+
+
+.followNWriteBTNS {
+    /*outline: 2px solid blue;*/
+    height: 50px;
+}
+
+.followNWriteBTNS button {
+    margin-left: 10px;
+    margin-top: 20px;
+}
+
+.moreUserUnits {
+    width: 90%;
+    border-top: 1px solid green;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.moreUserUnitsN { border-top: 1px solid blue;      transition: 5000ms; }
+.moreUserUnitsM { border-top: 1px solid orangered; transition: 5000ms; }
+.moreUserUnitsD { border-top: 1px solid green;     transition: 5000ms; }
+.moreUserUnitsE { border-top: 1px solid darkred;   transition: 5000ms; }
+
+.moreUsersShower {
+    width: 200px;
+    height: 50px;
+    margin-top: 10px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 20px ;
+    cursor: pointer;
+}
+

@@ -12,6 +12,7 @@ const actions = {
   followBTNTogglerAC: (userId: number, isFollowed: boolean) => ({ type: 'FOLLOW_ACTION_TOGGLER', userId, isFollowed } as const),
   setUsersAC: (users: UsersArr[], totalCount: number) => ({ type: 'SET_USERS', users, totalCount } as const),
   setCurrentPageAC: (currentPage: number) => ({ type: 'SET_CURRENT_PAGE', currentPage } as const),
+  setLinkTermName: (userName: string) => ({ type: 'SET_LINK_TERM_NAME', userName } as const),
   toggleIsLoadingAC: (isLoading: boolean) => ({ type: 'TOGGLE_IS_LOADING', isLoading } as const),
   toggleFollowingProgressAC: (isLoading: boolean, userId: number) => ({ type: 'TOGGLE_IS_FOLLOWING_PROGRESS', isLoading, userId } as const),
   errCatcherAtUsersGetAC: (usersGettingError: string) => ({ type: 'AT_GETTING_USERS_ERROR_CAUGHT', usersGettingError } as const),
@@ -35,13 +36,14 @@ const getUsersThunkAC = (pageSize: number, currentPage: number): ThunkAction_typ
       let response = await usersApi.getUsers(pageSize, currentPage);
       if (response.status === 200) dispatch(actions.setUsersAC(response.data.items, response.data.totalCount))
     }
-    catch (err) { dispatch(actions.errCatcherAtUsersGetAC(JSON.stringify(err))); }
+    catch (err) { dispatch(actions.errCatcherAtUsersGetAC(JSON.stringify(err.message))); }
     dispatch(actions.toggleIsLoadingAC(false));
   };
 const getCertainUserThunkAC = (pageSize: number, userName: string, pageOfEquals: number = 1): ThunkAction_type => async (dispatch: Dispatch_Type) => {
   // dispatch (toggleUserSearchModeAC(true))
   dispatch(actions.toggleIsLoadingAC(true));
   dispatch(actions.setCurrentPageAC(pageOfEquals))
+  dispatch(actions.setLinkTermName(userName));
   try {
     let response = await usersApi.getCertainUser(pageSize, userName, pageOfEquals)
     if (response.status === 200) dispatch(actions.setUsersAC(response.data.items, response.data.totalCount))
@@ -90,6 +92,7 @@ const initialUsersInfo = {
   pageSize: 50 as number,
   totalCount: 0 as number,
   currentPage: 1 as number,
+  linkTermName: '' as string,
   isLoading: false as boolean,
   defaultAvatar: maleProfilePic as string,
   followingInProgress: [] as number[],

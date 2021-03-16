@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef, SyntheticEvent, Fragment } from "react";
 import stl from './users.module.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Field, Formik } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
 import { ForUsersSomeAttrs } from "../../../redux/dialogsReducer";
 import { UsersThemes_Type, usersActions_Type } from "./usersContainer";
 import { InitialUsersInfo_Type } from "../../../redux/usersReducer";
 import { UsersThemesBGR_Type } from "../../../redux/backGroundSetter";
+import * as queryString from 'querystring'
 // import UnAuthorised                       from "../unAuthorised/unAuthorised";
+
 
 type UsersProps_Type = {
   themes: UsersThemes_Type
@@ -28,6 +30,10 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
   let [searchMode, setSearchMode] = useState(false);
   let [userSearchName, setUserSearchName] = useState<string>('')
 
+  let history = useHistory();
+  // console.log(history)
+
+
   let paginator = () => {
     let pageStep = 10;
     let pagesAmount = Math.ceil(usersInfo.totalCount / usersInfo.pageSize)
@@ -45,7 +51,8 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
         .map(p => {
           return <span key={p} className={usersInfo.currentPage === p ? `${stl.paginationSelected} ${themes.paginationSelectedDnmc}` :
             `${stl.pagination} ${themes.paginationDnmc}`}
-            onClick={() => { //debugger;
+            onClick={() => {
+              // debugger;
               searchMode ?
                 usersInfo.currentPage !== p && usersFuncs.getCertainUserThunk(usersInfo.pageSize, userSearchName, p) :
                 usersInfo.currentPage !== p && setPageListener(usersInfo.pageSize, p)
@@ -68,15 +75,28 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
     wrapperLocker && setWrapperLocker(''); isDisabled && setIsDisabled(false);
   };
 
-  let friendsSeekerSubmitter = (values: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+
+  let queryRequest = useLocation().search;
+  let parsedString = queryString.parse(queryRequest);
+  // console.log(parsedString);
+
+  useEffect(() => { if (parsedString['term'] && parsedString['term'] !== '') { setSearchMode(true); setUserSearchName(parsedString['term'] as string) } }, [])
+
+  let friendsSeekerSubmitter = (userName: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     setSearchMode(true)
-    setUserSearchName(values.text)
+    setUserSearchName(userName.text)
+    history.push({ pathname: 'users', search: `?page=${usersInfo.currentPage}&term=${userName.text}` })
     let { pageSize } = usersInfo;
-    usersFuncs.getCertainUserThunk(pageSize, values.text, 1)
+    usersFuncs.getCertainUserThunk(pageSize, userName.text.trim(), 1)
     setSubmitting(false);
   }
 
-  let searchModeCloseListener = () => { if (searchMode) { usersFuncs.setCurrentPageThunk(50, 1); setSearchMode(false) } usersFuncs.setErrorToNull(); };
+  let searchModeCloseListener = () => {
+    if (searchMode) {
+      usersFuncs.setCurrentPageThunk(50, 1); setSearchMode(false);
+      history.push({ pathname: 'users', search: `?page=${usersInfo.currentPage}` })
+    } usersFuncs.setErrorToNull();
+  };
 
   // let feedbackArr = usersInfo.feedbackArr;
 
@@ -120,7 +140,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
 
   // console.log(usersInfo.onSendMSGStatArr)
 
-  let validator = (values: Value_Type) => { const errors: Error_Type = {}; if (!values.text) { errors.text = 'Required' } return errors }
+  let validator = (values: Value_Type) => { let errors: Error_Type = {}; if (!values.text.trim()) { values.text = ''; errors.text = 'Required' } return errors }
 
   let formSubmitter = (userId: number, textValue: Value_Type, userName: string, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     let actionKey: string = uuidv4()
@@ -174,7 +194,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
           <h2 className={stl.userHeader}>Users</h2>
           {paginator()}
           <div className={stl.searchBlock} >
-            <Formik initialValues={{ text: '' }} validate={validator} onSubmit={friendsSeekerSubmitter}>
+            <Formik initialValues={{ text: parsedString.term as string || '' }} validate={validator} onSubmit={friendsSeekerSubmitter}>
               {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting, handleReset }) => (
                 <form onSubmit={handleSubmit} onReset={handleReset}>
                   <Field name="text" type="text" value={values.text} onChange={handleChange} placeholder={errors.text} className={`${stl.searchInput} ${themes.searchInputDnmc}`} />
@@ -223,7 +243,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                             <NavLink to={`/profile/${user.id}`}>
                               <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
                             </NavLink>
-                            <p className={`${themes.userNameDnmc}`}>{user.status}</p>
+                            <p /* className={`${themes.userNameDnmc}`} */ >{user.status}</p>
                           </div>
                           <div className={stl.followNWriteBTNS}>
                             <button

@@ -9,20 +9,22 @@ import { withSuspense } from './HOC/withSuspense';
 // const ProfileComposer = lazy(()=> import("./profile/profileCompWithContainer").then((m:any) => ({default: m.ProfileComposer}))) // as React.ComponentType
 // const ContentComposer = compose<React.ComponentType>(connect(mapStateToProps), withRouter,)(ContentCompContainer); // для примера на память оставлю
 
-const ProfileFuncContainer = lazy(() => import("./profile/profileCompWithContainer")) as React.LazyExoticComponent<React.ComponentType<any>>;
-const FriendsComposer = lazy(() => import("./friends/friendsContainer"));
-const DialogsComposer = lazy(() => import("./dialogs/dialogs"));
-const UsersComposer = lazy(() => import("./users/usersContainer"));
-const News = lazy(() => import('./news/News'));
-const Music = lazy(() => import('./news/News'));
-const Settings = lazy(() => import("./settings/settings"));
-const UnAuthorised = lazy(() => import("./unAuthorised/unAuthorised"));
-const NotFound = lazy(() => import("./404/404"));
+let ProfileFuncContainer = lazy(() => import("./profile/profileCompWithContainer")) as React.LazyExoticComponent<React.ComponentType<any>>;
+let FriendsComposer = lazy(() => import("./friends/friendsContainer"));
+let DialogsComposer = lazy(() => import("./dialogs/dialogs"));
+let ChatContainer = lazy(() => import("./chat/chat"))
+let UsersComposer = lazy(() => import("./users/usersContainer"));
+let News = lazy(() => import('./news/News'));
+let Music = lazy(() => import('./news/News'));
+let Settings = lazy(() => import("./settings/settings"));
+let UnAuthorised = lazy(() => import("./unAuthorised/unAuthorised"));
+let NotFound = lazy(() => import("./404/404"));
 
 
 let ProfileComp = withSuspense(ProfileFuncContainer)
 let FriendsComp = withSuspense(FriendsComposer)
 let DialogsComp = withSuspense(DialogsComposer)
+let ChatComp = withSuspense(ChatContainer)
 let UsersComp = withSuspense(UsersComposer)
 let NewsComp = withSuspense(News)
 let MusicComp = withSuspense(Music)
@@ -46,11 +48,14 @@ let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname }
     if (isAuth) {         // ЗАЛОГИНЕН
 
       if (pathname.match(/^\/login$|^\/$/)) return <Redirect to={`profile/${myId}`} />
-      if (!pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/)) return <Redirect to='/404' />
+      if (!pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/chat$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/)) return <Redirect to='/404' />
+      // if (!pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/chat$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/)) return <Redirect to='/404' />
       return <>
         <Route onLoad={true} exact path='/profile/:userId?' render={() => <ProfileComp />} />
         <Route onLoad={true} exact path='/friends' render={() => <FriendsComp />} />
-        <Route onLoad={true} exact path={`/dialogs/:userId?/:messages?`} render={() => <DialogsComp />} />
+        {/* <Route onLoad={true} exact path={`/dialogs/:userId?/:messages?`} render={() => <DialogsComp />} /> */}
+        <Route onLoad={true} exact path={`/dialogs/:userId?`} render={() => <DialogsComp />} />
+        <Route onLoad={true} exact path={'/chat'} render={() => <ChatComp />} />
         <Route onLoad={true} exact path={`/users`} render={() => <UsersComp />} />
         <Route onLoad={true} exact path='/news' render={() => <NewsComp />} />
         <Route onLoad={true} exact path='/music' render={() => <MusicComp />} />

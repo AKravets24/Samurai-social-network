@@ -1,0 +1,100 @@
+.chatGeneral {
+  background-color: lightyellow;
+  height: 100vh;
+  display: grid;
+  grid-template-areas: 
+  
+  'chatWrapper' 
+  'formSender';
+
+  /* grid-template-rows: calc(90%-40% 100px); */
+  /* grid-template-columns: 1fr 4fr; */
+  
+}
+
+
+.chatWrapper {
+  grid-area: 'chatWrapper';
+    /* min-height: 20%;
+    height: 70% !important;
+    max-height: 80%; */
+    overflow-y: scroll;
+}
+
+.msgBlock {
+  display: flex;
+  margin-bottom: 10px;
+  border-bottom: 1px solid gray;
+}
+
+.avaAndLink {
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid gray;
+}
+
+.avaAndLink img {
+  height: 100px;
+  /* width: 150px; */
+}
+
+.avaAndLink a {
+  text-align: center;
+}
+
+.msgBody {
+  width: 100%;
+  align-self: center;
+  text-align: center;
+  font-size: 26px;
+}
+
+.sendBTN {
+    /* position: relative; */
+}
+
+.respect {
+    /* position: absolute; */
+    /* display: none; */
+}
+
+.respect:hover  {
+    color: blue
+}
+
+.sendBTN:hover .respect { 
+    background-color: red;
+    color: red
+}
+
+.formSender {
+  grid-area: 'formSender';
+  /* height: 150px; */
+  display: flex;
+  justify-content: center;
+  /* height: 12vh; */
+  /* height: 100px; */
+  border-top: 2px solid black;
+  border-radius: 5px;
+  background-color: #ffe3d8;
+  align-items: flex-end
+  
+}
+
+.formik {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 80%;
+  
+}
+
+.inputer {
+  /* width: 80%; */
+  width: 90%;
+  height: 80%;
+  resize: none;
+  border-radius: 5px;
+}
