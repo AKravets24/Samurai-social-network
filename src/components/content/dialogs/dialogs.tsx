@@ -11,7 +11,7 @@ import { DialogActions_Type, InitialDialogsState_Type } from '../../../redux/dia
 import { MatchHook_Type } from "../../RouterHooksTypes";
 import { MessageData_Type } from "../../../redux/app";
 import { v4 as uuidv4 } from 'uuid';
-import { type } from "os";
+
 
 type DialogsActions_Types = {
   getMyNegotiatorsListThunk: () => void

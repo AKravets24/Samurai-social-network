@@ -131,8 +131,6 @@
     display: inline;
     text-decoration: none;
     font-size: 25px;
-    /*color: dodgerblue;*/
-    color: black;
     font-weight: bold;
     font-family: Arial;
 }
@@ -178,7 +176,7 @@
 
 .talkerBlockA_D            {color: deepskyblue;  }
 .talkerBlockA_D:hover      {color: royalblue;    }
-.talkerBlockA_D:active     {color: red;          }
+.talkerBlockA_D:active     {color: blue;         }
 .activeLinkD               {color: red;          }
 
 .talkerBlockA_E            {color: blueviolet    }
