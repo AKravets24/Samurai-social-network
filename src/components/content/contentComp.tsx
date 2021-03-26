@@ -47,7 +47,7 @@ let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname }
   let loginChecker = () => { // console.log(props)
     if (isAuth) {         // ЗАЛОГИНЕН
 
-      if (pathname.match(/^\/login$|^\/$/)) return <Redirect to={`profile/${myId}`} />
+      if (pathname.match(/^\/profile\b$|^\/login$|^\/$/)) return <Redirect to={`profile/${myId}`} />
       if (!pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/chat$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/)) return <Redirect to='/404' />
       // if (!pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/chat$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/)) return <Redirect to='/404' />
       return <>

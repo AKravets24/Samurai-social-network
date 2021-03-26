@@ -122,12 +122,14 @@ let NavBar: React.FC<PropsTypes> = (props) => {
     }
   }
 
+  console.log(props)
+
   return <>
     <div className={`${stl.blockMenu}  ${props.themes.blockMenu}`}>
       <ul className={stl.menu}>
         {!props.myId && <li><NavLink to={`/login`} className={props.themes.dynamicClass} activeClassName={props.themes.dynamicActiveClass}
         >Get Login</NavLink></li>}
-        {props.myId && <li><NavLink to={`/profile/${props.myId}`} className={props.themes.dynamicClass} activeClassName={props.themes.dynamicActiveClass}
+        {props.myId && <li><NavLink to={`/profile`} className={props.themes.dynamicClass} activeClassName={props.themes.dynamicActiveClass}
         > Profile </NavLink></li>}
         {props.myId && <li><NavLink to={'/friends'} className={props.themes.dynamicClass} activeClassName={props.themes.dynamicActiveClass}
         > Friends </NavLink></li>}
