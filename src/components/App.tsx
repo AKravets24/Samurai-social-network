@@ -6,8 +6,7 @@ import NavBarConnector from './navBar/navBar';
 import { ContentCompContainer } from './content/contentComp';
 import StoreContext from './storeContext';
 import {
-  getAppACs, getBackGroundSetterACs,
-  getInitialized, getSmartBackGroundReducer, GetSmartBGR_type
+  getAppACs, getBackGroundSetterACs, geSmartInitialized, getSmartBackGroundReducer
 } from "../redux/selectors";
 
 
@@ -26,48 +25,41 @@ export let AppTimeDeterminationContainer = () => {
     document.body.style.backgroundImage = `url(${backgroundReducer.backgroundPic})`
   }, [backgroundReducer.backgroundPic]);
 
+
   return backgroundReducer.timeToChangeTheme && backgroundReducer.backgroundPic !== '' && <AppContainer />
 };
 
 
 let AppContainer = () => {
 
-  let backgroundReducer = useSelector(getSmartBackGroundReducer)
-  let appInitialized = useSelector(getInitialized)
+  let { auth_LDR_GIF, timeToChangeTheme } = useSelector(getSmartBackGroundReducer)
+  let { funnyLoaderArr, appIsInitialized } = useSelector(geSmartInitialized)
   let backGroundSetterACs = useSelector(getBackGroundSetterACs);
   let appAC = useSelector(getAppACs)
 
   let dispatch = useDispatch();
 
-  let timeKeeper = backgroundReducer.timeToChangeTheme * 60000;                           // преобразование минут в милисекунды
+  let timeKeeper = timeToChangeTheme * 60000;                           // преобразование минут в милисекунды
   let timer = new Date().getHours() * 60 + new Date().getMinutes();
 
   let themeUpdater = () => { dispatch(backGroundSetterACs.timerAC(timer)) };              // ф-я отправляет количество минут с начала суток в редюсер
   useEffect(() => { dispatch(appAC.initializeAppThunkAC(timer)); }, []);
   setInterval(() => { themeUpdater() }, timeKeeper);
 
-  return <App appInitialized={appInitialized} auth_LDR_GIF={backgroundReducer.auth_LDR_GIF} />
+
+  let forAppProps = { funnyLoaderArr, appInitialized: appIsInitialized, auth_LDR_GIF }
+  return <App props={forAppProps} />
 }
 
-type AppProps_Type = { appInitialized: boolean, auth_LDR_GIF: string }
 
-let App: React.FC<AppProps_Type> = ({ appInitialized, auth_LDR_GIF }) => {
+type AppProps_Type = { props: { appInitialized: boolean, auth_LDR_GIF: string, funnyLoaderArr: string[] } }
+let App: React.FC<AppProps_Type> = ({ props: { appInitialized, auth_LDR_GIF, funnyLoaderArr } }) => {
 
-
-  let funnyLoaderArr = [
-    'Tectonic configuration...', 'Filling the oceans...',
-    'Planting flora...', 'Fauna breeding...',
-    'Crusades...', 'Witch-hunting...',
-    'Transition into the renaissance era...',
-    'Scientific and technological revolution...',
-    'Client: Synchronization...',
-  ] as string[];
 
   let [loadPhrase, setLoadPhrase] = useState<string>(funnyLoaderArr[0])
 
-  function* funnyLoader(loadersArr: string[]) {
-    for (let i = 0; i <= loadersArr.length; i++) { yield loadersArr[i] }
-  }
+  function* funnyLoader(loadersArr: string[]) { for (let i = 0; i <= loadersArr.length; i++) { yield loadersArr[i] } }
+
 
   let [refreshContent, setRefreshContent] = useState<any>();
   let iterator = (condition: boolean) => {
@@ -84,7 +76,6 @@ let App: React.FC<AppProps_Type> = ({ appInitialized, auth_LDR_GIF }) => {
         return !appInitialized ?
           <div className={stl.loaderBlock}>
             <img src={auth_LDR_GIF} alt="err" />
-            {/* <h1>Client: Synchronization...</h1> */}
             <h1>{loadPhrase ? loadPhrase : funnyLoaderArr[funnyLoaderArr.length - 1]}</h1>
           </div>
           :
