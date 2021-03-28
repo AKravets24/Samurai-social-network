@@ -122,7 +122,7 @@ let NavBar: React.FC<PropsTypes> = (props) => {
     }
   }
 
-  console.log(props)
+  // console.log(props)
 
   return <>
     <div className={`${stl.blockMenu}  ${props.themes.blockMenu}`}>

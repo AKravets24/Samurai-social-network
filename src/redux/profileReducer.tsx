@@ -43,29 +43,6 @@ type ActionTypes = InferActionsTypes<typeof actions>
 type ThunkAC_Type = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 type Dispatch_Type = Dispatch<ActionTypes>
 
-// const getProfileThUnkAC     = (userId:number, isMe:boolean):ThunkAC_Type       => async (dispatch:Dispatch_Type) => {
-//     dispatch(toggleIsLoadingAC(true));
-//     let status='', userName='', profileData={};
-//     let statusResponse = await usersApi.getStatus(userId)
-//     statusResponse.status===200 ? status=statusResponse.data :
-//         dispatch(errCatcherAtStatusGetAC(parseInt(JSON.stringify(statusResponse.message).replace(/\D+/g,""))))
-//     let profileResponse = await usersApi.getProfile(userId) 
-//     console.log(profileResponse);
-
-//     if (profileResponse.status === 200){
-//         profileData = profileResponse.data;
-//         userName = profileResponse.data.fullName;
-//         if (isMe) { dispatch(setProfileAC(profileData, false, status));
-//         } else {
-//             let certainResponse =  await usersApi.getCertainUser(null,userName);
-//             certainResponse.data.items.filter((el:any) => {
-//                 el.id === userId && dispatch(setProfileAC(profileData, el.followed, status));})
-//         }
-//     // } else dispatch(errCatcherAtProfileGetAC(parseInt(JSON.stringify(profileResponse.message).replace(/\D+/g,""))));
-//     } else dispatch(errCatcherAtProfileGetAC(parseInt(JSON.stringify(profileResponse).replace(/\D+/g,""))));
-//     dispatch(toggleIsLoadingAC(false));
-// };
-
 
 const getProfileThUnkAC = (userId: null | number, isMe: boolean): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.toggleIsLoadingAC(true));
@@ -91,8 +68,8 @@ const getProfileThUnkAC = (userId: null | number, isMe: boolean): ThunkAC_Type =
     }
   } catch (err) {
     dispatch(actions.errCatcherAtProfileGetAC(parseInt(JSON.stringify(err.message).replace(/\D+/g, ""))));
-    dispatch(actions.toggleIsLoadingAC(false));
   }
+  dispatch(actions.toggleIsLoadingAC(false));
 };
 
 const followThunkTogglerAC = (userId: null | number, isFollowed: null | boolean): ThunkAC_Type => async (dispatch: Dispatch_Type) => {

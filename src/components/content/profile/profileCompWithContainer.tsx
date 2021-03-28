@@ -112,14 +112,13 @@ type Profile_Types = {
 
 const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }) => {
   // console.log('render');
-  // console.log(props.state.profileMedia);
+  console.log(state.profileMedia);
 
   type Error_Type = { text?: string };
-  let errOnGettingProfile = state.profileMedia.errOnProfileLoading;
-  let userId = state.profileMedia.profileData.userId;
-  let errOnStatusLoading = state.profileMedia.errOnStatusLoading;
-  let isFollowed = state.profileMedia.isFollowed;
-  let onFollowingErr = state.profileMedia.onFollowingErr;
+
+  let { errOnProfileLoading: errOnGettingProfile, errOnStatusLoading, isFollowed, onFollowingErr, isLoading } = state.profileMedia;
+  let { userId } = state.profileMedia.profileData
+
 
   let [writeMode, setWriteMode] = useState(false)
   let [feedBacker, setFeedBacker] = useState(false)
@@ -201,7 +200,8 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
       </div>
     }
 
-    {!userId && !errOnGettingProfile && <div className={stl.loaderDiv}>
+    {/* {!userId && !errOnGettingProfile && isLoading && <div className={stl.loaderDiv}> */}
+    {isLoading && <div className={stl.loaderDiv}>
       <img className={stl.loader} src={state.picsNLoaders.auth_LDR_GIF} alt="Err" />
     </div>}
     {errOnGettingProfile &&
@@ -215,7 +215,7 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
         >Try again</button>
       </div>
     }
-    {userId && !errOnGettingProfile &&
+    {userId && !errOnGettingProfile && !isLoading &&
       <div className={`${stl.profile} ${themes.profileDnmc}`}>
         <div className={stl.panorama}>
           <img
