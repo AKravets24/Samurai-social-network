@@ -23,11 +23,31 @@
 .loaderDiv {
     width: 100%;
     display: flex;
+    background-color: lightyellow;
+    height: inherit;
+    opacity: 0.9;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 0 0 20px 0;
 }
 
 .loader {
-    margin: 100px auto;
+    height: 150px;
 }
+
+.loaderDiv p {
+    font-size: 38px;
+    font-weight: 700;
+    font-family: verdana;
+}
+
+.fontsClr_N                    {color: blue;     }
+.fontsClr_M                    {color: #f6fff6;  }
+.fontsClr_D                    {color: #4cb74c;  }
+.fontsClr_E                    {color: white;    }
+
+
 
 .panorama {
     width: 100%;

@@ -21,6 +21,7 @@ type Themes_Type = {
   BTN_ERR_DNMC: string,
   writePostDnmc: string,
   textInput: string,
+  fontClrsDnmc: string;
 }
 type ProfileState_Type = {
   profileMedia: InitialProfileState_Type
@@ -83,13 +84,13 @@ let ProfileFuncContainer = () => {
 
   useEffect(() => { profileActions.profileGetter(); }, [myId, comparativeId]);
 
-  let [themes, setThemes] = useState<Themes_Type>({ profileDnmc: '', panoramaSRC: '', profileInfoDnmc: '', BTNs: '', BTN_ERR_DNMC: '', writePostDnmc: '', textInput: '' })
+  let [themes, setThemes] = useState<Themes_Type>({ profileDnmc: '', panoramaSRC: '', profileInfoDnmc: '', BTNs: '', BTN_ERR_DNMC: '', writePostDnmc: '', textInput: '', fontClrsDnmc: '' })
   useEffect(() => {
     switch (colorTheme) {
-      case 'NIGHT': return setThemes({ ...themes, profileDnmc: stl.profileN, panoramaSRC: panoramaPicSrc, profileInfoDnmc: stl.profileInfoN, BTNs: stl.BTNsN, BTN_ERR_DNMC: stl.BTN_ERR_N, writePostDnmc: stl.writePostN, textInput: stl.inputN, })
-      case 'MORNING': return setThemes({ ...themes, profileDnmc: stl.profileM, panoramaSRC: panoramaPicSrc, profileInfoDnmc: stl.profileInfoM, BTNs: stl.BTNsM, BTN_ERR_DNMC: stl.BTN_ERR_M, writePostDnmc: stl.writePostM, textInput: stl.inputM, })
-      case 'DAY': return setThemes({ ...themes, profileDnmc: stl.profileD, panoramaSRC: panoramaPicSrc, profileInfoDnmc: stl.profileInfoD, BTNs: stl.BTNsD, BTN_ERR_DNMC: stl.BTN_ERR_D, writePostDnmc: stl.writePostD, textInput: stl.inputD, })
-      case 'EVENING': return setThemes({ ...themes, profileDnmc: stl.profileE, panoramaSRC: panoramaPicSrc, profileInfoDnmc: stl.profileInfoE, BTNs: stl.BTNsE, BTN_ERR_DNMC: stl.BTN_ERR_E, writePostDnmc: stl.writePostE, textInput: stl.inputE, })
+      case 'NIGHT': return setThemes({ ...themes, profileDnmc: stl.profileN, panoramaSRC: panoramaPicSrc, profileInfoDnmc: stl.profileInfoN, BTNs: stl.BTNsN, BTN_ERR_DNMC: stl.BTN_ERR_N, writePostDnmc: stl.writePostN, textInput: stl.inputN, fontClrsDnmc: stl.fontsClr_N })
+      case 'MORNING': return setThemes({ ...themes, profileDnmc: stl.profileM, panoramaSRC: panoramaPicSrc, profileInfoDnmc: stl.profileInfoM, BTNs: stl.BTNsM, BTN_ERR_DNMC: stl.BTN_ERR_M, writePostDnmc: stl.writePostM, textInput: stl.inputM, fontClrsDnmc: stl.fontsClr_M })
+      case 'DAY': return setThemes({ ...themes, profileDnmc: stl.profileD, panoramaSRC: panoramaPicSrc, profileInfoDnmc: stl.profileInfoD, BTNs: stl.BTNsD, BTN_ERR_DNMC: stl.BTN_ERR_D, writePostDnmc: stl.writePostD, textInput: stl.inputD, fontClrsDnmc: stl.fontsClr_D })
+      case 'EVENING': return setThemes({ ...themes, profileDnmc: stl.profileE, panoramaSRC: panoramaPicSrc, profileInfoDnmc: stl.profileInfoE, BTNs: stl.BTNsE, BTN_ERR_DNMC: stl.BTN_ERR_E, writePostDnmc: stl.writePostE, textInput: stl.inputE, fontClrsDnmc: stl.fontsClr_E })
     }
   }, [colorTheme]);
 
@@ -112,7 +113,7 @@ type Profile_Types = {
 
 const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }) => {
   // console.log('render');
-  console.log(state.profileMedia);
+  console.log(themes);
 
   type Error_Type = { text?: string };
 
@@ -203,6 +204,7 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
     {/* {!userId && !errOnGettingProfile && isLoading && <div className={stl.loaderDiv}> */}
     {isLoading && <div className={stl.loaderDiv}>
       <img className={stl.loader} src={state.picsNLoaders.auth_LDR_GIF} alt="Err" />
+      <p className={themes.fontClrsDnmc}>Loading profile...</p>
     </div>}
     {errOnGettingProfile &&
       // <div className={stl.onGettingErrorDiv}> {errOnGettingProfile} </div>
@@ -215,6 +217,7 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
         >Try again</button>
       </div>
     }
+
     {userId && !errOnGettingProfile && !isLoading &&
       <div className={`${stl.profile} ${themes.profileDnmc}`}>
         <div className={stl.panorama}>
@@ -327,7 +330,11 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
         </div>
       </div>
     }
+
+
   </>
 };
 
 export default ProfileFuncContainer;
+
+
