@@ -89,7 +89,7 @@ export const usersACs = (state = actionCreators) => { return state };
 
 const initialUsersInfo = {
   initialUsersList: [] as UsersArr[],
-  pageSize: 50 as number,
+  pageSize: 100 as number,
   totalCount: 0 as number,
   currentPage: 1 as number,
   linkTermName: '' as string,

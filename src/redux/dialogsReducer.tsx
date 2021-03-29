@@ -381,13 +381,12 @@ let initialDialogsState = {
   allDialogsIsLoading: false as boolean,
   certainDialogIsLoading: false as boolean,
   defaultAvatar: maleProfilePic as string,
-  certainDialogLoader: certainDialogLoaderGIF as string,
-  allDialogsLoader: allDialogsLoadeGIF as string,
+  certainDialogLoader: certainDialogLoaderGIF as string, // перенести в backgroundReducer!!!
   newMessagesCounter: 0 as number,
   newMessageBTNDisabled: false as boolean,
   msgLoader: envelopeGIF as string,
   prevMsgsIsLoading: false as boolean,
-  prevMsgsLoader: meetLinesGIF as string,
+  prevMsgsLoader: meetLinesGIF as string, // перенести в backgroundReducer!!!
   onError: errorPic as string,
   errGettingNewMSGSCount: false as boolean,
   onSendMSGStatArr: [] as any[],  // вроде как нафиг не нужен

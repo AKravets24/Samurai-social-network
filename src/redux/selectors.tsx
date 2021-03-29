@@ -105,10 +105,6 @@ export const getSmartProfileMediaData = createSelector(ProfileReducerPart_1, Pro
     return { ...ProfilePart_1, ...ProfilePart_2 }
 })
 
-//
-// old getSmartProfileMediaData was here
-//
-
 
 // pics and gifs to Profile
 // const getTheme                            = state =>  state.backgroundReducer.theme                             ;
@@ -136,7 +132,6 @@ const getCertainDialogIsLoading = (state: AppStateType) => state.dialogsReducer.
 
 const getDefaultAvatar_compDialogs = (state: AppStateType) => state.dialogsReducer.defaultAvatar;
 const getcertainDialogLoader = (state: AppStateType) => state.dialogsReducer.certainDialogLoader;
-const getAllDialogsLoader = (state: AppStateType) => state.dialogsReducer.allDialogsLoader;
 const getNewMessagesCounter = (state: AppStateType) => state.dialogsReducer.newMessagesCounter;
 const getNewMessageBTNDisabled = (state: AppStateType) => state.dialogsReducer.newMessageBTNDisabled;
 // const getMsgLoader                      = state => state.dialogsReducer.msgLoader                                ;
@@ -152,11 +147,11 @@ const getErrNegotiatorsListPIC = (state: AppStateType) => state.dialogsReducer.e
 const getErrCertainDialogGet = (state: AppStateType) => state.dialogsReducer.errCertainDialogGet;
 
 const DialogsReducerPart_1 = createSelector(getDialogsList, getCertainDialog, getAllDialogsIsLoading, getCertainDialogIsLoading, getDefaultAvatar_compDialogs,
-    getcertainDialogLoader, getAllDialogsLoader, getNewMessagesCounter, getNewMessageBTNDisabled, getMsgLoader, getPrevMsgsIsLoading, getPrevMsgsLoader,
-    (dialogsList, certainDialog, allDialogsIsLoading, certainDialogIsLoading, defaultAvatar, certainDialogLoader, allDialogsLoader, newMessagesCounter,
+    getcertainDialogLoader, getNewMessagesCounter, getNewMessageBTNDisabled, getMsgLoader, getPrevMsgsIsLoading, getPrevMsgsLoader,
+    (dialogsList, certainDialog, allDialogsIsLoading, certainDialogIsLoading, defaultAvatar, certainDialogLoader, newMessagesCounter,
         newMessageBTNDisabled, msgLoader, prevMsgsIsLoading, prevMsgsLoader) => {
         let DialogsPart_1 = {
-            dialogsList, certainDialog, allDialogsIsLoading, certainDialogIsLoading, defaultAvatar, certainDialogLoader, allDialogsLoader, newMessagesCounter,
+            dialogsList, certainDialog, allDialogsIsLoading, certainDialogIsLoading, defaultAvatar, certainDialogLoader, newMessagesCounter,
             newMessageBTNDisabled, msgLoader, prevMsgsIsLoading, prevMsgsLoader
         }
         return DialogsPart_1
@@ -173,9 +168,13 @@ export const getSmartDialogsReducer = createSelector(DialogsReducerPart_1, Dialo
     return { ...DialogsPart_1, ...DialogsPart_2 }
 })
 
-//
-// getSmartDialogsReducer was here 
-//
+
+const getHalfCircle_GIF = (state: AppStateType) => state.backgroundReducer.dialogsThemes.halfCircle_GIF;
+const getInterSector_GIF = (state: AppStateType) => state.backgroundReducer.dialogsThemes.interSector_GIF;
+
+export const getSmartDialogsLoaders = createSelector(getHalfCircle_GIF, getInterSector_GIF, (halfCircle_GIF, interSector_GIF) => {
+    return { halfCircle_GIF, interSector_GIF }
+})
 
 
 // USERS RESELECTORS===============================================================================================================USERS RESELECTORS==============

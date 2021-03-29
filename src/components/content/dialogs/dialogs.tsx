@@ -7,7 +7,9 @@ import {
   getColorTheme, getDialogsACs_compDialogs,
   getMyId, getSmartDialogsReducer
 } from "../../../redux/selectors";
-import { DialogActions_Type, InitialDialogsState_Type } from '../../../redux/dialogsReducer'
+import { DialogActions_Type, InitialDialogsState_Type } from '../../../redux/dialogsReducer';
+import { DialoguesThemes_Type } from '../../../redux/backGroundSetter';
+import { getSmartDialogsLoaders } from '../../../redux/selectors';
 import { MatchHook_Type } from "../../RouterHooksTypes";
 import { MessageData_Type } from "../../../redux/app";
 import { v4 as uuidv4 } from 'uuid';
@@ -36,6 +38,8 @@ let DialogFuncContainer = () => {
   let myId = useSelector(getMyId);
   let colorTheme = useSelector(getColorTheme);
   let dialogACs = useSelector(getDialogsACs_compDialogs);
+  let loaders = useSelector(getSmartDialogsLoaders)
+
 
 
   let dispatch = useDispatch();
@@ -85,6 +89,7 @@ let DialogFuncContainer = () => {
     myId={myId}
     themes={themes}
     actions={dialogActions}
+    loaders={loaders}
   /> : null;
 }
 
@@ -94,10 +99,13 @@ type DialogsProps_type = {
   themes: Themes_Type
   userIdInURL: undefined | string | number
   actions: DialogsActions_Types
+  loaders: DialoguesThemes_Type
 }
 
-let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, actions }) => {
-  // console.log(typeof stl.visibility)
+
+
+let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, actions, loaders }) => {
+  console.log(loaders)
 
   const dialogArea = useRef<HTMLDivElement>(null);
   const bufferBlock = useRef<HTMLDivElement>(null);
@@ -179,7 +187,12 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
         <div className={`${stl.dialogList} ${themes.firstScroller}`}>
           {/* {state.dialogsList.length === 0 && !state.errNegotiatorsListGet ? */}
           {state.allDialogsIsLoading ?
-            <img className={stl.certainLoader} src={state.allDialogsLoader} alt="Err" />
+            <div className={stl.crtnLoaderWrapper}>
+              <img className={stl.certainLoader} src={loaders.halfCircle_GIF} alt="Err" />
+              <img className={stl.certainLoader} src={loaders.interSector_GIF} alt="Err" />
+              <img className={stl.certainLoader} src={loaders.halfCircle_GIF} alt="Err" />
+              {/* <img className={stl.certainLoader} src={state.allDialogsLoader} alt="Err" /> */}
+            </div>
             :
             state.errNegotiatorsListGet ?
               <div className={stl.errorBlock}>

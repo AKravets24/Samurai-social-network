@@ -15,15 +15,15 @@
     opacity: 0.9;
     /*position: relative;*/
 }
-.profileN { background-color: #cfedff;     transition: 5000ms; }
-.profileM { background-color: #fbc498;     transition: 5000ms; }
-.profileD { background-color: lightyellow; transition: 5000ms; }
-.profileE { background-color: #fef0f0;     transition: 5000ms; }
+.profileN { background-color: #cfedff;     /* transition: 5000ms; */ }
+.profileM { background-color: #fbc498;     /* transition: 5000ms; */ }
+.profileD { background-color: lightyellow; /* transition: 5000ms; */ }
+.profileE { background-color: #fef0f0;     /* transition: 5000ms; */ }
 
 .loaderDiv {
     width: 100%;
     display: flex;
-    background-color: lightyellow;
+    /* background-color: lightyellow; */
     height: inherit;
     opacity: 0.9;
     justify-content: center;
@@ -45,7 +45,7 @@
 .fontsClr_N                    {color: blue;     }
 .fontsClr_M                    {color: #f6fff6;  }
 .fontsClr_D                    {color: #4cb74c;  }
-.fontsClr_E                    {color: white;    }
+.fontsClr_E                    {color: #684271;  }
 
 
 

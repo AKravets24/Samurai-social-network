@@ -105,11 +105,11 @@ const initialState = {
   authErr: '' as string,      // вынести в редюсер с логинизацией
   captchaPic: '' as string,
   errCaptchaGet: '' as string,
-  funnyLoaderArr: ['tectonic configuration...', 'filling the oceans...',
-    'planting flora...', 'fauna breeding...',
-    'crusades...', 'witch-hunting...',
-    'transition into the renaissance era...',
-    'scientific and technological revolution...',
+  funnyLoaderArr: ['Tectonic configuration...', 'Filling the oceans...',
+    'Planting flora...', 'Fauna breeding...',
+    'Crusades...', 'Witch-hunting...',
+    'Transition into the renaissance era...',
+    'Scientific and technological revolution...',
     'Client: Synchronization...',] as string[],
 };
 
