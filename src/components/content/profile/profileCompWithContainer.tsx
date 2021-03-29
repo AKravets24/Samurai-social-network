@@ -113,7 +113,7 @@ type Profile_Types = {
 
 const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }) => {
   // console.log('render');
-  console.log(themes);
+  // console.log(themes);
 
   type Error_Type = { text?: string };
 

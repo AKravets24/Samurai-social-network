@@ -8,10 +8,12 @@ import { getDialogACs, getMyId, getSmartPartialDialogReducer, getSmartDialogsRed
 import { AppStateType } from "../../redux/redux-store";
 import * as queryString from 'querystring'
 
-type ContainerPropsTypes = {
-  getNewMessagesRequestThunk: () => void,
-  setCurrentPageThunk: (pageSize: number, page: number) => void
-  getCertainUserThunk: (pageSize: number, userSearchName: string, page: number) => void
+type ContainerProps_Types = {
+  actions: {
+    getNewMessagesRequestThunk: () => void,
+    setCurrentPageThunk: (pageSize: number, page: number) => void
+    getCertainUserThunk: (pageSize: number, userSearchName: string, page: number) => void
+  }
   state: {
     colorTheme: string,
     myId: number,
@@ -26,51 +28,38 @@ type ContainerPropsTypes = {
   }
 }
 
-function NavBarContainer(props: ContainerPropsTypes) {
-  // console.log(props)
+let NavBarContainer: React.FC<ContainerProps_Types> = ({ state, actions }) => {
+  console.log(actions)
 
   let [themes, setThemes] = useState({ dynamicActiveClass: '', dynamicClass: 'stl.linkNight  ', blockMenu: '', counter: '', });
   useEffect(() => {
-    switch (props.state.colorTheme) {
+    switch (state.colorTheme) {
       case 'NIGHT': return setThemes({ ...themes, dynamicActiveClass: stl.activeLinkN, dynamicClass: stl.linkN, blockMenu: stl.blockMenuN, counter: stl.counterN, });
       case 'MORNING': return setThemes({ ...themes, dynamicActiveClass: stl.activeLinkM, dynamicClass: stl.linkM, blockMenu: stl.blockMenuM, counter: stl.counterM, });
       case 'DAY': return setThemes({ ...themes, dynamicActiveClass: stl.activeLinkD, dynamicClass: stl.linkD, blockMenu: stl.blockMenuD, counter: stl.counterD, });
       case 'EVENING': return setThemes({ ...themes, dynamicActiveClass: stl.activeLinkE, dynamicClass: stl.linkE, blockMenu: stl.blockMenuE, counter: stl.counterE, });
     }
-  }, [props.state.colorTheme]);
+  }, [state.colorTheme]);
 
-  let { newMessageBTNDisabled: btnIsDisabled, newMessagesCounter: newMSGSCounter, msgLoader, errGettingNewMSGSCount, onError: onErrorPic, envelope_GIF } = props.state.partDialogReducer;
+  console.log(state.partDialogReducer);
 
 
-  useEffect(() => { props.state.myId && props.getNewMessagesRequestThunk() }, []);
+  useEffect(() => { state.myId && actions.getNewMessagesRequestThunk() }, []);
 
-  return themes.dynamicActiveClass && <NavBar
-    myId={props.state.myId}
-    getNewMessages={props.getNewMessagesRequestThunk}
-    setCurrentPage={props.setCurrentPageThunk}
-    getCertainUser={props.getCertainUserThunk}
+  return themes.dynamicActiveClass ? <NavBar
+    myId={state.myId}
     themes={themes}
-
-    btnIsDisabled={btnIsDisabled}
-    newMSGSCounter={newMSGSCounter}
-    msgLoader={msgLoader}
-    errGettingNewMSGSCount={errGettingNewMSGSCount}
-    onErrorPic={onErrorPic}
-    envelope_GIF={envelope_GIF}
-  />
+    actions={actions}
+    state={state.partDialogReducer}
+  /> : null
 }
 
 type PropsTypes = {
-  btnIsDisabled: boolean,
-  errGettingNewMSGSCount: boolean,
-  getNewMessages: () => void,
-  setCurrentPage: (pageSize: number, page: number) => void,
-  getCertainUser: (pageSize: number, userSearchName: string, page: number) => void,
-  msgLoader: string,
   myId: number,
-  newMSGSCounter: number,
-  onErrorPic: string,
-  envelope_GIF: string,
+  actions: ContainerProps_Types['actions']
+
+  state: ContainerProps_Types['state']['partDialogReducer']
+
   themes: {
     blockMenu: string,
     counter: string,
@@ -79,31 +68,31 @@ type PropsTypes = {
   }
 }
 
-// function NavBar(props:PropsTypes) {
-let NavBar: React.FC<PropsTypes> = (props) => {
-  console.log(props)
+
+let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions }) => {
+  // console.log(props)
 
   // let [isHiddenBTN, setIsHiddenBTN] = useState(stl.hidden);
   let isHiddenBTN = stl.hidden;
   let [element, setElement] = useState<any>(null);
 
-  useEffect(() => { BTNRenderSelector() }, [props.btnIsDisabled, props.errGettingNewMSGSCount]);
+  useEffect(() => { BTNRenderSelector() }, [state.newMessageBTNDisabled, state.errGettingNewMSGSCount]);
 
   const BTNRenderSelector = () => {
-    if (props.btnIsDisabled) {
+    if (state.newMessageBTNDisabled) {
       // setIsHiddenBTN(stl.hidden);
       isHiddenBTN = stl.hidden;
-      setElement(<img src={props.envelope_GIF} alt="err" />); // лодер конверта
+      setElement(<img src={state.envelope_GIF} alt="err" />); // лодер конверта
       return element
     }
-    else if (props.errGettingNewMSGSCount) {
+    else if (state.errGettingNewMSGSCount) {
       // setIsHiddenBTN(stl.showed)
       isHiddenBTN = stl.showed;
-      setElement(<img className={stl.errorImg} src={props.onErrorPic} alt='err' />); // пиктограмма ошибки
+      setElement(<img className={stl.errorImg} src={state.onError} alt='err' />); // пиктограмма ошибки
       return element
     }
     else {
-      setElement(<span className={props.themes.dynamicClass}> +1? </span>)
+      setElement(<span className={themes.dynamicClass}> +1? </span>)
       return element
     }
   };
@@ -117,10 +106,10 @@ let NavBar: React.FC<PropsTypes> = (props) => {
     let parsedString = queryString.parse(queryRequest);
     if (parsedString['term'] && parsedString['term'] !== '') { // проверка второго необязательного параметра
       //@ts-ignore
-      props.getCertainUser(50, parsedString['term'], 1)
+      props.actions.setCurrentPageThunk(50, parsedString['term'], 1)
       history.push({ pathname: 'users', search: `?page=1&term=${parsedString['term']}` })
     } else {
-      props.setCurrentPage(50, 1)
+      actions.setCurrentPageThunk(50, 1)
       history.push({ pathname: 'users', search: `?page=1` })
     }
   }
@@ -128,46 +117,46 @@ let NavBar: React.FC<PropsTypes> = (props) => {
   // console.log(props)
 
   return <>
-    <div className={`${stl.blockMenu}  ${props.themes.blockMenu}`}>
+    <div className={`${stl.blockMenu}  ${themes.blockMenu}`}>
       <ul className={stl.menu}>
-        {!props.myId && <li><NavLink to={`/login`} className={props.themes.dynamicClass} activeClassName={props.themes.dynamicActiveClass}
+        {!myId && <li><NavLink to={`/login`} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}
         >Get Login</NavLink></li>}
-        {props.myId && <li><NavLink to={`/profile`} className={props.themes.dynamicClass} activeClassName={props.themes.dynamicActiveClass}
+        {myId && <li><NavLink to={`/profile`} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}
         > Profile </NavLink></li>}
-        {props.myId && <li><NavLink to={'/friends'} className={props.themes.dynamicClass} activeClassName={props.themes.dynamicActiveClass}
+        {myId && <li><NavLink to={'/friends'} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}
         > Friends </NavLink></li>}
 
-        {props.myId && <li className={stl.dialogsSpan}>
-          <button disabled={props.btnIsDisabled} onClick={props.getNewMessages} className={isHiddenBTN}>
+        {myId && <li className={stl.dialogsSpan}>
+          <button disabled={state.newMessageBTNDisabled} onClick={actions.getNewMessagesRequestThunk} className={isHiddenBTN}>
             {element}
             {/* { props.btnIsDisabled && !props.errGettingNewMSGSCount ?  <img src={props.msgLoader} alt="err"/>  :
                             <span className={themes.dynamicClass}> '+1?'</span>}*/}
           </button>
           <NavLink to={'/dialogs'}
-            className={props.themes.dynamicClass}
-            activeClassName={props.themes.dynamicActiveClass}>
+            className={themes.dynamicClass}
+            activeClassName={themes.dynamicActiveClass}>
             Dialogs </NavLink>
-          <p className={`${props.themes.counter}`} hidden={!props.newMSGSCounter}>({props.newMSGSCounter})</p>
+          <p className={`${themes.counter}`} hidden={!state.newMessagesCounter}>({state.newMessagesCounter})</p>
         </li>}
-        {props.myId && <li><NavLink to={'/chat'}
-          className={props.themes.dynamicClass}
-          activeClassName={props.themes.dynamicActiveClass}> Chat </NavLink></li>}
+        {myId && <li><NavLink to={'/chat'}
+          className={themes.dynamicClass}
+          activeClassName={themes.dynamicActiveClass}> Chat </NavLink></li>}
         {/* {props.myId && <li><NavLink to={'/users'} */}
-        {props.myId && <li><NavLink to={history.location.pathname !== `/users` ? '/users' : history.location.pathname + history.location.search}
+        {myId && <li><NavLink to={history.location.pathname !== `/users` ? '/users' : history.location.pathname + history.location.search}
           // {props.myId && <li><NavLink to={history.location.pathname + history.location.search}
-          className={props.themes.dynamicClass}
-          activeClassName={props.themes.dynamicActiveClass}
+          className={themes.dynamicClass}
+          activeClassName={themes.dynamicActiveClass}
           onClick={(e) => history.location.pathname === `/users` ? finalUsersLink() : null}
         > Users </NavLink></li>}
         <li><NavLink to='/news'
-          className={props.themes.dynamicClass}
-          activeClassName={props.themes.dynamicActiveClass}> News </NavLink></li>
+          className={themes.dynamicClass}
+          activeClassName={themes.dynamicActiveClass}> News </NavLink></li>
         <li><NavLink to='/music'
-          className={props.themes.dynamicClass}
-          activeClassName={props.themes.dynamicActiveClass}> Music </NavLink></li>
+          className={themes.dynamicClass}
+          activeClassName={themes.dynamicActiveClass}> Music </NavLink></li>
         <li><NavLink to='/settings'
-          className={props.themes.dynamicClass}
-          activeClassName={props.themes.dynamicActiveClass}> Settings </NavLink></li>
+          className={themes.dynamicClass}
+          activeClassName={themes.dynamicActiveClass}> Settings </NavLink></li>
       </ul>
     </div>
   </>
@@ -196,7 +185,9 @@ const mergeProps = (stateProps: any, dispatchProps: any) => {                   
   const setCurrentPageThunk = (pageSize: number, page: number) => dispatch(state.usersACs.setCurrentPageThunkAC(pageSize, page))
   const getCertainUserThunk = (pageSize: number, userSearchName: string, page: number) => dispatch(state.usersACs.getCertainUserThunkAC(pageSize, userSearchName, page))
 
-  return { state, getNewMessagesRequestThunk, setCurrentPageThunk, getCertainUserThunk }
+  const actions = { getNewMessagesRequestThunk, setCurrentPageThunk, getCertainUserThunk }
+
+  return { state, actions }
 };
 
 // @ts-ignore

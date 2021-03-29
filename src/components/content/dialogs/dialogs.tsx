@@ -93,7 +93,7 @@ let DialogFuncContainer = () => {
   /> : null;
 }
 
-type DialogsProps_type = {
+type DialogsProps_Type = {
   myId: null | number
   state: InitialDialogsState_Type
   themes: Themes_Type
@@ -104,7 +104,7 @@ type DialogsProps_type = {
 
 
 
-let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, actions, loaders }) => {
+let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, actions, loaders }) => {
   console.log(loaders)
 
   const dialogArea = useRef<HTMLDivElement>(null);
