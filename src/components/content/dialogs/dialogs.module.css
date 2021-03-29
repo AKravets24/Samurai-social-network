@@ -58,7 +58,7 @@
 .dialogListE ::-webkit-scrollbar-button,.dialogAreaE::-webkit-scrollbar-button:single-button       {background-color: darkred;      transition: 5000ms; }
 .dialogListE ::-webkit-scrollbar-thumb, .dialogAreaE::-webkit-scrollbar-thumb                      {background-color: darkred;      transition: 5000ms; }
 
-.crtnLoaderWrapper {
+.dialogListLoaderWrapper {
     height: 90%;
     display: flex;
     align-items: center;
@@ -66,18 +66,18 @@
     flex-direction: column;
 }
 
-.certainLoader {
+.dialogListLoader {
     height: 80px;
     margin-bottom: 50px;
     margin-left: 25px;
 }
 
-.crtnLoaderWrapper :nth-child(2){
+.dialogListLoaderWrapper :nth-child(2){
     height: 120px;
 }
 
 
-.crtnLoaderWrapper :nth-child(3){
+.dialogListLoaderWrapper :nth-child(3){
     transform: rotate(180deg)
 }
 
@@ -293,6 +293,15 @@
 .dialogAreaM,.textareaM {background-color: #faffd3;     transition: 5000ms; }
 .dialogAreaD,.textareaD {background-color: lightyellow; transition: 5000ms; }
 .dialogAreaE,.textareaE {background-color: #ffe1e1;     transition: 5000ms; }
+
+
+.certainLDRWrapper {
+    height: 100%;
+    margin-top: -40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 
 .dialogArea img {

@@ -61,7 +61,7 @@ let DialogFuncContainer = () => {
     match?.params?.userId ? dialogActions.talkedBeforeThunk(+match.params.userId) : dialogActions.getMyNegotiatorsListThunk();
   }, [])
 
-  let [themes, setThemes] = useState<Themes_Type>({ dialogDynamic: '', firstScroller: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDynamic: '', msgUserDynamic: '', dialogAreaBackgroundNSecondScroll: '', textAreaDynamic: '', sendBTNDynamic: '' })
+  let [themes, setThemes] = useState<Themes_Type>({ dialogDynamic: '', firstScroller: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDynamic: '', msgUserDynamic: '', dialogAreaBackgroundNSecondScroll: '', textAreaDynamic: '', sendBTNDynamic: '', })
   useEffect(() => {
     switch (colorTheme) {
       case 'NIGHT': return setThemes({
@@ -179,7 +179,7 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
     setModalMsggs(modalMsggs = finalState)
   }
 
-  console.log(state.certainDialogIsLoading)
+  // console.log(state.certainDialogIsLoading)
 
   return <>
     <div className={`${stl.dialogsPage} ${themes.dialogDynamic}`}>
@@ -187,11 +187,10 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
         <div className={`${stl.dialogList} ${themes.firstScroller}`}>
           {/* {state.dialogsList.length === 0 && !state.errNegotiatorsListGet ? */}
           {state.allDialogsIsLoading ?
-            <div className={stl.crtnLoaderWrapper}>
-              <img className={stl.certainLoader} src={loaders.halfCircle_GIF} alt="Err" />
-              <img className={stl.certainLoader} src={loaders.interSector_GIF} alt="Err" />
-              <img className={stl.certainLoader} src={loaders.halfCircle_GIF} alt="Err" />
-              {/* <img className={stl.certainLoader} src={state.allDialogsLoader} alt="Err" /> */}
+            <div className={stl.dialogListLoaderWrapper}>
+              <img className={stl.dialogListLoader} src={loaders.halfCircle_GIF} alt="Err" />
+              <img className={stl.dialogListLoader} src={loaders.interSector_GIF} alt="Err" />
+              <img className={stl.dialogListLoader} src={loaders.halfCircle_GIF} alt="Err" />
             </div>
             :
             state.errNegotiatorsListGet ?
@@ -234,10 +233,9 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
             onContextMenu={e => e.preventDefault()}
           >
             <div className={stl.oldMsgsLoader}>
-              {state.prevMsgsIsLoading && <img src={state.prevMsgsLoader} alt="" />}
+              {state.prevMsgsIsLoading && <img src={state.prevMsgsLoader} alt="Err" />}
             </div>
-
-            {state.certainDialogIsLoading ? <img src={state.certainDialogLoader} alt="err" /> :
+            {state.certainDialogIsLoading ? <div className={stl.certainLDRWrapper}><img src={loaders.certainLDR_GIF} alt="err" /></div> :
               state.errCertainDialogGet ? <div className={stl.errorBlock}> {state.errCertainDialogGet}</div> :
                 state?.certainDialog?.items
                   .map((msg, i, arr) => {

@@ -208,8 +208,6 @@
 import { CertainDialog_Type, DialogsList_Type, MessageData_Type, usersApi } from './app';
 import maleProfilePic from './img/dialogs/male.png';
 import errorPic from './img/dialogs/error.png';
-import certainDialogLoaderGIF from './loader/dialogs/loader_green_spinner.gif';
-import allDialogsLoadeGIF from './loader/dialogs/spinner_yellow.gif';
 import envelopeGIF from './loader/dialogs/envelope.gif';
 import meetLinesGIF from './loader/dialogs/lGreenMeetLines.gif';
 import radioTowerPIC from './img/dialogs/radioTower1.png';
@@ -381,10 +379,9 @@ let initialDialogsState = {
   allDialogsIsLoading: false as boolean,
   certainDialogIsLoading: false as boolean,
   defaultAvatar: maleProfilePic as string,
-  certainDialogLoader: certainDialogLoaderGIF as string, // перенести в backgroundReducer!!!
   newMessagesCounter: 0 as number,
   newMessageBTNDisabled: false as boolean,
-  msgLoader: envelopeGIF as string,
+  msgLoader: envelopeGIF as string,  // перенести в backgroundReducer!!!
   prevMsgsIsLoading: false as boolean,
   prevMsgsLoader: meetLinesGIF as string, // перенести в backgroundReducer!!!
   onError: errorPic as string,

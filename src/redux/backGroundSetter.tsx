@@ -52,6 +52,12 @@ import interSector_GIF_M from './loader/dialogs/allDialogsList/interSector_M.gif
 import interSector_GIF_D from './loader/dialogs/allDialogsList/interSector_D.gif';
 import interSector_GIF_E from './loader/dialogs/allDialogsList/interSector_E.gif';
 
+import certainLDR_GIF_N from './loader/dialogs/dialogArea/win_N.gif';
+import certainLDR_GIF_M from './loader/dialogs/dialogArea/win_M.gif';
+import certainLDR_GIF_D from './loader/dialogs/dialogArea/win_D.gif';
+import certainLDR_GIF_E from './loader/dialogs/dialogArea/win_E.gif';
+
+
 // UsersGeneralLoaderGIF =========================================================================================================== Users
 import userLoaderGIF_N from './loader/users/LDR_N.gif';
 import userLoaderGIF_M from './loader/users/LDR_M.gif';
@@ -82,7 +88,7 @@ export type ProfileThemes_Type = {
     panoramaPic: string; panorama_LDR_GIF: string; ava_LDR_GIF: string; BTN_LDR_GIF: string; status_LDR_GIF: string, auth_LDR_GIF: string
 }
 
-export type DialoguesThemes_Type = { halfCircle_GIF: string, interSector_GIF: string, }
+export type DialoguesThemes_Type = { halfCircle_GIF: string, interSector_GIF: string, certainLDR_GIF: string }
 
 export type UsersThemesBGR_Type = { generalLDR_GIF: string }
 
@@ -102,6 +108,7 @@ let initialState = {
     dialogsThemes: {
         halfCircle_GIF: '' as string,
         interSector_GIF: '' as string,
+        certainLDR_GIF: '' as string
     } as DialoguesThemes_Type,
     usersThemes: {
         generalLDR_GIF: '' as string,
@@ -120,7 +127,7 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     ...state, theme: 'NIGHT', backgroundPic: backDropPIC_N, timeToChangeTheme: 180 - action.timer,
                     auth_LDR_GIF: auth_LDR_GIF_N,
                     profileThemes: { auth_LDR_GIF: auth_LDR_GIF_N, panoramaPic: panoramaPIC_N, panorama_LDR_GIF: panoramaGIF_N, ava_LDR_GIF: ava_LDR_GIF_N, BTN_LDR_GIF: BTN_LDR_GIF_N, status_LDR_GIF: status_LDR_GIF_N, },
-                    dialogsThemes: { halfCircle_GIF: halfCircle_GIF_N, interSector_GIF: interSector_GIF_N },
+                    dialogsThemes: { halfCircle_GIF: halfCircle_GIF_N, interSector_GIF: interSector_GIF_N, certainLDR_GIF: certainLDR_GIF_N },
                     usersThemes: { generalLDR_GIF: userLoaderGIF_N, }
                 }
             } else if (action.timer >= 180 && action.timer < 660) { // } else if (action.timer >= 180 && action.timer < 660) {
@@ -129,7 +136,7 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     ...state, theme: 'MORNING', backgroundPic: backDropPIC_M, timeToChangeTheme: 660 - action.timer, // 660
                     auth_LDR_GIF: auth_LDR_GIF_M,
                     profileThemes: { auth_LDR_GIF: auth_LDR_GIF_M, panoramaPic: panoramaPIC_M, panorama_LDR_GIF: panoramaGIF_M, ava_LDR_GIF: ava_LDR_GIF_M, BTN_LDR_GIF: BTN_LDR_GIF_M, status_LDR_GIF: status_LDR_GIF_M, },
-                    dialogsThemes: { halfCircle_GIF: halfCircle_GIF_M, interSector_GIF: interSector_GIF_M },
+                    dialogsThemes: { halfCircle_GIF: halfCircle_GIF_M, interSector_GIF: interSector_GIF_M, certainLDR_GIF: certainLDR_GIF_M },
                     usersThemes: { generalLDR_GIF: userLoaderGIF_M, }
                 }
             } else if (action.timer >= 660 && action.timer < 1080) { // } else if (action.timer >= 660 && action.timer < 1080) { //1080
@@ -138,7 +145,7 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     ...state, theme: 'DAY', backgroundPic: backDropPIC_D, timeToChangeTheme: 1080 - action.timer,
                     auth_LDR_GIF: auth_LDR_GIF_D,
                     profileThemes: { auth_LDR_GIF: auth_LDR_GIF_D, panoramaPic: panoramaPIC_D, panorama_LDR_GIF: panoramaGIF_D, ava_LDR_GIF: ava_LDR_GIF_D, BTN_LDR_GIF: BTN_LDR_GIF_D, status_LDR_GIF: status_LDR_GIF_D, },
-                    dialogsThemes: { halfCircle_GIF: halfCircle_GIF_D, interSector_GIF: interSector_GIF_D },
+                    dialogsThemes: { halfCircle_GIF: halfCircle_GIF_D, interSector_GIF: interSector_GIF_D, certainLDR_GIF: certainLDR_GIF_D },
                     usersThemes: { generalLDR_GIF: userLoaderGIF_D, }
                 }
             } else if (action.timer >= 1080 && action.timer < 1440) { // } else if (action.timer >= 1080 && action.timer < 1440) { //1440
@@ -147,7 +154,7 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     ...state, theme: 'EVENING', backgroundPic: backDropPIC_E, timeToChangeTheme: 1440 - action.timer,
                     auth_LDR_GIF: auth_LDR_GIF_E,
                     profileThemes: { auth_LDR_GIF: auth_LDR_GIF_E, panoramaPic: panoramaPIC_E, panorama_LDR_GIF: panoramaGIF_E, ava_LDR_GIF: ava_LDR_GIF_E, BTN_LDR_GIF: BTN_LDR_GIF_E, status_LDR_GIF: status_LDR_GIF_E, },
-                    dialogsThemes: { halfCircle_GIF: halfCircle_GIF_E, interSector_GIF: interSector_GIF_E },
+                    dialogsThemes: { halfCircle_GIF: halfCircle_GIF_E, interSector_GIF: interSector_GIF_E, certainLDR_GIF: certainLDR_GIF_E },
                     usersThemes: { generalLDR_GIF: userLoaderGIF_E, }
                 }
             }
