@@ -233,7 +233,7 @@ let Dialogs: React.FC<DialogsProps_type> = ({ myId, state, themes, userIdInURL, 
             onContextMenu={e => e.preventDefault()}
           >
             <div className={stl.oldMsgsLoader}>
-              {state.prevMsgsIsLoading && <img src={state.prevMsgsLoader} alt="Err" />}
+              {state.prevMsgsIsLoading && <img src={loaders.prevMSGLDR_GIF} alt="Err" />}
             </div>
             {state.certainDialogIsLoading ? <div className={stl.certainLDRWrapper}><img src={loaders.certainLDR_GIF} alt="err" /></div> :
               state.errCertainDialogGet ? <div className={stl.errorBlock}> {state.errCertainDialogGet}</div> :

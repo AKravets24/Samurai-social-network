@@ -208,8 +208,6 @@
 import { CertainDialog_Type, DialogsList_Type, MessageData_Type, usersApi } from './app';
 import maleProfilePic from './img/dialogs/male.png';
 import errorPic from './img/dialogs/error.png';
-import envelopeGIF from './loader/dialogs/envelope.gif';
-import meetLinesGIF from './loader/dialogs/lGreenMeetLines.gif';
 import radioTowerPIC from './img/dialogs/radioTower1.png';
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
@@ -381,9 +379,7 @@ let initialDialogsState = {
   defaultAvatar: maleProfilePic as string,
   newMessagesCounter: 0 as number,
   newMessageBTNDisabled: false as boolean,
-  msgLoader: envelopeGIF as string,  // перенести в backgroundReducer!!!
   prevMsgsIsLoading: false as boolean,
-  prevMsgsLoader: meetLinesGIF as string, // перенести в backgroundReducer!!!
   onError: errorPic as string,
   errGettingNewMSGSCount: false as boolean,
   onSendMSGStatArr: [] as any[],  // вроде как нафиг не нужен

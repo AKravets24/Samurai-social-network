@@ -1,4 +1,3 @@
-
 import React, { DOMElement, useEffect, useState } from "react";
 import stl from './navBar.module.css';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
@@ -22,6 +21,7 @@ type ContainerPropsTypes = {
       newMessageBTNDisabled: boolean,
       newMessagesCounter: number,
       onError: string
+      envelope_GIF: string
     }
   }
 }
@@ -39,7 +39,8 @@ function NavBarContainer(props: ContainerPropsTypes) {
     }
   }, [props.state.colorTheme]);
 
-  let { newMessageBTNDisabled: btnIsDisabled, newMessagesCounter: newMSGSCounter, msgLoader, errGettingNewMSGSCount, onError: onErrorPic } = props.state.partDialogReducer;
+  let { newMessageBTNDisabled: btnIsDisabled, newMessagesCounter: newMSGSCounter, msgLoader, errGettingNewMSGSCount, onError: onErrorPic, envelope_GIF } = props.state.partDialogReducer;
+
 
   useEffect(() => { props.state.myId && props.getNewMessagesRequestThunk() }, []);
 
@@ -55,6 +56,7 @@ function NavBarContainer(props: ContainerPropsTypes) {
     msgLoader={msgLoader}
     errGettingNewMSGSCount={errGettingNewMSGSCount}
     onErrorPic={onErrorPic}
+    envelope_GIF={envelope_GIF}
   />
 }
 
@@ -68,6 +70,7 @@ type PropsTypes = {
   myId: number,
   newMSGSCounter: number,
   onErrorPic: string,
+  envelope_GIF: string,
   themes: {
     blockMenu: string,
     counter: string,
@@ -78,7 +81,7 @@ type PropsTypes = {
 
 // function NavBar(props:PropsTypes) {
 let NavBar: React.FC<PropsTypes> = (props) => {
-  // console.log(props)
+  console.log(props)
 
   // let [isHiddenBTN, setIsHiddenBTN] = useState(stl.hidden);
   let isHiddenBTN = stl.hidden;
@@ -90,7 +93,7 @@ let NavBar: React.FC<PropsTypes> = (props) => {
     if (props.btnIsDisabled) {
       // setIsHiddenBTN(stl.hidden);
       isHiddenBTN = stl.hidden;
-      setElement(<img src={props.msgLoader} alt="err" />); // лодер конверта
+      setElement(<img src={props.envelope_GIF} alt="err" />); // лодер конверта
       return element
     }
     else if (props.errGettingNewMSGSCount) {
