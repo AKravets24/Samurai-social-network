@@ -10,7 +10,7 @@
     border-radius: 0 0 25px 0;
 
     /*min-height: calc(100vh - 270px);*/
-    min-height: 600px;
+    min-height: 700px;
     /*height: calc(100vh - 170px);*/
 }
 
@@ -553,6 +553,8 @@
     margin: 0 auto;
     display: flex;
     justify-content: center;
+    align-items: center;
+    height: 80px;
 }
 
 .moreUserUnitsN { border-top: 1px solid blue;      transition: 5000ms; }

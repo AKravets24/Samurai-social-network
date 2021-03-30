@@ -15,7 +15,8 @@ type FriendsProps_Type = {
 }
 
 export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo }) => {
-  console.log(palsFuncs)
+  console.log(palsInfo.friendsCount)
+
 
   type Error_Type = { text?: string }
 
@@ -48,7 +49,7 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
   };
 
   let followTogglerListener = (userId: number, userIsFollowed: boolean) => { palsFuncs.followThunkToggler(userId, userIsFollowed) }
-  let getMyFriendsListener = () => { palsFuncs.getMyFriendsListThunk() }
+  let getMyFriendsListener = (page: number) => { palsFuncs.getMyFriendsListThunk(page) }
 
   // console.log(palsInfo.friendsList)
 
@@ -66,85 +67,101 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
     else if (e.keyCode === 13) { formSubmitter(userId, values, userName, { setSubmitting }) }
   }
 
+  // let friendsListPage = 1;
+  let [friendsListPage, setFriendsListPage] = useState<number>(1);
+
   return <>
-    {palsInfo.errOnGettingFriends ?
-      <div className={`${stl.Houston} ${themes.friendsGeneralDnmc}`}>
-        <h2>Houston, we've got a problem...</h2>
-        <h2>{palsInfo.errOnGettingFriends}</h2>
-        <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`} onClick={getMyFriendsListener}
-        >Try again</button>
-      </div>
-      :
-      <div className={`${stl.friendsGeneral} ${themes.friendsGeneralDnmc}`}>
-        <h2 className={stl.userHeader}>Friends</h2>
-        <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
-          {palsInfo.friendsList.map((user: UsersArr) =>
-            <div className={stl.userUnitContainer} key={user.id}>
-              <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`}>
-                <div className={stl.avaDiv}>
-                  <NavLink to={`/profile/${user.id}`}>
-                    <img src={user.photos.large || palsInfo.defaultAvatar} alt='err'
-                      className={`${themes.userAvaDnmc}`} />
-                  </NavLink>
-                </div>
-                <div className={stl.nameStateBTNs}>
-                  {/* <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}> */}
-                  <div className={stl.userBlockInfo}>
-                    <NavLink to={`/profile/${user.id}`}>
-                      <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
-                    </NavLink>
-                    <p className={`${themes.userNameDnmc}`}>{user.status}</p>
-                  </div>
-                  <div className={stl.followNWriteBTNS}>
-                    <button
-                      id={user.id}
-                      disabled={palsInfo.followingInProgress.some(id => id === user.id)}
-                      className={`${stl.followBTN} ${themes.followBTNDnmc} ${user.error && themes.followBTN_ERR_DNMC}`}
-                      onClick={() => followTogglerListener(user.id, user.followed)}
-                    >
-                      {user.error ? user.error : user.followed ? 'unFollow' : 'Follow'}
-                    </button>
-                    <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                      disabled={isDisabled}
-                      onClick={(e) => userIdTalkModeOn(e)}
-                    >
-                      Write message
+    <div className={`${stl.friendsGeneral} ${themes.friendsGeneralDnmc}`}>
+      {palsInfo.friendsListIsLoading ?  // список друзей загружается? 
+        <div>Loading...</div> :
+        palsInfo.errOnGettingFriends ?     // есть ошибка при загрузке?
+          <div className={`${stl.Houston} ${themes.friendsGeneralDnmc}`}>
+            <h2>Houston, we've got a problem...</h2>
+            <h2>{palsInfo.errOnGettingFriends}</h2>
+            <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`} onClick={() => getMyFriendsListener(friendsListPage)}
+            >Try again</button>
+          </div>
+          :
+          !palsInfo.friendsList.length ? //есть ли друзья в списке?
+            <div>find friends</div> :
+            <>
+              <h2 className={stl.userHeader}>Friends {palsInfo.friendsCount ? `(${palsInfo.friendsList.length} / ${palsInfo.friendsCount})` : null}</h2>
+              <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
+
+                {palsInfo.friendsList.map((user: UsersArr) =>
+                  <div className={stl.userUnitContainer} key={user.id}>
+                    <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`}>
+                      <div className={stl.avaDiv}>
+                        <NavLink to={`/profile/${user.id}`}>
+                          <img src={user.photos.large || palsInfo.defaultAvatar} alt='err'
+                            className={`${themes.userAvaDnmc}`} />
+                        </NavLink>
+                      </div>
+                      <div className={stl.nameStateBTNs}>
+                        {/* <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}> */}
+                        <div className={stl.userBlockInfo}>
+                          <NavLink to={`/profile/${user.id}`}>
+                            <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
+                          </NavLink>
+                          <p className={`${themes.userNameDnmc}`}>{user.status}</p>
+                        </div>
+                        <div className={stl.followNWriteBTNS}>
+                          <button
+                            id={user.id}
+                            disabled={palsInfo.followingInProgress.some(id => id === user.id)}
+                            className={`${stl.followBTN} ${themes.followBTNDnmc} ${user.error && themes.followBTN_ERR_DNMC}`}
+                            onClick={() => followTogglerListener(user.id, user.followed)}
+                          >
+                            {user.error ? user.error : user.followed ? 'unFollow' : 'Follow'}
+                          </button>
+                          <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                            disabled={isDisabled}
+                            onClick={(e) => userIdTalkModeOn(e)}
+                          >
+                            Write message
                                         </button>
-                  </div>
-                </div>
-              </div>
-              <div className={`${stl.userUnitHidden}`}>
-                <div className={stl.miniHeadWrapper}>
-                  <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
-                  <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
-                  <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
-                    onClick={(e: any) => { userIdTalkModeOff(e) }}
-                  >X
+                        </div>
+                      </div>
+                    </div>
+                    <div className={`${stl.userUnitHidden}`}>
+                      <div className={stl.miniHeadWrapper}>
+                        <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
+                        <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
+                        <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
+                          onClick={(e: any) => { userIdTalkModeOff(e) }}
+                        >X
                   </button>
-                </div>
-                <div className={stl.textAreaWrapper}>
-                  <Formik initialValues={{ text: '' }} validate={formValidator}
-                    onSubmit={(values, { setSubmitting }) => {
-                      formSubmitter(user.id, values, user.name, { setSubmitting });
-                    }}>
-                    {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
-                      <form onSubmit={handleSubmit} >
-                        <Field name="text" className={stl.talkTextarea} as='textarea' onChange={handleChange} value={values.text}
-                          placeholder={errors.text} onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, user.id, values, user.name, {
-                            setSubmitting
-                          }))} />
-                        <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                        > Send Msg </button>
-                      </form>
-                    )}
-                  </Formik>
-                </div>
+                      </div>
+                      <div className={stl.textAreaWrapper}>
+                        <Formik initialValues={{ text: '' }} validate={formValidator}
+                          onSubmit={(values, { setSubmitting }) => {
+                            formSubmitter(user.id, values, user.name, { setSubmitting });
+                          }}>
+                          {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
+                            <form onSubmit={handleSubmit} >
+                              <Field name="text" className={stl.talkTextarea} as='textarea' onChange={handleChange} value={values.text}
+                                placeholder={errors.text} onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, user.id, values, user.name, {
+                                  setSubmitting
+                                }))} />
+                              <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                              > Send Msg </button>
+                            </form>
+                          )}
+                        </Formik>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
-        </div>
-      </div>
-    }
+
+
+              <div className={`${stl.moreUserUnits}  ${themes.moreUserUnitsDnmc}`}>
+
+                <button disabled={palsInfo.friendsCount === palsInfo.friendsList.length}
+                  className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`} onClick={() => { setFriendsListPage(++friendsListPage); getMyFriendsListener(friendsListPage) }}>Show more!</button></div>
+            </>
+      }
+    </div>
   </>
 };
 

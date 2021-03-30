@@ -20,7 +20,8 @@ import { AppStateType, InferActionsTypes } from './redux-store';
 
 
 const actions = {
-    getMyFriendsAC: (returnedList: UsersArr[]) => ({ type: 'GOT_FRIENDS_LIST', returnedList } as const),
+    friendsListIsLoadingAC: (isLoading: boolean) => ({ type: 'FRIENDS_LIST_TOGGLE_IS_LOADING', isLoading } as const),
+    getMyFriendsAC: (returnedList: UsersArr[], friendsCounter: number) => ({ type: 'GOT_FRIENDS_LIST', returnedList, friendsCounter } as const),
     followBTNTogglerAC: (userId: number, isFollowed: boolean) => ({ type: 'FOLLOW_ACTION_TOGGLER', userId, isFollowed } as const),
     errCatcherAtFollowingAC: (userId: number, errorCode: number) => ({ type: 'ERROR_AT_FOLLOWING_TOGGLER', userId, errorCode } as const),
     toggleFollowingProgressAC: (isLoading: boolean, userId: number) => ({ type: 'TOGGLE_IS_FOLLOWING_PROGRESS', isLoading, userId } as const),
@@ -32,13 +33,17 @@ type ActionTypes = InferActionsTypes<typeof actions>
 type Dispatch_Type = Dispatch<ActionTypes>
 type ThunkAC_Type = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
-const getMyFriendsListThunkAC = (): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
+const getMyFriendsListThunkAC = (page: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
+    if (page === 1) dispatch(actions.friendsListIsLoadingAC(true))
     try {
-        let response = await usersApi.getMyFriends()
-        if (response.status === 200) dispatch(actions.getMyFriendsAC(response.data.items))
+        let response = await usersApi.getMyFriends(page)
+        if (response.status === 200) dispatch(actions.getMyFriendsAC(response.data.items, response.data.totalCount))
+        console.log(response)
     }
     catch (err) { dispatch(actions.errCatcherAtFriendsGetAC(JSON.stringify(err.message))) }
+    if (page === 1) dispatch(actions.friendsListIsLoadingAC(false))
 };
+
 
 const followThunkTogglerAC = (userId: number, isFollowed: boolean): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
     dispatch(actions.toggleFollowingProgressAC(true, userId));
@@ -54,7 +59,7 @@ const followThunkTogglerAC = (userId: number, isFollowed: boolean): ThunkAC_Type
 
 export type FriendsACs = {
     followThunkTogglerAC: (userId: number, isFollowed: boolean) => ThunkAC_Type
-    getMyFriendsListThunkAC: () => ThunkAC_Type
+    getMyFriendsListThunkAC: (page: number) => ThunkAC_Type
 }
 
 const actionCreators: FriendsACs = { getMyFriendsListThunkAC, followThunkTogglerAC };
@@ -64,9 +69,11 @@ export const friendsACs = (state = actionCreators) => { return state };
 
 const initialFriendsInfo = {
     friendsList: [] as UsersArr[],
+    friendsCount: 0 as number,
     defaultAvatar: maleProfilePic as string,
     followingInProgress: [] as number[],
     errOnGettingFriends: '' as string,
+    friendsListIsLoading: false as boolean,
 };
 
 export type InitialFriendsInfo_Type = typeof initialFriendsInfo;
@@ -74,7 +81,10 @@ export type InitialFriendsInfo_Type = typeof initialFriendsInfo;
 
 export const friendsReducer = (state = initialFriendsInfo, action: ActionTypes): InitialFriendsInfo_Type => {
     switch (action.type) {
-        case 'GOT_FRIENDS_LIST': return { ...state, friendsList: action.returnedList };
+        case 'FRIENDS_LIST_TOGGLE_IS_LOADING': return { ...state, friendsListIsLoading: action.isLoading }
+        // case 'GOT_FRIENDS_LIST': return { ...state, friendsList: action.returnedList };
+        case 'GOT_FRIENDS_LIST': return { ...state, friendsList: [...state.friendsList, ...action.returnedList], friendsCount: action.friendsCounter };
+
         // case ERROR_AT_GETTING_USERS:       return {...state,errOnGettingFriends: action.usersGettingError}
         case 'ERROR_AT_GETTING_USERS': return { ...state, errOnGettingFriends: action.usersGettingError.substr(1, action.usersGettingError.length - 2) };
         case 'FOLLOW_ACTION_TOGGLER': return {

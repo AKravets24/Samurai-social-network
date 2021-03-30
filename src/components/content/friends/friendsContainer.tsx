@@ -15,7 +15,7 @@ export type PalsThemes_Type = {
 }
 
 export type FriendsActions_Type = {
-  getMyFriendsListThunk: () => void
+  getMyFriendsListThunk: (page: number) => void
   followThunkToggler: (userId: number, isFollowed: boolean) => void
   sendMessageToUserThunk: (userId: number, body: string, actionKey: string, userName: string) => void
 }
@@ -29,14 +29,14 @@ let FriendsFuncContainer = () => {
   let friendsACs: FriendsACs = useSelector(getFriendsACs)
   let dialogsACs: DialogActions_Type = useSelector(getDialogsACs_compUsers)
 
-  let getMyFriendsListThunk = () => { dispatch(friendsACs.getMyFriendsListThunkAC()) };
+  let getMyFriendsListThunk = (page: number) => { dispatch(friendsACs.getMyFriendsListThunkAC(page)) };
   let followThunkToggler = (userId: number, isFollowed: boolean) => { dispatch(friendsACs.followThunkTogglerAC(userId, isFollowed)) };
   let sendMessageToUserThunk = (userId: number, body: string, actionKey: string, userName: string) => {
     dispatch(dialogsACs.sendMessageToUserThunkAC(userId, body, actionKey, userName))
   }
   let palsFuncs: FriendsActions_Type = { getMyFriendsListThunk, followThunkToggler, sendMessageToUserThunk }
 
-  useEffect(() => { getMyFriendsListThunk() }, []);
+  useEffect(() => { getMyFriendsListThunk(1) }, []);
 
 
   let [themes, setThemes] = useState<PalsThemes_Type>({

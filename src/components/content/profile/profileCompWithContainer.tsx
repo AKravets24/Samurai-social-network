@@ -206,7 +206,7 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
       <img className={stl.loader} src={state.picsNLoaders.auth_LDR_GIF} alt="Err" />
       <p className={themes.fontClrsDnmc}>Loading profile...</p>
     </div>}
-    {errOnGettingProfile &&
+    {errOnGettingProfile && !isLoading &&
       // <div className={stl.onGettingErrorDiv}> {errOnGettingProfile} </div>
       <div className={`${stl.Houston} ${themes.profileDnmc}`}>
         <h2>Houston, we've got a problem...</h2>

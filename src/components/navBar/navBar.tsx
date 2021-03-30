@@ -28,8 +28,15 @@ type ContainerProps_Types = {
   }
 }
 
+type ThemesNavbar_Type = {
+  blockMenu: string,
+  counter: string,
+  dynamicActiveClass: string,
+  dynamicClass: string,
+}
+
 let NavBarContainer: React.FC<ContainerProps_Types> = ({ state, actions }) => {
-  console.log(actions)
+  // console.log(actions)
 
   let [themes, setThemes] = useState({ dynamicActiveClass: '', dynamicClass: 'stl.linkNight  ', blockMenu: '', counter: '', });
   useEffect(() => {
@@ -41,7 +48,6 @@ let NavBarContainer: React.FC<ContainerProps_Types> = ({ state, actions }) => {
     }
   }, [state.colorTheme]);
 
-  console.log(state.partDialogReducer);
 
 
   useEffect(() => { state.myId && actions.getNewMessagesRequestThunk() }, []);
@@ -60,12 +66,7 @@ type PropsTypes = {
 
   state: ContainerProps_Types['state']['partDialogReducer']
 
-  themes: {
-    blockMenu: string,
-    counter: string,
-    dynamicActiveClass: string,
-    dynamicClass: string,
-  }
+  themes: ThemesNavbar_Type
 }
 
 
