@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { Friends } from './friends'
+import { Friends } from './friends';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
-import stl from './../users/users.module.css'
+import stl from './../users/users.module.css';
 import { getColorTheme, GetSmartFriendsReducer, getFriendsACs, getDialogsACs_compUsers } from "../../../redux/selectors";
 import { InitialFriendsInfo_Type, FriendsACs } from "../../../redux/friendsReducer";
 import { DialogActions_Type } from "../../../redux/dialogsReducer";
-import { UsersThemesBGR_Type } from "../../../redux/backGroundSetter";
+import { FriendsThemesBGR_Type } from "../../../redux/backGroundSetter";
 
 
 export type PalsThemes_Type = {
@@ -24,7 +24,8 @@ export type FriendsActions_Type = {
 let FriendsFuncContainer = () => {
 
   let colorTheme = useSelector(getColorTheme)
-  let palsInfo: InitialFriendsInfo_Type & UsersThemesBGR_Type = useSelector(GetSmartFriendsReducer)
+  let palsInfo: InitialFriendsInfo_Type & FriendsThemesBGR_Type = useSelector(GetSmartFriendsReducer)
+  // console.log(palsInfo)
 
   let dispatch = useDispatch();
   let friendsACs: FriendsACs = useSelector(getFriendsACs)

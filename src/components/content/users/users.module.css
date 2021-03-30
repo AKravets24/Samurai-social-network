@@ -54,26 +54,29 @@
 .pagBTN {
     /*background-color: lightgreen;*/
     height: 40px;
-    cursor: pointer;
     border-radius: 10px;
     outline: none;
-
 }
-.pagBTN_N          {background-color: #4967ff;                }
-.pagBTN_N:hover    {background-color: midnightblue;color:white}
-.pagBTN_N:active   {background-color: darkblue;color:white    }
 
-.pagBTN_M          {background-color: #ff8151;                }
-.pagBTN_M:hover    {background-color: #ff5818;color:white     }
-.pagBTN_M:active   {background-color: #f12a11;color:white     }
+.pagBTN:enabled {
+    cursor: pointer;
+}
 
-.pagBTN_D          {background-color: lightgreen;             }
-.pagBTN_D:hover    {background-color: #4dd14d;    color:black }
-.pagBTN_D:active   {background-color: #08ac08;    color:black }
+.pagBTN_N                   {background-color: #4967ff;                }
+.pagBTN_N:hover:enabled     {background-color: midnightblue;color:white}
+.pagBTN_N:active:enabled    {background-color: darkblue;color:white    }
 
-.pagBTN_E          {background-color: indianred;              }
-.pagBTN_E:hover    {background-color: darkred; color:white    }
-.pagBTN_E:active   {background-color: red; color:white        }
+.pagBTN_M                   {background-color: #ff8151;                }
+.pagBTN_M:hover:enabled     {background-color: #ff5818;color:white     }
+.pagBTN_M:active:enabled    {background-color: #f12a11;color:white     }
+
+.pagBTN_D                   {background-color: lightgreen;             }
+.pagBTN_D:hover:enabled     {background-color: #4dd14d;    color:black }
+.pagBTN_D:active:enabled    {background-color: #08ac08;    color:black }
+
+.pagBTN_E                   {background-color: #cd5c5c;                  }
+.pagBTN_E:hover:enabled     {background-color: darkred; color:white    }
+.pagBTN_E:active:enabled    {background-color: red; color:white        }
 
 
 .paginationSelected,
@@ -297,34 +300,55 @@
 .followBTN {
     width: 150px;
     height: 30px;
-    /*margin-top: 10px;*/
-    /*background-color: lightgreen;*/
     outline: none;
     border-radius: 10px;
-    /*border: 2px solid green;*/
-    cursor: pointer;
     font-size: 17px;
+    /* display: flex; */
+}
+
+.followBTN:enabled{
+    cursor: pointer;
+}
+
+.followBTNContainer {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.followBTNText {
+    width: 85%;
+    padding: 2px 0 0 20%;
+}
+
+.followBTNLoader {
+    width: 15%;
+    padding: 2px 0 0 0 ;
+}
+
+.followBTNLoader img {
+    width: 20px;
 }
 
 
 .followBTN_N            {background-color: #4967ff;                              }
-.followBTN_N:hover      {background-color: midnightblue; color:white;            }
-.followBTN_N:active     {background-color: darkblue;     color:white;            }
+.followBTN_N:hover:enabled      {background-color: midnightblue; color:white;            }
+.followBTN_N:active:enabled     {background-color: darkblue;     color:white;            }
 
 
 .followBTN_M            {background-color: #ff8151;                              }
-.followBTN_M:hover      {background-color: #ff5818; color:white;                 }
-.followBTN_M:active     {background-color: #f12a11; color:white;                 }
+.followBTN_M:hover:enabled      {background-color: #ff5818; color:white;                 }
+.followBTN_M:active:enabled     {background-color: #f12a11; color:white;                 }
 
 
 .followBTN_D            {background-color: lightgreen; border: 2px solid green;  }
-.followBTN_D:hover      {background-color: #4dd14d;    color:black               }
-.followBTN_D:active     {background-color: #08ac08;    color:black               }
+.followBTN_D:hover:enabled      {background-color: #4dd14d;    color:black               }
+.followBTN_D:active:enabled     {background-color: #08ac08;    color:black               }
 
 
 .followBTN_E            {background-color: indianred;                            }
-.followBTN_E:hover      {background-color: darkred; color:white                  }
-.followBTN_E:active     {background-color: red; color:white                      }
+.followBTN_E:hover:enabled      {background-color: darkred; color:white                  }
+.followBTN_E:active:enabled     {background-color: red; color:white                      }
 
 
 .followBTN_ERR_N        {border: 1px solid #ff5f5f; box-shadow: #ff5f5f 0 0 19px 10px; background-color: #ff3b3b; color: white; font-weight: bold; }
@@ -569,6 +593,9 @@
     border-radius: 10px;
     outline: none;
     font-size: 20px ;
+}
+
+.moreUsersShower:enabled {
     cursor: pointer;
 }
 

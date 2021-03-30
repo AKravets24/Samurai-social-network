@@ -74,6 +74,7 @@ const initialFriendsInfo = {
     followingInProgress: [] as number[],
     errOnGettingFriends: '' as string,
     friendsListIsLoading: false as boolean,
+
 };
 
 export type InitialFriendsInfo_Type = typeof initialFriendsInfo;

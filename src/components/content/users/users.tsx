@@ -18,7 +18,7 @@ type UsersProps_Type = {
 }
 
 export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }) => {
-  // console.log(usersInfo.onSendMSGStatArr)
+  // console.log(usersInfo.BTN_FLW_GIF)
   // console.log(usersInfo.feedbackArr)
 
   type Error_Type = { text?: string }
@@ -246,14 +246,28 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                             <p /* className={`${themes.userNameDnmc}`} */ >{user.status}</p>
                           </div>
                           <div className={stl.followNWriteBTNS}>
+
                             <button
+                              id={user.id}
+                              disabled={usersInfo.followingInProgress.some(id => id === user.id)}
+                              className={`${stl.followBTN} ${themes.followBTNDnmc} ${user.error && themes.followBTN_ERR_DNMC}`}
+                              onClick={() => usersFuncs.followThunkToggler(user.id, user.followed)}
+                            >
+                              <div className={stl.followBTNContainer}>
+                                <div className={stl.followBTNText}> {user.error ? user.error : user.followed ? 'unFollow' : 'Follow'} </div>
+                                <div className={stl.followBTNLoader}> {usersInfo.followingInProgress.some(id => id === user.id) && <img src={usersInfo.BTN_FLW_GIF} alt="Err" />} </div>
+                              </div>
+                            </button>
+
+                            {/* <button
                               disabled={usersInfo.followingInProgress.some((id: any) => id == user.id)}
                               id={user.id}
                               className={`${stl.followBTN} ${themes.followBTNDnmc} ${user.error && themes.followBTN_ERR_DNMC}`}
                               onClick={() => usersFuncs.followThunkToggler(user.id, user.followed)}
                             >
                               {user.error ? user.error : user.followed ? 'unFollow' : 'Follow'}
-                            </button>
+                              <img src={usersInfo.BTN_FLW_GIF} alt="Err" />
+                            </button> */}
                             <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                               disabled={isDisabled}
                               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => userIdTalkModeOn(e, i, users)}

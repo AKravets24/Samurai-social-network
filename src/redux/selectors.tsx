@@ -197,6 +197,7 @@ const getUserNotFoundGIF = (state: AppStateType) => state.usersReducer.userNotFo
 const getMSGStat = (state: AppStateType) => state.dialogsReducer.onSendMSGStatArr;
 const getFeedbackArr = (state: AppStateType) => state.dialogsReducer.feedbackArr;
 const getGeneralLDR_GIF = (state: AppStateType) => state.backgroundReducer.usersThemes.generalLDR_GIF;
+const getBTN_FLW_GIF = (state: AppStateType) => state.backgroundReducer.usersThemes.BTN_FLW_GIF;
 
 
 const UsersReducerPart_1 = createSelector(getInitialUserList, getPageSize, getTotalCount, getCurrentPage,/* */getLinkTermName,/* */getIsLoading_compUsers,
@@ -210,9 +211,9 @@ const UsersReducerPart_1 = createSelector(getInitialUserList, getPageSize, getTo
         return UsersPart_1
     })
 
-const UsersReducerPart_2 = createSelector(getUserFindingError, getMSGStat, getFeedbackArr, getGeneralLDR_GIF, getUserNotFoundGIF,
-    (userFindingError, onSendMSGStatArr, feedbackArr, generalLDR_GIF, userNotFoundGIF,) => {
-        let UsersPart_2 = { userFindingError, onSendMSGStatArr, feedbackArr, generalLDR_GIF, userNotFoundGIF, }
+const UsersReducerPart_2 = createSelector(getUserFindingError, getMSGStat, getFeedbackArr, getGeneralLDR_GIF, getUserNotFoundGIF, getBTN_FLW_GIF,
+    (userFindingError, onSendMSGStatArr, feedbackArr, generalLDR_GIF, userNotFoundGIF, BTN_FLW_GIF,) => {
+        let UsersPart_2 = { userFindingError, onSendMSGStatArr, feedbackArr, generalLDR_GIF, userNotFoundGIF, BTN_FLW_GIF, }
         return UsersPart_2
     })
 
@@ -226,7 +227,6 @@ export type SmartUserMediaData_Type = typeof getSmartUsersMediaData
 // FRIENDS RESELECTORS===============================================================================================================FRIENDS RESELECTORS==============
 
 export const getFriendsACs = (state: AppStateType) => state.friendsACs
-
 //in reSelector control
 const getFiendsList = (state: AppStateType) => state.friendsReducer.friendsList;
 const getDefaultAvatar_compFriends = (state: AppStateType) => state.friendsReducer.defaultAvatar;
@@ -235,9 +235,9 @@ const getErrOnGettingFriends = (state: AppStateType) => state.friendsReducer.err
 const getFriendsCount = (state: AppStateType) => state.friendsReducer.friendsCount;
 const getFriendsListIsLoading = (state: AppStateType) => state.friendsReducer.friendsListIsLoading;
 
-export const GetSmartFriendsReducer = createSelector(getFiendsList, getDefaultAvatar_compFriends, getFollowingInProgress_compFriends, getErrOnGettingFriends, getFriendsCount, getFriendsListIsLoading, getGeneralLDR_GIF,
-    (friendsList, defaultAvatar, followingInProgress, errOnGettingFriends, friendsCount, friendsListIsLoading, generalLDR_GIF,) => {
-        return { friendsList, defaultAvatar, followingInProgress, errOnGettingFriends, friendsCount, friendsListIsLoading, generalLDR_GIF }
+export const GetSmartFriendsReducer = createSelector(getFiendsList, getDefaultAvatar_compFriends, getFollowingInProgress_compFriends, getErrOnGettingFriends, getFriendsCount, getFriendsListIsLoading, getGeneralLDR_GIF, getBTN_FLW_GIF,
+    (friendsList, defaultAvatar, followingInProgress, errOnGettingFriends, friendsCount, friendsListIsLoading, generalLDR_GIF, BTN_FLW_GIF,) => {
+        return { friendsList, defaultAvatar, followingInProgress, errOnGettingFriends, friendsCount, friendsListIsLoading, generalLDR_GIF, BTN_FLW_GIF }
     })
 
 
