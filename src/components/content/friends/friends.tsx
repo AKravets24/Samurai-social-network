@@ -6,16 +6,17 @@ import { v4 as uuidv4 } from 'uuid';
 import { PalsThemes_Type, FriendsActions_Type } from './friendsContainer';
 import { InitialFriendsInfo_Type } from '../../../redux/friendsReducer';
 import { UsersArr } from '../../../redux/app';
+import { UsersThemesBGR_Type } from '../../../redux/backGroundSetter';
 
 
 type FriendsProps_Type = {
   themes: PalsThemes_Type
-  palsInfo: InitialFriendsInfo_Type
+  palsInfo: InitialFriendsInfo_Type & UsersThemesBGR_Type
   palsFuncs: FriendsActions_Type
 }
 
 export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo }) => {
-  console.log(palsInfo.friendsCount)
+  console.log(palsInfo.generalLDR_GIF)
 
 
   type Error_Type = { text?: string }
@@ -72,9 +73,11 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
 
   return <>
     <div className={`${stl.friendsGeneral} ${themes.friendsGeneralDnmc}`}>
-      {palsInfo.friendsListIsLoading ?  // список друзей загружается? 
-        <div>Loading...</div> :
-        palsInfo.errOnGettingFriends ?     // есть ошибка при загрузке?
+      {palsInfo.friendsListIsLoading ?                                                    // список друзей загружается? 
+        <div className={stl.loaderDiv}>
+          <img className={stl.loader} src={palsInfo.generalLDR_GIF} alt="Err" />
+        </div> :
+        palsInfo.errOnGettingFriends ?                                                    // есть ошибка при загрузке?
           <div className={`${stl.Houston} ${themes.friendsGeneralDnmc}`}>
             <h2>Houston, we've got a problem...</h2>
             <h2>{palsInfo.errOnGettingFriends}</h2>
@@ -82,7 +85,7 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
             >Try again</button>
           </div>
           :
-          !palsInfo.friendsList.length ? //есть ли друзья в списке?
+          !palsInfo.friendsList.length ?                                                  //есть ли друзья в списке?
             <div>find friends</div> :
             <>
               <h2 className={stl.userHeader}>Friends {palsInfo.friendsCount ? `(${palsInfo.friendsList.length} / ${palsInfo.friendsCount})` : null}</h2>

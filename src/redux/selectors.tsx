@@ -235,9 +235,9 @@ const getErrOnGettingFriends = (state: AppStateType) => state.friendsReducer.err
 const getFriendsCount = (state: AppStateType) => state.friendsReducer.friendsCount;
 const getFriendsListIsLoading = (state: AppStateType) => state.friendsReducer.friendsListIsLoading;
 
-export const GetSmartFriendsReducer = createSelector(getFiendsList, getDefaultAvatar_compFriends, getFollowingInProgress_compFriends, getErrOnGettingFriends, getFriendsCount, getFriendsListIsLoading,
-    (friendsList, defaultAvatar, followingInProgress, errOnGettingFriends, friendsCount, friendsListIsLoading) => {
-        return { friendsList, defaultAvatar, followingInProgress, errOnGettingFriends, friendsCount, friendsListIsLoading }
+export const GetSmartFriendsReducer = createSelector(getFiendsList, getDefaultAvatar_compFriends, getFollowingInProgress_compFriends, getErrOnGettingFriends, getFriendsCount, getFriendsListIsLoading, getGeneralLDR_GIF,
+    (friendsList, defaultAvatar, followingInProgress, errOnGettingFriends, friendsCount, friendsListIsLoading, generalLDR_GIF,) => {
+        return { friendsList, defaultAvatar, followingInProgress, errOnGettingFriends, friendsCount, friendsListIsLoading, generalLDR_GIF }
     })
 
 
