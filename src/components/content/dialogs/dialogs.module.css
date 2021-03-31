@@ -427,7 +427,7 @@
 .userMsgN::after   {content:''; border-top: 20px solid #a6ebff;      transition: 5000ms; }
 
 .userMsgM          {background-color: #c7eef9;                       transition: 5000ms; }
-.userMsgM::after   {content:'';border-left: 20px solid #dbf7ff;      transition: 5000ms; }
+.userMsgM::after   {content:'';border-left: 20px solid #c7eef9;      transition: 5000ms; }
 
 .userMsgD          {background-color: #cef3ff;                       transition: 5000ms; }
 .userMsgD::after   {content:''; border-top: 20px solid #cef3ff;      transition: 5000ms; }
@@ -567,23 +567,23 @@
     border-radius: 10px;
     outline: none;
 }
-.sendBTN_N          {background-color: #4967ff;}
-.sendBTN_N:hover    {background-color: midnightblue;color:white}
-.sendBTN_N:active   {background-color: darkblue;color:white}
+.sendBTN_N                  {background-color: #4967ff;}
+.sendBTN_N:hover:enabled    {background-color: midnightblue;color:white}
+.sendBTN_N:active:enabled   {background-color: darkblue;color:white}
 
 
-.sendBTN_M          {background-color: #ff652a;}
-.sendBTN_M:hover    {background-color: #ff5b1d;color:white}
-.sendBTN_M:active   {background-color:#ff4700;color:white}
+.sendBTN_M                  {background-color: #ff652a;}
+.sendBTN_M:hover:enabled    {background-color: #ff5b1d;color:white}
+.sendBTN_M:active:enabled   {background-color: #ff4700;color:white}
 
 
-.sendBTN_D          {background-color: #98eaff;}
-.sendBTN_D:hover    {background-color: #6ad3ff;color:black }
-.sendBTN_D:active   {background-color: #3ad7ff;color:black}
+.sendBTN_D                  {background-color: #98eaff;}
+.sendBTN_D:hover:enabled    {background-color: #6ad3ff;color:black }
+.sendBTN_D:active:enabled   {background-color: #3ad7ff;color:black}
 
 
-.sendBTN_E          {background-color: indianred;}
-.sendBTN_E:hover    {background-color: darkred; color:white}
-.sendBTN_E:active   {background-color: red; color:white}
+.sendBTN_E                  {background-color: indianred;}
+.sendBTN_E:hover:enabled    {background-color: darkred; color:white}
+.sendBTN_E:active:enabled   {background-color: red; color:white}
 
 

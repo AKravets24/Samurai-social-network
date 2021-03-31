@@ -113,7 +113,7 @@ type Profile_Types = {
 
 const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }) => {
   // console.log('render');
-  // console.log(themes);
+  // console.log(state.profileMedia.isLoading);
 
   type Error_Type = { text?: string };
 
@@ -277,7 +277,12 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
                     className={`${stl.followBTN} ${themes.BTNs} ${onFollowingErr && themes.BTN_ERR_DNMC}`}
                     disabled={state.profileMedia.isFollowing}
                     onClick={() => actions.followThunkToggler(userId, isFollowed)}
-                  >{onFollowingErr ? onFollowingErr : state.profileMedia.isFollowed ? 'Unfollow' : 'Follow'}</button>
+                  >
+                    <div className={stl.followBTNContainer}>
+                      <div className={stl.followBTNText}>  {onFollowingErr ? onFollowingErr : state.profileMedia.isFollowed ? 'Unfollow' : 'Follow'} </div>
+                      <div className={stl.followBTNLoader}> {state.profileMedia.isFollowing && <img src={state.picsNLoaders.BTN_LDR_GIF} alt="Err" />} </div>
+                    </div>
+                  </button>
                 }
               </div>
               <div className={stl.statusBlock}>

@@ -105,7 +105,7 @@ type DialogsProps_Type = {
 
 
 let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, actions, loaders }) => {
-  console.log(loaders)
+  // console.log(loaders)
 
   const dialogArea = useRef<HTMLDivElement>(null);
   const bufferBlock = useRef<HTMLDivElement>(null);

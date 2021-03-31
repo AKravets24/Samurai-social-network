@@ -25,20 +25,26 @@ let FriendsFuncContainer = () => {
 
   let colorTheme = useSelector(getColorTheme)
   let palsInfo: InitialFriendsInfo_Type & FriendsThemesBGR_Type = useSelector(GetSmartFriendsReducer)
-  // console.log(palsInfo)
 
   let dispatch = useDispatch();
   let friendsACs: FriendsACs = useSelector(getFriendsACs)
   let dialogsACs: DialogActions_Type = useSelector(getDialogsACs_compUsers)
+
+  // console.log(friendsACs)
+
 
   let getMyFriendsListThunk = (page: number) => { dispatch(friendsACs.getMyFriendsListThunkAC(page)) };
   let followThunkToggler = (userId: number, isFollowed: boolean) => { dispatch(friendsACs.followThunkTogglerAC(userId, isFollowed)) };
   let sendMessageToUserThunk = (userId: number, body: string, actionKey: string, userName: string) => {
     dispatch(dialogsACs.sendMessageToUserThunkAC(userId, body, actionKey, userName))
   }
+  let componentStateCleaner = () => { dispatch(friendsACs.unMountCleaner()) }
   let palsFuncs: FriendsActions_Type = { getMyFriendsListThunk, followThunkToggler, sendMessageToUserThunk }
 
-  useEffect(() => { getMyFriendsListThunk(1) }, []);
+  useEffect(() => {
+    getMyFriendsListThunk(1)
+    return () => { componentStateCleaner() }
+  }, []);
 
 
   let [themes, setThemes] = useState<PalsThemes_Type>({

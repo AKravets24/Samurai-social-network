@@ -16,7 +16,7 @@ type FriendsProps_Type = {
 }
 
 export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo }) => {
-  console.log(palsInfo.BTN_FLW_GIF)
+  // console.log(palsInfo.BTN_FLW_GIF)
 
 
   type Error_Type = { text?: string }

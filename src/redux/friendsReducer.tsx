@@ -26,6 +26,7 @@ const actions = {
     errCatcherAtFollowingAC: (userId: number, errorCode: number) => ({ type: 'ERROR_AT_FOLLOWING_TOGGLER', userId, errorCode } as const),
     toggleFollowingProgressAC: (isLoading: boolean, userId: number) => ({ type: 'TOGGLE_IS_FOLLOWING_PROGRESS', isLoading, userId } as const),
     errCatcherAtFriendsGetAC: (usersGettingError: string) => ({ type: 'ERROR_AT_GETTING_USERS', usersGettingError } as const),
+    ifUnMountCleanerAC: () => ({ type: 'COMPONENT_UNMOUNTED' } as const)
 }
 
 type ActionTypes = InferActionsTypes<typeof actions>
@@ -57,12 +58,15 @@ const followThunkTogglerAC = (userId: number, isFollowed: boolean): ThunkAC_Type
     dispatch(actions.toggleFollowingProgressAC(false, userId));
 };
 
+const unMountCleaner = () => (dispatch: Dispatch_Type) => { dispatch(actions.ifUnMountCleanerAC()) }
+
 export type FriendsACs = {
     followThunkTogglerAC: (userId: number, isFollowed: boolean) => ThunkAC_Type
     getMyFriendsListThunkAC: (page: number) => ThunkAC_Type
+    unMountCleaner: () => void
 }
 
-const actionCreators: FriendsACs = { getMyFriendsListThunkAC, followThunkTogglerAC };
+const actionCreators: FriendsACs = { getMyFriendsListThunkAC, followThunkTogglerAC, unMountCleaner };
 
 export const friendsACs = (state = actionCreators) => { return state };
 
@@ -107,6 +111,8 @@ export const friendsReducer = (state = initialFriendsInfo, action: ActionTypes):
                 ? [...state.followingInProgress, action.userId]
                 : [...state.followingInProgress.filter(id => id != action.userId)]
         };
+        case 'COMPONENT_UNMOUNTED': return { ...state, friendsList: [], friendsCount: 0 }
+
         default: return { ...state };
     }
 };

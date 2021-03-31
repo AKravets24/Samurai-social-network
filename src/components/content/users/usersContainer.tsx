@@ -27,6 +27,7 @@ export type usersActions_Type = {
   feedBackWindowCloser: (arrIndex: number) => void
   feedbackRefPush: (el_id: number) => void
   setErrorToNull: () => void
+  componentStateCleaner: () => void
 }
 
 export let UsersFuncContainer = () => {
@@ -47,6 +48,7 @@ export let UsersFuncContainer = () => {
     feedBackWindowCloser: (arrIndex: number) => dispatch(dialogsACs.feedBackWindowCloserAC(arrIndex)),
     feedbackRefPush: (el_id: number) => dispatch(dialogsACs.feedbackRefPushAC(el_id)),
     setErrorToNull: () => dispatch(usersACs.setErrorToNullAC()),
+    componentStateCleaner: () => { dispatch(usersACs.unMountCleaner()) }
   }
 
   let { pageSize, currentPage, linkTermName } = smartData;
@@ -83,6 +85,7 @@ export let UsersFuncContainer = () => {
       history.push({ pathname: 'users', search: `?page=${currentPage}` })
     }
 
+    return () => { usersActions.componentStateCleaner() }
 
   }, [currentPage])
 

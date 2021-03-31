@@ -19,6 +19,7 @@ const actions = {
   errCatcherAtUsersFindAC: (usersFindingError: string) => ({ type: 'AT_FINDING_USERS_ERROR_CAUGHT', usersFindingError } as const),
   setErrorToNullAC: () => ({ type: 'ERROR_NULLIFIER' } as const),
   errCatcherAtFollowingAC: (userId: number, errorCode: number) => ({ type: 'ERROR_AT_FOLLOWING_TOGGLER', userId, errorCode } as const),
+  ifUnMountCleanerAC: () => ({ type: 'COMPONENT_UNMOUNTED' } as const)
 }
 
 
@@ -72,17 +73,20 @@ const followThunkTogglerAC = (userId: number, isFollowed: boolean): ThunkAction_
   dispatch(actions.toggleFollowingProgressAC(false, userId));
 };
 
+const unMountCleaner = () => (dispatch: Dispatch_Type) => { dispatch(actions.ifUnMountCleanerAC()) }
+
 export type UsersACs_Type = {
   setErrorToNullAC: () => SetErrorToNullAC_Type
   getUsersThunkAC: (pageSize: number, currentPage: number) => ThunkAction_type
   setCurrentPageThunkAC: (pageSize: number, currentPage: number) => ThunkAction_type
   followThunkTogglerAC: (userId: number, isFollowed: boolean) => ThunkAction_type
   getCertainUserThunkAC: (pageSize: number, userName: string, pageOfEquals: number) => ThunkAction_type
+  unMountCleaner: () => void
 }
 
 const actionCreators: UsersACs_Type = {
   getUsersThunkAC, setCurrentPageThunkAC,
-  getCertainUserThunkAC, setErrorToNullAC: actions.setErrorToNullAC, followThunkTogglerAC
+  getCertainUserThunkAC, setErrorToNullAC: actions.setErrorToNullAC, followThunkTogglerAC, unMountCleaner
 };
 export const usersACs = (state = actionCreators) => { return state };
 
@@ -150,6 +154,8 @@ export const usersReducer = (state = initialUsersInfo, action: ActionTypes): Ini
     case 'ERROR_NULLIFIER':
       // console.log('ERROR_NULLIFIER');
       return { ...state, usersGettingError: '', userFindingError: '', }
+
+    case 'COMPONENT_UNMOUNTED': return { ...state, initialUsersList: [], }
 
     default: return { ...state };
   }

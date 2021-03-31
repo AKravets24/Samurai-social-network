@@ -29,10 +29,10 @@ import ava_LDR_GIF_D from './loader/profile/avaD.gif';
 import ava_LDR_GIF_E from './loader/profile/avaE.gif';
 
 // ProfileBTNLoaderGIF
-import BTN_LDR_GIF_N from './loader/profile/BTNN.gif';
-import BTN_LDR_GIF_M from './loader/profile/BTNM.gif';
-import BTN_LDR_GIF_D from './loader/profile/BTND.gif';
-import BTN_LDR_GIF_E from './loader/profile/BTNE.gif';
+import BTN_LDR_GIF_N from './loader/profile/btnLoaders/BTN_LDR_N.gif';
+import BTN_LDR_GIF_M from './loader/profile/btnLoaders/BTN_LDR_M.gif';
+import BTN_LDR_GIF_D from './loader/profile/btnLoaders/BTN_LDR_D.gif';
+import BTN_LDR_GIF_E from './loader/profile/btnLoaders/BTN_LDR_E.gif';
 
 // ProfileStatusLoaderGIF
 import status_LDR_GIF_N from './loader/profile/statusN.gif';
@@ -77,10 +77,10 @@ import userLoaderGIF_E from './loader/users/LDR_E.gif';
 
 
 //UsersBTNLoaders ========================================================================================== Users BTN Loaders
-import BTN_FLW_N from './loader/users/btnLoaders/BTN_LDR_N.gif';
-import BTN_FLW_M from './loader/users/btnLoaders/BTN_LDR_M.gif';
-import BTN_FLW_D from './loader/users/btnLoaders/BTN_LDR_D.gif';
-import BTN_FLW_E from './loader/users/btnLoaders/BTN_LDR_E.gif';
+import BTN_FLW_GIF_N from './loader/users/btnLoaders/BTN_LDR_N.gif';
+import BTN_FLW_GIF_M from './loader/users/btnLoaders/BTN_LDR_M.gif';
+import BTN_FLW_GIF_D from './loader/users/btnLoaders/BTN_LDR_D.gif';
+import BTN_FLW_GIF_E from './loader/users/btnLoaders/BTN_LDR_E.gif';
 
 
 const TIMER = 'TIMER';
@@ -157,8 +157,8 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     navBarThemes: { envelope_GIF: envelope_N },
                     profileThemes: { auth_LDR_GIF: auth_LDR_GIF_N, panoramaPic: panoramaPIC_N, panorama_LDR_GIF: panoramaGIF_N, ava_LDR_GIF: ava_LDR_GIF_N, BTN_LDR_GIF: BTN_LDR_GIF_N, status_LDR_GIF: status_LDR_GIF_N, },
                     dialogsThemes: { halfCircle_GIF: halfCircle_GIF_N, interSector_GIF: interSector_GIF_N, certainLDR_GIF: certainLDR_GIF_N, prevMSGLDR_GIF: prevMSGLDR_N, },
-                    friendsThemes: { generalLDR_GIF: userLoaderGIF_N, BTN_FLW_GIF: BTN_FLW_N },
-                    usersThemes: { generalLDR_GIF: userLoaderGIF_N, BTN_FLW_GIF: BTN_FLW_N },
+                    friendsThemes: { generalLDR_GIF: userLoaderGIF_N, BTN_FLW_GIF: BTN_FLW_GIF_N },
+                    usersThemes: { generalLDR_GIF: userLoaderGIF_N, BTN_FLW_GIF: BTN_FLW_GIF_N },
                 }
             } else if (action.timer >= 180 && action.timer < 660) { // } else if (action.timer >= 180 && action.timer < 660) {
                 // console.log('MORNING_THEME')
@@ -168,8 +168,8 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     navBarThemes: { envelope_GIF: envelope_M },
                     profileThemes: { auth_LDR_GIF: auth_LDR_GIF_M, panoramaPic: panoramaPIC_M, panorama_LDR_GIF: panoramaGIF_M, ava_LDR_GIF: ava_LDR_GIF_M, BTN_LDR_GIF: BTN_LDR_GIF_M, status_LDR_GIF: status_LDR_GIF_M, },
                     dialogsThemes: { halfCircle_GIF: halfCircle_GIF_M, interSector_GIF: interSector_GIF_M, certainLDR_GIF: certainLDR_GIF_M, prevMSGLDR_GIF: prevMSGLDR_M, },
-                    friendsThemes: { generalLDR_GIF: userLoaderGIF_M, BTN_FLW_GIF: BTN_FLW_M },
-                    usersThemes: { generalLDR_GIF: userLoaderGIF_M, BTN_FLW_GIF: BTN_FLW_M }
+                    friendsThemes: { generalLDR_GIF: userLoaderGIF_M, BTN_FLW_GIF: BTN_FLW_GIF_M },
+                    usersThemes: { generalLDR_GIF: userLoaderGIF_M, BTN_FLW_GIF: BTN_FLW_GIF_M }
                 }
             } else if (action.timer >= 660 && action.timer < 1080) { // } else if (action.timer >= 660 && action.timer < 1080) { //1080
                 // console.log('DAY_THEME')
@@ -179,8 +179,8 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     navBarThemes: { envelope_GIF: envelope_D },
                     profileThemes: { auth_LDR_GIF: auth_LDR_GIF_D, panoramaPic: panoramaPIC_D, panorama_LDR_GIF: panoramaGIF_D, ava_LDR_GIF: ava_LDR_GIF_D, BTN_LDR_GIF: BTN_LDR_GIF_D, status_LDR_GIF: status_LDR_GIF_D, },
                     dialogsThemes: { halfCircle_GIF: halfCircle_GIF_D, interSector_GIF: interSector_GIF_D, certainLDR_GIF: certainLDR_GIF_D, prevMSGLDR_GIF: prevMSGLDR_D, },
-                    friendsThemes: { generalLDR_GIF: userLoaderGIF_D, BTN_FLW_GIF: BTN_FLW_D },
-                    usersThemes: { generalLDR_GIF: userLoaderGIF_D, BTN_FLW_GIF: BTN_FLW_D }
+                    friendsThemes: { generalLDR_GIF: userLoaderGIF_D, BTN_FLW_GIF: BTN_FLW_GIF_D },
+                    usersThemes: { generalLDR_GIF: userLoaderGIF_D, BTN_FLW_GIF: BTN_FLW_GIF_D }
                 }
             } else if (action.timer >= 1080 && action.timer < 1440) { // } else if (action.timer >= 1080 && action.timer < 1440) { //1440
                 // console.log('EVENING_THEME')
@@ -190,8 +190,8 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     navBarThemes: { envelope_GIF: envelope_E },
                     profileThemes: { auth_LDR_GIF: auth_LDR_GIF_E, panoramaPic: panoramaPIC_E, panorama_LDR_GIF: panoramaGIF_E, ava_LDR_GIF: ava_LDR_GIF_E, BTN_LDR_GIF: BTN_LDR_GIF_E, status_LDR_GIF: status_LDR_GIF_E, },
                     dialogsThemes: { halfCircle_GIF: halfCircle_GIF_E, interSector_GIF: interSector_GIF_E, certainLDR_GIF: certainLDR_GIF_E, prevMSGLDR_GIF: prevMSGLDR_E, },
-                    friendsThemes: { generalLDR_GIF: userLoaderGIF_E, BTN_FLW_GIF: BTN_FLW_E },
-                    usersThemes: { generalLDR_GIF: userLoaderGIF_E, BTN_FLW_GIF: BTN_FLW_E },
+                    friendsThemes: { generalLDR_GIF: userLoaderGIF_E, BTN_FLW_GIF: BTN_FLW_GIF_E },
+                    usersThemes: { generalLDR_GIF: userLoaderGIF_E, BTN_FLW_GIF: BTN_FLW_GIF_E },
                 }
             }
         default: return state;
