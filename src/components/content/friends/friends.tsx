@@ -112,13 +112,22 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
                           <button
                             id={user.id}
                             disabled={palsInfo.followingInProgress.some(id => id === user.id)}
-                            className={`${stl.followBTN} ${themes.followBTNDnmc} ${user.error && themes.followBTN_ERR_DNMC}`}
-                            onClick={() => followTogglerListener(user.id, user.followed)}
+
+                            className={`${stl.followBTN}  ${user.error ? themes.followBTN_ERR_DNMC : themes.followBTNDnmc}`}
+                            onClick={() => palsFuncs.followThunkToggler(user.id, user.followed)}
                           >
                             <div className={stl.followBTNContainer}>
-                              <div className={stl.followBTNText}> {user.error ? user.error : user.followed ? 'unFollow' : 'Follow'} </div>
+                              <div className={stl.followBTNText}>
+                                {user.error ?
+                                  <>
+                                    <p className={stl.onFollowingErrBTN}>{user.error}</p>
+                                    <p className={stl.tryAgainBTN}>Try again!</p>
+                                  </>
+                                  :
+                                  user.followed ? 'unFollow' : 'Follow'} </div>
                               <div className={stl.followBTNLoader}> {palsInfo.followingInProgress.some(id => id === user.id) && <img src={palsInfo.BTN_FLW_GIF} alt="Err" />} </div>
                             </div>
+
                           </button>
                           <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                             disabled={isDisabled}

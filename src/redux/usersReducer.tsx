@@ -19,7 +19,8 @@ const actions = {
   errCatcherAtUsersFindAC: (usersFindingError: string) => ({ type: 'AT_FINDING_USERS_ERROR_CAUGHT', usersFindingError } as const),
   setErrorToNullAC: () => ({ type: 'ERROR_NULLIFIER' } as const),
   errCatcherAtFollowingAC: (userId: number, errorCode: number) => ({ type: 'ERROR_AT_FOLLOWING_TOGGLER', userId, errorCode } as const),
-  ifUnMountCleanerAC: () => ({ type: 'COMPONENT_UNMOUNTED' } as const)
+  ifUnMountCleanerAC: () => ({ type: 'COMPONENT_UNMOUNTED' } as const),
+  followingErrCleaner: (userId: number) => ({ type: 'AT_FOLLOWING_ERROR_CLEANED', userId } as const),
 }
 
 
@@ -63,6 +64,7 @@ const setCurrentPageThunkAC = (pageSize: number, currentPage: number): ThunkActi
 };
 const followThunkTogglerAC = (userId: number, isFollowed: boolean): ThunkAction_type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.toggleFollowingProgressAC(true, userId));
+  dispatch(actions.followingErrCleaner(userId))
   let followToggler;
   isFollowed ? followToggler = usersApi.unFollowRequest : followToggler = usersApi.followRequest;
   try {
@@ -114,13 +116,26 @@ export const usersReducer = (state = initialUsersInfo, action: ActionTypes): Ini
   // debugger;
   switch (action.type) {
     case 'FOLLOW_ACTION_TOGGLER':
+      console.log('FOLLOW_ACTION_TOGGLER');
+
       return {
         ...state, initialUsersList: state.initialUsersList.map((currentUser: any) => {
           if (+currentUser.id === +action.userId) {
-            return { ...currentUser, followed: action.isFollowed }
+            return { ...currentUser, followed: action.isFollowed, error: '' }
           } return { ...currentUser }
         })
       };
+    case 'AT_FOLLOWING_ERROR_CLEANED':
+      console.log(123);
+
+      return {
+        ...state, initialUsersList: state.initialUsersList.map((currentUser: any) => {
+          if (+currentUser.id === +action.userId) {
+            return { ...currentUser, error: '' }
+          } return { ...currentUser }
+        })
+      };
+
     case 'ERROR_AT_FOLLOWING_TOGGLER':
       return {
         ...state, initialUsersList: state.initialUsersList.map((currentUser: any) => {

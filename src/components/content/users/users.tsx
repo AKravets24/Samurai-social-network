@@ -187,6 +187,10 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
   //   }
   // })
 
+  // console.log(usersInfo?.initialUsersList);
+
+
+
   return <>
     <div className={`${stl.usersPage} ${themes.userPageDnmc}`} >
       <div className={stl.userInfo}>
@@ -250,24 +254,24 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                             <button
                               id={user.id}
                               disabled={usersInfo.followingInProgress.some(id => id === user.id)}
-                              className={`${stl.followBTN} ${themes.followBTNDnmc} ${user.error && themes.followBTN_ERR_DNMC}`}
+                              // className={`${stl.followBTN} ${themes.followBTNDnmc} ${user.error && themes.followBTN_ERR_DNMC}`}
+                              className={`${stl.followBTN}  ${user.error ? themes.followBTN_ERR_DNMC : themes.followBTNDnmc}`}
                               onClick={() => usersFuncs.followThunkToggler(user.id, user.followed)}
                             >
                               <div className={stl.followBTNContainer}>
-                                <div className={stl.followBTNText}> {user.error ? user.error : user.followed ? 'unFollow' : 'Follow'} </div>
+                                <div className={stl.followBTNText}>
+                                  {user.error ?
+                                    <>
+                                      <p className={stl.onFollowingErrBTN}>{user.error}</p>
+                                      <p className={stl.tryAgainBTN}>Try again!</p>
+                                    </>
+                                    :
+                                    user.followed ? 'unFollow' : 'Follow'} </div>
                                 <div className={stl.followBTNLoader}> {usersInfo.followingInProgress.some(id => id === user.id) && <img src={usersInfo.BTN_FLW_GIF} alt="Err" />} </div>
                               </div>
+
                             </button>
 
-                            {/* <button
-                              disabled={usersInfo.followingInProgress.some((id: any) => id == user.id)}
-                              id={user.id}
-                              className={`${stl.followBTN} ${themes.followBTNDnmc} ${user.error && themes.followBTN_ERR_DNMC}`}
-                              onClick={() => usersFuncs.followThunkToggler(user.id, user.followed)}
-                            >
-                              {user.error ? user.error : user.followed ? 'unFollow' : 'Follow'}
-                              <img src={usersInfo.BTN_FLW_GIF} alt="Err" />
-                            </button> */}
                             <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                               disabled={isDisabled}
                               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => userIdTalkModeOn(e, i, users)}

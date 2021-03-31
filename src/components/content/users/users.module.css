@@ -321,6 +321,22 @@
     padding: 2px 0 0 20%;
 }
 
+.followBTNText p{ 
+    margin: 0;
+}
+
+.followBTN:hover .onFollowingErrBTN {
+    display: none;
+}
+
+.followBTN:hover .tryAgainBTN {
+    display: block;
+}
+
+.tryAgainBTN {
+    display: none;
+}
+
 .followBTNLoader {
     width: 15%;
     padding: 2px 0 0 0 ;
@@ -331,12 +347,12 @@
 }
 
 
-.followBTN_N                    {background-color: #4967ff;                              }
+.followBTN_N                    {background-color: #4967ff;                                }
 .followBTN_N:hover:enabled      {background-color: midnightblue; color:white;            }
 .followBTN_N:active:enabled     {background-color: darkblue;     color:white;            }
 
 
-.followBTN_M                    {background-color: #ff8151;                              }
+.followBTN_M                    {background-color: #ff8151;                                }
 .followBTN_M:hover:enabled      {background-color: #ff5818; color:white;                 }
 .followBTN_M:active:enabled     {background-color: #f12a11; color:white;                 }
 
@@ -346,7 +362,7 @@
 .followBTN_D:active:enabled     {background-color: #08ac08;    color:black               }
 
 
-.followBTN_E                    {background-color: indianred;                            }
+.followBTN_E                    {background-color: indianred;                              }
 .followBTN_E:hover:enabled      {background-color: darkred; color:white                  }
 .followBTN_E:active:enabled     {background-color: red; color:white                      }
 

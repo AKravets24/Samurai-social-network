@@ -26,7 +26,8 @@ const actions = {
     errCatcherAtFollowingAC: (userId: number, errorCode: number) => ({ type: 'ERROR_AT_FOLLOWING_TOGGLER', userId, errorCode } as const),
     toggleFollowingProgressAC: (isLoading: boolean, userId: number) => ({ type: 'TOGGLE_IS_FOLLOWING_PROGRESS', isLoading, userId } as const),
     errCatcherAtFriendsGetAC: (usersGettingError: string) => ({ type: 'ERROR_AT_GETTING_USERS', usersGettingError } as const),
-    ifUnMountCleanerAC: () => ({ type: 'COMPONENT_UNMOUNTED' } as const)
+    ifUnMountCleanerAC: () => ({ type: 'COMPONENT_UNMOUNTED' } as const),
+    followingErrCleaner: (userId: number) => ({ type: 'AT_FOLLOWING_ERROR_CLEANED', userId } as const),
 }
 
 type ActionTypes = InferActionsTypes<typeof actions>
@@ -48,6 +49,7 @@ const getMyFriendsListThunkAC = (page: number): ThunkAC_Type => async (dispatch:
 
 const followThunkTogglerAC = (userId: number, isFollowed: boolean): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
     dispatch(actions.toggleFollowingProgressAC(true, userId));
+    dispatch(actions.followingErrCleaner(userId));
     let followToggler;
     isFollowed ? followToggler = usersApi.unFollowRequest : followToggler = usersApi.followRequest;
     try {
@@ -99,6 +101,17 @@ export const friendsReducer = (state = initialFriendsInfo, action: ActionTypes):
                 } return { ...currentUser }
             })
         };
+
+        case 'AT_FOLLOWING_ERROR_CLEANED':
+            return {
+                ...state, friendsList: state.friendsList.map((currentUser: any) => {
+                    if (+currentUser.id === +action.userId) {
+                        return { ...currentUser, error: '' }
+                    } return { ...currentUser }
+                })
+            };
+
+
         case 'ERROR_AT_FOLLOWING_TOGGLER': return {
             ...state, friendsList: state.friendsList.map((currentUser: UsersArr) => {
                 if (currentUser.id == action.userId) {
