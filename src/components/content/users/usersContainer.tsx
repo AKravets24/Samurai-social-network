@@ -21,7 +21,7 @@ export type UsersThemes_Type = {
 export type usersActions_Type = {
   getUsersThunk: (pageSize: number, currentPage: number) => void
   setCurrentPageThunk: (pageSize: number, currentPage: number) => void
-  followThunkToggler: (userId: number, isFollowed: boolean) => void
+  followThunkToggler: (userId: number, isFollowed: boolean, error: string) => void
   getCertainUserThunk: (pageSize: number, userName: string, pageOfEquals: number) => void
   sendMessageToUserThunk: (userId: number, body: string, actionKey: string, userName: string) => void
   feedBackWindowCloser: (arrIndex: number) => void
@@ -42,7 +42,7 @@ export let UsersFuncContainer = () => {
   let usersActions: usersActions_Type = {
     getUsersThunk: (pageSize: number, currentPage: number) => dispatch(usersACs.getUsersThunkAC(pageSize, currentPage)),
     setCurrentPageThunk: (pageSize: number, currentPage: number) => dispatch(usersACs.setCurrentPageThunkAC(pageSize, currentPage)),
-    followThunkToggler: (userId: number, isFollowed: boolean) => dispatch(usersACs.followThunkTogglerAC(userId, isFollowed)),
+    followThunkToggler: (userId: number, isFollowed: boolean, error: string) => dispatch(usersACs.followThunkTogglerAC(userId, isFollowed, error)),
     getCertainUserThunk: (pageSize: number, userName: string, pageOfEquals: number) => { dispatch(usersACs.getCertainUserThunkAC(pageSize, userName, pageOfEquals)) },
     sendMessageToUserThunk: (userId: number, body: string, actionKey: string, userName: string) => dispatch(dialogsACs.sendMessageToUserThunkAC(userId, body, actionKey, userName)),
     feedBackWindowCloser: (arrIndex: number) => dispatch(dialogsACs.feedBackWindowCloserAC(arrIndex)),

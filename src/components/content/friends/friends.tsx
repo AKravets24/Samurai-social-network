@@ -49,7 +49,7 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
     }
   };
 
-  let followTogglerListener = (userId: number, userIsFollowed: boolean) => { palsFuncs.followThunkToggler(userId, userIsFollowed) }
+  let followTogglerListener = (userId: number, userIsFollowed: boolean, error: string) => { palsFuncs.followThunkToggler(userId, userIsFollowed, error) }
   let getMyFriendsListener = (page: number) => { palsFuncs.getMyFriendsListThunk(page) }
 
   // console.log(palsInfo.friendsList)
@@ -114,7 +114,7 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
                             disabled={palsInfo.followingInProgress.some(id => id === user.id)}
 
                             className={`${stl.followBTN}  ${user.error ? themes.followBTN_ERR_DNMC : themes.followBTNDnmc}`}
-                            onClick={() => palsFuncs.followThunkToggler(user.id, user.followed)}
+                            onClick={() => followTogglerListener(user.id, user.followed, user.error)}
                           >
                             <div className={stl.followBTNContainer}>
                               <div className={stl.followBTNText}>

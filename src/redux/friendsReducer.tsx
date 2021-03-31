@@ -47,9 +47,9 @@ const getMyFriendsListThunkAC = (page: number): ThunkAC_Type => async (dispatch:
 };
 
 
-const followThunkTogglerAC = (userId: number, isFollowed: boolean): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
+const followThunkTogglerAC = (userId: number, isFollowed: boolean, error: string = ''): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
     dispatch(actions.toggleFollowingProgressAC(true, userId));
-    dispatch(actions.followingErrCleaner(userId));
+    if (error) dispatch(actions.followingErrCleaner(userId));
     let followToggler;
     isFollowed ? followToggler = usersApi.unFollowRequest : followToggler = usersApi.followRequest;
     try {
@@ -63,7 +63,7 @@ const followThunkTogglerAC = (userId: number, isFollowed: boolean): ThunkAC_Type
 const unMountCleaner = () => (dispatch: Dispatch_Type) => { dispatch(actions.ifUnMountCleanerAC()) }
 
 export type FriendsACs = {
-    followThunkTogglerAC: (userId: number, isFollowed: boolean) => ThunkAC_Type
+    followThunkTogglerAC: (userId: number, isFollowed: boolean, error: string) => ThunkAC_Type
     getMyFriendsListThunkAC: (page: number) => ThunkAC_Type
     unMountCleaner: () => void
 }

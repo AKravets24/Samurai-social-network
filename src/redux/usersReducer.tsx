@@ -62,9 +62,9 @@ const setCurrentPageThunkAC = (pageSize: number, currentPage: number): ThunkActi
     dispatch(actions.setUsersAC(response.data.items, response.data.totalCount)) : dispatch(actions.errCatcherAtUsersGetAC(JSON.stringify(response)))
   dispatch(actions.toggleIsLoadingAC(false));
 };
-const followThunkTogglerAC = (userId: number, isFollowed: boolean): ThunkAction_type => async (dispatch: Dispatch_Type) => {
+const followThunkTogglerAC = (userId: number, isFollowed: boolean, error: string = ''): ThunkAction_type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.toggleFollowingProgressAC(true, userId));
-  dispatch(actions.followingErrCleaner(userId))
+  if (error) dispatch(actions.followingErrCleaner(userId))
   let followToggler;
   isFollowed ? followToggler = usersApi.unFollowRequest : followToggler = usersApi.followRequest;
   try {
@@ -81,7 +81,7 @@ export type UsersACs_Type = {
   setErrorToNullAC: () => SetErrorToNullAC_Type
   getUsersThunkAC: (pageSize: number, currentPage: number) => ThunkAction_type
   setCurrentPageThunkAC: (pageSize: number, currentPage: number) => ThunkAction_type
-  followThunkTogglerAC: (userId: number, isFollowed: boolean) => ThunkAction_type
+  followThunkTogglerAC: (userId: number, isFollowed: boolean, error: string) => ThunkAction_type
   getCertainUserThunkAC: (pageSize: number, userName: string, pageOfEquals: number) => ThunkAction_type
   unMountCleaner: () => void
 }

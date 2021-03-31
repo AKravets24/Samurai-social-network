@@ -98,39 +98,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
     } usersFuncs.setErrorToNull();
   };
 
-  // let feedbackArr = usersInfo.feedbackArr;
-
-  // useEffect(()=>{
-  //     // console.log(feedbackArr)
-  //     let index = feedbackArr.findIndex(el=>{ return el && el.id===feedBackRef.current.id });
-  //     // if (index ===-1 && feedBackRef.current ) props.feedbackRefPush(feedBackRef.current);
-  //     if (index ===-1 && feedBackRef.current ) setFeedBackArr(feedbackArr.concat(feedBackRef.current));
-  //     // console.log(feedbackArr)
-  //     for (let i=0; i<=feedbackArr.length; i++){
-
-  //         // props.feedbackArr[i]&&console.log(feedbackArr[i].className)
-  //         if (feedbackArr[i])  {feedbackArr[i].className = `${stl.feedbackHidden}`
-  //             console.log(feedbackArr[i].className)}
-
-  //         // props.feedbackArr[i] && console.log(props.feedbackArr[i].className)
-  //         // props.feedbackArr[i] && setTimeout( ()=> { localFeedbackArr[i].className = `${localFeedbackArr[i].className} ${stl.feedbackHidden}`},3000);
-  //         // if (props.feedbackArr[i]) {
-  //         //     localFeedbackArr[i].className = `${localFeedbackArr[i].className} ${stl.feedbackHidden}`;
-
-  //         //     console.log(localFeedbackArr[i].className)
-  //         // }
-  //         // if (props.feedbackArr[i]) props.feedbackArr[i].className = `${feedBackRef.current.className} ${stl.feedbackHidden}`;
-
-  //         // setTimeout(()=>{ if(feedBackRef.current !== null) feedBackRef.current.className = `${feedBackRef.current.className} ${stl.feedbackHidden}`},4000);  //через 5 сек анимация плавного убирания на 3 секунды
-  //         // setTimeout(()=>{ props.feedBackWindowCloser(i) },7000);  // через 8 секунд объект удаляется из DOM
-  //         }
-  //         // console.log(feedbackArr)
-  //     // }
-
-  // },[usersInfo.onSendMSGStatArr.length]);
-
-  // setTimeout( ()=> {console.log(feedbackArr)},9000 )
-
   let firstBlockClass = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
   let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
 
@@ -254,9 +221,8 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                             <button
                               id={user.id}
                               disabled={usersInfo.followingInProgress.some(id => id === user.id)}
-                              // className={`${stl.followBTN} ${themes.followBTNDnmc} ${user.error && themes.followBTN_ERR_DNMC}`}
                               className={`${stl.followBTN}  ${user.error ? themes.followBTN_ERR_DNMC : themes.followBTNDnmc}`}
-                              onClick={() => usersFuncs.followThunkToggler(user.id, user.followed)}
+                              onClick={() => usersFuncs.followThunkToggler(user.id, user.followed, user.error)}
                             >
                               <div className={stl.followBTNContainer}>
                                 <div className={stl.followBTNText}>
@@ -269,9 +235,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                                     user.followed ? 'unFollow' : 'Follow'} </div>
                                 <div className={stl.followBTNLoader}> {usersInfo.followingInProgress.some(id => id === user.id) && <img src={usersInfo.BTN_FLW_GIF} alt="Err" />} </div>
                               </div>
-
                             </button>
-
                             <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                               disabled={isDisabled}
                               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => userIdTalkModeOn(e, i, users)}

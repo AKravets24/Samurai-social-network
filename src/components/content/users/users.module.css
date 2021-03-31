@@ -367,24 +367,24 @@
 .followBTN_E:active:enabled     {background-color: red; color:white                      }
 
 
-.followBTN_ERR_N        {border: 1px solid #ff5f5f; box-shadow: #ff5f5f 0 0 19px 10px; background-color: #ff3b3b; color: white; font-weight: bold; }
-.followBTN_ERR_N:hover  {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }
-.followBTN_ERR_N:active {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred;                                  }
+.followBTN_ERR_N        {border: 1px solid #ff5f5f; box-shadow: #ff5f5f 0 0 19px 10px;  background-color: #ff3b3b; color: white; font-weight: bold; }
+.followBTN_ERR_N:hover  {border: 1px solid red;     box-shadow: red 0 0 19px 10px;      background-color: red;                                        }
+.followBTN_ERR_N:active {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px;  background-color: darkred;                                    }
 
 
-.followBTN_ERR_M        {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred; color: white; font-weight: bold; }
-.followBTN_ERR_M:hover  {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }
-.followBTN_ERR_M:active {border: 1px solid #ff3b3b; box-shadow: #ff3b3b 0 0 19px 10px; background-color: #ff3b3b;                                  }
+.followBTN_ERR_M        {border: 1px solid darkred; box-shadow: #a40000 0 0 19px 10px; background-color: #a40000; color: white; font-weight: bold;  }
+.followBTN_ERR_M:hover  {border: 1px solid #880f0f; box-shadow: #880f0f 0 0 19px 10px; background-color: #880f0f;                                     }
+.followBTN_ERR_M:active {border: 1px solid #5f0101; box-shadow: #5f0101 0 0 19px 10px; background-color: #5f0101;                                     }
 
 
-.followBTN_ERR_D        {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred; font-weight: bold;               }
-.followBTN_ERR_D:hover  {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }
-.followBTN_ERR_D:active {border: 1px solid red;     box-shadow: red 0 0 19px 10px;     background-color: red;                                      }
+.followBTN_ERR_D        {border: 1px solid #ff2a2a; box-shadow: #ff7070 0 0 19px 10px; background-color: #ff7070; font-weight: bold;                  }
+.followBTN_ERR_D:hover  {border: 1px solid #ff0000; box-shadow: #ff2424 0 0 19px 10px; background-color: #ff2424;                                     }
+.followBTN_ERR_D:active {border: 1px solid red;     box-shadow: #ce0303 0 0 19px 10px; background-color: #ce0303;                                     }
 
 
-.followBTN_ERR_E        {border: 1px solid red;     box-shadow: red 0 0 19px 15px;     background-color: white;   color: red;   font-weight: bold; }
-.followBTN_ERR_E:hover  {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred;                                  }
-.followBTN_ERR_E:active {border: 1px solid darkred; box-shadow: darkred 0 0 19px 10px; background-color: darkred;                                  }
+.followBTN_ERR_E        {border: 1px solid#ff0000; box-shadow: #ff4141 0 0 19px 15px; background-color: #ff4141;  color: #fdfdfd; font-weight: bold; }
+.followBTN_ERR_E:hover  {border: 1px solid#ac0000; box-shadow: #ac0000 0 0 19px 10px; background-color: #ac0000;                                  }
+.followBTN_ERR_E:active {border: 1px solid#f30000; box-shadow: #f30000 0 0 19px 10px; background-color: #f30000;                                  }
 
 
 .msgSender {
