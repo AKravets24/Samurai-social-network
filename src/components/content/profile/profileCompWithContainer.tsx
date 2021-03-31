@@ -274,12 +274,18 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
                 <h2> {state.profileMedia.profileData.fullName} {state.myId === userId && '(it\'s you)'}</h2>
                 {state.myId !== userId &&
                   <button
-                    className={`${stl.followBTN} ${themes.BTNs} ${onFollowingErr && themes.BTN_ERR_DNMC}`}
+                    className={`${stl.followBTN}  ${onFollowingErr ? themes.BTN_ERR_DNMC : themes.BTNs}`}
                     disabled={state.profileMedia.isFollowing}
                     onClick={() => actions.followThunkToggler(userId, isFollowed)}
                   >
                     <div className={stl.followBTNContainer}>
-                      <div className={stl.followBTNText}>  {onFollowingErr ? onFollowingErr : state.profileMedia.isFollowed ? 'Unfollow' : 'Follow'} </div>
+                      <div className={stl.followBTNText}>
+                        {onFollowingErr ?                   // есть ошибка при выполнении (un)Follow?
+                          <>
+                            <p className={stl.onFollowingErrBTN}>{onFollowingErr}</p>
+                            <p className={stl.tryAgainBTN}>Try again!</p>
+                          </> :                  // если нет ошибки, то : 
+                          state.profileMedia.isFollowed ? 'Unfollow' : 'Follow'} </div>
                       <div className={stl.followBTNLoader}> {state.profileMedia.isFollowing && <img src={state.picsNLoaders.BTN_LDR_GIF} alt="Err" />} </div>
                     </div>
                   </button>

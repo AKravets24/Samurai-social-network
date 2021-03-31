@@ -254,12 +254,20 @@
     border-radius: 10px;
     outline: none;
     margin-left: 25px;
-    width: 150px;
+    width: 160px;
 }
 
 .followBTN:enabled{
     cursor: pointer;
 }
+
+.followBTN:hover .onFollowingErrBTN{
+    display: none;
+}
+.followBTN:hover .tryAgainBTN{
+    display: block;
+    }
+    
 
 .followBTNContainer {
     display: flex;
@@ -269,7 +277,11 @@
 
 .followBTNText {
     width: 85%;
-    padding: 5px 0 0 20%;
+    padding: 5px 0 0 18%;
+}
+
+.followBTNText p {
+    margin: 0;
 }
 
 .followBTNLoader {
@@ -279,6 +291,14 @@
 
 .followBTNLoader img {
     width: 20px;
+}
+
+.onFollowingErrBTN {
+
+}
+
+.tryAgainBTN {
+    display: none;
 }
 
 
