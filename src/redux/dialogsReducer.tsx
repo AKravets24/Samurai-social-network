@@ -333,7 +333,7 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
     if (response.status === 200) dispatch(actions.onSendingMSGEStatusAC(1, userId, actionKey, userName)) && dispatch(actions.sendMsgAC(response.data.data.message.body))
   }
   catch (err) {
-    dispatch(actions.onSendingMSGEStatusAC(2, userId, actionKey, userName)) && console.log('error')
+    dispatch(actions.onSendingMSGEStatusAC(2, userId, actionKey, userName)) /* && console.log('error') */
   }
 };
 
@@ -457,7 +457,7 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
     case 'ON_SENDING_MSG_STATUS':
       // let index = state.keyArr.findIndex((el) => (el === action.actionKey));
       let index = state.feedbackArr.findIndex((el) => (el.actionKey === action.actionKey));
-      console.log(action);
+      // console.log(action);
 
 
       let newFeedbackArr = [...state.feedbackArr]
@@ -489,7 +489,7 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
     //   return { ...state };
 
     case 'FEEDBACK_WINDOW_CLOSER':
-      console.log(1);
+      // console.log(1);
       let arrDelItem = [...state.feedbackArr]
       arrDelItem.splice(action.arrIndex, 1)
       // state.onSendMSGStatArr.splice(action.arrIndex, 1);

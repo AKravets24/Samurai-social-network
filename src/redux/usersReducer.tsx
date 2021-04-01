@@ -36,9 +36,10 @@ const getUsersThunkAC = (pageSize: number, currentPage: number): ThunkAction_typ
     dispatch(actions.setCurrentPageAC(currentPage));
     try {
       let response = await usersApi.getUsers(pageSize, currentPage);
+      console.log(response)
       if (response.status === 200) dispatch(actions.setUsersAC(response.data.items, response.data.totalCount))
     }
-    catch (err) { dispatch(actions.errCatcherAtUsersGetAC(JSON.stringify(err.message))); }
+    catch (err) { console.log(err); dispatch(actions.errCatcherAtUsersGetAC(JSON.stringify(err.message))); }
     dispatch(actions.toggleIsLoadingAC(false));
   };
 const getCertainUserThunkAC = (pageSize: number, userName: string, pageOfEquals: number = 1): ThunkAction_type => async (dispatch: Dispatch_Type) => {

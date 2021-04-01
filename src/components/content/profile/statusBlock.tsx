@@ -48,7 +48,7 @@ export let StatusCompFunc: React.FC<StatusProps> = ({ colorTheme, errOnStatusLoa
   return <>
     {/* <div className={stl.statusWrapper}> */}
     <div className={isMe ? stl.myStatusWrapper : stl.statusWrapper} onClick={isMe ? (e: React.MouseEvent) => { setStatusEdit(true) } : undefined}>
-      <p className={`${stl.statusField} ${errOnStatusUpdate && stl.statusError}`}>
+      <p className={`${stl.statusField} ${errOnStatusUpdate || errOnStatusLoading && stl.statusError}`}>
         {errOnStatusLoading ?
           errOnStatusLoading : errOnStatusUpdate ?
             errOnStatusUpdate : statusField ?

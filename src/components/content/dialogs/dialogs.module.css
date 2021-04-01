@@ -294,6 +294,18 @@
 .dialogAreaD,.textareaD {background-color: lightyellow; transition: 5000ms; }
 .dialogAreaE,.textareaE {background-color: #ffe1e1;     transition: 5000ms; }
 
+.noDialogsList {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.noDialogsList p {
+    font-size: 28px;
+    font-weight: 600;
+}
+
 
 .certainLDRWrapper {
     height: 100%;

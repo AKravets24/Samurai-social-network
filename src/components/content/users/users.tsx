@@ -147,15 +147,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
 
   let modalCloser = (i: number, e: any) => { setIndexEl({ index: i, elem: e }) }
 
-  // newFeedbackArr.forEach((el, i) => {
-  //   if (el.statNum !== 0) {
-  //     debugger
-  //     setTimeout(() => { newFeedbackArr.splice(i, 1) }, 3000)
-  //   }
-  // })
-
-  // console.log(usersInfo?.initialUsersList);
-
+  console.log(usersInfo)
 
 
   return <>
@@ -258,7 +250,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
     </div>
     {usersInfo.feedbackArr.map((el, i, arr) => {
       // console.log(1);
-
       return <FeedBacker key={el.actionKey}
         feedBackWindowCloser={usersFuncs.feedBackWindowCloser}
         statInfo={arr[i]}
@@ -330,7 +321,7 @@ interface FBProps_Type {
 }
 
 const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProps_Type) => {
-
+  // console.log(statInfo);
   console.log(index)
   let feedBackNamer = (i: number) => {
     if (i === 0) return `${stl.feedbackWindow0}`

@@ -112,4 +112,6 @@
 
 .statusError {
     color: red;
+    border-radius: 5px;
+    box-shadow: #ff0000 0 0 10px 2px;
 }

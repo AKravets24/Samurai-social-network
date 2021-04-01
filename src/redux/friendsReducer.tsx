@@ -28,6 +28,8 @@ const actions = {
     errCatcherAtFriendsGetAC: (usersGettingError: string) => ({ type: 'ERROR_AT_GETTING_USERS', usersGettingError } as const),
     ifUnMountCleanerAC: () => ({ type: 'COMPONENT_UNMOUNTED' } as const),
     followingErrCleaner: (userId: number) => ({ type: 'AT_FOLLOWING_ERROR_CLEANED', userId } as const),
+    moreFriendsIsLoading: (isLoading: boolean) => ({ type: 'MORE_FRIENDS_IS_LOADING', isLoading } as const),
+    moreFriendsLoadErrAC: (errCode: number) => ({ type: 'MORE_FRIENDS_LOAD_ERR', errCode } as const),
 }
 
 type ActionTypes = InferActionsTypes<typeof actions>
@@ -35,15 +37,20 @@ type ActionTypes = InferActionsTypes<typeof actions>
 type Dispatch_Type = Dispatch<ActionTypes>
 type ThunkAC_Type = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
-const getMyFriendsListThunkAC = (page: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
-    if (page === 1) dispatch(actions.friendsListIsLoadingAC(true))
+const getMyFriendsListThunkAC = (page: number, showMoreBTN: boolean = false): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
+    if (page === 1) dispatch(actions.friendsListIsLoadingAC(true)); dispatch(actions.moreFriendsIsLoading(true));
     try {
         let response = await usersApi.getMyFriends(page)
         if (response.status === 200) dispatch(actions.getMyFriendsAC(response.data.items, response.data.totalCount))
         console.log(response)
     }
-    catch (err) { dispatch(actions.errCatcherAtFriendsGetAC(JSON.stringify(err.message))) }
-    if (page === 1) dispatch(actions.friendsListIsLoadingAC(false))
+    catch (err) {
+        console.log(err.message);
+        showMoreBTN ?
+            dispatch(actions.moreFriendsLoadErrAC(parseInt(JSON.stringify(err.message).replace(/\D+/g, "")))) :
+            dispatch(actions.errCatcherAtFriendsGetAC(JSON.stringify(err.message)))
+    }
+    if (page === 1) dispatch(actions.friendsListIsLoadingAC(false)); dispatch(actions.moreFriendsIsLoading(false));
 };
 
 
@@ -80,7 +87,8 @@ const initialFriendsInfo = {
     followingInProgress: [] as number[],
     errOnGettingFriends: '' as string,
     friendsListIsLoading: false as boolean,
-
+    moreFriendsIsLoading: false as boolean,
+    moreFriendsLoadErr: 0 as number,
 };
 
 export type InitialFriendsInfo_Type = typeof initialFriendsInfo;
@@ -124,6 +132,12 @@ export const friendsReducer = (state = initialFriendsInfo, action: ActionTypes):
                 ? [...state.followingInProgress, action.userId]
                 : [...state.followingInProgress.filter(id => id != action.userId)]
         };
+        case 'MORE_FRIENDS_IS_LOADING':
+            return {
+                ...state, moreFriendsIsLoading: action.isLoading
+            }
+        case 'MORE_FRIENDS_LOAD_ERR': return { ...state, moreFriendsLoadErr: action.errCode }
+
         case 'COMPONENT_UNMOUNTED': return { ...state, friendsList: [], friendsCount: 0 }
 
         default: return { ...state };

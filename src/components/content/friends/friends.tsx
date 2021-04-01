@@ -86,7 +86,9 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
           </div>
           :
           !palsInfo.friendsList.length ?                                                  //есть ли друзья в списке?
-            <div>find friends</div> :
+            <div className={stl.noFriendsWrapper}>
+              <p>No friends here so far...</p>
+            </div> :
             <>
               <h2 className={stl.userHeader}>Friends {palsInfo.friendsCount ? `(${palsInfo.friendsList.length} / ${palsInfo.friendsCount})` : null}</h2>
               <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
@@ -112,7 +114,6 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
                           <button
                             id={user.id}
                             disabled={palsInfo.followingInProgress.some(id => id === user.id)}
-
                             className={`${stl.followBTN}  ${user.error ? themes.followBTN_ERR_DNMC : themes.followBTNDnmc}`}
                             onClick={() => followTogglerListener(user.id, user.followed, user.error)}
                           >
@@ -127,7 +128,6 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
                                   user.followed ? 'unFollow' : 'Follow'} </div>
                               <div className={stl.followBTNLoader}> {palsInfo.followingInProgress.some(id => id === user.id) && <img src={palsInfo.BTN_FLW_GIF} alt="Err" />} </div>
                             </div>
-
                           </button>
                           <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
                             disabled={isDisabled}
@@ -172,14 +172,36 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
 
               <div className={`${stl.moreUserUnits}  ${themes.moreUserUnitsDnmc}`}>
 
-                <button disabled={palsInfo.friendsCount === palsInfo.friendsList.length}
-                  className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`} onClick={() => { setFriendsListPage(++friendsListPage); getMyFriendsListener(friendsListPage) }}>
-                  {palsInfo.friendsCount === palsInfo.friendsList.length ? 'All list loaded!' : " Show more!"}
-                  {/* <img src={palsInfo.generalLDR_GIF} alt="Err" /> */}
-                </button></div>
+
+
+                <button
+                  disabled={palsInfo.moreFriendsIsLoading || palsInfo.friendsCount === palsInfo.friendsList.length}
+                  className={`${stl.moreUsersShower}  ${palsInfo.errOnGettingFriends ? themes.followBTN_ERR_DNMC : themes.pagBTNDnmc}`}
+                  onClick={() => { setFriendsListPage(++friendsListPage); getMyFriendsListener(friendsListPage) }}
+                >
+                  <div className={stl.followBTNContainer}>
+                    <div className={stl.followBTNText}>
+                      {palsInfo.errOnGettingFriends ?
+                        <>
+                          <p className={stl.onFollowingErrBTN}>{palsInfo.moreFriendsLoadErr} Err!</p>
+                          <p className={stl.tryAgainBTN}>Try again!</p>
+                        </>
+                        :
+                        palsInfo.friendsCount === palsInfo.friendsList.length ? 'All list loaded!' : " Show more!"} </div>
+                    <div className={stl.followBTNLoader}> {palsInfo.moreFriendsIsLoading && <img src={palsInfo.BTN_FLW_GIF} alt="Err" />} </div>
+                  </div>
+                </button>
+
+              </div>
             </>
       }
     </div>
   </>
 };
 
+//<button disabled={palsInfo.friendsCount === palsInfo.friendsList.length}
+//                  className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`} onClick={() => { setFriendsListPage(++friendsListPage); getMyFriendsListener//(friendsListPage) }}>
+//                  {palsInfo.friendsCount === palsInfo.friendsList.length ? 'All list loaded!' : " Show more!"}
+//
+//                  {/* <img src={palsInfo.generalLDR_GIF} alt="Err" /> */}
+//                </button>

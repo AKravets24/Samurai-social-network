@@ -138,8 +138,10 @@
 }
 
 .loaderDiv {
-    margin: 150px auto;
+    /* margin: 150px auto; */
     display: flex;
+    align-self: center;
+    justify-content: center;
 }
 
 .Houston {
@@ -159,6 +161,18 @@
     font-size: 30px;
 }
 
+
+.noFriendsWrapper { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.noFriendsWrapper p { 
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+}
 
 .loader{
     height: 250px;
@@ -344,6 +358,7 @@
 
 .followBTNLoader img {
     width: 20px;
+    margin: 0;
 }
 
 
@@ -609,9 +624,12 @@
     border-radius: 10px;
     outline: none;
     font-size: 20px ;
+    padding-top: 9px;
 }
 
 .moreUsersShower:enabled {
     cursor: pointer;
 }
+
+
 

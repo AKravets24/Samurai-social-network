@@ -143,8 +143,8 @@
 /*}*/
 
 .BTNsN                  {background-color: #4967ff;                   }
-.BTNsN:hover:enabled    {background-color: midnightblue;color:white }
-.BTNsN:active:enabled   {background-color: darkblue;color:white     }
+.BTNsN:hover:enabled    {background-color: #191970;color:white      }
+.BTNsN:active:enabled   {background-color: #00008b;color:white      }
 
 .BTNsM                  {background-color: #ff652a;                   }
 .BTNsM:hover:enabled    {background-color: #ff5b1d;                   }
@@ -155,8 +155,8 @@
 .BTNsD:active:enabled   {background-color: #f1f14f;color:black      }
 
 .BTNsE                  {background-color: #cd5c5c;                   }
-.BTNsE:hover:enabled    {background-color: darkred; color:white     }
-.BTNsE:active:enabled   {background-color: red; color:white         }
+.BTNsE:hover:enabled    {background-color: #8b0000; color:white     }
+.BTNsE:active:enabled   {background-color: #ff0000; color:white     }
 
 
 .BTN_ERR_N        {border: 1px solid #ff5f5f; box-shadow: #ff5f5f 0 0 19px 10px; background-color: #ff3b3b; color: white; font-weight: bold; }

@@ -186,14 +186,14 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
       <div className={stl.dialogListAndArea}>
         <div className={`${stl.dialogList} ${themes.firstScroller}`}>
           {/* {state.dialogsList.length === 0 && !state.errNegotiatorsListGet ? */}
-          {state.allDialogsIsLoading ?
+          {state.allDialogsIsLoading ?                                                 // диалоги загружаются?
             <div className={stl.dialogListLoaderWrapper}>
               <img className={stl.dialogListLoader} src={loaders.halfCircle_GIF} alt="Err" />
               <img className={stl.dialogListLoader} src={loaders.interSector_GIF} alt="Err" />
               <img className={stl.dialogListLoader} src={loaders.halfCircle_GIF} alt="Err" />
             </div>
             :
-            state.errNegotiatorsListGet ?
+            state.errNegotiatorsListGet ?                                               // есть оштбки при загрузке?
               <div className={stl.errorBlock}>
                 <h2>Error!</h2>
                 <div>
@@ -232,6 +232,10 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
             onScroll={() => !dialogArea?.current?.scrollTop && oldMsgLazyLoader()}
             onContextMenu={e => e.preventDefault()}
           >
+            {!state.dialogsList.length &&                        // если ни с кем еще не было диалогов
+              <div className={stl.noDialogsList}>
+                <p>No dialogs here so far...</p>
+              </div>}
             <div className={stl.oldMsgsLoader}>
               {state.prevMsgsIsLoading && <img src={loaders.prevMSGLDR_GIF} alt="Err" />}
             </div>
