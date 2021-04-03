@@ -16,6 +16,7 @@ const actions = {
   readyStatusSetter: (newReadyStatus: ReadyStatus_Type) => ({ type: 'SET_NEW_READY_STATUS', newReadyStatus } as const),
   socketSetter: (newWebSosket: null | WebSocket) => ({ type: 'SET_NEW_WEB_SOCKET', newWebSosket } as const),
   chatArrSetter: (newchatArr: ChatArr_Type[]) => ({ type: 'SET_NEW_CHAT_ARR', newchatArr } as const),
+  chatArrCleanerAC: () => ({ type: 'SET_UNMOUNT_CLEAN' } as const),
 }
 
 
@@ -51,7 +52,10 @@ let setSocketChannelThunkAC = () => (dispatch: Dispatch_Type) => {
 }
 
 
-const chatActions = { setSocketChannelThunkAC, }
+let setChatArrEmpty = () => (dispatch: Dispatch_Type) => { dispatch(actions.chatArrCleanerAC()) }
+
+
+const chatActions = { setSocketChannelThunkAC, setChatArrEmpty, }
 
 
 export const chatACs = (state = chatActions) => { return state }
@@ -69,6 +73,7 @@ export const chatReducer = (state = initialChatState, action: ActionTypes): Init
     case 'SET_NEW_CHAT_ARR':
       return { ...state, chatArr: [...action.newchatArr.reverse(), ...state.chatArr] }
     case 'SET_NEW_READY_STATUS': return { ...state, readyStatus: action.newReadyStatus }
+    case 'SET_UNMOUNT_CLEAN': return { ...state, chatArr: [], readyStatus: 'undefined' }
     default: return { ...state }
   }
 }

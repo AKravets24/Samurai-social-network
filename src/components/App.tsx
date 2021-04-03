@@ -17,7 +17,7 @@ export let AppTimeDeterminationContainer = () => {
 
   let dispatch = useDispatch();
 
-  let timeSetter = (timer: number) => { dispatch(backGroundSetterACs.timerAC(timer)) }
+  let timeSetter = (timer: number) => { dispatch(backGroundSetterACs.timerGetter(timer)) }
 
   let timer = new Date().getHours() * 60 + new Date().getMinutes();
   useEffect(() => { timeSetter(timer) }, []);                                // ф-я отправляет количество минут с начала суток в редюсер
@@ -32,22 +32,25 @@ export let AppTimeDeterminationContainer = () => {
 
 let AppContainer = () => {
 
-  let { auth_LDR_GIF, timeToChangeTheme } = useSelector(getSmartBackGroundReducer)
+  let { auth_LDR_GIF, timeToChangeTheme } = useSelector(getSmartBackGroundReducer) // timeToChangeTheme - время до смены темы в минутах
   let { funnyLoaderArr, appIsInitialized } = useSelector(geSmartInitialized)
   let backGroundSetterACs = useSelector(getBackGroundSetterACs);
   let appAC = useSelector(getAppACs)
 
   let dispatch = useDispatch();
 
-  let timeKeeper = timeToChangeTheme * 60000;                           // преобразование минут в милисекунды
-  let timer = new Date().getHours() * 60 + new Date().getMinutes();
+  let timeToChangeThemeInMS = timeToChangeTheme * 60000;                                        // преобразование минут в милисекунды для передачи в сетИнтервал
+  let timer: number                                                                             // количество минут с начала суток
 
-  let themeUpdater = () => { dispatch(backGroundSetterACs.timerAC(timer)) };              // ф-я отправляет количество минут с начала суток в редюсер
+  let tick = () => { timer = new Date().getHours() * 60 + new Date().getMinutes()}              // timer = количество минут, прошедших с начала суток
+
+  let themeUpdater = (timer: number) => { dispatch(backGroundSetterACs.timerGetter(timer)) };   // ф-я отправляет количество минут с начала суток в редюсер
   useEffect(() => { dispatch(appAC.initializeAppThunkAC(timer)); }, []);
-  setInterval(() => { themeUpdater() }, timeKeeper);
-
+  useEffect(() => { setInterval(tick, 1000) }, [])
+  useEffect(() => { setInterval(() => { themeUpdater(timer) }, timeToChangeThemeInMS) }, [])
 
   let forAppProps = { funnyLoaderArr, appInitialized: appIsInitialized, auth_LDR_GIF }
+  console.log(1)
   return <App props={forAppProps} />
 }
 

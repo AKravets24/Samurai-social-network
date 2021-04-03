@@ -90,8 +90,13 @@ export const timerAC = (timer: number): TimerAC_Type => ({ type: TIMER, timer })
 type ActionTypes = TimerAC_Type;
 
 
-export type BG_ACs_Type = { timerAC: (timer: number) => void }
-const actionCreators: BG_ACs_Type = { timerAC };
+export type BG_ACs_Type = { timerGetter: (timer: number) => void }
+// const actionCreators: BG_ACs_Type = { timerAC };
+
+
+export let timerGetter = (timer: number) => (dispatch: any) => { console.log(timer, ":количество минут с начала суток"); dispatch(timerAC(timer)) }
+
+const actionCreators: BG_ACs_Type = { timerGetter };
 
 export const backGroundSetterACs = (state = actionCreators) => state;
 
@@ -123,7 +128,7 @@ let initialState = {
         panoramaPic: '' as string,
         panorama_LDR_GIF: '' as string,
         ava_LDR_GIF: '' as string,
-        BTN_LDR_GIF: '' as string,
+        BTN_LDR_GIF: '' as string,  
         status_LDR_GIF: '' as string,
     } as ProfileThemes_Type,
     dialogsThemes: {
@@ -148,7 +153,8 @@ export type BG_State_Type = typeof initialState;
 export const backgroundReducer = (state = initialState, action: ActionTypes): BG_State_Type => {
     switch (action.type) {
         case TIMER:
-            // console.log('TIMER');
+            // console.log(TIMER);
+            // console.log(action.timer, ':таймер в редюсере');
             if (action.timer >= 1440 || action.timer < 180) {  //  if (action.timer >= 1440 || action.timer < 180) {
                 // console.log('NIGHT_THEME')
                 return {
@@ -160,7 +166,7 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     friendsThemes: { generalLDR_GIF: userLoaderGIF_N, BTN_FLW_GIF: BTN_FLW_GIF_N },
                     usersThemes: { generalLDR_GIF: userLoaderGIF_N, BTN_FLW_GIF: BTN_FLW_GIF_N },
                 }
-            } else if (action.timer >= 180 && action.timer < 660) { // } else if (action.timer >= 180 && action.timer < 660) {
+                } else if (action.timer >= 180 && action.timer < 660) { // } else if (action.timer >= 180 && action.timer < 660) {
                 // console.log('MORNING_THEME')
                 return {
                     ...state, theme: 'MORNING', backgroundPic: backDropPIC_M, timeToChangeTheme: 660 - action.timer, // 660
@@ -171,10 +177,10 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     friendsThemes: { generalLDR_GIF: userLoaderGIF_M, BTN_FLW_GIF: BTN_FLW_GIF_M },
                     usersThemes: { generalLDR_GIF: userLoaderGIF_M, BTN_FLW_GIF: BTN_FLW_GIF_M }
                 }
-            } else if (action.timer >= 660 && action.timer < 1080) { // } else if (action.timer >= 660 && action.timer < 1080) { //1080
+                } else if (action.timer >= 660 && action.timer < 1080) { // } else if (action.timer >= 660 && action.timer < 1080) { //1080
                 // console.log('DAY_THEME')
                 return {
-                    ...state, theme: 'DAY', backgroundPic: backDropPIC_D, timeToChangeTheme: 1080 - action.timer,
+                    ...state, theme: 'DAY', backgroundPic: backDropPIC_D, timeToChangeTheme: 1080 - action.timer,// 1080
                     auth_LDR_GIF: auth_LDR_GIF_D,
                     navBarThemes: { envelope_GIF: envelope_D },
                     profileThemes: { auth_LDR_GIF: auth_LDR_GIF_D, panoramaPic: panoramaPIC_D, panorama_LDR_GIF: panoramaGIF_D, ava_LDR_GIF: ava_LDR_GIF_D, BTN_LDR_GIF: BTN_LDR_GIF_D, status_LDR_GIF: status_LDR_GIF_D, },
@@ -185,7 +191,7 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
             } else if (action.timer >= 1080 && action.timer < 1440) { // } else if (action.timer >= 1080 && action.timer < 1440) { //1440
                 // console.log('EVENING_THEME')
                 return {
-                    ...state, theme: 'EVENING', backgroundPic: backDropPIC_E, timeToChangeTheme: 1440 - action.timer,
+                    ...state, theme: 'EVENING', backgroundPic: backDropPIC_E, timeToChangeTheme: 1440 - action.timer, // 1440
                     auth_LDR_GIF: auth_LDR_GIF_E,
                     navBarThemes: { envelope_GIF: envelope_E },
                     profileThemes: { auth_LDR_GIF: auth_LDR_GIF_E, panoramaPic: panoramaPIC_E, panorama_LDR_GIF: panoramaGIF_E, ava_LDR_GIF: ava_LDR_GIF_E, BTN_LDR_GIF: BTN_LDR_GIF_E, status_LDR_GIF: status_LDR_GIF_E, },

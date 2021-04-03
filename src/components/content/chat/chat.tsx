@@ -17,8 +17,12 @@ export default function ChatContainer() {
   let chatACs = useSelector(getChatACs);
   let dispatch = useDispatch()
 
+  console.log(chatACs);
+
+
   useEffect(() => {
     dispatch(chatACs.setSocketChannelThunkAC())
+    return () => { dispatch(chatACs.setChatArrEmpty()) }
   }, [])
 
   let chatMSGSender = (msg: string) => {
