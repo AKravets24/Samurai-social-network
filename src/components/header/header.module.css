@@ -1,11 +1,9 @@
 .header {
     width: 100%;
     border-radius: 15px 15px 3px 3px;
-    /*background-color: lightSkyBlue;*/
     display: grid;
     grid-template-areas: "boofer logotype login";
     grid-template-columns: 1fr 3fr 1fr;
-    vertical-align: center;
 }
 .headerN {background-color: midnightblue;   transition: 5000ms; }
 .headerM {background-color: #fff5cf;        transition: 5000ms; }

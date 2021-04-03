@@ -83,9 +83,8 @@ import BTN_FLW_GIF_D from './loader/users/btnLoaders/BTN_LDR_D.gif';
 import BTN_FLW_GIF_E from './loader/users/btnLoaders/BTN_LDR_E.gif';
 
 
-const TIMER = 'TIMER';
-export type TimerAC_Type = { type: typeof TIMER, timer: number }
-export const timerAC = (timer: number): TimerAC_Type => ({ type: TIMER, timer });
+export type TimerAC_Type = { type: 'TIMER', timer: number }
+// const timerAC = (timer: number): TimerAC_Type => ({ type: 'TIMER', timer } as const);
 
 type ActionTypes = TimerAC_Type;
 
@@ -93,8 +92,14 @@ type ActionTypes = TimerAC_Type;
 export type BG_ACs_Type = { timerGetter: (timer: number) => void }
 // const actionCreators: BG_ACs_Type = { timerAC };
 
+let actions = {
+    timerAC: (timer: number)=> ({ type: 'TIMER', timer } as const),
+    forDNMCThemesTransitionFlagAC: ()=> ({type: 'THEMES_TRANSITION_FLAG'} as const)
+}
 
-export let timerGetter = (timer: number) => (dispatch: any) => { console.log(timer, ":количество минут с начала суток"); dispatch(timerAC(timer)) }
+let timerGetter = (timer: number) => (dispatch: any) => { /* console.log(timer, ":количество минут с начала суток"); */ dispatch(actions.timerAC(timer)) }
+
+let transitionFlagSetter = () => (dispatch: any) => { dispatch(actions.forDNMCThemesTransitionFlagAC())}
 
 const actionCreators: BG_ACs_Type = { timerGetter };
 
@@ -122,6 +127,8 @@ let initialState = {
     backgroundPic: '' as string,
     timeToChangeTheme: 0 as number,
     auth_LDR_GIF: '' as string,
+    forDNMCThemesTransitionFlag: false as boolean,
+
     navBarThemes: { envelope_GIF: '' as string },
     profileThemes: {
         auth_LDR_GIF: '' as string,
@@ -152,7 +159,7 @@ export type BG_State_Type = typeof initialState;
 
 export const backgroundReducer = (state = initialState, action: ActionTypes): BG_State_Type => {
     switch (action.type) {
-        case TIMER:
+        case 'TIMER':
             // console.log(TIMER);
             // console.log(action.timer, ':таймер в редюсере');
             if (action.timer >= 1440 || action.timer < 180) {  //  if (action.timer >= 1440 || action.timer < 180) {

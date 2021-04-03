@@ -1,5 +1,5 @@
 import { usersApi } from "./app";
-import { timerAC, TimerAC_Type } from './backGroundSetter'
+// import { timerAC, TimerAC_Type } from './backGroundSetter'
 import { SetLogOutUserDataAC_Type } from "./headerReducer";
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk"
@@ -75,7 +75,7 @@ const getCaptchaThunkAC = (): ThunkAC_Type => async (dispatch: Dispatch_Type) =>
   catch (err) { dispatch(actions.errGetCaptchaAC(err)) }
 }
 const initializeAppThunkAC = (timer: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
-  timerAC(timer)                // было dispatch(timerAC(timer)), вернуть и доработать, если не будет срабатывать вообще вроде он нафиг не нужен тут
+  // timerAC(timer)                // было dispatch(timerAC(timer)), вернуть и доработать, если не будет срабатывать вообще вроде он нафиг не нужен тут
   try {
     let response = await usersApi.getLogIn();
     let { id, email, login } = response.data.data;
