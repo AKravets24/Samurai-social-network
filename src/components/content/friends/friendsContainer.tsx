@@ -37,7 +37,7 @@ let FriendsFuncContainer = () => {
   let getMyFriendsListThunk = (page: number) => { dispatch(friendsACs.getMyFriendsListThunkAC(page)) };
   let followThunkToggler = (userId: number, isFollowed: boolean, error: string) => { dispatch(friendsACs.followThunkTogglerAC(userId, isFollowed, error)) };
   let sendMessageToUserThunk = (userId: number, body: string, actionKey: string, userName: string) => {
-    dispatch(dialogsACs.sendMessageToUserThunkAC(userId, body, actionKey, userName))
+    dispatch(dialogsACs.sendMessageToUserThunkAC(userId, body, actionKey, userName, -1))
   }
   let componentStateCleaner = () => { dispatch(friendsACs.unMountCleaner()) }
   let palsFuncs: FriendsActions_Type = { getMyFriendsListThunk, followThunkToggler, sendMessageToUserThunk }

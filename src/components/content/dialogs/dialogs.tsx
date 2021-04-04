@@ -19,7 +19,7 @@ import cn from 'classnames/bind';
 type DialogsActions_Types = {
   getMyNegotiatorsListThunk: () => void
   getTalkWithUserThunk: (userId: number) => void
-  sendMessageToUserThunk: (userId: number, msg: string, actionKey: string, userName: string) => void
+  sendMessageToUserThunk: (userId: number, msg: string, actionKey: string, userName: string, senderId: number) => void
   talkedBeforeThunk: (userId: number) => void
   setSelectedMessages: (messageId: string) => void
   setSpamMessagesThunk: (messageId: string, index: number) => void
@@ -48,8 +48,8 @@ let DialogFuncContainer = () => {
   let dialogActions: DialogsActions_Types = {
     getMyNegotiatorsListThunk: () => dispatch(dialogACs.getMyNegotiatorsListThunkAC()),
     getTalkWithUserThunk: (userId: number) => dispatch(dialogACs.getTalkWithUserThunkAC(userId)),
-    sendMessageToUserThunk: (userId: number, msg: string, actionKey: string, userName: string) =>
-      dispatch(dialogACs.sendMessageToUserThunkAC(userId, msg, actionKey, userName)),
+    sendMessageToUserThunk: (userId: number, msg: string, actionKey: string, userName: string, senderId: number) =>
+      dispatch(dialogACs.sendMessageToUserThunkAC(userId, msg, actionKey, userName, senderId)),
     talkedBeforeThunk: (userId: number) => dispatch(dialogACs.talkedBeforeThunkAC(userId)),
     setSelectedMessages: (messageId: string) => dispatch(dialogACs.setSelectedMessagesAC(messageId)),
     setSpamMessagesThunk: (messageId: string, index: number) => dispatch(dialogACs.setSpamMessagesThunkAC(messageId, index)),
@@ -151,7 +151,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   type Value_Type = { text: string }
   let submitter = (values: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     // actions.sendMessageToUserThunk(dialogId, values.text.substring(0, values.text.length - 1), '', '')
-    actions.sendMessageToUserThunk(dialogId, values.text, '', ''); values.text = ''; setSubmitting(false);
+    actions.sendMessageToUserThunk(dialogId, values.text, uuidv4(), '', myId as number); values.text = ''; setSubmitting(false);
   }
 
   let keyCodeChecker = (e: KeyboardEvent, values: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
@@ -183,7 +183,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
     setModalMsggs(modalMsggs = finalState)
   }
 
-  // console.log(state.certainDialogIsLoading)
+  // console.log(state?.certainDialog)
 
   return <>
     <div className={cn(stl.dialogsPage, themes.dialogDnmc, delayFlag && stl.delay)}>
@@ -233,7 +233,8 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
           </div>
           <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll, delayFlag && stl.delay)}
             ref={dialogArea}
-            onScroll={() => !dialogArea?.current?.scrollTop && oldMsgLazyLoader()}
+            // onScroll={() => !dialogArea?.current?.scrollTop   && oldMsgLazyLoader()}
+            onScroll={() => !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount && oldMsgLazyLoader()}
             onContextMenu={e => e.preventDefault()}
           >
             {!state.dialogsList.length &&                        // если ни с кем еще не было диалогов

@@ -56,6 +56,7 @@ const getTalkWithUserThunkAC = (userId: number): ThunkAC_Type => async (dispatch
   dispatch(actions.setDialogsAreLoadingToggleAC(false, true))
   try {
     let response = await usersApi.getTalkWithUser(userId);
+    console.log(response)
     if (response.status === 200) dispatch(actions.setTalkWithUser(response.data))
   }
   catch (err) { dispatch(actions.setErrCertainDialogGetAC(JSON.stringify(err.message))) };
@@ -70,7 +71,7 @@ const talkedBeforeThunkAC = (userId: number): ThunkAC_Type => async (dispatch: D
       if (response.data.find((el: DialogsList_Type) => (el.id === +userId))) {                                          // если в списке диалогов есть нужный юзер
         try {
           let responseCertainUser = await usersApi.getTalkWithUser(userId)                                        // то запрашиваем диалог с ним
-          responseCertainUser.status === 200 && dispatch(actions.setTalkWithUser(responseCertainUser.data))
+          responseCertainUser.status === 200 && dispatch(actions.setTalkWithUser(responseCertainUser.data)) && console.log(responseCertainUser)
         }
         catch (err) { dispatch(actions.setErrCertainDialogGetAC(JSON.stringify(err.message))) };                    //error
       } else {
@@ -118,12 +119,20 @@ const getNewMessagesRequestThunkAC = (): ThunkAC_Type => async (dispatch: Dispat
   catch (err) { dispatch(actions.newMsgActonCombiner(0, false, true)) };
 };
 
-const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: string, userName: string): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
+const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: string, userName: string, senderId: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
+  // console.log(actionKey)
   dispatch(actions.onSendingMSGEStatusAC(0, userId, actionKey, userName));
+  let pseudoMsg = {
+    body, actionKey, senderId, addedAt: '', deletedByRecipient: false, deletedBySender: false, distributionId: null, id: '', isSpam: false, recipientId: -1, recipientName: '', senderName: '', translatedBody: null, viewed: false
+  }
+
+  dispatch(actions.sendMsgAC(pseudoMsg))
   try {
     let response = await usersApi.sendMsgToTalker(userId, body)
-    console.log(response.data);
-    if (response.status === 200) dispatch(actions.onSendingMSGEStatusAC(1, userId, actionKey, userName)) && dispatch(actions.sendMsgAC(response.data.data.message))
+    let modifiedmsgItem = response.data.data.message;
+    modifiedmsgItem.actionKey = actionKey
+    console.log(modifiedmsgItem)
+    if (response.status === 200) dispatch(actions.onSendingMSGEStatusAC(1, userId, actionKey, userName)) && dispatch(actions.sendMsgAC(modifiedmsgItem)) // response.data.data.message
   }
   catch (err) {
     dispatch(actions.onSendingMSGEStatusAC(2, userId, actionKey, userName)) /* && console.log('error') */
@@ -142,7 +151,7 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
 export type DialogActions_Type = {
   getMyNegotiatorsListThunkAC: () => ThunkAC_Type
   getTalkWithUserThunkAC: (userId: number) => ThunkAC_Type
-  sendMessageToUserThunkAC: (userId: number, body: string, actionKey: string, userName: string) => ThunkAC_Type
+  sendMessageToUserThunkAC: (userId: number, body: string, actionKey: string, userName: string, senderId: number) => ThunkAC_Type
   createNewDialogAC: (userId: number, fullName: string, photos: Photos_Type) => CreateNewDialogAC_Type
   talkedBeforeThunkAC: (userId: number) => ThunkAC_Type
   setSelectedMessagesAC: (messageId: string) => SetSelectedMessagesAC_Type
@@ -166,7 +175,7 @@ export const dialogACs = (state = dialogActions) => { return state };
 
 let initialDialogsState = {
   dialogsList: [] as DialogsList_Type[],
-  certainDialog: { items: [] } as CertainDialog_Type,
+  certainDialog: { items: [], totalCount: 0, error: null } as CertainDialog_Type,
   allDialogsIsLoading: false as boolean,
   certainDialogIsLoading: false as boolean,
   defaultAvatar: maleProfilePic as string,
@@ -201,7 +210,33 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
         errGettingNewMSGSCount: action.hasErr
       };
 
-    case 'SEND_MESSAGE_TO_USER': return { ...state, certainDialog: { items: [...state.certainDialog.items, action.msgItem] } }
+    case 'SEND_MESSAGE_TO_USER':
+      let totalMsgCount: number = 0;                                                                // этот колхоз из=за TS, ибо object possibly undefined
+      if (state?.certainDialog?.totalCount) totalMsgCount = state.certainDialog.totalCount + 1      // и этот 
+
+      console.log(action)
+
+      // let someUsers = users.filter(item => item.id < 3)
+
+      // let doubledItems = state.certainDialog.items.filter(item => { return item.actionKey === action.msgItem.actionKey })
+      // 
+
+      let msgListOld = [...state.certainDialog.items];
+      // let msgListNew = msgListOld.push(action.msgItem)
+      let msgListNew = msgListOld.splice(state.certainDialog.items.length - 1, 0, action.msgItem)
+
+
+      // let doubledItems = msgListNew.filter(item => { return item.actionKey === action.msgItem.actionKey })
+
+      console.log(msgListNew)
+
+
+      return {
+        ...state, certainDialog: {
+          items: [...state.certainDialog.items, action.msgItem,],
+          totalCount: totalMsgCount
+        }
+      }
     case 'SET_MY_COMPANIONS_LIST': return { ...state, dialogsList: action.data };
     case 'ERR_NEGOTIATORS_LIST_GET': return { ...state, errNegotiatorsListGet: action.errorCode };
     case 'DIALOGS_ARE_LOADING_TOGGLER': return { ...state, allDialogsIsLoading: action.allDialogs, certainDialogIsLoading: action.certainDialog }
@@ -248,7 +283,7 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
     case 'ON_SENDING_MSG_STATUS':
       // let index = state.keyArr.findIndex((el) => (el === action.actionKey));
       let index = state.feedbackArr.findIndex((el) => (el.actionKey === action.actionKey));
-      // console.log(action);
+      console.log(action);
 
 
       let newFeedbackArr = [...state.feedbackArr]
