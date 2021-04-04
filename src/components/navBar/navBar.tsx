@@ -2,9 +2,10 @@ import React, { DOMElement, useEffect, useState } from "react";
 import stl from './navBar.module.css';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
+import cn from 'classnames/bind';
 import { withAuthRedirect } from "../content/HOC/withAuthRedirect";
 
-import { getDialogACs, getMyId, getSmartPartialDialogReducer, getSmartDialogsReducer, getTheme, getUsersACs } from "../../redux/selectors";
+import { getDialogACs, getMyId, getSmartPartialDialogReducer, getSmartDialogsReducer, getTheme, getUsersACs, getThemesDelayFlag } from "../../redux/selectors";
 import { AppStateType } from "../../redux/redux-store";
 import * as queryString from 'querystring'
 
@@ -17,6 +18,7 @@ type ContainerProps_Types = {
   state: {
     colorTheme: string,
     myId: number,
+    themesDelayFlag: boolean,
     partDialogReducer: {
       errGettingNewMSGSCount: boolean,
       msgLoader: string,
@@ -36,25 +38,28 @@ type ThemesNavbar_Type = {
 }
 
 let NavBarContainer: React.FC<ContainerProps_Types> = ({ state, actions }) => {
-  // console.log(actions)
+  console.log(state)
+
+  let { myId, colorTheme, themesDelayFlag } = state;
 
   let [themes, setThemes] = useState({ dynamicActiveClass: '', dynamicClass: 'stl.linkNight  ', blockMenu: '', counter: '', });
   useEffect(() => {
-    switch (state.colorTheme) {
+    switch (colorTheme) {
       case 'NIGHT': return setThemes({ ...themes, dynamicActiveClass: stl.activeLinkN, dynamicClass: stl.linkN, blockMenu: stl.blockMenuN, counter: stl.counterN, });
       case 'MORNING': return setThemes({ ...themes, dynamicActiveClass: stl.activeLinkM, dynamicClass: stl.linkM, blockMenu: stl.blockMenuM, counter: stl.counterM, });
       case 'DAY': return setThemes({ ...themes, dynamicActiveClass: stl.activeLinkD, dynamicClass: stl.linkD, blockMenu: stl.blockMenuD, counter: stl.counterD, });
       case 'EVENING': return setThemes({ ...themes, dynamicActiveClass: stl.activeLinkE, dynamicClass: stl.linkE, blockMenu: stl.blockMenuE, counter: stl.counterE, });
     }
-  }, [state.colorTheme]);
+  }, [colorTheme]);
 
 
 
-  useEffect(() => { state.myId && actions.getNewMessagesRequestThunk() }, []);
+  useEffect(() => { myId && actions.getNewMessagesRequestThunk() }, []);
 
   return themes.dynamicActiveClass ? <NavBar
-    myId={state.myId}
+    myId={myId}
     themes={themes}
+    delayFlag={themesDelayFlag}
     actions={actions}
     state={state.partDialogReducer}
   /> : null
@@ -62,16 +67,16 @@ let NavBarContainer: React.FC<ContainerProps_Types> = ({ state, actions }) => {
 
 type PropsTypes = {
   myId: number,
-  actions: ContainerProps_Types['actions']
-
-  state: ContainerProps_Types['state']['partDialogReducer']
+  delayFlag: boolean,
 
   themes: ThemesNavbar_Type
+  actions: ContainerProps_Types['actions']
+  state: ContainerProps_Types['state']['partDialogReducer']
 }
 
 
-let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions }) => {
-  // console.log(props)
+let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions, delayFlag }) => {
+  // console.log(delayFlag)
 
   // let [isHiddenBTN, setIsHiddenBTN] = useState(stl.hidden);
   let isHiddenBTN = stl.hidden;
@@ -118,7 +123,7 @@ let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions }) => {
   // console.log(props)
 
   return <>
-    <div className={`${stl.blockMenu}  ${themes.blockMenu}`}>
+    <div className={cn(stl.blockMenu, themes.blockMenu, delayFlag && stl.delay)}>
       <ul className={stl.menu}>
         {!myId && <li><NavLink to={`/login`} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}
         >Get Login</NavLink></li>}
@@ -172,6 +177,7 @@ const mapStateToProps = (state: AppStateType) => {
     usersACs: getUsersACs(state),
     partDialogReducer: getSmartPartialDialogReducer(state),
     // partDialogReducer:     getSmartDialogsReducer(state), 
+    themesDelayFlag: getThemesDelayFlag(state)
   }
 };
 

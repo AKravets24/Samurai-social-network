@@ -3,10 +3,15 @@
     display: grid;
     border-radius: 4px 4px 4px 20px;
 }
-.blockMenuN  {background-color: lightskyblue; transition: 5000ms; }
-.blockMenuM  {background-color: #f36d3a;      transition: 5000ms; }
-.blockMenuD  {background-color: lightgreen;   transition: 5000ms; }
-.blockMenuE  {background-color: #661717;      transition: 5000ms; }
+
+.delay {
+    transition: 4000ms;
+}
+
+.blockMenuN  {background-color: lightskyblue; }
+.blockMenuM  {background-color: #f36d3a;      }
+.blockMenuD  {background-color: lightgreen;   }
+.blockMenuE  {background-color: #661717;      }
 
 .menu {
     margin: 0 0 0 0;
@@ -124,8 +129,6 @@
 
 .dialogsSpan p {
     opacity: 1;
-    /*position: absolute;*/
-    /*color: green;*/
     margin-left: 120px;
     margin-top: -30px;
     margin-bottom: 0;

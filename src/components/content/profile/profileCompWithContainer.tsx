@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
 import { withAuthRedirect } from "../HOC/withAuthRedirect";
-import { getMyId, getProfileACs, getProfilePics, getSmartProfileMediaData, getSmartPicsNLoaders, getColorTheme } from "../../../redux/selectors";
+import { getMyId, getProfileACs, getProfilePics, getSmartProfileMediaData, getSmartPicsNLoaders, getColorTheme, getThemesDelayFlag } from "../../../redux/selectors";
 import { Formik, Field } from 'formik';
 import stl from './profile.module.css';
 import Post from './post/post';
@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { InitialProfileState_Type, profileACs_Type, ProfilePicturesTypes } from "../../../redux/profileReducer";
 import { ProfileThemes_Type } from '../../../redux/backGroundSetter'
 import { HistoryHook_Type, MatchHook_Type } from '../../RouterHooksTypes'
+import cn from 'classnames/bind';
 
 
 type Themes_Type = {
@@ -54,6 +55,7 @@ let ProfileFuncContainer = () => {
   let profilePics = useSelector(getProfilePics);
   let profileACs = useSelector(getProfileACs);
   let colorTheme = useSelector(getColorTheme);
+  let themesDelayFlag = useSelector(getThemesDelayFlag)
 
   let comparativeId = +match?.params?.userId;
 
@@ -100,6 +102,7 @@ let ProfileFuncContainer = () => {
     colorTheme={colorTheme}
     themes={themes}
     actions={profileActions}
+    delayFlag={themesDelayFlag}
   /> : null;
 };
 
@@ -109,9 +112,10 @@ type Profile_Types = {
   state: ProfileState_Type
   themes: Themes_Type
   colorTheme: string
+  delayFlag: boolean
 }
 
-const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }) => {
+const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, delayFlag }) => {
   // console.log('render');
   // console.log(state.profileMedia.isLoading);
 
@@ -202,7 +206,7 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
     }
 
     {/* {!userId && !errOnGettingProfile && isLoading && <div className={stl.loaderDiv}> */}
-    {isLoading && <div className={`${stl.loaderDiv} ${themes.profileDnmc}`}>
+    {isLoading && <div className={cn(stl.loaderDiv, delayFlag && themes.profileDnmc)}>
       <img className={stl.loader} src={state.picsNLoaders.auth_LDR_GIF} alt="Err" />
       <p className={themes.fontClrsDnmc}>Loading profile...</p>
     </div>}
@@ -270,11 +274,11 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
               }
             </div>
             <div className={stl.profileInfo}>
-              <div className={`${stl.nameWrapper} ${themes.profileInfoDnmc}`}>
+              <div className={cn(stl.nameWrapper, delayFlag && themes.profileInfoDnmc)}>
                 <h2> {state.profileMedia.profileData.fullName} {state.myId === userId && '(it\'s you)'}</h2>
                 {state.myId !== userId &&
                   <button
-                    className={`${stl.followBTN}  ${onFollowingErr ? themes.BTN_ERR_DNMC : themes.BTNs}`}
+                    className={cn(stl.followBTN, onFollowingErr ? themes.BTN_ERR_DNMC : themes.BTNs)}
                     disabled={state.profileMedia.isFollowing}
                     onClick={() => actions.followThunkToggler(userId, isFollowed)}
                   >
@@ -320,7 +324,8 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme }
           </div>
 
           {state.myId === userId && <div>
-            <div className={`${stl.writePost} ${themes.writePostDnmc}`}>
+            {/* <div className={`${stl.writePost} ${themes.writePostDnmc}`}> */}
+            <div className={cn(stl.writePost, themes.writePostDnmc, delayFlag && stl.delay)}>
               <h2>My posts</h2>
               <div className={stl.inputBox}>
                 <Formik initialValues={{ text: '' }} validate={validator} onSubmit={submitterForWall}>

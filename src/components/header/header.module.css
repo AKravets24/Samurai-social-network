@@ -5,10 +5,15 @@
     grid-template-areas: "boofer logotype login";
     grid-template-columns: 1fr 3fr 1fr;
 }
-.headerN {background-color: midnightblue;   transition: 5000ms; }
-.headerM {background-color: #fff5cf;        transition: 5000ms; }
-.headerD {background-color: lightskyblue;   transition: 5000ms; }
-.headerE {background-color: darkred;        transition: 5000ms; }
+
+.delay {
+    transition: 4000ms;
+}
+
+.headerN {background-color: midnightblue; }
+.headerM {background-color: #fff5cf;      }
+.headerD {background-color: lightskyblue; }
+.headerE {background-color: darkred;      }
 
 .buffer {
     grid-area: boofer;
@@ -17,12 +22,7 @@
 .logotype {
     grid-area: logotype;
     display: flex;
-    /*width: 70%;*/
-    /*justify-content: center;*/
     margin: 0 auto;
-
-    /*grid-template-columns: 2fr 3fr;*/
-
     padding-top: 10px;
 }
 
@@ -38,10 +38,10 @@
     /*color: lightyellow;*/
     text-align: center;
 }
-.logoTypeH1N {color: lightyellow; transition: 5000ms; }
-.logoTypeH1M {color: black;       transition: 5000ms; }
-.logoTypeH1D {color: white;       transition: 5000ms; }
-.logoTypeH1E {color: lightyellow; transition: 5000ms; }
+.logoTypeH1N {color: lightyellow; }
+.logoTypeH1M {color: black;       }
+.logoTypeH1D {color: white;       }
+.logoTypeH1E {color: lightyellow; }
 
 .login {
     grid-area: login;
@@ -79,20 +79,20 @@
     text-align: center;
     margin: 0 15px 0  0;
 }
-.loginH4N {color: lightyellow;  transition: 5000ms;  }
-.loginH4M {color: black;        transition: 5000ms;  }
-.loginH4D {color: white;        transition: 5000ms;  }
-.loginH4E {color: lightyellow;  transition: 5000ms;  }
+.loginH4N {color: lightyellow;  }
+.loginH4M {color: black;        }
+.loginH4D {color: white;        }
+.loginH4E {color: lightyellow;  }
 
 
 .loginHref {
     text-align: center;
     margin: 0;
 }
-.loginHrefN  {color: lightyellow; transition: 5000ms; }
-.loginHrefM  {color: black;       transition: 5000ms; }
-.loginHrefD  {color: white;       transition: 5000ms; }
-.loginHrefE  {color: lightyellow; transition: 5000ms; }
+.loginHrefN  {color: lightyellow; }
+.loginHrefM  {color: black;       }
+.loginHrefD  {color: white;       }
+.loginHrefE  {color: lightyellow; }
 
 
 .login a {

@@ -81,27 +81,32 @@ import BTN_FLW_GIF_N from './loader/users/btnLoaders/BTN_LDR_N.gif';
 import BTN_FLW_GIF_M from './loader/users/btnLoaders/BTN_LDR_M.gif';
 import BTN_FLW_GIF_D from './loader/users/btnLoaders/BTN_LDR_D.gif';
 import BTN_FLW_GIF_E from './loader/users/btnLoaders/BTN_LDR_E.gif';
+import { InferActionsTypes } from "./redux-store";
+import { Dispatch } from "redux";
 
 
-export type TimerAC_Type = { type: 'TIMER', timer: number }
+// type TimerAC_Type = { type: 'TIMER', timer: number }
 // const timerAC = (timer: number): TimerAC_Type => ({ type: 'TIMER', timer } as const);
-
-type ActionTypes = TimerAC_Type;
-
-
-export type BG_ACs_Type = { timerGetter: (timer: number) => void }
+// type ActionTypes = TimerAC_Type;
+// type ActionTypes = TimerAC_Type;
 // const actionCreators: BG_ACs_Type = { timerAC };
 
+
+type BG_ACs_Type = { timerGetter: (timer: number) => void; transitionFlagSetter: () => void }
+
 let actions = {
-    timerAC: (timer: number)=> ({ type: 'TIMER', timer } as const),
-    forDNMCThemesTransitionFlagAC: ()=> ({type: 'THEMES_TRANSITION_FLAG'} as const)
+    timerAC: (timer: number) => ({ type: 'TIMER', timer } as const),
+    forThemesDelayFlagAC: () => ({ type: 'THEMES_TRANSITION_FLAG' } as const)
 }
 
-let timerGetter = (timer: number) => (dispatch: any) => { /* console.log(timer, ":количество минут с начала суток"); */ dispatch(actions.timerAC(timer)) }
+type ActionTypes = InferActionsTypes<typeof actions>;
+type Dispatch_Type = Dispatch<ActionTypes>
 
-let transitionFlagSetter = () => (dispatch: any) => { dispatch(actions.forDNMCThemesTransitionFlagAC())}
+let timerGetter = (timer: number) => (dispatch: Dispatch_Type) => { /* console.log(timer, ":количество минут с начала суток"); */ dispatch(actions.timerAC(timer)) }
 
-const actionCreators: BG_ACs_Type = { timerGetter };
+let transitionFlagSetter = () => (dispatch: Dispatch_Type) => { dispatch(actions.forThemesDelayFlagAC()) }
+
+const actionCreators: BG_ACs_Type = { timerGetter, transitionFlagSetter };
 
 export const backGroundSetterACs = (state = actionCreators) => state;
 
@@ -127,7 +132,7 @@ let initialState = {
     backgroundPic: '' as string,
     timeToChangeTheme: 0 as number,
     auth_LDR_GIF: '' as string,
-    forDNMCThemesTransitionFlag: false as boolean,
+    themesDelayFlag: false as boolean,
 
     navBarThemes: { envelope_GIF: '' as string },
     profileThemes: {
@@ -135,7 +140,7 @@ let initialState = {
         panoramaPic: '' as string,
         panorama_LDR_GIF: '' as string,
         ava_LDR_GIF: '' as string,
-        BTN_LDR_GIF: '' as string,  
+        BTN_LDR_GIF: '' as string,
         status_LDR_GIF: '' as string,
     } as ProfileThemes_Type,
     dialogsThemes: {
@@ -159,6 +164,8 @@ export type BG_State_Type = typeof initialState;
 
 export const backgroundReducer = (state = initialState, action: ActionTypes): BG_State_Type => {
     switch (action.type) {
+        case 'THEMES_TRANSITION_FLAG': return { ...state, themesDelayFlag: true }
+
         case 'TIMER':
             // console.log(TIMER);
             // console.log(action.timer, ':таймер в редюсере');
@@ -173,7 +180,7 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     friendsThemes: { generalLDR_GIF: userLoaderGIF_N, BTN_FLW_GIF: BTN_FLW_GIF_N },
                     usersThemes: { generalLDR_GIF: userLoaderGIF_N, BTN_FLW_GIF: BTN_FLW_GIF_N },
                 }
-                } else if (action.timer >= 180 && action.timer < 660) { // } else if (action.timer >= 180 && action.timer < 660) {
+            } else if (action.timer >= 180 && action.timer < 660) { // } else if (action.timer >= 180 && action.timer < 660) {
                 // console.log('MORNING_THEME')
                 return {
                     ...state, theme: 'MORNING', backgroundPic: backDropPIC_M, timeToChangeTheme: 660 - action.timer, // 660
@@ -184,7 +191,7 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
                     friendsThemes: { generalLDR_GIF: userLoaderGIF_M, BTN_FLW_GIF: BTN_FLW_GIF_M },
                     usersThemes: { generalLDR_GIF: userLoaderGIF_M, BTN_FLW_GIF: BTN_FLW_GIF_M }
                 }
-                } else if (action.timer >= 660 && action.timer < 1080) { // } else if (action.timer >= 660 && action.timer < 1080) { //1080
+            } else if (action.timer >= 660 && action.timer < 1080) { // } else if (action.timer >= 660 && action.timer < 1080) { //1080
                 // console.log('DAY_THEME')
                 return {
                     ...state, theme: 'DAY', backgroundPic: backDropPIC_D, timeToChangeTheme: 1080 - action.timer,// 1080

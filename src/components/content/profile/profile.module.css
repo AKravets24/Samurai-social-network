@@ -15,10 +15,15 @@
     opacity: 0.9;
     /*position: relative;*/
 }
-.profileN { background-color: #cfedff;     /* transition: 5000ms; */ }
-.profileM { background-color: #fbc498;     /* transition: 5000ms; */ }
-.profileD { background-color: lightyellow; /* transition: 5000ms; */ }
-.profileE { background-color: #fef0f0;     /* transition: 5000ms; */ }
+
+.delay {
+    transition: 4000ms;
+}
+
+.profileN { background-color: #cfedff;     }
+.profileM { background-color: #fbc498;     }
+.profileD { background-color: lightyellow; }
+.profileE { background-color: #fef0f0;     }
 
 .loaderDiv {
     width: 100%;
@@ -239,14 +244,11 @@
     justify-content: center;
 }
 
-.nameWrapper button {
-    /* width: 120px; */
-}
 
-.profileInfoN { border-top: 2px solid midnightblue;border-bottom: 2px solid midnightblue; transition: 5000ms; }
-.profileInfoM { border-top: 2px solid #ff5b1d;     border-bottom: 2px solid #ff5b1d;      transition: 5000ms; }
-.profileInfoD { border-top: 2px solid lightgreen;  border-bottom: 2px solid lightgreen;   transition: 5000ms; }
-.profileInfoE { border-top: 2px solid darkred;     border-bottom: 2px solid darkred;      transition: 5000ms; }
+.profileInfoN { border-top: 2px solid midnightblue;border-bottom: 2px solid midnightblue; }
+.profileInfoM { border-top: 2px solid #ff5b1d;     border-bottom: 2px solid #ff5b1d;      }
+.profileInfoD { border-top: 2px solid lightgreen;  border-bottom: 2px solid lightgreen;   }
+.profileInfoE { border-top: 2px solid darkred;     border-bottom: 2px solid darkred;      }
 
 .followBTN {
     height: 35px;
@@ -326,10 +328,10 @@
     margin-top: 10px;
 
 }
-.writePostN { border-top: 2px solid midnightblue; transition: 5000ms; }
-.writePostM { border-top: 2px solid #ff5b1d;      transition: 5000ms; }
-.writePostD { border-top: 2px solid lightgreen;   transition: 5000ms; }
-.writePostE { border-top: 2px solid darkred;      transition: 5000ms; }
+.writePostN { border-top: 2px solid midnightblue;}
+.writePostM { border-top: 2px solid #ff5b1d;     }
+.writePostD { border-top: 2px solid lightgreen;  }
+.writePostE { border-top: 2px solid darkred;     }
 
 
 .writePost h2 {
@@ -354,10 +356,10 @@
     /*border: 2px solid black;*/
 }
 
-.inputN   {background-color: #b9ebff; border: 2px solid midnightblue; transition: 5000ms; }
-.inputM   {background-color: #fff2eb; border: 2px solid #ff5b1d;      transition: 5000ms; }
-.inputD   {background-color: #feffeb; border: 2px solid lightgreen;   transition: 5000ms; }
-.inputE   {background-color: #faebeb; border: 2px solid darkred;      transition: 5000ms; }
+.inputN   {background-color: #b9ebff; border: 2px solid midnightblue;}
+.inputM   {background-color: #fff2eb; border: 2px solid #ff5b1d;     }
+.inputD   {background-color: #feffeb; border: 2px solid lightgreen;  }
+.inputE   {background-color: #faebeb; border: 2px solid darkred;     }
 
 .writePost button {
     grid-area: snd;

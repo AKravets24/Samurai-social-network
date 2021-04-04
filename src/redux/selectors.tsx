@@ -8,6 +8,7 @@ export const getBackGroundReducer = (state: AppStateType) => state.backgroundRed
 export const getInitialized = (state: AppStateType) => state.appAuthReducer.appIsInitialized;
 export const getAppACs = (state: AppStateType) => state.appAC;
 export const getBackGroundSetterACs = (state: AppStateType) => state.backGroundSetterACs;
+export const getThemesDelayFlag = (state: AppStateType) => state.backgroundReducer.themesDelayFlag;
 
 const getBackgroundPic = (state: AppStateType) => state.backgroundReducer.backgroundPic;
 const getTimeToChangeTheme = (state: AppStateType) => state.backgroundReducer.timeToChangeTheme;
@@ -15,10 +16,10 @@ const getAuth_LDR_GIF = (state: AppStateType) => state.backgroundReducer.auth_LD
 const getFunnyLoaderArr = (state: AppStateType) => state.appAuthReducer.funnyLoaderArr;
 
 
-export type GetSmartBGR_type = { backgroundPic: string, timeToChangeTheme: number, auth_LDR_GIF: string }
-export const getSmartBackGroundReducer = createSelector(getBackgroundPic, getTimeToChangeTheme, getAuth_LDR_GIF,
-    (backgroundPic, timeToChangeTheme, auth_LDR_GIF): GetSmartBGR_type => {
-        return { backgroundPic, timeToChangeTheme, auth_LDR_GIF }
+export type GetSmartBGR_type = { backgroundPic: string, timeToChangeTheme: number, auth_LDR_GIF: string, themesDelayFlag: boolean }
+export const getSmartBackGroundReducer = createSelector(getBackgroundPic, getTimeToChangeTheme, getAuth_LDR_GIF, getThemesDelayFlag,
+    (backgroundPic, timeToChangeTheme, auth_LDR_GIF, themesDelayFlag,): GetSmartBGR_type => {
+        return { backgroundPic, timeToChangeTheme, auth_LDR_GIF, themesDelayFlag, }
     });
 
 export const geSmartInitialized = createSelector(getInitialized, getFunnyLoaderArr, (appIsInitialized, funnyLoaderArr) => {

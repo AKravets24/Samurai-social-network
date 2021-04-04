@@ -20,7 +20,10 @@ export let AppTimeDeterminationContainer = () => {
   let timeSetter = (timer: number) => { dispatch(backGroundSetterACs.timerGetter(timer)) }
 
   let timer = new Date().getHours() * 60 + new Date().getMinutes();
-  useEffect(() => { timeSetter(timer) }, []);                                // ф-я отправляет количество минут с начала суток в редюсер
+  useEffect(() => {
+    timeSetter(timer);
+    setTimeout(() => { dispatch(backGroundSetterACs.transitionFlagSetter()) }, 2000)  // перенести в функциональный компонент!!!!!!
+  }, []);                                // ф-я отправляет количество минут с начала суток в редюсер
   useEffect(() => {
     document.body.style.backgroundImage = `url(${backgroundReducer.backgroundPic})`
   }, [backgroundReducer.backgroundPic]);
@@ -39,9 +42,10 @@ let AppContainer = () => {
 
   let dispatch = useDispatch();
 
+
   let timeToChangeThemeInMS = timeToChangeTheme * 60000;                                        // преобразование минут в милисекунды для передачи в сетИнтервал
   let timer: number                                                                             // количество минут с начала суток
-  let tick = () => { timer = new Date().getHours() * 60 + new Date().getMinutes()}              // timer = количество минут, прошедших с начала суток
+  let tick = () => { timer = new Date().getHours() * 60 + new Date().getMinutes() }              // timer = количество минут, прошедших с начала суток
 
   let themeUpdater = (timer: number) => { dispatch(backGroundSetterACs.timerGetter(timer)) };   // ф-я отправляет количество минут с начала суток в редюсер
   useEffect(() => { dispatch(appAC.initializeAppThunkAC(timer)); }, []);
