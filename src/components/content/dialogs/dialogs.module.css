@@ -490,18 +490,6 @@
 }
 
 
-.selectedMsg {
-    /*opacity: 0.5;*/
-    /*transition: 200ms;*/
-    /*!*padding: 0 50px 0 50px;*!*/
-    /*!*filter: blur(1px);*!*/
-    /*filter: grayscale(.50)*/
-
-    /*display: none;*/
-
-    outline: 2px solid red;
-}
-
 .messageBody {
     color: black;
     font-size: 22px;
