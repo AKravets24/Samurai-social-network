@@ -7,15 +7,17 @@ import { PalsThemes_Type, FriendsActions_Type } from './friendsContainer';
 import { InitialFriendsInfo_Type } from '../../../redux/friendsReducer';
 import { UsersArr } from '../../../redux/app';
 import { UsersThemesBGR_Type } from '../../../redux/backGroundSetter';
+import cn from 'classnames/bind';
 
 
 type FriendsProps_Type = {
   themes: PalsThemes_Type
   palsInfo: InitialFriendsInfo_Type & UsersThemesBGR_Type
   palsFuncs: FriendsActions_Type
+  delayFlag: boolean,
 }
 
-export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo }) => {
+export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo, delayFlag }) => {
   // console.log(palsInfo.BTN_FLW_GIF)
 
 
@@ -72,13 +74,13 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
   let [friendsListPage, setFriendsListPage] = useState<number>(1);
 
   return <>
-    <div className={`${stl.friendsGeneral} ${themes.friendsGeneralDnmc}`}>
+    <div className={cn(stl.friendsGeneral, themes.friendsGeneralDnmc, delayFlag && stl.delay)}>
       {palsInfo.friendsListIsLoading ?                                                    // список друзей загружается? 
         <div className={stl.loaderDiv}>
           <img className={stl.loader} src={palsInfo.generalLDR_GIF} alt="Err" />
         </div> :
         palsInfo.errOnGettingFriends ?                                                    // есть ошибка при загрузке?
-          <div className={`${stl.Houston} ${themes.friendsGeneralDnmc}`}>
+          <div className={cn(stl.Houston, themes.friendsGeneralDnmc, delayFlag && stl.delay)}>
             <h2>Houston, we've got a problem...</h2>
             <h2>{palsInfo.errOnGettingFriends}</h2>
             <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`} onClick={() => getMyFriendsListener(friendsListPage)}
@@ -91,11 +93,10 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
             </div> :
             <>
               <h2 className={stl.userHeader}>Friends {palsInfo.friendsCount ? `(${palsInfo.friendsList.length} / ${palsInfo.friendsCount})` : null}</h2>
-              <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
-
+              <div className={cn(stl.mapWrapper, themes.mapWrapperDnmc, wrapperLocker, delayFlag && stl.delay)}>
                 {palsInfo.friendsList.map((user: UsersArr) =>
                   <div className={stl.userUnitContainer} key={user.id}>
-                    <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`}>
+                    <div className={cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed)}>
                       <div className={stl.avaDiv}>
                         <NavLink to={`/profile/${user.id}`}>
                           <img src={user.photos.large || palsInfo.defaultAvatar} alt='err'
@@ -103,10 +104,9 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
                         </NavLink>
                       </div>
                       <div className={stl.nameStateBTNs}>
-                        {/* <div className={`${stl.userBlockInfo} ${themes.userBlockInfoDnmc}`}> */}
                         <div className={stl.userBlockInfo}>
                           <NavLink to={`/profile/${user.id}`}>
-                            <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
+                            <h2 className={cn(stl.userName, themes.userNameDnmc)}>{user.name} </h2>
                           </NavLink>
                           <p className={`${themes.userNameDnmc}`}>{user.status}</p>
                         </div>
@@ -114,7 +114,7 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
                           <button
                             id={user.id}
                             disabled={palsInfo.followingInProgress.some(id => id === user.id)}
-                            className={`${stl.followBTN}  ${user.error ? themes.followBTN_ERR_DNMC : themes.followBTNDnmc}`}
+                            className={cn(stl.followBTN, user.error ? themes.followBTN_ERR_DNMC : themes.followBTNDnmc)}
                             onClick={() => followTogglerListener(user.id, user.followed, user.error)}
                           >
                             <div className={stl.followBTNContainer}>
@@ -140,9 +140,9 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
                     </div>
                     <div className={`${stl.userUnitHidden}`}>
                       <div className={stl.miniHeadWrapper}>
-                        <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name}</h2>
-                        <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>
-                        <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
+                        <h2 className={cn(stl.userName, themes.userNameDnmc)}>{user.name}</h2>
+                        <button className={cn(stl.followBTN, themes.followBTNDnmc)}>Go to chat</button>
+                        <button className={cn(stl.closeBTN, stl.followBTN, themes.followBTNDnmc)}
                           onClick={(e: any) => { userIdTalkModeOff(e) }}
                         >X
                   </button>
@@ -158,7 +158,7 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
                                 placeholder={errors.text} onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, user.id, values, user.name, {
                                   setSubmitting
                                 }))} />
-                              <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                              <button type="submit" disabled={isSubmitting} className={cn(stl.followBTN, themes.followBTNDnmc)}
                               > Send Msg </button>
                             </form>
                           )}
@@ -168,15 +168,10 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
                   </div>
                 )}
               </div>
-
-
-              <div className={`${stl.moreUserUnits}  ${themes.moreUserUnitsDnmc}`}>
-
-
-
+              <div className={cn(stl.moreUserUnits, themes.moreUserUnitsDnmc, delayFlag && stl.delay)}>
                 <button
                   disabled={palsInfo.moreFriendsIsLoading || palsInfo.friendsCount === palsInfo.friendsList.length}
-                  className={`${stl.moreUsersShower}  ${palsInfo.errOnGettingFriends ? themes.followBTN_ERR_DNMC : themes.pagBTNDnmc}`}
+                  className={cn(stl.moreUsersShower, palsInfo.errOnGettingFriends ? themes.followBTN_ERR_DNMC : themes.pagBTNDnmc)}
                   onClick={() => { setFriendsListPage(++friendsListPage); getMyFriendsListener(friendsListPage) }}
                 >
                   <div className={stl.followBTNContainer}>

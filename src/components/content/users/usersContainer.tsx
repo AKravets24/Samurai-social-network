@@ -9,6 +9,7 @@ import {
   getUsersACs, getColorTheme,
   getDialogsACs_compUsers,
   getSmartUsersMediaData,
+  getThemesDelayFlag,
 } from "../../../redux/selectors";
 import * as queryString from 'querystring'
 
@@ -37,6 +38,7 @@ export let UsersFuncContainer = () => {
   let dialogsACs = useSelector(getDialogsACs_compUsers);
   let usersACs = useSelector(getUsersACs);
   let colorTheme = useSelector(getColorTheme);
+  let themesDelayFlag = useSelector(getThemesDelayFlag);
 
   let dispatch = useDispatch();
   let usersActions: usersActions_Type = {
@@ -194,6 +196,7 @@ export let UsersFuncContainer = () => {
       usersInfo={smartData}
       themes={themes}
       usersFuncs={usersActions}
+      delayFlag={themesDelayFlag}
     /> : null
 }
 

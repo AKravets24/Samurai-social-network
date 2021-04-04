@@ -5,7 +5,7 @@ import { Field, Formik } from 'formik';
 import stl from './dialogs.module.css';
 import {
   getColorTheme, getDialogsACs_compDialogs,
-  getMyId, getSmartDialogsReducer
+  getMyId, getSmartDialogsReducer, getThemesDelayFlag
 } from "../../../redux/selectors";
 import { DialogActions_Type, InitialDialogsState_Type } from '../../../redux/dialogsReducer';
 import { DialoguesThemes_Type } from '../../../redux/backGroundSetter';
@@ -13,6 +13,7 @@ import { getSmartDialogsLoaders } from '../../../redux/selectors';
 import { MatchHook_Type } from "../../RouterHooksTypes";
 import { MessageData_Type } from "../../../redux/app";
 import { v4 as uuidv4 } from 'uuid';
+import cn from 'classnames/bind';
 
 
 type DialogsActions_Types = {
@@ -27,7 +28,7 @@ type DialogsActions_Types = {
 }
 
 type Themes_Type = {
-  activeLink: string, dialogAreaBackgroundNSecondScroll: string, dialogDynamic: string, firstScroller: string, msgMeDynamic: string, msgUserDynamic: string, sendBTNDynamic: string, talkerBlockA: string, talkerBlockTheme: string, textAreaDynamic: string
+  activeLink: string, dialogAreaBackgroundNSecondScroll: string, dialogDnmc: string, firstScroller: string, msgMeDnmc: string, msgUserDnmc: string, sendBTNDnmc: string, talkerBlockA: string, talkerBlockTheme: string, textAreaDnmc: string
 }
 
 let DialogFuncContainer = () => {
@@ -36,6 +37,7 @@ let DialogFuncContainer = () => {
 
   let dialogsInfo = useSelector(getSmartDialogsReducer);
   let myId = useSelector(getMyId);
+  let themesDelayFlag = useSelector(getThemesDelayFlag);
   let colorTheme = useSelector(getColorTheme);
   let dialogACs = useSelector(getDialogsACs_compDialogs);
   let loaders = useSelector(getSmartDialogsLoaders)
@@ -61,32 +63,33 @@ let DialogFuncContainer = () => {
     match?.params?.userId ? dialogActions.talkedBeforeThunk(+match.params.userId) : dialogActions.getMyNegotiatorsListThunk();
   }, [])
 
-  let [themes, setThemes] = useState<Themes_Type>({ dialogDynamic: '', firstScroller: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDynamic: '', msgUserDynamic: '', dialogAreaBackgroundNSecondScroll: '', textAreaDynamic: '', sendBTNDynamic: '', })
+  let [themes, setThemes] = useState<Themes_Type>({ dialogDnmc: '', firstScroller: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDnmc: '', msgUserDnmc: '', dialogAreaBackgroundNSecondScroll: '', textAreaDnmc: '', sendBTNDnmc: '', })
   useEffect(() => {
     switch (colorTheme) {
       case 'NIGHT': return setThemes({
-        ...themes, dialogDynamic: stl.dialogN, firstScroller: stl.dialogListN, talkerBlockTheme: stl.talkerBlockN, activeLink: stl.activeLinkN, talkerBlockA: stl.talkerBlockA_N, msgMeDynamic: stl.myMsgN,
-        msgUserDynamic: stl.userMsgN, dialogAreaBackgroundNSecondScroll: stl.dialogAreaN, textAreaDynamic: stl.textareaN, sendBTNDynamic: stl.sendBTN_N,
+        ...themes, dialogDnmc: stl.dialogN, firstScroller: stl.dialogListN, talkerBlockTheme: stl.talkerBlockN, activeLink: stl.activeLinkN, talkerBlockA: stl.talkerBlockA_N, msgMeDnmc: stl.myMsgN,
+        msgUserDnmc: stl.userMsgN, dialogAreaBackgroundNSecondScroll: stl.dialogAreaN, textAreaDnmc: stl.textareaN, sendBTNDnmc: stl.sendBTN_N,
       });
       case 'MORNING': return setThemes({
-        ...themes, dialogDynamic: stl.dialogM, firstScroller: stl.dialogListM, talkerBlockTheme: stl.talkerBlockM, activeLink: stl.activeLinkM, talkerBlockA: stl.talkerBlockA_M, msgMeDynamic: stl.myMsgM,
-        msgUserDynamic: stl.userMsgM, dialogAreaBackgroundNSecondScroll: stl.dialogAreaM, textAreaDynamic: stl.textareaM, sendBTNDynamic: stl.sendBTN_M,
+        ...themes, dialogDnmc: stl.dialogM, firstScroller: stl.dialogListM, talkerBlockTheme: stl.talkerBlockM, activeLink: stl.activeLinkM, talkerBlockA: stl.talkerBlockA_M, msgMeDnmc: stl.myMsgM,
+        msgUserDnmc: stl.userMsgM, dialogAreaBackgroundNSecondScroll: stl.dialogAreaM, textAreaDnmc: stl.textareaM, sendBTNDnmc: stl.sendBTN_M,
       });
       case 'DAY': return setThemes({
-        ...themes, dialogDynamic: stl.dialogD, firstScroller: stl.dialogListD, talkerBlockTheme: stl.talkerBlockD, activeLink: stl.activeLinkD, talkerBlockA: stl.talkerBlockA_D, msgMeDynamic: stl.myMsgD,
-        msgUserDynamic: stl.userMsgD, dialogAreaBackgroundNSecondScroll: stl.dialogAreaD, textAreaDynamic: stl.textareaD, sendBTNDynamic: stl.sendBTN_D,
+        ...themes, dialogDnmc: stl.dialogD, firstScroller: stl.dialogListD, talkerBlockTheme: stl.talkerBlockD, activeLink: stl.activeLinkD, talkerBlockA: stl.talkerBlockA_D, msgMeDnmc: stl.myMsgD,
+        msgUserDnmc: stl.userMsgD, dialogAreaBackgroundNSecondScroll: stl.dialogAreaD, textAreaDnmc: stl.textareaD, sendBTNDnmc: stl.sendBTN_D,
       });
       case 'EVENING': return setThemes({
-        ...themes, dialogDynamic: stl.dialogE, firstScroller: stl.dialogListE, talkerBlockTheme: stl.talkerBlockE, activeLink: stl.activeLinkE, talkerBlockA: stl.talkerBlockA_E, msgMeDynamic: stl.myMsgE,
-        msgUserDynamic: stl.userMsgE, dialogAreaBackgroundNSecondScroll: stl.dialogAreaE, textAreaDynamic: stl.textareaE, sendBTNDynamic: stl.sendBTN_E,
+        ...themes, dialogDnmc: stl.dialogE, firstScroller: stl.dialogListE, talkerBlockTheme: stl.talkerBlockE, activeLink: stl.activeLinkE, talkerBlockA: stl.talkerBlockA_E, msgMeDnmc: stl.myMsgE,
+        msgUserDnmc: stl.userMsgE, dialogAreaBackgroundNSecondScroll: stl.dialogAreaE, textAreaDnmc: stl.textareaE, sendBTNDnmc: stl.sendBTN_E,
       });
     }
   }, [colorTheme])
 
-  return themes.dialogDynamic ? <Dialogs
+  return themes.dialogDnmc ? <Dialogs
     state={dialogsInfo}
     userIdInURL={match?.params?.userId}
     myId={myId}
+    delayFlag={themesDelayFlag}
     themes={themes}
     actions={dialogActions}
     loaders={loaders}
@@ -96,6 +99,7 @@ let DialogFuncContainer = () => {
 type DialogsProps_Type = {
   myId: null | number
   state: InitialDialogsState_Type
+  delayFlag: boolean
   themes: Themes_Type
   userIdInURL: undefined | string | number
   actions: DialogsActions_Types
@@ -104,7 +108,7 @@ type DialogsProps_Type = {
 
 
 
-let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, actions, loaders }) => {
+let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, actions, loaders, delayFlag }) => {
   // console.log(loaders)
 
   const dialogArea = useRef<HTMLDivElement>(null);
@@ -182,9 +186,9 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   // console.log(state.certainDialogIsLoading)
 
   return <>
-    <div className={`${stl.dialogsPage} ${themes.dialogDynamic}`}>
+    <div className={cn(stl.dialogsPage, themes.dialogDnmc, delayFlag && stl.delay)}>
       <div className={stl.dialogListAndArea}>
-        <div className={`${stl.dialogList} ${themes.firstScroller}`}>
+        <div className={cn(stl.dialogList, themes.firstScroller, delayFlag && stl.delay)}>
           {/* {state.dialogsList.length === 0 && !state.errNegotiatorsListGet ? */}
           {state.allDialogsIsLoading ?                                                 // диалоги загружаются?
             <div className={stl.dialogListLoaderWrapper}>
@@ -200,14 +204,14 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                   <img /* onLoad={true} */ src={state.errNegotiatorsListPIC} alt="Err" />
                 </div>
                 <p>{state.errNegotiatorsListGet} Connection lost!</p>
-                <button className={`${stl.errBTN} ${themes.sendBTNDynamic}`}
+                <button className={`${stl.errBTN} ${themes.sendBTNDnmc}`}
                   onClick={() => actions.getMyNegotiatorsListThunk()}
                 >Try again</button>
               </div>
               :
               state.dialogsList
                 .map((user, i) =>
-                  <div className={`${stl.talkerBlock} ${themes.talkerBlockTheme}`} key={i} >
+                  <div className={cn(stl.talkerBlock, themes.talkerBlockTheme, delayFlag && stl.delay)} key={i} >
                     <NavLink to={`/profile/${user.id}`} >
                       <img src={user.photos.large || state.defaultAvatar} alt="err" />
                     </NavLink>
@@ -227,7 +231,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
               <h3>On button click makes immediate action</h3>
             </div>
           </div>
-          <div className={`${stl.dialogArea} ${themes.dialogAreaBackgroundNSecondScroll}`}
+          <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll, delayFlag && stl.delay)}
             ref={dialogArea}
             onScroll={() => !dialogArea?.current?.scrollTop && oldMsgLazyLoader()}
             onContextMenu={e => e.preventDefault()}
@@ -248,20 +252,19 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
                     return <div
                       key={msg.id}
-                      className={myId !== null && +msg.senderId === +myId ?
-                        `${stl.messageBlockMe} ${themes.msgMeDynamic} ` : `${stl.messageBlockUser} ${themes.msgUserDynamic}`}
+                      className={cn(myId !== null && +msg.senderId === +myId ? `${stl.messageBlockMe} ${themes.msgMeDnmc} ${delayFlag && stl.delay} ` : `${stl.messageBlockUser} ${themes.msgUserDnmc} ${delayFlag && stl.delay}`)}
                       id={msg.id}
                       onDoubleClick={() => visibility ? setVisibility(null) : setVisibility(stl.visibility)}
                       onContextMenu={(e) => { onRightClickListener(e, i, arr) }}
                     >
                       <p className={stl.messageBody} >{msg.body}</p>
-                      <p className={myId !== null && +msg.senderId === +myId ?
-                        stl.messageBlockTimeMe : stl.messageBlockTimeUser} >{msg.addedAt}, {msg.viewed ? 'seen' : 'x'}</p>
+                      <p className={cn(myId !== null && +msg.senderId === +myId ? stl.messageBlockTimeMe : stl.messageBlockTimeUser)}
+                      >{msg.addedAt}, {msg.viewed ? 'seen' : 'x'}</p>
                       <div className={stl.editWrapper}>
                         <div className={visibility}>
                           <button onClick={() => actions.deleteMessageThunk(msg.id, 0)} > Delete now! </button>             {/* second argument is fake!!! */}
                           {myId !== null && +msg.senderId !== +myId &&
-                            <button onClick={() => actions.setSpamMessagesThunk(msg.id, 0)}> To spam now!</button>}            {/* second argument is fake!!! */}
+                            <button onClick={() => actions.setSpamMessagesThunk(msg.id, 0)}> To spam now!</button>}         {/* second argument is fake!!! */}
                         </div>
                       </div>
                       {modalMsggs.servInfo[i]?.flag ? <ModalMenu index={i} msgs={arr[i]} servInfo={modalMsggs.servInfo[i]} deleteMsg={actions.deleteMessageThunk} markAsSpam={actions.setSpamMessagesThunk} /> : null}
@@ -273,13 +276,14 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
             <Formik initialValues={{ text: '' }} validate={validator} onSubmit={submitter} >
               {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
                 <form onSubmit={handleSubmit} >
-                  <Field name="text" onChange={handleChange} value={values.text} placeholder={errors.text} as='textarea' className={`${stl.txtAreaField} ${themes.textAreaDynamic}`} disabled={!dialogId}
+                  <Field name="text" onChange={handleChange} value={values.text} placeholder={errors.text} as='textarea'
+                    className={cn(stl.txtAreaField, themes.textAreaDnmc, delayFlag && stl.delay)} disabled={!dialogId}
                     onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, values, {
                       setSubmitting
                     }))}
                   />
                   {dialogId ?
-                    <button disabled={isSubmitting} className={`${stl.sendBTN} ${themes.sendBTNDynamic}`}
+                    <button disabled={isSubmitting} className={cn(stl.sendBTN, themes.sendBTNDnmc)}
                     > Send </button> : null}
                 </form>
               )}
@@ -300,7 +304,7 @@ let ModalMenu = React.memo((props: any) => {
   let spamMarker = (msgId: string, index: number) => { props.markAsSpam(msgId, index); setIsOpen(false) }
   let msgDeleter = (msgId: string, index: number) => { props.deleteMsg(msgId, index); setIsOpen(false) }
 
-  return isOpen ? <div className={props.servInfo.isMyMsg ? `${stl.contextMenu} ${stl.contMenuMyMsg}` : `${stl.contextMenu} ${stl.contMenuFriendMsg}`}>
+  return isOpen ? <div className={cn(props.servInfo.isMyMsg ? `${stl.contextMenu} ${stl.contMenuMyMsg}` : `${stl.contextMenu} ${stl.contMenuFriendMsg}`)}>
     <div className={stl.contextMenuUpper} >
       <div className={stl.repeatNSpam} onClick={() => spamMarker(props.msgs.id, props.index)}>Mark as spam</div>
       <button onClick={() => setIsOpen(false)}>X</button>

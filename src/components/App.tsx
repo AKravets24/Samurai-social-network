@@ -20,13 +20,8 @@ export let AppTimeDeterminationContainer = () => {
   let timeSetter = (timer: number) => { dispatch(backGroundSetterACs.timerGetter(timer)) }
 
   let timer = new Date().getHours() * 60 + new Date().getMinutes();
-  useEffect(() => {
-    timeSetter(timer);
-    setTimeout(() => { dispatch(backGroundSetterACs.transitionFlagSetter()) }, 2000)  // перенести в функциональный компонент!!!!!!
-  }, []);                                // ф-я отправляет количество минут с начала суток в редюсер
-  useEffect(() => {
-    document.body.style.backgroundImage = `url(${backgroundReducer.backgroundPic})`
-  }, [backgroundReducer.backgroundPic]);
+  useEffect(() => { timeSetter(timer); }, []);                                   // ф-я отправляет количество минут с начала суток в редюсер
+  useEffect(() => { document.body.style.backgroundImage = `url(${backgroundReducer.backgroundPic})` }, [backgroundReducer.backgroundPic]);
 
 
   return backgroundReducer.timeToChangeTheme && backgroundReducer.backgroundPic !== '' && <AppContainer />
@@ -52,14 +47,14 @@ let AppContainer = () => {
   useEffect(() => { setInterval(tick, 1000) }, [])
   useEffect(() => { setInterval(() => { themeUpdater(timer) }, timeToChangeThemeInMS) }, [])
 
-  let forAppProps = { funnyLoaderArr, appInitialized: appIsInitialized, auth_LDR_GIF }
 
+  let forAppProps = { funnyLoaderArr, appInitialized: appIsInitialized, auth_LDR_GIF, flagDelay: backGroundSetterACs.transitionFlagSetter }
   return <App props={forAppProps} />
 }
 
 
-type AppProps_Type = { props: { appInitialized: boolean, auth_LDR_GIF: string, funnyLoaderArr: string[] } }
-let App: React.FC<AppProps_Type> = ({ props: { appInitialized, auth_LDR_GIF, funnyLoaderArr } }) => {
+type AppProps_Type = { props: { appInitialized: boolean, auth_LDR_GIF: string, funnyLoaderArr: string[], flagDelay: () => void } }
+let App: React.FC<AppProps_Type> = ({ props: { appInitialized, auth_LDR_GIF, funnyLoaderArr, flagDelay } }) => {
 
 
   let [loadPhrase, setLoadPhrase] = useState<string>(funnyLoaderArr[0])
@@ -73,7 +68,9 @@ let App: React.FC<AppProps_Type> = ({ props: { appInitialized, auth_LDR_GIF, fun
     else { setTimeout(() => { clearInterval(refreshContent) }, 1500) }
   }
 
+  let dispatch = useDispatch();
   useEffect(() => { iterator(appInitialized) }, [appInitialized])
+  useEffect(() => { setTimeout(() => { dispatch(flagDelay()) }, 2000) }, [])
 
 
   return <>

@@ -7,7 +7,8 @@ import { ForUsersSomeAttrs } from "../../../redux/dialogsReducer";
 import { UsersThemes_Type, usersActions_Type } from "./usersContainer";
 import { InitialUsersInfo_Type } from "../../../redux/usersReducer";
 import { UsersThemesBGR_Type } from "../../../redux/backGroundSetter";
-import * as queryString from 'querystring'
+import * as queryString from 'querystring';
+import cn from 'classnames/bind';
 // import UnAuthorised                       from "../unAuthorised/unAuthorised";
 
 
@@ -15,9 +16,10 @@ type UsersProps_Type = {
   themes: UsersThemes_Type
   usersInfo: InitialUsersInfo_Type & UsersThemesBGR_Type & ForUsersSomeAttrs
   usersFuncs: usersActions_Type
+  delayFlag: boolean
 }
 
-export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }) => {
+export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, delayFlag }) => {
   // console.log(usersInfo.BTN_FLW_GIF)
   // console.log(usersInfo.feedbackArr)
 
@@ -98,7 +100,8 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
     } usersFuncs.setErrorToNull();
   };
 
-  let firstBlockClass = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
+  // let firstBlockClass = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
+  let firstBlockClass = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed);
   let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
 
   let [isHidden, setIsHidden] = useState<null | string>(null)
@@ -151,18 +154,19 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
 
 
   return <>
-    <div className={`${stl.usersPage} ${themes.userPageDnmc}`} >
+    <div className={cn(stl.usersPage, themes.userPageDnmc, delayFlag && stl.delay)} >
       <div className={stl.userInfo}>
-        <div className={`${stl.generalHeader} ${themes.generalHeaderDnmc}`}>
+        <div className={cn(stl.generalHeader, themes.generalHeaderDnmc, delayFlag && stl.delay)}>
           <h2 className={stl.userHeader}>Users</h2>
           {paginator()}
           <div className={stl.searchBlock} >
             <Formik initialValues={{ text: parsedString.term as string || '' }} validate={validator} onSubmit={friendsSeekerSubmitter}>
               {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting, handleReset }) => (
                 <form onSubmit={handleSubmit} onReset={handleReset}>
-                  <Field name="text" type="text" value={values.text} onChange={handleChange} placeholder={errors.text} className={`${stl.searchInput} ${themes.searchInputDnmc}`} />
-                  <button type="submit" disabled={isSubmitting} className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} >Find!</button>
-                  <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} type="reset" onClick={searchModeCloseListener} >X</button>
+                  <Field name="text" type="text" value={values.text} onChange={handleChange} placeholder={errors.text}
+                    className={cn(stl.searchInput, themes.searchInputDnmc, delayFlag && stl.delay)} />
+                  <button type="submit" disabled={isSubmitting} className={cn(stl.pagBTN, themes.pagBTNDnmc)} >Find!</button>
+                  <button className={cn(stl.pagBTN, themes.pagBTNDnmc)} type="reset" onClick={searchModeCloseListener} >X</button>
                 </form>
               )}
             </Formik>
@@ -178,7 +182,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
               <h2>Houston, we've got a problem...</h2>
               <h2>{usersInfo.usersGettingError || usersInfo.userFindingError}</h2>
               {usersInfo.usersGettingError && <button
-                className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
+                className={cn(stl.moreUsersShower, themes.pagBTNDnmc)}
                 onClick={() => { usersFuncs.setErrorToNull(); setPageListener(usersInfo.pageSize, usersInfo.currentPage); }}
               >Try again</button>}
             </div>
@@ -188,12 +192,11 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                 <img src={usersInfo.userNotFoundGIF} alt="Err" />
                 <h2>{usersInfo.userNotFound} =(</h2>
               </div> :
-
-              <div className={`${stl.mapWrapper} ${themes.mapWrapperDnmc} ${wrapperLocker}`}>
+              <div className={cn(stl.mapWrapper, themes.mapWrapperDnmc, wrapperLocker, delayFlag && stl.delay)}>
                 {usersInfo?.initialUsersList
                   .map((user, i, users) =>
                     <div className={stl.userUnitContainer} key={i}>
-                      <div className={`${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`} >
+                      <div className={cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed)} >
                         <div className={stl.avaDiv}>
                           <NavLink to={`/profile/${user.id}`}>
                             <img src={user.photos.large || usersInfo.defaultAvatar} alt='err'
@@ -204,16 +207,16 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
 
                           <div className={stl.userBlockInfo}>
                             <NavLink to={`/profile/${user.id}`}>
-                              <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{user.name} </h2>
+                              <h2 className={cn(stl.userName, themes.userNameDnmc)}>{user.name} </h2>
                             </NavLink>
-                            <p /* className={`${themes.userNameDnmc}`} */ >{user.status}</p>
+                            <p>{user.status}</p>
                           </div>
                           <div className={stl.followNWriteBTNS}>
 
                             <button
                               id={user.id}
                               disabled={usersInfo.followingInProgress.some(id => id === user.id)}
-                              className={`${stl.followBTN}  ${user.error ? themes.followBTN_ERR_DNMC : themes.followBTNDnmc}`}
+                              className={cn(stl.followBTN, user.error ? themes.followBTN_ERR_DNMC : themes.followBTNDnmc)}
                               onClick={() => usersFuncs.followThunkToggler(user.id, user.followed, user.error)}
                             >
                               <div className={stl.followBTNContainer}>
@@ -228,7 +231,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                                 <div className={stl.followBTNLoader}> {usersInfo.followingInProgress.some(id => id === user.id) && <img src={usersInfo.BTN_FLW_GIF} alt="Err" />} </div>
                               </div>
                             </button>
-                            <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+                            <button className={cn(stl.followBTN, themes.followBTNDnmc)}
                               disabled={isDisabled}
                               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => userIdTalkModeOn(e, i, users)}
                             >Write message </button>
@@ -236,13 +239,14 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
                         </div>
                       </div>
                       {writeMsgMode.servInfo[i]?.flag ?
-                        <WriterMode themes={themes} userEl={users[i]} sendMsg={usersFuncs.sendMessageToUserThunk} index={i} srvInfo={writeMsgMode.servInfo[i]} /> : null}
+                        <WriterMode themes={themes} userEl={users[i]} sendMsg={usersFuncs.sendMessageToUserThunk} index={i} srvInfo={writeMsgMode.servInfo[i]}
+                          delayFlag={delayFlag} /> : null}
                     </div >
                   )}
               </div>
         }
       </div>
-      <div className={`${stl.moreUserUnits}  ${themes.moreUserUnitsDnmc}`}>
+      <div className={cn(stl.moreUserUnits, themes.moreUserUnitsDnmc)}>
         <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
           onClick={() => console.log('show more content')}>Show More
                 </button>
@@ -260,7 +264,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs }
 }
 
 // let WriterMode = ({ themes }: UsersThemes_Type) => {
-let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo }: any) => {  // Прикруитть нормальную типизацию
+let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFlag }: any) => {  // Прикруитть нормальную типизацию
   // console.log(1)
 
   type Error_Type = { text?: string }
@@ -282,12 +286,12 @@ let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo }: any) =
     srvInfo.closer(index, element)
   }
 
-  return <div className={`${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`}>
+  return <div className={cn(stl.userWriteMode, themes.userWriteModeDnmc, stl.userUnitShowed, delayFlag && stl.delay)}>
 
     <div className={stl.miniHeadWrapper}>
-      <h2 className={`${stl.userName} ${themes.userNameDnmc}`}>{userEl.name}</h2>
-      <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}>Go to chat</button>   {/* // добавить логику перехода в чат */}
-      <button className={`${stl.closeBTN} ${stl.followBTN} ${themes.followBTNDnmc}`}
+      <h2 className={cn(stl.userName, themes.userNameDnmc)}>{userEl.name}</h2>
+      <button className={cn(stl.followBTN, themes.followBTNDnmc)}>Go to chat</button>   {/* // добавить логику перехода в чат */}
+      <button className={cn(stl.closeBTN, stl.followBTN, themes.followBTNDnmc)}
         // onClick={e => { userIdTalkModeOff(e) }}
         onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => { closeAction(index, e.target) }}
       >X</button>
@@ -303,7 +307,7 @@ let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo }: any) =
               onChange={handleChange} value={values.text} placeholder={errors.text}
               onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, userEl.id, values, userEl.name, { setSubmitting }))}
             />
-            <button type="submit" disabled={isSubmitting} className={`${stl.followBTN} ${themes.followBTNDnmc}`}
+            <button type="submit" disabled={isSubmitting} className={cn(stl.followBTN, themes.followBTNDnmc)}
             > Send Msg </button>
           </form>
         )}

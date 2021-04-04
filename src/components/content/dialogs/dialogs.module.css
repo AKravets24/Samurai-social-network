@@ -10,10 +10,15 @@
 .dialogsPage {
     border-radius: 5px 5px 20px 5px;
 }
-.dialogN {background-color:#bee3fa;    transition: 5000ms; }
-.dialogM {background-color:#ffc150;    transition: 5000ms; }
-.dialogD {background-color: lightblue; transition: 5000ms; }
-.dialogE {background-color: #4d0000;   transition: 5000ms; }
+
+.delay {
+    transition: 4000ms;
+}
+
+.dialogN {background-color:#bee3fa;    }
+.dialogM {background-color:#ffc150;    }
+.dialogD {background-color: lightblue; }
+.dialogE {background-color: #4d0000;   }
 
 
 
@@ -42,21 +47,21 @@
     max-height: inherit;
 }
 
-.dialogListN::-webkit-scrollbar                                                                    {background-color: lightyellow;  transition: 5000ms; }
-.dialogListN::-webkit-scrollbar-button,.dialogAreaN ::-webkit-scrollbar-button:single-button       {background-color: deepskyblue;  transition: 5000ms; }
-.dialogListN::-webkit-scrollbar-thumb, .dialogAreaN ::-webkit-scrollbar-thumb                      {background-color: deepskyblue;  transition: 5000ms; }
+.dialogListN::-webkit-scrollbar                                                                    {background-color: lightyellow;  }
+.dialogListN::-webkit-scrollbar-button,.dialogAreaN ::-webkit-scrollbar-button:single-button       {background-color: deepskyblue;  }
+.dialogListN::-webkit-scrollbar-thumb, .dialogAreaN ::-webkit-scrollbar-thumb                      {background-color: deepskyblue;  }
 
-.dialogListM::-webkit-scrollbar                                                                    {background-color: lightyellow;  transition: 5000ms; }
-.dialogListM::-webkit-scrollbar-button,.dialogAreaM::-webkit-scrollbar-button:single-button        {background-color: orangered;    transition: 5000ms; }
-.dialogListM::-webkit-scrollbar-thumb, .dialogAreaM::-webkit-scrollbar-thumb                       {background-color: orangered;    transition: 5000ms; }
+.dialogListM::-webkit-scrollbar                                                                    {background-color: lightyellow;  }
+.dialogListM::-webkit-scrollbar-button,.dialogAreaM::-webkit-scrollbar-button:single-button        {background-color: orangered;    }
+.dialogListM::-webkit-scrollbar-thumb, .dialogAreaM::-webkit-scrollbar-thumb                       {background-color: orangered;    }
 
-.dialogListD::-webkit-scrollbar                                                                    {background-color: lightyellow;  transition: 5000ms; }
-.dialogListD::-webkit-scrollbar-button,.dialogAreaD::-webkit-scrollbar-button:single-button        {background-color: lightskyblue; transition: 5000ms; }
-.dialogListD::-webkit-scrollbar-thumb, .dialogAreaD::-webkit-scrollbar-thumb                       {background-color: lightskyblue; transition: 5000ms; }
+.dialogListD::-webkit-scrollbar                                                                    {background-color: lightyellow;  }
+.dialogListD::-webkit-scrollbar-button,.dialogAreaD::-webkit-scrollbar-button:single-button        {background-color: lightskyblue; }
+.dialogListD::-webkit-scrollbar-thumb, .dialogAreaD::-webkit-scrollbar-thumb                       {background-color: lightskyblue; }
 
-.dialogListE ::-webkit-scrollbar                                                                   {background-color: lightyellow;  transition: 5000ms; }
-.dialogListE ::-webkit-scrollbar-button,.dialogAreaE::-webkit-scrollbar-button:single-button       {background-color: darkred;      transition: 5000ms; }
-.dialogListE ::-webkit-scrollbar-thumb, .dialogAreaE::-webkit-scrollbar-thumb                      {background-color: darkred;      transition: 5000ms; }
+.dialogListE ::-webkit-scrollbar                                                                   {background-color: lightyellow;  }
+.dialogListE ::-webkit-scrollbar-button,.dialogAreaE::-webkit-scrollbar-button:single-button       {background-color: darkred;      }
+.dialogListE ::-webkit-scrollbar-thumb, .dialogAreaE::-webkit-scrollbar-thumb                      {background-color: darkred;      }
 
 .dialogListLoaderWrapper {
     height: 90%;
@@ -176,10 +181,10 @@
     padding-right: 2%;
     hyphens: auto;
 }
-.talkerBlockN              {background-color: #a9c2ff;     transition: 5000ms; }
-.talkerBlockM              {background-color: #ffffef;     transition: 5000ms; }
-.talkerBlockD              {background-color: lightyellow; transition: 5000ms; }
-.talkerBlockE              {background-color: #ffe1e1;     transition: 5000ms; }
+.talkerBlockN              {background-color: #a9c2ff;    }
+.talkerBlockM              {background-color: #ffffef;    }
+.talkerBlockD              {background-color: lightyellow;}
+.talkerBlockE              {background-color: #ffe1e1;    }
 
 
 
@@ -289,10 +294,10 @@
     height: 100vh;
     /*max-height: 1500px;*/
 }
-.dialogAreaN,.textareaN {background-color: #fdfdfd;     transition: 5000ms; }
-.dialogAreaM,.textareaM {background-color: #faffd3;     transition: 5000ms; }
-.dialogAreaD,.textareaD {background-color: lightyellow; transition: 5000ms; }
-.dialogAreaE,.textareaE {background-color: #ffe1e1;     transition: 5000ms; }
+.dialogAreaN,.textareaN {background-color: #fdfdfd;     }
+.dialogAreaM,.textareaM {background-color: #faffd3;     }
+.dialogAreaD,.textareaD {background-color: lightyellow; }
+.dialogAreaE,.textareaE {background-color: #ffe1e1;     }
 
 .noDialogsList {
     height: 100%;
@@ -422,30 +427,30 @@
     transform: rotate(-190deg)
 }
 
-.myMsgN            {background-color: #b8e9b8;                       transition: 5000ms; }
-.myMsgN::after     {content:'';border-left: 20px solid #b8e9b8;      transition: 5000ms; }
+.myMsgN            {background-color: #b8e9b8;                       }
+.myMsgN::after     {content:'';border-left: 20px solid #b8e9b8;      }
 
-.myMsgM            {background-color: #abffab;                       transition: 5000ms; }
-.myMsgM::after     {content:''; border-left: 20px solid #abffab;     transition: 5000ms; }
+.myMsgM            {background-color: #abffab;                       }
+.myMsgM::after     {content:''; border-left: 20px solid #abffab;     }
 
-.myMsgD            {background-color: lightgreen;                    transition: 5000ms; }
-.myMsgD::after     {content:'';  border-left: 20px solid lightgreen; transition: 5000ms; }
+.myMsgD            {background-color: lightgreen;                    }
+.myMsgD::after     {content:'';  border-left: 20px solid lightgreen; }
 
-.myMsgE            {background-color: #6fd76f;                       transition: 5000ms; }
-.myMsgE::after     {content:''; border-left: 20px solid #6fd76f;     transition: 5000ms; }
+.myMsgE            {background-color: #6fd76f;                       }
+.myMsgE::after     {content:''; border-left: 20px solid #6fd76f;     }
 
 
-.userMsgN          {background-color: #a6ebff;                       transition: 5000ms; }
-.userMsgN::after   {content:''; border-top: 20px solid #a6ebff;      transition: 5000ms; }
+.userMsgN          {background-color: #a6ebff;                       }
+.userMsgN::after   {content:''; border-top: 20px solid #a6ebff;      }
 
-.userMsgM          {background-color: #c7eef9;                       transition: 5000ms; }
-.userMsgM::after   {content:'';border-left: 20px solid #c7eef9;      transition: 5000ms; }
+.userMsgM          {background-color: #c7eef9;                       }
+.userMsgM::after   {content:'';border-left: 20px solid #c7eef9;      }
 
-.userMsgD          {background-color: #cef3ff;                       transition: 5000ms; }
-.userMsgD::after   {content:''; border-top: 20px solid #cef3ff;      transition: 5000ms; }
+.userMsgD          {background-color: #cef3ff;                       }
+.userMsgD::after   {content:''; border-top: 20px solid #cef3ff;      }
 
-.userMsgE          {background-color:  #cef3ff;                      transition: 5000ms; }
-.userMsgE::after   {content:''; border-top: 20px solid #cef3ff;      transition: 5000ms; }
+.userMsgE          {background-color:  #cef3ff;                      }
+.userMsgE::after   {content:''; border-top: 20px solid #cef3ff;      }
 
 
 .messageBlockUser {

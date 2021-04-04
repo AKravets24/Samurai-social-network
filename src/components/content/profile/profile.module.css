@@ -13,7 +13,6 @@
 
 .profile {
     opacity: 0.9;
-    /*position: relative;*/
 }
 
 .delay {
@@ -28,7 +27,6 @@
 .loaderDiv {
     width: 100%;
     display: flex;
-    /* background-color: lightyellow; */
     height: inherit;
     opacity: 0.9;
     justify-content: center;

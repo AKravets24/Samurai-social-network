@@ -4,7 +4,7 @@ import { Friends } from './friends';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import stl from './../users/users.module.css';
-import { getColorTheme, GetSmartFriendsReducer, getFriendsACs, getDialogsACs_compUsers } from "../../../redux/selectors";
+import { getColorTheme, GetSmartFriendsReducer, getFriendsACs, getDialogsACs_compUsers, getThemesDelayFlag } from "../../../redux/selectors";
 import { InitialFriendsInfo_Type, FriendsACs } from "../../../redux/friendsReducer";
 import { DialogActions_Type } from "../../../redux/dialogsReducer";
 import { FriendsThemesBGR_Type } from "../../../redux/backGroundSetter";
@@ -25,6 +25,7 @@ let FriendsFuncContainer = () => {
 
   let colorTheme = useSelector(getColorTheme)
   let palsInfo: InitialFriendsInfo_Type & FriendsThemesBGR_Type = useSelector(GetSmartFriendsReducer)
+  let themesDelayFlag = useSelector(getThemesDelayFlag)
 
   let dispatch = useDispatch();
   let friendsACs: FriendsACs = useSelector(getFriendsACs)
@@ -124,7 +125,7 @@ let FriendsFuncContainer = () => {
     }
   }, [colorTheme]);
 
-  return <Friends themes={themes} palsFuncs={palsFuncs} palsInfo={palsInfo} />
+  return <Friends themes={themes} palsFuncs={palsFuncs} palsInfo={palsInfo} delayFlag={themesDelayFlag} />
 }
 
 export default FriendsFuncContainer;

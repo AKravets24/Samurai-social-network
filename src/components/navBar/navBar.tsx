@@ -38,7 +38,7 @@ type ThemesNavbar_Type = {
 }
 
 let NavBarContainer: React.FC<ContainerProps_Types> = ({ state, actions }) => {
-  console.log(state)
+  // console.log(state)
 
   let { myId, colorTheme, themesDelayFlag } = state;
 
