@@ -71,7 +71,7 @@ const talkedBeforeThunkAC = (userId: number): ThunkAC_Type => async (dispatch: D
       if (response.data.find((el: DialogsList_Type) => (el.id === +userId))) {                                          // если в списке диалогов есть нужный юзер
         try {
           let responseCertainUser = await usersApi.getTalkWithUser(userId)                                        // то запрашиваем диалог с ним
-          responseCertainUser.status === 200 && dispatch(actions.setTalkWithUser(responseCertainUser.data)) && console.log(responseCertainUser)
+          responseCertainUser.status === 200 && dispatch(actions.setTalkWithUser(responseCertainUser.data)) /* && console.log(responseCertainUser) */
         }
         catch (err) { dispatch(actions.setErrCertainDialogGetAC(JSON.stringify(err.message))) };                    //error
       } else {
@@ -131,7 +131,7 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
     let response = await usersApi.sendMsgToTalker(userId, body)
     let modifiedmsgItem = response.data.data.message;
     modifiedmsgItem.actionKey = actionKey
-    console.log(modifiedmsgItem)
+    // console.log(modifiedmsgItem)
     if (response.status === 200) dispatch(actions.onSendingMSGEStatusAC(1, userId, actionKey, userName)) && dispatch(actions.sendMsgAC(modifiedmsgItem)) // response.data.data.message
   }
   catch (err) {
@@ -211,32 +211,14 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       };
 
     case 'SEND_MESSAGE_TO_USER':
-      let totalMsgCount: number = 0;                                                                // этот колхоз из=за TS, ибо object possibly undefined
-      if (state?.certainDialog?.totalCount) totalMsgCount = state.certainDialog.totalCount + 1      // и этот 
+      let totalMsgCount: number = 0;                                                                                    // этот колхоз из=за TS, ибо object possibly undefined
+      if (state?.certainDialog?.totalCount) totalMsgCount = state.certainDialog.totalCount + 1                          // и этот 
 
-      console.log(action)
+      let duplicateIndex = state.certainDialog.items.findIndex(item => item.actionKey === action.msgItem.actionKey);
+      let finalArr: MessageData_Type[] = [...state.certainDialog.items];
+      duplicateIndex === -1 ? finalArr = [...state.certainDialog.items, action.msgItem] : finalArr[duplicateIndex] = action.msgItem
+      return { ...state, certainDialog: { items: finalArr } }
 
-      // let someUsers = users.filter(item => item.id < 3)
-
-      // let doubledItems = state.certainDialog.items.filter(item => { return item.actionKey === action.msgItem.actionKey })
-      // 
-
-      let msgListOld = [...state.certainDialog.items];
-      // let msgListNew = msgListOld.push(action.msgItem)
-      let msgListNew = msgListOld.splice(state.certainDialog.items.length - 1, 0, action.msgItem)
-
-
-      // let doubledItems = msgListNew.filter(item => { return item.actionKey === action.msgItem.actionKey })
-
-      console.log(msgListNew)
-
-
-      return {
-        ...state, certainDialog: {
-          items: [...state.certainDialog.items, action.msgItem,],
-          totalCount: totalMsgCount
-        }
-      }
     case 'SET_MY_COMPANIONS_LIST': return { ...state, dialogsList: action.data };
     case 'ERR_NEGOTIATORS_LIST_GET': return { ...state, errNegotiatorsListGet: action.errorCode };
     case 'DIALOGS_ARE_LOADING_TOGGLER': return { ...state, allDialogsIsLoading: action.allDialogs, certainDialogIsLoading: action.certainDialog }
@@ -283,7 +265,7 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
     case 'ON_SENDING_MSG_STATUS':
       // let index = state.keyArr.findIndex((el) => (el === action.actionKey));
       let index = state.feedbackArr.findIndex((el) => (el.actionKey === action.actionKey));
-      console.log(action);
+      // console.log(action);
 
 
       let newFeedbackArr = [...state.feedbackArr]
