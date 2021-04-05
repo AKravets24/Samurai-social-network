@@ -21,7 +21,7 @@ const actions = {
   setTalkWithUser: (data: CertainDialog_Type) => ({ type: 'SET_TALK_WITH_USER', data } as const),
   addPrevMSGS: (prevMsgs: MessageData_Type[]) => ({ type: 'ADDED_PREVIOUS_MSGS', prevMsgs } as const),
   prevMsgsloadingTogglerAC: (prevMsgsIsLoading: boolean) => ({ type: 'PREV_MSGS_LOADING_TOGGLER', prevMsgsIsLoading } as const),
-  sendMsgAC: (msgItem: MessageData_Type) => ({ type: 'SEND_MESSAGE_TO_USER', msgItem } as const),
+  sendMsgAC: (msgItem: MessageData_Type,) => ({ type: 'SEND_MESSAGE_TO_USER', msgItem } as const),
   onSendingMSGEStatusAC: (number: number, userId: number, actionKey: string, userName: string) => ({ type: 'ON_SENDING_MSG_STATUS', number, userId, actionKey, userName } as const),
   feedBackWindowCloserAC: (arrIndex: number) => ({ type: 'FEEDBACK_WINDOW_CLOSER', arrIndex } as const),
   createNewDialogAC: (userId: number, fullName: string, photos: Photos_Type) => ({ type: 'CREATE_AND_SET_NEW_DIALOG', userId, fullName, photos } as const),
@@ -31,6 +31,7 @@ const actions = {
   setSelectedMessagesAC: (messageId: string) => ({ type: 'SET_SELECTED_MESSAGES', messageId } as const),
   deleteMessageAC: (messageId: string, index: number) => ({ type: 'DELETE_MESSAGE', messageId, index } as const),
   setAsSpamMessage: (messageId: string, index: number) => ({ type: 'SET_SPAM_MESSAGE', messageId, index } as const),
+  toggleSendingInProgressAC: (isSending: boolean, actionKey: string) => ({ type: 'TOGGLE_SENDING_IN_PROGRESS', isSending, actionKey } as const),
 }
 
 type ActionTypes = InferActionsTypes<typeof actions>
@@ -65,15 +66,15 @@ const getTalkWithUserThunkAC = (userId: number): ThunkAC_Type => async (dispatch
 const talkedBeforeThunkAC = (userId: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.setDialogsAreLoadingToggleAC(true, true))
   try {
-    let response = await usersApi.getMyNegotiatorsList()                                                            // получаем список диалогов
+    let response = await usersApi.getMyNegotiatorsList()                                                      // получаем список диалогов
     if (response.status === 200) {
       dispatch(actions.setMyCompanions(response.data))
-      if (response.data.find((el: DialogsList_Type) => (el.id === +userId))) {                                          // если в списке диалогов есть нужный юзер
+      if (response.data.find((el: DialogsList_Type) => (el.id === +userId))) {                                // если в списке диалогов есть нужный юзер
         try {
-          let responseCertainUser = await usersApi.getTalkWithUser(userId)                                        // то запрашиваем диалог с ним
-          responseCertainUser.status === 200 && dispatch(actions.setTalkWithUser(responseCertainUser.data)) /* && console.log(responseCertainUser) */
+          let responseCertainUser = await usersApi.getTalkWithUser(userId)                                    // то запрашиваем диалог с ним
+          responseCertainUser.status === 200 && dispatch(actions.setTalkWithUser(responseCertainUser.data))   /* && console.log(responseCertainUser) */
         }
-        catch (err) { dispatch(actions.setErrCertainDialogGetAC(JSON.stringify(err.message))) };                    //error
+        catch (err) { dispatch(actions.setErrCertainDialogGetAC(JSON.stringify(err.message))) };              // error
       } else {
         let getProfileResponse = await usersApi.getProfile(userId);
         console.log(getProfileResponse)
@@ -83,9 +84,9 @@ const talkedBeforeThunkAC = (userId: number): ThunkAC_Type => async (dispatch: D
     }
   } catch (err) {
     dispatch(actions.setErrMyNegotiatorsList(parseInt(JSON.stringify(err.message).replace(/\D+/g, "")))); // errorCode
-    dispatch(actions.setErrCertainDialogGetAC(JSON.stringify(err.message)));                                                   // error
-    // dispatch(setErrMyNegotiatorsList(parseInt(JSON.stringify(response).replace(/\D+/g,"")))); // errorCode
-    // dispatch(setErrCertainDialogGetAC(JSON.stringify(response)));                                                   // error
+    dispatch(actions.setErrCertainDialogGetAC(JSON.stringify(err.message)));                                                  // error
+    // dispatch(setErrMyNegotiatorsList(parseInt(JSON.stringify(response).replace(/\D+/g,""))));                              // errorCode
+    // dispatch(setErrCertainDialogGetAC(JSON.stringify(response)));                                                          // error
   }
   dispatch(actions.setDialogsAreLoadingToggleAC(false, false))
 };
@@ -118,13 +119,11 @@ const getNewMessagesRequestThunkAC = (): ThunkAC_Type => async (dispatch: Dispat
   }
   catch (err) { dispatch(actions.newMsgActonCombiner(0, false, true)) };
 };
-
 const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: string, userName: string, senderId: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   // console.log(actionKey)
   dispatch(actions.onSendingMSGEStatusAC(0, userId, actionKey, userName));
-  let pseudoMsg = {
-    body, actionKey, senderId, addedAt: '', deletedByRecipient: false, deletedBySender: false, distributionId: null, id: '', isSpam: false, recipientId: -1, recipientName: '', senderName: '', translatedBody: null, viewed: false
-  }
+  dispatch(actions.toggleSendingInProgressAC(true, actionKey));
+  let pseudoMsg = { body, actionKey, senderId, isSending: false, addedAt: '', deletedByRecipient: false, deletedBySender: false, distributionId: null, id: '', isSpam: false, recipientId: -1, recipientName: '', senderName: '', translatedBody: null, viewed: false };
 
   dispatch(actions.sendMsgAC(pseudoMsg))
   try {
@@ -137,16 +136,10 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
   catch (err) {
     dispatch(actions.onSendingMSGEStatusAC(2, userId, actionKey, userName)) /* && console.log('error') */
   }
+  dispatch(actions.toggleSendingInProgressAC(false, actionKey));
 };
 
-// const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: string, userName: string): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
-//   dispatch(actions.onSendingMSGEStatusAC(0, userId, actionKey, userName));
-//   let response = await usersApi.sendMsgToTalker(userId, body)
-//   console.log(response.data);
-//   response.status === 200 ?
-//     dispatch(actions.onSendingMSGEStatusAC(1, userId, actionKey, userName)) && dispatch(actions.sendMsgAC(response.data.data.message.body)) :
-//     dispatch(actions.onSendingMSGEStatusAC(2, userId, actionKey, userName)) && console.log('error')
-// };
+
 
 export type DialogActions_Type = {
   getMyNegotiatorsListThunkAC: () => ThunkAC_Type
@@ -190,6 +183,7 @@ let initialDialogsState = {
   errNegotiatorsListGet: 0 as number,
   errNegotiatorsListPIC: radioTowerPIC as string,
   errCertainDialogGet: '' as string,
+  sendndigInProgress: [] as string[],
 };
 
 export type InitialDialogsState_Type = typeof initialDialogsState;
@@ -217,7 +211,17 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       let duplicateIndex = state.certainDialog.items.findIndex(item => item.actionKey === action.msgItem.actionKey);
       let finalArr: MessageData_Type[] = [...state.certainDialog.items];
       duplicateIndex === -1 ? finalArr = [...state.certainDialog.items, action.msgItem] : finalArr[duplicateIndex] = action.msgItem
-      return { ...state, certainDialog: { items: finalArr } }
+
+      return { ...state, certainDialog: { items: finalArr } };
+
+    case 'TOGGLE_SENDING_IN_PROGRESS':
+
+      return {
+        ...state, sendndigInProgress: action.isSending
+          ? [...state.sendndigInProgress, action.actionKey]
+          : [...state.sendndigInProgress.filter(el => el != action.actionKey)]
+      }
+
 
     case 'SET_MY_COMPANIONS_LIST': return { ...state, dialogsList: action.data };
     case 'ERR_NEGOTIATORS_LIST_GET': return { ...state, errNegotiatorsListGet: action.errorCode };

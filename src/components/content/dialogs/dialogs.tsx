@@ -261,6 +261,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       <p className={stl.messageBody} >{msg.body}</p>
                       <p className={cn(myId !== null && +msg.senderId === +myId ? stl.messageBlockTimeMe : stl.messageBlockTimeUser)}
                       >{msg.addedAt}, {msg.viewed ? 'seen' : 'x'}</p>
+                      {state.sendndigInProgress.some(el => el === msg.actionKey) && <div>'loading'</div>}
                       <div className={stl.editWrapper}>
                         <div className={visibility}>
                           <button onClick={() => actions.deleteMessageThunk(msg.id, 0)} > Delete now! </button>             {/* second argument is fake!!! */}
