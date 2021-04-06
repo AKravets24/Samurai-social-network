@@ -183,7 +183,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
     setModalMsggs(modalMsggs = finalState)
   }
 
-  // console.log(state?.certainDialog)
+  console.log(state.errInSendingArr)
 
   return <>
     <div className={cn(stl.dialogsPage, themes.dialogDnmc, delayFlag && stl.delay)}>
@@ -259,9 +259,14 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       onContextMenu={(e) => { onRightClickListener(e, i, arr) }}
                     >
                       <p className={stl.messageBody} >{msg.body}</p>
+
                       <p className={cn(myId !== null && +msg.senderId === +myId ? stl.messageBlockTimeMe : stl.messageBlockTimeUser)}
-                      >{msg.addedAt}, {msg.viewed ? 'seen' : 'x'}</p>
-                      {state.sendndigInProgress.some(el => el === msg.actionKey) && <div>'loading'</div>}
+                      > {state.sendndigInProgress.some(el => el === msg.actionKey) ? 'loading' :                           // сообщение  отправляется? 
+                        state.errInSendingArr.some(el => el.actionKey === msg.actionKey) ?                                 // пришла ошибка от сервера? 
+                          state.errInSendingArr.map(el => { if (el.actionKey === msg.actionKey) return `Error: ${el.error}!` }) :
+                          `${msg.addedAt}, ${msg.viewed ? 'seen' : 'x'}`                                                   // тогда рендерим инфо
+                        } </p>
+
                       <div className={stl.editWrapper}>
                         <div className={visibility}>
                           <button onClick={() => actions.deleteMessageThunk(msg.id, 0)} > Delete now! </button>             {/* second argument is fake!!! */}

@@ -32,6 +32,7 @@ const actions = {
   deleteMessageAC: (messageId: string, index: number) => ({ type: 'DELETE_MESSAGE', messageId, index } as const),
   setAsSpamMessage: (messageId: string, index: number) => ({ type: 'SET_SPAM_MESSAGE', messageId, index } as const),
   toggleSendingInProgressAC: (isSending: boolean, actionKey: string) => ({ type: 'TOGGLE_SENDING_IN_PROGRESS', isSending, actionKey } as const),
+  errCatcherAtSendingAC: (actionKey: string, errCode: number) => ({ type: 'ERROR_AT_SENDING_TOGGLER', actionKey, errCode } as const),
 }
 
 type ActionTypes = InferActionsTypes<typeof actions>
@@ -121,7 +122,8 @@ const getNewMessagesRequestThunkAC = (): ThunkAC_Type => async (dispatch: Dispat
 };
 const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: string, userName: string, senderId: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   // console.log(actionKey)
-  dispatch(actions.onSendingMSGEStatusAC(0, userId, actionKey, userName));
+  dispatch(actions.onSendingMSGEStatusAC(0, userId, actionKey, userName));  //for friends, users comps
+  dispatch(actions.errCatcherAtSendingAC(actionKey, 0));
   dispatch(actions.toggleSendingInProgressAC(true, actionKey));
   let pseudoMsg = { body, actionKey, senderId, isSending: false, addedAt: '', deletedByRecipient: false, deletedBySender: false, distributionId: null, id: '', isSpam: false, recipientId: -1, recipientName: '', senderName: '', translatedBody: null, viewed: false };
 
@@ -134,7 +136,8 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
     if (response.status === 200) dispatch(actions.onSendingMSGEStatusAC(1, userId, actionKey, userName)) && dispatch(actions.sendMsgAC(modifiedmsgItem)) // response.data.data.message
   }
   catch (err) {
-    dispatch(actions.onSendingMSGEStatusAC(2, userId, actionKey, userName)) /* && console.log('error') */
+    dispatch(actions.onSendingMSGEStatusAC(2, userId, actionKey, userName)) /* && console.log('error') */ //for friends, users  comps
+    dispatch(actions.errCatcherAtSendingAC(actionKey, parseInt(JSON.stringify(err.message).replace(/\D+/g, ""))))
   }
   dispatch(actions.toggleSendingInProgressAC(false, actionKey));
 };
@@ -184,6 +187,7 @@ let initialDialogsState = {
   errNegotiatorsListPIC: radioTowerPIC as string,
   errCertainDialogGet: '' as string,
   sendndigInProgress: [] as string[],
+  errInSendingArr: [] as any[]
 };
 
 export type InitialDialogsState_Type = typeof initialDialogsState;
@@ -215,13 +219,23 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       return { ...state, certainDialog: { items: finalArr } };
 
     case 'TOGGLE_SENDING_IN_PROGRESS':
-
       return {
         ...state, sendndigInProgress: action.isSending
           ? [...state.sendndigInProgress, action.actionKey]
           : [...state.sendndigInProgress.filter(el => el != action.actionKey)]
       }
 
+    case 'ERROR_AT_SENDING_TOGGLER':
+      console.log('ERROR_AT_SENDING_TOGGLER');
+
+      let { errCode, actionKey } = action;
+
+
+      return {
+        ...state, errInSendingArr: action.errCode
+          ? [...state.errInSendingArr, { actionKey, error: errCode }]
+          : [...state.errInSendingArr.filter(el => el.actionKey != action.actionKey)]
+      }
 
     case 'SET_MY_COMPANIONS_LIST': return { ...state, dialogsList: action.data };
     case 'ERR_NEGOTIATORS_LIST_GET': return { ...state, errNegotiatorsListGet: action.errorCode };

@@ -126,7 +126,7 @@ export const usersReducer = (state = initialUsersInfo, action: ActionTypes): Ini
           } return { ...currentUser }
         })
       };
-    case 'AT_FOLLOWING_ERROR_CLEANED':
+    case 'AT_FOLLOWING_ERROR_CLEANED':                                                                // можно и скорее всего нужно слить воедино !!!!
       console.log(123);
 
       return {
@@ -137,7 +137,7 @@ export const usersReducer = (state = initialUsersInfo, action: ActionTypes): Ini
         })
       };
 
-    case 'ERROR_AT_FOLLOWING_TOGGLER':
+    case 'ERROR_AT_FOLLOWING_TOGGLER':                                                                // можно и скорее всего нужно слить воедино !!!
       return {
         ...state, initialUsersList: state.initialUsersList.map((currentUser: any) => {
           if (+currentUser.id === +action.userId) {
