@@ -2,6 +2,9 @@ import { CertainDialog_Type, DialogsList_Type, MessageData_Type, usersApi } from
 import maleProfilePic from './img/dialogs/male.png';
 import errorPic from './img/dialogs/error.png';
 import radioTowerPIC from './img/dialogs/radioTower1.png';
+import msgSendLoaderGIF from './loader/dialogs/onSendMsg/msgSender.gif';
+import msgDeliveredFlag from './img/dialogs/delivered.png'
+import msgSeenFlag from './img/dialogs/seen.png'
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType, InferActionsTypes } from './redux-store';
@@ -167,7 +170,7 @@ const dialogActions: DialogActions_Type = {
 
 export const dialogACs = (state = dialogActions) => { return state };
 
-
+type ErrinSendingArr_Type = { actionKey: string, error: number }
 
 let initialDialogsState = {
   dialogsList: [] as DialogsList_Type[],
@@ -187,7 +190,10 @@ let initialDialogsState = {
   errNegotiatorsListPIC: radioTowerPIC as string,
   errCertainDialogGet: '' as string,
   sendndigInProgress: [] as string[],
-  errInSendingArr: [] as any[]
+  errInSendingArr: [] as ErrinSendingArr_Type[],
+  msgLoaderGIF: msgSendLoaderGIF,
+  msgDeliveredFlagPIC: msgDeliveredFlag,
+  msgSeenFlagPIC: msgSeenFlag,
 };
 
 export type InitialDialogsState_Type = typeof initialDialogsState;

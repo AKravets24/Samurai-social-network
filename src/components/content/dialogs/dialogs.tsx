@@ -260,12 +260,19 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                     >
                       <p className={stl.messageBody} >{msg.body}</p>
 
-                      <p className={cn(myId !== null && +msg.senderId === +myId ? stl.messageBlockTimeMe : stl.messageBlockTimeUser)}
-                      > {state.sendndigInProgress.some(el => el === msg.actionKey) ? 'loading' :                           // сообщение  отправляется? 
-                        state.errInSendingArr.some(el => el.actionKey === msg.actionKey) ?                                 // пришла ошибка от сервера? 
-                          state.errInSendingArr.map(el => { if (el.actionKey === msg.actionKey) return `Error: ${el.error}!` }) :
-                          `${msg.addedAt}, ${msg.viewed ? 'seen' : 'x'}`                                                   // тогда рендерим инфо
-                        } </p>
+                      <div className={stl.msgStatWrapper}>
+                        {state.sendndigInProgress.some(el => el === msg.actionKey) && <img className={stl.ldrAndErr} src={state.msgLoaderGIF} alt="Err" />}
+                        {state.errInSendingArr.some(el => el.actionKey === msg.actionKey) && <img className={stl.ldrAndErr} src={state.onError} alt="Err" />}
+                        <p className={cn(myId !== null && +msg.senderId === +myId ? stl.messageBlockTimeMe : stl.messageBlockTimeUser)}
+                        > {state.sendndigInProgress.some(el => el === msg.actionKey) ? 'loading' :                                       // сообщение  отправляется? 
+                          state.errInSendingArr.some(el => el.actionKey === msg.actionKey) ?                                             // пришла ошибка от сервера? 
+                            state.errInSendingArr.map(el => { if (el.actionKey === msg.actionKey) return `Error: ${el.error}!` }) :
+                            `${msg.addedAt}`                                                                                              // тогда рендерим инфо
+                          } </p>
+                        {state.sendndigInProgress.some(el => el === msg.actionKey) === false && state.errInSendingArr.some(el => el.actionKey === msg.actionKey) === false &&
+                          <img className={stl.checkMark} src={msg.viewed ? state.msgSeenFlagPIC : state.msgDeliveredFlagPIC} alt="Err" />}
+                      </div>
+
 
                       <div className={stl.editWrapper}>
                         <div className={visibility}>

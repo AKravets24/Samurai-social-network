@@ -95,7 +95,7 @@ export const usersApi = {
   // DIALOGS ------------------------------------------------------------------------------------------------------------------- DIALOGS
   getMyNegotiatorsList() { return instance.get<DialogsList_Type[]>(`dialogs`) },
   getTalkWithUser(userId: number, msgCount: number = 20, pageNumber: number = 1) { return instance.get<CertainDialog_Type>(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`) },
-  sendMsgToTalker(userId: null | number, body: string) { return instance.post<SendMsgToTalker_Type>(`dialogs/${userId}/messages`, { body }) },
+  sendMsgToTalker(userId: null | number, body: string) { return instance.post<SendMsgToTalker_Type>(`dialogs1/${userId}/messages`, { body }) },
   getNewMessages() { return instance.get<number>(`dialogs/messages/new/count`) },
   deleteMessage(messageId: string) { return instance.delete<DeleteMSG_Type>(`dialogs/messages/${messageId}`) },
   setAsSpamMessage(messageId: string) { return instance.post<SetAsSpamMSG_Type>(`dialogs/messages/${messageId}/spam`) },

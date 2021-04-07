@@ -144,22 +144,25 @@ const getErrNegotiatorsListPIC = (state: AppStateType) => state.dialogsReducer.e
 const getErrCertainDialogGet = (state: AppStateType) => state.dialogsReducer.errCertainDialogGet;
 const getsendndigInProgress = (state: AppStateType) => state.dialogsReducer.sendndigInProgress;
 const getErrInSendingArr = (state: AppStateType) => state.dialogsReducer.errInSendingArr;
+const getMsgLoaderGIF = (state: AppStateType) => state.dialogsReducer.msgLoaderGIF;
+const getMsgDeliveredFlagPIC = (state: AppStateType) => state.dialogsReducer.msgDeliveredFlagPIC;
+const getMsgSeenFlagPIC = (state: AppStateType) => state.dialogsReducer.msgSeenFlagPIC;
 
 const DialogsReducerPart_1 = createSelector(getDialogsList, getCertainDialog, getAllDialogsIsLoading, getCertainDialogIsLoading, getDefaultAvatar_compDialogs,
-    getNewMessagesCounter, getNewMessageBTNDisabled, getPrevMsgsIsLoading,
+    getNewMessagesCounter, getNewMessageBTNDisabled, getPrevMsgsIsLoading, getOnErrorPic,
     (dialogsList, certainDialog, allDialogsIsLoading, certainDialogIsLoading, defaultAvatar, newMessagesCounter,
-        newMessageBTNDisabled, prevMsgsIsLoading,) => {
+        newMessageBTNDisabled, prevMsgsIsLoading, onError,) => {
         let DialogsPart_1 = {
             dialogsList, certainDialog, allDialogsIsLoading, certainDialogIsLoading, defaultAvatar, newMessagesCounter,
-            newMessageBTNDisabled, prevMsgsIsLoading,
+            newMessageBTNDisabled, prevMsgsIsLoading, onError,
         }
         return DialogsPart_1
     })
 
-const DialogsReducerPart_2 = createSelector(getOnErrorPic, getErrGettingNewMSGSCount, getOnSendMSGStatArr, getKeyArr, getFeedbackArr_compDialogs,
-    getErrNegotiatorsListGet, getErrNegotiatorsListPIC, getErrCertainDialogGet, getsendndigInProgress, getErrInSendingArr,
-    (onError, errGettingNewMSGSCount, onSendMSGStatArr, keyArr, feedbackArr, errNegotiatorsListGet, errNegotiatorsListPIC, errCertainDialogGet, sendndigInProgress, errInSendingArr) => {
-        let DialogsPart_2 = { onError, errGettingNewMSGSCount, onSendMSGStatArr, keyArr, feedbackArr, errNegotiatorsListGet, errNegotiatorsListPIC, errCertainDialogGet, sendndigInProgress, errInSendingArr }
+const DialogsReducerPart_2 = createSelector(getErrGettingNewMSGSCount, getOnSendMSGStatArr, getKeyArr, getFeedbackArr_compDialogs,
+    getErrNegotiatorsListGet, getErrNegotiatorsListPIC, getErrCertainDialogGet, getsendndigInProgress, getErrInSendingArr, getMsgLoaderGIF, getMsgDeliveredFlagPIC, getMsgSeenFlagPIC,
+    (errGettingNewMSGSCount, onSendMSGStatArr, keyArr, feedbackArr, errNegotiatorsListGet, errNegotiatorsListPIC, errCertainDialogGet, sendndigInProgress, errInSendingArr, msgLoaderGIF, msgDeliveredFlagPIC, msgSeenFlagPIC,) => {
+        let DialogsPart_2 = { errGettingNewMSGSCount, onSendMSGStatArr, keyArr, feedbackArr, errNegotiatorsListGet, errNegotiatorsListPIC, errCertainDialogGet, sendndigInProgress, errInSendingArr, msgLoaderGIF, msgDeliveredFlagPIC, msgSeenFlagPIC }
         return DialogsPart_2
     })
 
