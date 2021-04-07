@@ -157,7 +157,7 @@ export type DialogsList_Type = {
   photos: { small: null | string, large: null | string }
   userName: string
 };
-export type MessageData_Type = { addedAt: string, body: string, id: string, recipientId: number, senderId: number, translatedBody: null | boolean, viewed: boolean, actionKey?: string }
+export type MessageData_Type = { addedAt: string, body: string, id: string, recipientId: number, senderId: number, translatedBody: null | boolean, viewed: boolean, actionKey?: string | any }
 export type CertainDialog_Type = { error?: null | string, items: MessageData_Type[], totalCount?: number }
 type SendMsgToTalker_Type = {
   data: {

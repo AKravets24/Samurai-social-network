@@ -348,6 +348,8 @@ const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProp
   </div>
 },
   function areEqual(prevProps, nextProps) {
+
+
     // return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
     return false
   })

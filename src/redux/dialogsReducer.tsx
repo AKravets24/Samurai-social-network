@@ -104,7 +104,8 @@ const addPrevMessagesThunkAC = (userId: number, msgCount: number, pageNumber: nu
 const deleteMessageThunkAC = (messageId: string, index: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   try {
     let response = await usersApi.deleteMessage(messageId)
-    if (response.status === 200) dispatch(actions.deleteMessageAC(messageId, index))
+    if (response.status === 200) { dispatch(actions.deleteMessageAC(messageId, index)) }
+    console.log(response)
   }
   catch (err) { console.log(err); }
 };
@@ -247,7 +248,7 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
     case 'ERR_NEGOTIATORS_LIST_GET': return { ...state, errNegotiatorsListGet: action.errorCode };
     case 'DIALOGS_ARE_LOADING_TOGGLER': return { ...state, allDialogsIsLoading: action.allDialogs, certainDialogIsLoading: action.certainDialog }
     case 'ERR_CERTAIN_DIALOG_GET': return { ...state, errCertainDialogGet: action.error.substr(1, action.error.length - 2) };
-    case 'SET_TALK_WITH_USER': return { ...state, certainDialog: action.data };
+    case 'SET_TALK_WITH_USER': console.log('SET_TALK_WITH_USER'); return { ...state, certainDialog: action.data };
     case 'CREATE_AND_SET_NEW_DIALOG':
       console.log(action)
 
@@ -275,9 +276,29 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       stateCopy = { ...state, certainDialog: { items: [] } }
       return stateCopy;
 
-    case 'DELETE_MESSAGE': state.certainDialog.items.splice(action.index, 1); return stateCopy;
+    case 'DELETE_MESSAGE':
+      console.log('DELETE_MESSAGE');
+
+
+      let dialogListCopy = { ...state.certainDialog }
+
+      let indexForDeleting = state.certainDialog.items.findIndex(item => item.id === action.messageId);
+
+      console.log(indexForDeleting)
+
+      console.log(dialogListCopy)
+      let x = dialogListCopy.items.splice(indexForDeleting, 1)
+      console.log(dialogListCopy)
+      console.log(x)
+
+      return { ...state, certainDialog: { items: dialogListCopy.items } }
+    // return { ...state }
+
+    // state.certainDialog.items.splice(action.index, 1); return stateCopy;
 
     case 'ADDED_PREVIOUS_MSGS':
+      console.log('ADDED_PREVIOUS_MSGS');
+
       let reverseItems = action.prevMsgs.reverse();
       reverseItems.forEach((el: MessageData_Type) => state.certainDialog.items.unshift(el))
       return stateCopy;
