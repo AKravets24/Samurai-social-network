@@ -67,6 +67,7 @@ const getTalkWithUserThunkAC = (userId: number): ThunkAC_Type => async (dispatch
   catch (err) { dispatch(actions.setErrCertainDialogGetAC(JSON.stringify(err.message))) };
   dispatch(actions.setDialogsAreLoadingToggleAC(false, false))
 };
+
 const talkedBeforeThunkAC = (userId: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.setDialogsAreLoadingToggleAC(true, true))
   try {

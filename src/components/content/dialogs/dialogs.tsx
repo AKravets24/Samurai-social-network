@@ -131,10 +131,10 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   // let prevCount:number = usePrevious(dialogAreaHeight);
   let prevCount = 0;
 
-  let getTalk = (userId: number) => { setDialogId(dialogId = userId); actions.getTalkWithUserThunk(dialogId) };
+  let getTalk = (userId: number) => { setDialogId(dialogId = userId); setPageNumber(2); setMsgsMapDone(false); actions.getTalkWithUserThunk(dialogId) };
   let scrollToDown = (bufferBlock: any) => { bufferBlock.current && bufferBlock.current.scrollIntoView({ behavior: "auto" }) };
 
-  let oldMsgLazyLoader = () => { let msgCount = 5; actions.addPrevMessagesThunk(dialogId, msgCount, pageNumber); setPageNumber(pageNumber + 1) };
+  let oldMsgLazyLoader = () => { let msgCount = 10; actions.addPrevMessagesThunk(dialogId, msgCount, pageNumber); setPageNumber(pageNumber + 1) };
 
   useEffect(() => {
     dialogArea?.current &&
@@ -256,10 +256,11 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
           <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll, delayFlag && stl.delay)}
             ref={dialogArea}
             // onScroll={() => !dialogArea?.current?.scrollTop   && oldMsgLazyLoader()}
-            onScroll={() => !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount && oldMsgLazyLoader()}
+            onScroll={() => !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
+              !state.prevMsgsIsLoading && oldMsgLazyLoader()}
             onContextMenu={e => e.preventDefault()}
           >
-            {!state.dialogsList.length &&                        // если ни с кем еще не было диалогов
+            {!state.dialogsList.length && !state.allDialogsIsLoading && !state.errNegotiatorsListGet &&            // если ни с кем еще не было диалогов
               <div className={stl.noDialogsList}>
                 <p>No dialogs here so far...</p>
               </div>}

@@ -94,7 +94,7 @@ export const usersApi = {
   getMyFriends(listPage: number) { return instance.get<UsersListData_Type>(`users?friend=true&count=50&page=${listPage}`) },
   // DIALOGS ------------------------------------------------------------------------------------------------------------------- DIALOGS
   getMyNegotiatorsList() { return instance.get<DialogsList_Type[]>(`dialogs`) },
-  getTalkWithUser(userId: number, msgCount: number = 20, pageNumber: number = 1) { return instance.get<CertainDialog_Type>(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`) },
+  getTalkWithUser(userId: number, msgCount: number = 10 /* 20 */, pageNumber: number = 1) { return instance.get<CertainDialog_Type>(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`) },
   sendMsgToTalker(userId: null | number, body: string) { return instance.post<SendMsgToTalker_Type>(`dialogs1/${userId}/messages`, { body }) },
   getNewMessages() { return instance.get<number>(`dialogs/messages/new/count`) },
   deleteMessage(messageId: string) { return instance.delete<DeleteMSG_Type>(`dialogs/messages/${messageId}`) },
