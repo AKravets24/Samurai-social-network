@@ -101,8 +101,6 @@
 }
 
 .statusField {
-    display: flex;
-    /* overflow: hidden; */
     word-break: break-all;
     -moz-hyphens: auto;
     -webkit-hyphens: auto;
@@ -114,4 +112,5 @@
     color: red;
     border-radius: 5px;
     box-shadow: #ff0000 0 0 10px 2px;
+    text-align: center;
 }

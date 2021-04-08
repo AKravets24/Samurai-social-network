@@ -27,8 +27,8 @@ const actions = {
   followingTogglerAC: (isFollowing: boolean) => ({ type: 'TOGGLER_IS_FOLLOWING', isFollowing } as const),
   followBTNTogglerAC: (userId: null | number, isFollowed: null | boolean) => ({ type: 'FOLLOW_ACTION_TOGGLER', userId, isFollowed } as const),
   errCatcherAtFollowingAC: (userId: null | number, errorCode: number) => ({ type: 'ERROR_AT_FOLLOWING_TOGGLER', userId, errorCode } as const),
-  errCatcherAtProfileGetAC: (errorCode: number) => ({ type: 'ERROR_AT_GETTING_PROFILE', errorCode } as const),
-  errCatcherAtStatusGetAC: (errorCode: number) => ({ type: 'ERROR_AT_GETTING_STATUS', errorCode } as const),
+  errCatcherAtProfileGetAC: (errorCode: string) => ({ type: 'ERROR_AT_GETTING_PROFILE', errorCode } as const),
+  errCatcherAtStatusGetAC: (errorCode: string) => ({ type: 'ERROR_AT_GETTING_STATUS', errorCode } as const),
   setErrorToNullAC: () => ({ type: 'ERROR_NULLIFIER' } as const),
   errCattcherAtStatUpdateAC: (error: string) => ({ type: 'ERROR_AT_STATUS_UPDATE', error } as const),
   errCatcherAtAvaUpdateAC: (errorCode: number) => ({ type: 'ERROR_AT_AVATAR_UPDADE', errorCode } as const),
@@ -46,11 +46,13 @@ type Dispatch_Type = Dispatch<ActionTypes>
 
 const getProfileThUnkAC = (userId: null | number, isMe: boolean): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.toggleIsLoadingAC(true));
+  dispatch(actions.errCatcherAtStatusGetAC(''))
+  dispatch(actions.errCatcherAtProfileGetAC(''))
   let status = '', userName = '', profileData = {};
   try {
     let statusResponse = await usersApi.getStatus(userId)
     if (statusResponse.status === 200) status = statusResponse.data
-  } catch (err) { dispatch(actions.errCatcherAtStatusGetAC(parseInt(JSON.stringify(err.message).replace(/\D+/g, "")))) }
+  } catch (err) { dispatch(actions.errCatcherAtStatusGetAC(JSON.stringify(err.message).replace(/\D+/g, ""))) }
   try {
     let profileResponse = await usersApi.getProfile(userId)
     if (profileResponse.status === 200) {
@@ -67,7 +69,7 @@ const getProfileThUnkAC = (userId: null | number, isMe: boolean): ThunkAC_Type =
       }
     }
   } catch (err) {
-    dispatch(actions.errCatcherAtProfileGetAC(parseInt(JSON.stringify(err.message).replace(/\D+/g, ""))));
+    dispatch(actions.errCatcherAtProfileGetAC(JSON.stringify(err.message).replace(/\D+/g, "")));
   }
   dispatch(actions.toggleIsLoadingAC(false));
 };
@@ -195,9 +197,9 @@ export const profileReducer = (state: InitialProfileState_Type = initialProfileS
       state.wallPosts.unshift(text);
       return { ...state };
     case 'SET_PROFILE': return { ...state, profileData: action.profileData, isFollowed: action.isFollowed, statusField: action.status };
-    case 'ERROR_AT_GETTING_PROFILE': return { ...state, errOnProfileLoading: `${action.errorCode} error!` };
-    case 'ERROR_AT_GETTING_STATUS': return { ...state, errOnStatusLoading: `${action.errorCode} error!` };
-    case 'ERROR_AT_STATUS_UPDATE': return { ...state, errOnStatusUpdate: action.error.substr(1, action.error.length - 2) };
+    case 'ERROR_AT_GETTING_PROFILE': return { ...state, errOnProfileLoading: action.errorCode };
+    case 'ERROR_AT_GETTING_STATUS': console.log('ERROR_AT_GETTING_STATUS'); return { ...state, errOnStatusLoading: action.errorCode };
+    case 'ERROR_AT_STATUS_UPDATE': console.log('ERROR_AT_STATUS_UPDATE'); return { ...state, errOnStatusUpdate: action.error.substr(1, action.error.length - 2) };
     case 'ERROR_AT_AVATAR_UPDADE': return { ...state, errOnAvatarUpdate: `${action.errorCode} error!` };
     case 'FOLLOW_ACTION_TOGGLER': return { ...state, isFollowed: action.isFollowed };
     case 'ERROR_AT_FOLLOWING_TOGGLER': return { ...state, onFollowingErr: `${action.errorCode} error!` };

@@ -125,6 +125,13 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   let [dialogAreaHeight, setDialogAreaHeight] = useState<AreaHeight | any>(0);
   let [userNameInHeader, setUserNameInHeader] = useState('');
 
+  useEffect(() => {
+    if (dialogId) {
+      let user = state.dialogsList.find(el => el.id === dialogId)
+      if (user) return setUserNameInHeader(user.userName)
+    }
+  }, [msgsMapDone])
+
   type usePrevious = { current: number }
 
   // let usePrevious=(value:number)=> {let ref=useRef<object>();useEffect(()=>{ref.current=value});return ref.current;};             // пересмотреть логику работы!!
@@ -134,7 +141,11 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   let getTalk = (userId: number) => { setDialogId(dialogId = userId); setPageNumber(2); setMsgsMapDone(false); actions.getTalkWithUserThunk(dialogId) };
   let scrollToDown = (bufferBlock: any) => { bufferBlock.current && bufferBlock.current.scrollIntoView({ behavior: "auto" }) };
 
-  let oldMsgLazyLoader = () => { let msgCount = 10; actions.addPrevMessagesThunk(dialogId, msgCount, pageNumber); setPageNumber(pageNumber + 1) };
+  let oldMsgLazyLoader = (scrollHeight: number | undefined) => {
+    console.log(scrollHeight)
+    let msgCount = 10; actions.addPrevMessagesThunk(dialogId, msgCount, pageNumber);
+    setPageNumber(pageNumber + 1)
+  };
 
   useEffect(() => {
     dialogArea?.current &&
@@ -143,8 +154,9 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   useEffect(() => {
     dialogArea?.current &&
       setDialogAreaHeight(dialogAreaHeight = dialogArea.current.scrollHeight);
+    console.log(dialogAreaHeight)
     return setDialogAreaHeight(0);
-  }, [state]);
+  }, [state.dialogsList.length]);
   useEffect(() => { /*msgsMapDone &&*/ scrollToDown(bufferBlock) }, [msgsMapDone])
 
   // console.log(props.state.certainDialog);
@@ -241,7 +253,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       <img src={user.photos.large || state.defaultAvatar} alt="err" />
                     </NavLink>
                     <NavLink to={`/dialogs/${user.id}`}
-                      onClick={() => { getTalk(user.id); setUserNameInHeader(user.userName) }}
+                      onClick={() => { getTalk(user.id); }}
                       className={themes.talkerBlockA}
                       activeClassName={themes.activeLink}>
                       {user.userName}{user.hasNewMessages &&
@@ -256,8 +268,10 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
           <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll, delayFlag && stl.delay)}
             ref={dialogArea}
             // onScroll={() => !dialogArea?.current?.scrollTop   && oldMsgLazyLoader()}
-            onScroll={() => !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
-              !state.prevMsgsIsLoading && oldMsgLazyLoader()}
+            onScroll={() => {
+              /* console.log(dialogArea?.current?.scrollHeight) */; !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
+                !state.prevMsgsIsLoading && oldMsgLazyLoader(dialogArea?.current?.scrollHeight)
+            }}
             onContextMenu={e => e.preventDefault()}
           >
             {!state.dialogsList.length && !state.allDialogsIsLoading && !state.errNegotiatorsListGet &&            // если ни с кем еще не было диалогов

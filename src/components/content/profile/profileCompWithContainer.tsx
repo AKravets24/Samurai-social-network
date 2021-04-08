@@ -214,7 +214,7 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
       // <div className={stl.onGettingErrorDiv}> {errOnGettingProfile} </div>
       <div className={`${stl.Houston} ${themes.profileDnmc}`}>
         <h2>Houston, we've got a problem...</h2>
-        <h2>{errOnGettingProfile}</h2>
+        <h2>{errOnGettingProfile} error!</h2>
         <button
           className={`${stl.followBTN} ${themes.BTNs}`}
           onClick={() => { actions.profileGetter() }}

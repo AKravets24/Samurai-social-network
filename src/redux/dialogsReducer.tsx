@@ -45,6 +45,7 @@ type ThunkAC_Type = ThunkAction<Promise<void>, AppStateType, unknown, ActionType
 
 const getMyNegotiatorsListThunkAC = (): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.setDialogsAreLoadingToggleAC(true, false))
+  actions.setErrMyNegotiatorsList(0)
   try {
     let response = await usersApi.getMyNegotiatorsList();
     console.log(response)
@@ -59,6 +60,7 @@ const getMyNegotiatorsListThunkAC = (): ThunkAC_Type => async (dispatch: Dispatc
 };
 const getTalkWithUserThunkAC = (userId: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.setDialogsAreLoadingToggleAC(false, true))
+  dispatch(actions.setErrCertainDialogGetAC(''))
   try {
     let response = await usersApi.getTalkWithUser(userId);
     console.log(response)

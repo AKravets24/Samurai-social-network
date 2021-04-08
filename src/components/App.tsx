@@ -70,7 +70,8 @@ let App: React.FC<AppProps_Type> = ({ props: { appInitialized, auth_LDR_GIF, fun
 
   let dispatch = useDispatch();
   useEffect(() => { iterator(appInitialized) }, [appInitialized])
-  useEffect(() => { setTimeout(() => { dispatch(flagDelay()) }, 3000) }, [])
+  // useEffect(() => { setTimeout(() => { dispatch(flagDelay()) }, 3000) }, [])
+  useEffect(() => { appInitialized && setTimeout(() => { dispatch(flagDelay()) }, 3000) }, [])
 
 
   return <>
