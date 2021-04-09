@@ -113,7 +113,7 @@ type ModalMsgs_Type = {
 let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, actions, loaders, delayFlag }) => {
   // console.log(loaders)
 
-  const dialogArea = useRef<HTMLDivElement>(null);
+  const dialogArea = useRef<HTMLDivElement | any>(null);
   const bufferBlock = useRef<HTMLDivElement>(null);
 
   interface AreaHeight { }
@@ -121,49 +121,37 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
   let [dialogId, setDialogId] = useState(userIdInURL === undefined ? 0 : +userIdInURL);
   let [pageNumber, setPageNumber] = useState(2);
-  let [msgsMapDone, setMsgsMapDone] = useState(false);
+  let [msgsMapDone, setMsgsMapDone] = useState(0); //диалог:  0 = не загружен, 1 = загружен первично, 2 = загрузка предыдущей части 3 = загружена предыдущая часть
   let [dialogAreaHeight, setDialogAreaHeight] = useState<AreaHeight | any>(0);
   let [userNameInHeader, setUserNameInHeader] = useState('');
 
-  useEffect(() => {
+
+  let getTalk = (userId: number) => { setDialogId(dialogId = userId); setPageNumber(2); actions.getTalkWithUserThunk(dialogId) };
+
+  let oldMsgLazyLoader = () => {
+    actions.addPrevMessagesThunk(dialogId, 10, pageNumber);
+    setMsgsMapDone(2)
+    setPageNumber(pageNumber + 1)
+  };
+
+
+  useEffect(() => {            // логика, отвечающая за работу скроллбара и активного имени в шапке 
+    if (msgsMapDone === 1) {
+      scrollToDown(bufferBlock)
+    }
+    else if (msgsMapDone === 3 && !state.prevMsgsIsLoading) {
+      dialogArea?.current?.scrollTo(0, dialogArea?.current?.scrollHeight - dialogAreaHeight)
+    }
+
     if (dialogId) {
       let user = state.dialogsList.find(el => el.id === dialogId)
       if (user) return setUserNameInHeader(user.userName)
     }
-  }, [msgsMapDone])
+  }, [msgsMapDone, !state.prevMsgsIsLoading])
 
-  type usePrevious = { current: number }
-
-  // let usePrevious=(value:number)=> {let ref=useRef<object>();useEffect(()=>{ref.current=value});return ref.current;};             // пересмотреть логику работы!!
-  // let prevCount:number = usePrevious(dialogAreaHeight);
-  let prevCount = 0;
-
-  let getTalk = (userId: number) => { setDialogId(dialogId = userId); setPageNumber(2); setMsgsMapDone(false); actions.getTalkWithUserThunk(dialogId) };
-  let scrollToDown = (bufferBlock: any) => { bufferBlock.current && bufferBlock.current.scrollIntoView({ behavior: "auto" }) };
-
-  let oldMsgLazyLoader = (scrollHeight: number | undefined) => {
-    console.log(scrollHeight)
-    let msgCount = 10; actions.addPrevMessagesThunk(dialogId, msgCount, pageNumber);
-    setPageNumber(pageNumber + 1)
-  };
-
-  useEffect(() => {
-    dialogArea?.current &&
-      !state.prevMsgsIsLoading && dialogArea.current.scrollTo(0, dialogAreaHeight - prevCount)
-  }, [state.prevMsgsIsLoading])
-  useEffect(() => {
-    dialogArea?.current &&
-      setDialogAreaHeight(dialogAreaHeight = dialogArea.current.scrollHeight);
-    console.log(dialogAreaHeight)
-    return setDialogAreaHeight(0);
-  }, [state.dialogsList.length]);
-  useEffect(() => { /*msgsMapDone &&*/ scrollToDown(bufferBlock) }, [msgsMapDone])
-
-  // console.log(props.state.certainDialog);
 
   type Value_Type = { text: string }
   let submitter = (values: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
-    // actions.sendMessageToUserThunk(dialogId, values.text.substring(0, values.text.length - 1), '', '')
     actions.sendMessageToUserThunk(dialogId, values.text, uuidv4() as string, '', myId as number); values.text = ''; setSubmitting(false);
   }
 
@@ -208,9 +196,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   }
 
   window.onkeyup = ({ key }: KeyboardEvent) => {
-
     if (key === "Escape") {
-
       let newServInfo = [...modalMsggs.servInfo]
       let newMsgArr = [...modalMsggs.msgArr]
       newServInfo.forEach(el => { if (el !== undefined) el.flag = false })
@@ -220,7 +206,11 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
     }
   };
 
-  // console.log(modalMsggs)
+
+  let scrollToDown = (bufferBlock: any) => { bufferBlock.current && bufferBlock.current.scrollIntoView({ behavior: "auto" }) };
+
+
+
 
   return <>
     <div className={cn(stl.dialogsPage, themes.dialogDnmc, delayFlag && stl.delay)}>
@@ -253,7 +243,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       <img src={user.photos.large || state.defaultAvatar} alt="err" />
                     </NavLink>
                     <NavLink to={`/dialogs/${user.id}`}
-                      onClick={() => { getTalk(user.id); }}
+                      onClick={() => { getTalk(user.id); setMsgsMapDone(0) }}
                       className={themes.talkerBlockA}
                       activeClassName={themes.activeLink}>
                       {user.userName}{user.hasNewMessages &&
@@ -267,10 +257,9 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
           </div>
           <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll, delayFlag && stl.delay)}
             ref={dialogArea}
-            // onScroll={() => !dialogArea?.current?.scrollTop   && oldMsgLazyLoader()}
             onScroll={() => {
-              /* console.log(dialogArea?.current?.scrollHeight) */; !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
-                !state.prevMsgsIsLoading && oldMsgLazyLoader(dialogArea?.current?.scrollHeight)
+              !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
+                !state.prevMsgsIsLoading && oldMsgLazyLoader()
             }}
             onContextMenu={e => e.preventDefault()}
           >
@@ -285,7 +274,8 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
               state.errCertainDialogGet ? <div className={stl.errorBlock}> {state.errCertainDialogGet}</div> :
                 state?.certainDialog?.items
                   .map((msg, i, arr) => {
-                    if (msgsMapDone === false && i === arr.length - 1) { return setMsgsMapDone(true) }
+                    if (msgsMapDone === 0 && i === arr.length - 1) { setMsgsMapDone(1); setDialogAreaHeight(dialogArea?.current?.scrollHeight) }
+                    if (msgsMapDone === 2 && i === arr.length - 1) { setMsgsMapDone(3); setDialogAreaHeight(dialogArea?.current?.scrollHeight) }
                     // if (i === arr.length - 1) { scrollToDown(bufferBlock) }
 
                     return <div

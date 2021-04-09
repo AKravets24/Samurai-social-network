@@ -64,7 +64,7 @@ let App: React.FC<AppProps_Type> = ({ props: { appInitialized, auth_LDR_GIF, fun
 
   let [refreshContent, setRefreshContent] = useState<any>();
   let iterator = (condition: boolean) => {
-    if (!condition) { let num = funnyLoader(funnyLoaderArr); setRefreshContent(setInterval(() => { setLoadPhrase(num.next().value as string) }, 700)) }
+    if (!condition) { let num = funnyLoader(funnyLoaderArr); setRefreshContent(setInterval(() => { setLoadPhrase(num.next().value as string) }, 1200)) }
     else { setTimeout(() => { clearInterval(refreshContent) }, 1500) }
   }
 

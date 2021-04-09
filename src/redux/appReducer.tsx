@@ -105,12 +105,16 @@ const initialState = {
   authErr: '' as string,      // вынести в редюсер с логинизацией
   captchaPic: '' as string,
   errCaptchaGet: '' as string,
-  funnyLoaderArr: ['Tectonic configuration...', 'Filling the oceans...',
-    'Planting flora...', 'Fauna breeding...',
-    'Crusades...', 'Witch-hunting...',
-    'Transition into the renaissance era...',
-    'Scientific and technological revolution...',
-    'Client: Synchronization...',] as string[],
+  funnyLoaderArr: ["Calibrating the planet's rotation...",
+    "Launching magma streams...", "Launching geomorphological processes...",
+    "Placing continental plates ...", 'Filling the oceans...', "Deep water trenching...",
+    "Creating the relief of the ocean floor ...", 'Tectonic configuration...', "Land level rise...",
+    "Initializing waves ...", "Updating ocean currents ...", "Filtration of the atmosphere...", "Checking nitrogen content...",
+    "Optimizing Planetary Air Circulation...", "Checking Ozone Concentration...", "Calculation of solar radiation...",
+    "Sea level rise...", "Soil saturation with nutrients...", 'Planting flora...', 'Fauna breeding...', "Melting polar ice...",
+    'Crusades...', 'Witch-hunting...', 'Transition into the renaissance era...', 'Scientific and technological revolution...',
+    "Discharge of toxic waste...", "Senate's convocation...", "Selecting factions ...", "Energy conversation...",
+    "Environmental deterioration", 'Client: Synchronization...',] as string[],
 };
 
 export type appStateType = typeof initialState;

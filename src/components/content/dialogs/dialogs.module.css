@@ -59,9 +59,9 @@
 .dialogListD::-webkit-scrollbar-button,.dialogAreaD::-webkit-scrollbar-button:single-button        {background-color: lightskyblue; }
 .dialogListD::-webkit-scrollbar-thumb, .dialogAreaD::-webkit-scrollbar-thumb                       {background-color: lightskyblue; }
 
-.dialogListE ::-webkit-scrollbar                                                                   {background-color: lightyellow;  }
-.dialogListE ::-webkit-scrollbar-button,.dialogAreaE::-webkit-scrollbar-button:single-button       {background-color: darkred;      }
-.dialogListE ::-webkit-scrollbar-thumb, .dialogAreaE::-webkit-scrollbar-thumb                      {background-color: darkred;      }
+.dialogListE::-webkit-scrollbar                                                                    {background-color: lightyellow;  }
+.dialogListE::-webkit-scrollbar-button,.dialogAreaE::-webkit-scrollbar-button:single-button        {background-color: darkred;      }
+.dialogListE::-webkit-scrollbar-thumb, .dialogAreaE::-webkit-scrollbar-thumb                       {background-color: darkred;      }
 
 .dialogListLoaderWrapper {
     height: 90%;
