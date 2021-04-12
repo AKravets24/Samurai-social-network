@@ -164,6 +164,8 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
     actions.addPost(values.text); values.text = ''; setSubmitting(false);
   }
 
+  console.log(delayFlag)
+
 
   return <>
     {writeMode &&
@@ -206,7 +208,7 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
     }
 
     {/* {!userId && !errOnGettingProfile && isLoading && <div className={stl.loaderDiv}> */}
-    {isLoading && <div className={cn(stl.loaderDiv, delayFlag && themes.profileDnmc)}>
+    {isLoading && <div className={cn(stl.loaderDiv, themes.profileDnmc, delayFlag && stl.delay)}>
       <img className={stl.loader} src={state.picsNLoaders.auth_LDR_GIF} alt="Err" />
       <p className={themes.fontClrsDnmc}>Loading profile...</p>
     </div>}
@@ -274,7 +276,7 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
               }
             </div>
             <div className={stl.profileInfo}>
-              <div className={cn(stl.nameWrapper, delayFlag && themes.profileInfoDnmc)}>
+              <div className={cn(stl.nameWrapper, themes.profileInfoDnmc, delayFlag && stl.delay)}>
                 <h2> {state.profileMedia.profileData.fullName} {state.myId === userId && '(it\'s you)'}</h2>
                 {state.myId !== userId &&
                   <button

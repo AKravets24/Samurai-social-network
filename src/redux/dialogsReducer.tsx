@@ -21,7 +21,7 @@ const actions = {
   setDialogsAreLoadingToggleAC: (allDialogs: boolean, certainDialog: boolean) => ({ type: 'DIALOGS_ARE_LOADING_TOGGLER', allDialogs, certainDialog } as const),
   setMyCompanions: (data: DialogsList_Type[]) => ({ type: 'SET_MY_COMPANIONS_LIST', data } as const),
   setErrMyNegotiatorsList: (errorCode: number) => ({ type: 'ERR_NEGOTIATORS_LIST_GET', errorCode } as const),
-  setTalkWithUser: (data: CertainDialog_Type) => ({ type: 'SET_TALK_WITH_USER', data } as const),
+  setTalkWithUser: (data: CertainDialog_Type, userId: number) => ({ type: 'SET_TALK_WITH_USER', data, userId } as const),
   addPrevMSGS: (prevMsgs: MessageData_Type[]) => ({ type: 'ADDED_PREVIOUS_MSGS', prevMsgs } as const),
   prevMsgsloadingTogglerAC: (prevMsgsIsLoading: boolean) => ({ type: 'PREV_MSGS_LOADING_TOGGLER', prevMsgsIsLoading } as const),
   sendMsgAC: (msgItem: MessageData_Type,) => ({ type: 'SEND_MESSAGE_TO_USER', msgItem } as const),
@@ -64,12 +64,11 @@ const getTalkWithUserThunkAC = (userId: number): ThunkAC_Type => async (dispatch
   try {
     let response = await usersApi.getTalkWithUser(userId);
     console.log(response)
-    if (response.status === 200) dispatch(actions.setTalkWithUser(response.data))
+    if (response.status === 200) dispatch(actions.setTalkWithUser(response.data, userId))
   }
   catch (err) { dispatch(actions.setErrCertainDialogGetAC(JSON.stringify(err.message))) };
   dispatch(actions.setDialogsAreLoadingToggleAC(false, false))
 };
-
 const talkedBeforeThunkAC = (userId: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.setDialogsAreLoadingToggleAC(true, true))
   try {
@@ -79,7 +78,7 @@ const talkedBeforeThunkAC = (userId: number): ThunkAC_Type => async (dispatch: D
       if (response.data.find((el: DialogsList_Type) => (el.id === +userId))) {                                // если в списке диалогов есть нужный юзер
         try {
           let responseCertainUser = await usersApi.getTalkWithUser(userId)                                    // то запрашиваем диалог с ним
-          responseCertainUser.status === 200 && dispatch(actions.setTalkWithUser(responseCertainUser.data))   /* && console.log(responseCertainUser) */
+          responseCertainUser.status === 200 && dispatch(actions.setTalkWithUser(responseCertainUser.data, userId))   /* && console.log(responseCertainUser) */
         }
         catch (err) { dispatch(actions.setErrCertainDialogGetAC(JSON.stringify(err.message))) };              // error
       } else {
@@ -247,11 +246,28 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
           : [...state.errInSendingArr.filter(el => el.actionKey != action.actionKey)]
       }
 
-    case 'SET_MY_COMPANIONS_LIST': return { ...state, dialogsList: action.data };
+    case 'SET_MY_COMPANIONS_LIST': console.log(action); return { ...state, dialogsList: action.data };
     case 'ERR_NEGOTIATORS_LIST_GET': return { ...state, errNegotiatorsListGet: action.errorCode };
     case 'DIALOGS_ARE_LOADING_TOGGLER': return { ...state, allDialogsIsLoading: action.allDialogs, certainDialogIsLoading: action.certainDialog }
     case 'ERR_CERTAIN_DIALOG_GET': return { ...state, errCertainDialogGet: action.error.substr(1, action.error.length - 2) };
-    case 'SET_TALK_WITH_USER': console.log('SET_TALK_WITH_USER'); return { ...state, certainDialog: action.data };
+    case 'SET_TALK_WITH_USER': console.log('SET_TALK_WITH_USER');
+      console.log(action)
+
+      let certainListCopy = [...action.data.items];
+      let actionDataCopy = { ...action.data };
+      let newMsgCounter = state.newMessagesCounter;
+
+      let dialogListCopy = [...state.dialogsList];
+      dialogListCopy.find(el => {
+        if (el.id === action.userId) {
+          el.hasNewMessages = false;
+          if (newMsgCounter) return newMsgCounter -= el.newMessagesCount;
+          el.newMessagesCount = 0
+        }
+      })
+      certainListCopy.forEach(el => { if (el.senderId === action.userId) { el.viewed = true } })
+      actionDataCopy.items = certainListCopy;
+      return { ...state, certainDialog: actionDataCopy, newMessagesCounter: newMsgCounter };
     case 'CREATE_AND_SET_NEW_DIALOG':
       console.log(action)
 
@@ -279,25 +295,13 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       stateCopy = { ...state, certainDialog: { items: [] } }
       return stateCopy;
 
-    case 'DELETE_MESSAGE':
-      console.log('DELETE_MESSAGE');
+    case 'DELETE_MESSAGE': // console.log('DELETE_MESSAGE');
 
-
-      let dialogListCopy = { ...state.certainDialog }
-
+      let certainDialog = { ...state.certainDialog };
       let indexForDeleting = state.certainDialog.items.findIndex(item => item.id === action.messageId);
+      certainDialog.items.splice(indexForDeleting, 1);
 
-      console.log(indexForDeleting)
-
-      console.log(dialogListCopy)
-      let x = dialogListCopy.items.splice(indexForDeleting, 1)
-      console.log(dialogListCopy)
-      console.log(x)
-
-      return { ...state, certainDialog: { items: dialogListCopy.items } }
-    // return { ...state }
-
-    // state.certainDialog.items.splice(action.index, 1); return stateCopy;
+      return { ...state, certainDialog: { items: certainDialog.items } }
 
     case 'ADDED_PREVIOUS_MSGS':
       console.log('ADDED_PREVIOUS_MSGS');
