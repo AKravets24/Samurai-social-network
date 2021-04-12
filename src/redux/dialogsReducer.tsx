@@ -2,6 +2,7 @@ import { CertainDialog_Type, DialogsList_Type, MessageData_Type, usersApi } from
 import maleProfilePic from './img/dialogs/male.png';
 import errorPic from './img/dialogs/error.png';
 import radioTowerPIC from './img/dialogs/radioTower1.png';
+import arrowDownPIC from './img/dialogs/arrowDown.png';
 import msgSendLoaderGIF from './loader/dialogs/onSendMsg/msgSender.gif';
 import msgDeliveredFlag from './img/dialogs/delivered.png'
 import msgSeenFlag from './img/dialogs/seen.png'
@@ -194,9 +195,10 @@ let initialDialogsState = {
   errCertainDialogGet: '' as string,
   sendndigInProgress: [] as string[],
   errInSendingArr: [] as ErrinSendingArr_Type[],
-  msgLoaderGIF: msgSendLoaderGIF,
-  msgDeliveredFlagPIC: msgDeliveredFlag,
-  msgSeenFlagPIC: msgSeenFlag,
+  msgLoaderGIF: msgSendLoaderGIF as string,
+  msgDeliveredFlagPIC: msgDeliveredFlag as string,
+  msgSeenFlagPIC: msgSeenFlag as string,
+  arrowDownPIC: arrowDownPIC as string,
 };
 
 export type InitialDialogsState_Type = typeof initialDialogsState;
@@ -236,10 +238,7 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
 
     case 'ERROR_AT_SENDING_TOGGLER':
       console.log('ERROR_AT_SENDING_TOGGLER');
-
       let { errCode, actionKey } = action;
-
-
       return {
         ...state, errInSendingArr: action.errCode
           ? [...state.errInSendingArr, { actionKey, error: errCode }]

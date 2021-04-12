@@ -147,14 +147,16 @@ const getErrInSendingArr = (state: AppStateType) => state.dialogsReducer.errInSe
 const getMsgLoaderGIF = (state: AppStateType) => state.dialogsReducer.msgLoaderGIF;
 const getMsgDeliveredFlagPIC = (state: AppStateType) => state.dialogsReducer.msgDeliveredFlagPIC;
 const getMsgSeenFlagPIC = (state: AppStateType) => state.dialogsReducer.msgSeenFlagPIC;
+const getArrowDownPIC = (state: AppStateType) => state.dialogsReducer.arrowDownPIC;
+
 
 const DialogsReducerPart_1 = createSelector(getDialogsList, getCertainDialog, getAllDialogsIsLoading, getCertainDialogIsLoading, getDefaultAvatar_compDialogs,
-    getNewMessagesCounter, getNewMessageBTNDisabled, getPrevMsgsIsLoading, getOnErrorPic,
+    getNewMessagesCounter, getNewMessageBTNDisabled, getPrevMsgsIsLoading, getOnErrorPic, getArrowDownPIC,
     (dialogsList, certainDialog, allDialogsIsLoading, certainDialogIsLoading, defaultAvatar, newMessagesCounter,
-        newMessageBTNDisabled, prevMsgsIsLoading, onError,) => {
+        newMessageBTNDisabled, prevMsgsIsLoading, onError, arrowDownPIC) => {
         let DialogsPart_1 = {
             dialogsList, certainDialog, allDialogsIsLoading, certainDialogIsLoading, defaultAvatar, newMessagesCounter,
-            newMessageBTNDisabled, prevMsgsIsLoading, onError,
+            newMessageBTNDisabled, prevMsgsIsLoading, onError, arrowDownPIC
         }
         return DialogsPart_1
     })

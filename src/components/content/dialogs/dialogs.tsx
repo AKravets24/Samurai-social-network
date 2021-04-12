@@ -209,7 +209,8 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
   let scrollToDown = (bufferBlock: any) => { bufferBlock.current && bufferBlock.current.scrollIntoView({ behavior: "auto" }) };
 
-
+  // console.log(dialogArea?.current?.scrollTop)
+  let [btnShow, setBtnShow] = useState<boolean>(false);
 
 
   return <>
@@ -243,7 +244,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       <img src={user.photos.large || state.defaultAvatar} alt="err" />
                     </NavLink>
                     <NavLink to={`/dialogs/${user.id}`}
-                      onClick={() => { getTalk(user.id); setMsgsMapDone(0) }}
+                      onClick={() => { getTalk(user.id); setMsgsMapDone(0); setBtnShow(false) }}
                       className={themes.talkerBlockA}
                       activeClassName={themes.activeLink}>
                       {user.userName}{user.hasNewMessages &&
@@ -258,6 +259,8 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
           <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll, delayFlag && stl.delay)}
             ref={dialogArea}
             onScroll={() => {
+              // console.log(dialogArea?.current?.scrollTop)
+              dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 >= 200 ? setBtnShow(true) : setBtnShow(false);
               !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
                 !state.prevMsgsIsLoading && oldMsgLazyLoader()
             }}
@@ -283,7 +286,6 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       key={uuidv4()}
                       className={cn(myId !== null && +msg.senderId === +myId ? `${stl.messageBlockMe} ${themes.msgMeDnmc} ${delayFlag && stl.delay} ` : `${stl.messageBlockUser} ${themes.msgUserDnmc} ${delayFlag && stl.delay}`)}
                       id={msg.id}
-                      // onDoubleClick={() => visibility ? setVisibility(null) : setVisibility(stl.visibility)}
                       onContextMenu={(e) => { return state.sendndigInProgress.some(el => el === msg.actionKey) ? null : onRightClickListener(e, i, arr) }}
                     >
                       <p className={stl.messageBody} >{msg.body}</p>
@@ -315,9 +317,16 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       /> : null}
                     </div>
                   })}
+
+
+
             <div ref={bufferBlock} />
           </div>
           <div className={stl.sender}>
+            {btnShow && <button className={stl.scrollToDownBtn} onClick={() => scrollToDown(bufferBlock)}>
+              <img src={state.arrowDownPIC} alt="Err" />
+            </button>
+            }
             <Formik initialValues={{ text: '' }} validate={validator} onSubmit={submitter} >
               {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
                 <form onSubmit={handleSubmit} >

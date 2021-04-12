@@ -276,6 +276,7 @@
     height: 100vh;
     /*max-height: 1500px;*/
 }
+
 .dialogAreaN,.textareaN {background-color: #fdfdfd;     }
 .dialogAreaM,.textareaM {background-color: #faffd3;     }
 .dialogAreaD,.textareaD {background-color: lightyellow; }
@@ -546,11 +547,25 @@
 /*.dialogAreaEvening::-webkit-scrollbar-thumb {background-color: darkred;}*/
 /*.dialogAreaEvening::-webkit-scrollbar-button:single-button  {background-color: darkred;}*/
 
+
+
 .sender {
     height: 180px;
     /*background-color: red;*/
     border-radius: 0 0 20px 0;
     width: 100%;
+    position: relative
+}
+
+.scrollToDownBtn {
+    position: absolute;
+    top:  -90px;
+    right: 45px;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 3px solid grey;
+    cursor: pointer;
+    outline:none;
 }
 
 .sender form {
