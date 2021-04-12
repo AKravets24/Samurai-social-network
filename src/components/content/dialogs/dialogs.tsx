@@ -28,7 +28,7 @@ type DialogsActions_Types = {
 }
 
 type Themes_Type = {
-  activeLink: string, dialogAreaBackgroundNSecondScroll: string, dialogDnmc: string, firstScroller: string, msgMeDnmc: string, msgUserDnmc: string, sendBTNDnmc: string, talkerBlockA: string, talkerBlockTheme: string, textAreaDnmc: string
+  activeLink: string, dialogAreaBackgroundNSecondScroll: string, dialogDnmc: string, firstScroller: string, msgMeDnmc: string, msgUserDnmc: string, sendBTNDnmc: string, talkerBlockA: string, nameInHeaderDnmc: string, talkerBlockTheme: string, textAreaDnmc: string
 }
 
 let DialogFuncContainer = () => {
@@ -63,24 +63,24 @@ let DialogFuncContainer = () => {
     match?.params?.userId ? dialogActions.talkedBeforeThunk(+match.params.userId) : dialogActions.getMyNegotiatorsListThunk();
   }, [])
 
-  let [themes, setThemes] = useState<Themes_Type>({ dialogDnmc: '', firstScroller: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDnmc: '', msgUserDnmc: '', dialogAreaBackgroundNSecondScroll: '', textAreaDnmc: '', sendBTNDnmc: '', })
+  let [themes, setThemes] = useState<Themes_Type>({ dialogDnmc: '', firstScroller: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDnmc: '', msgUserDnmc: '', dialogAreaBackgroundNSecondScroll: '', nameInHeaderDnmc: '', textAreaDnmc: '', sendBTNDnmc: '', })
   useEffect(() => {
     switch (colorTheme) {
       case 'NIGHT': return setThemes({
         ...themes, dialogDnmc: stl.dialogN, firstScroller: stl.dialogListN, talkerBlockTheme: stl.talkerBlockN, activeLink: stl.activeLinkN, talkerBlockA: stl.talkerBlockA_N, msgMeDnmc: stl.myMsgN,
-        msgUserDnmc: stl.userMsgN, dialogAreaBackgroundNSecondScroll: stl.dialogAreaN, textAreaDnmc: stl.textareaN, sendBTNDnmc: stl.sendBTN_N,
+        msgUserDnmc: stl.userMsgN, dialogAreaBackgroundNSecondScroll: stl.dialogAreaN, nameInHeaderDnmc: stl.nameInHeaderN, textAreaDnmc: stl.textareaN, sendBTNDnmc: stl.sendBTN_N,
       });
       case 'MORNING': return setThemes({
         ...themes, dialogDnmc: stl.dialogM, firstScroller: stl.dialogListM, talkerBlockTheme: stl.talkerBlockM, activeLink: stl.activeLinkM, talkerBlockA: stl.talkerBlockA_M, msgMeDnmc: stl.myMsgM,
-        msgUserDnmc: stl.userMsgM, dialogAreaBackgroundNSecondScroll: stl.dialogAreaM, textAreaDnmc: stl.textareaM, sendBTNDnmc: stl.sendBTN_M,
+        msgUserDnmc: stl.userMsgM, dialogAreaBackgroundNSecondScroll: stl.dialogAreaM, nameInHeaderDnmc: stl.nameInHeaderM, textAreaDnmc: stl.textareaM, sendBTNDnmc: stl.sendBTN_M,
       });
       case 'DAY': return setThemes({
         ...themes, dialogDnmc: stl.dialogD, firstScroller: stl.dialogListD, talkerBlockTheme: stl.talkerBlockD, activeLink: stl.activeLinkD, talkerBlockA: stl.talkerBlockA_D, msgMeDnmc: stl.myMsgD,
-        msgUserDnmc: stl.userMsgD, dialogAreaBackgroundNSecondScroll: stl.dialogAreaD, textAreaDnmc: stl.textareaD, sendBTNDnmc: stl.sendBTN_D,
+        msgUserDnmc: stl.userMsgD, dialogAreaBackgroundNSecondScroll: stl.dialogAreaD, nameInHeaderDnmc: stl.nameInHeaderD, textAreaDnmc: stl.textareaD, sendBTNDnmc: stl.sendBTN_D,
       });
       case 'EVENING': return setThemes({
         ...themes, dialogDnmc: stl.dialogE, firstScroller: stl.dialogListE, talkerBlockTheme: stl.talkerBlockE, activeLink: stl.activeLinkE, talkerBlockA: stl.talkerBlockA_E, msgMeDnmc: stl.myMsgE,
-        msgUserDnmc: stl.userMsgE, dialogAreaBackgroundNSecondScroll: stl.dialogAreaE, textAreaDnmc: stl.textareaE, sendBTNDnmc: stl.sendBTN_E,
+        msgUserDnmc: stl.userMsgE, dialogAreaBackgroundNSecondScroll: stl.dialogAreaE, nameInHeaderDnmc: stl.nameInHeaderE, textAreaDnmc: stl.textareaE, sendBTNDnmc: stl.sendBTN_E,
       });
     }
   }, [colorTheme])
@@ -129,9 +129,10 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   let getTalk = (userId: number) => { setDialogId(dialogId = userId); setPageNumber(2); actions.getTalkWithUserThunk(dialogId) };
 
   let oldMsgLazyLoader = () => {
+    // debugger;
     actions.addPrevMessagesThunk(dialogId, 10, pageNumber);
     setMsgsMapDone(2)
-    setPageNumber(pageNumber + 1)
+    !state.errAtGettingPrevMsgs && setPageNumber(pageNumber + 1)
   };
 
 
@@ -209,8 +210,8 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
   let scrollToDown = (bufferBlock: any) => { bufferBlock.current && bufferBlock.current.scrollIntoView({ behavior: "auto" }) };
 
-  // console.log(dialogArea?.current?.scrollTop)
   let [btnShow, setBtnShow] = useState<boolean>(false);
+  let [dialogChanging, setDialogChanging] = useState<boolean>(false)
 
 
   return <>
@@ -244,7 +245,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       <img src={user.photos.large || state.defaultAvatar} alt="err" />
                     </NavLink>
                     <NavLink to={`/dialogs/${user.id}`}
-                      onClick={() => { getTalk(user.id); setMsgsMapDone(0); setBtnShow(false) }}
+                      onClick={() => { getTalk(user.id); setMsgsMapDone(0); setBtnShow(false); setDialogChanging(true) }}
                       className={themes.talkerBlockA}
                       activeClassName={themes.activeLink}>
                       {user.userName}{user.hasNewMessages &&
@@ -254,15 +255,14 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
         </div>
         <div className={stl.dialogsAreaAndSender}>
           <div className={stl.editWrapper}>
-            <h2>{userNameInHeader}</h2>
+            <h2 className={themes.nameInHeaderDnmc}>{userNameInHeader}</h2>
           </div>
           <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll, delayFlag && stl.delay)}
             ref={dialogArea}
             onScroll={() => {
-              // console.log(dialogArea?.current?.scrollTop)
               dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 >= 200 ? setBtnShow(true) : setBtnShow(false);
               !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
-                !state.prevMsgsIsLoading && oldMsgLazyLoader()
+                !state.prevMsgsIsLoading && !dialogChanging && oldMsgLazyLoader()
             }}
             onContextMenu={e => e.preventDefault()}
           >
@@ -271,15 +271,16 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                 <p>No dialogs here so far...</p>
               </div>}
             <div className={stl.oldMsgsLoader}>
-              {state.prevMsgsIsLoading && <img src={loaders.prevMSGLDR_GIF} alt="Err" />}
+              {state.prevMsgsIsLoading ? <img src={loaders.prevMSGLDR_GIF} alt="Err" /> :                          // предыдущие сообщения грузятся? | лодер
+                state.errAtGettingPrevMsgs && <p>Failed to load previous messages. Try again.</p>                  // есть ошибка?                   | соболезнования
+              }
             </div>
             {state.certainDialogIsLoading ? <div className={stl.certainLDRWrapper}><img src={loaders.certainLDR_GIF} alt="err" /></div> :
               state.errCertainDialogGet ? <div className={stl.errorBlock}> {state.errCertainDialogGet}</div> :
                 state?.certainDialog?.items
                   .map((msg, i, arr) => {
-                    if (msgsMapDone === 0 && i === arr.length - 1) { setMsgsMapDone(1); setDialogAreaHeight(dialogArea?.current?.scrollHeight) }
-                    if (msgsMapDone === 2 && i === arr.length - 1) { setMsgsMapDone(3); setDialogAreaHeight(dialogArea?.current?.scrollHeight) }
-                    // if (i === arr.length - 1) { scrollToDown(bufferBlock) }
+                    if (msgsMapDone === 0 && i === arr.length - 1) { setMsgsMapDone(1); setDialogAreaHeight(dialogArea?.current?.scrollHeight); setDialogChanging(false) }
+                    if (msgsMapDone === 2 && i === arr.length - 1) { setMsgsMapDone(3); setDialogAreaHeight(dialogArea?.current?.scrollHeight); setDialogChanging(false) }
 
                     return <div
                       // key={msg.id}
@@ -317,9 +318,6 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       /> : null}
                     </div>
                   })}
-
-
-
             <div ref={bufferBlock} />
           </div>
           <div className={stl.sender}>

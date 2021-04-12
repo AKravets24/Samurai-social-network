@@ -37,6 +37,7 @@ const actions = {
   setAsSpamMessage: (messageId: string, index: number) => ({ type: 'SET_SPAM_MESSAGE', messageId, index } as const),
   toggleSendingInProgressAC: (isSending: boolean, actionKey: string) => ({ type: 'TOGGLE_SENDING_IN_PROGRESS', isSending, actionKey } as const),
   errCatcherAtSendingAC: (actionKey: string, errCode: number) => ({ type: 'ERROR_AT_SENDING_TOGGLER', actionKey, errCode } as const),
+  errAtGettingPrevMsgsAC: (isErr: boolean) => ({ type: 'IS_ERROR_AT_GETTING_PREV_MSGS', isErr } as const),
 }
 
 type ActionTypes = InferActionsTypes<typeof actions>
@@ -99,11 +100,17 @@ const talkedBeforeThunkAC = (userId: number): ThunkAC_Type => async (dispatch: D
 };
 const addPrevMessagesThunkAC = (userId: number, msgCount: number, pageNumber: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.prevMsgsloadingTogglerAC(true));
-  let response = await usersApi.getTalkWithUser(userId, msgCount, pageNumber)
-  dispatch(actions.addPrevMSGS(response.data.items))
+  dispatch(actions.errAtGettingPrevMsgsAC(false));
+  try {
+    let response = await usersApi.getTalkWithUser(userId, msgCount, pageNumber)
+    dispatch(actions.addPrevMSGS(response.data.items))
+  }
+  catch (err) {
+    dispatch(actions.errAtGettingPrevMsgsAC(true));
+  }
   dispatch(actions.prevMsgsloadingTogglerAC(false));
-
 };
+
 const deleteMessageThunkAC = (messageId: string, index: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   try {
     let response = await usersApi.deleteMessage(messageId)
@@ -199,6 +206,7 @@ let initialDialogsState = {
   msgDeliveredFlagPIC: msgDeliveredFlag as string,
   msgSeenFlagPIC: msgSeenFlag as string,
   arrowDownPIC: arrowDownPIC as string,
+  errAtGettingPrevMsgs: false as boolean,
 };
 
 export type InitialDialogsState_Type = typeof initialDialogsState;
@@ -312,6 +320,11 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
     case 'PREV_MSGS_LOADING_TOGGLER':
       // console.log('PREV_MSGS_LOADING_TOGGLER')
       return { ...state, prevMsgsIsLoading: action.prevMsgsIsLoading };
+
+    case 'IS_ERROR_AT_GETTING_PREV_MSGS':
+      console.log('IS_ERROR_AT_GETTING_PREV_MSGS');
+
+      return { ...state, errAtGettingPrevMsgs: action.isErr }
 
     case 'ON_SENDING_MSG_STATUS':
       // let index = state.keyArr.findIndex((el) => (el === action.actionKey));

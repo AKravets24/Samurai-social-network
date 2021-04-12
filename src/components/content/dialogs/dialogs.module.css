@@ -262,6 +262,11 @@
     justify-content: space-around;
 }
 
+.nameInHeaderN { color: black} 
+.nameInHeaderM { color: black}
+.nameInHeaderD { color: black}
+.nameInHeaderE { color: white}
+
 .dialogArea {
     /*outline: 2px solid blue;*/
     grid-area: specificDialog;
@@ -325,6 +330,15 @@
     width: 100%;
     height: 20px;
     /*outline: 2px solid red;*/
+}
+
+.oldMsgsLoader p {
+    margin: 0;
+    color: red;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
 }
 
 .messageBlockMe,
@@ -474,32 +488,6 @@
     transition: 100ms;
     filter: grayscale(.70);
 }
-
-.editWrapper {
-    height: 35px;
-}
-
-.editWrapper button {
-    font-size: 25px;
-    background-color: transparent;
-    border-radius: 5px;
-    outline: none;
-}
-
-.editWrapper button:first-child {
-    color: red;
-    margin-right: 10px;
-}
-
-.editWrapper button:nth-child(2n) {
-    color:  blue;
-    margin-left: 10px;
-}
-
-.editWrapper button:hover {
-    cursor: pointer;
-}
-
 
 .messageBody {
     color: black;
