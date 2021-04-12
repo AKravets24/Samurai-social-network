@@ -154,6 +154,8 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   type Value_Type = { text: string }
   let submitter = (values: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     actions.sendMessageToUserThunk(dialogId, values.text, uuidv4() as string, '', myId as number); values.text = ''; setSubmitting(false);
+    bufferBlock?.current?.scrollIntoView({ behavior: "auto" })
+
   }
 
   let keyCodeChecker = (e: KeyboardEvent, values: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
