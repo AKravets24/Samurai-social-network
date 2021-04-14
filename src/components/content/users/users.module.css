@@ -501,17 +501,6 @@
     bottom: 270px;
 }
 
-.feedBackVisible{
-    opacity: 1;
-    transition:  3s;
-}
-.feedbackHidden{
-    opacity: 0;
-    transition:  3s;
-}
-.feedbackWindow:hover {
-    /*background-color: black;*/
-}
 .feedbackWindow0 button,
 .feedbackWindow1 button,
 .feedbackWindow2 button {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, SyntheticEvent, Fragment } from "react";
+import React, { useState, useEffect, useRef, } from "react";
 import stl from './users.module.css';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Field, Formik } from 'formik';
@@ -62,7 +62,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
           return <span key={p} className={usersInfo.currentPage === p ? `${stl.paginationSelected} ${themes.paginationSelectedDnmc}` :
             `${stl.pagination} ${themes.paginationDnmc}`}
             onClick={() => {
-              // debugger;
+              mapWrapperRef?.current?.scrollTo(0, 0)
               searchMode ?
                 usersInfo.currentPage !== p && usersFuncs.getCertainUserThunk(pageSize, userSearchName, p) :
                 usersInfo.currentPage !== p && setPageListener(pageSize, p)
@@ -105,23 +105,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
     } usersFuncs.setErrorToNull();
   };
 
-  // let firstBlockClass = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
-  let firstBlockClass = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed);
-  let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
-
-  let [isHidden, setIsHidden] = useState<null | string>(null)
-
-  let postClass = () => { setTimeout(() => { setIsHidden(stl.feedbackHidden); return isHidden }, 3000) }
-
-  // console.log(usersInfo.onSendMSGStatArr)
-
   let validator = (values: Value_Type) => { let errors: Error_Type = {}; if (!values.text.trim()) { values.text = ''; errors.text = 'Required' } return errors }
-
-  let formSubmitter = (userId: number, textValue: Value_Type, userName: string, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
-    let actionKey: string = uuidv4()
-    usersFuncs.sendMessageToUserThunk(userId, textValue.text, actionKey, userName);
-    textValue.text = ''; setSubmitting(false);
-  }
 
   type ModalMsgs_Type = { servInfo: { clientX?: number, clientY?: number, flag?: boolean, closer?: any }[] }
   let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
@@ -146,7 +130,8 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
       let newServInfo = [...writeMsgMode.servInfo]
       newServInfo[indexEl.index].flag = false
       let finalState = { servInfo: newServInfo }
-      indexEl.elem.className = firstBlockClass
+      // indexEl.elem.className = firstBlockClass
+      indexEl.elem.className = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed)
       setWriteMsgMode(writeMsgMode = finalState)
       setWrapperLocker(stl.wrapperUnlocked);
       setIsDisabled(false);
@@ -156,7 +141,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
   let modalCloser = (i: number, e: any) => { setIndexEl({ index: i, elem: e }) }
 
   // console.log(usersInfo)
-
+  let mapWrapperRef = useRef<HTMLDivElement>(null);
 
   return <>
     <div className={cn(stl.usersPage, themes.userPageDnmc, delayFlag && stl.delay)} >
@@ -197,7 +182,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
                 <img src={usersInfo.userNotFoundGIF} alt="Err" />
                 <h2>{usersInfo.userNotFound} =(</h2>
               </div> :
-              <div className={cn(stl.mapWrapper, themes.mapWrapperDnmc, wrapperLocker, delayFlag && stl.delay)}>
+              <div ref={mapWrapperRef} className={cn(stl.mapWrapper, themes.mapWrapperDnmc, wrapperLocker, delayFlag && stl.delay)}>
                 {usersInfo?.initialUsersList
                   .map((user, i, users) =>
                     <div className={stl.userUnitContainer} key={i}>
@@ -358,16 +343,6 @@ const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProp
     // return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
     return false
   })
-
-
-
-
-
-
-
-
-
-
 
 // const FeedBacker = React.memo(({ sendingMSGStatArr, feedBackWindowCloser }: FBProps_Type) => {
 //   // console.log(sendingMSGStatArr)
