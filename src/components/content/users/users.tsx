@@ -33,12 +33,20 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
   let [userSearchName, setUserSearchName] = useState<string>('')
 
   let history = useHistory();
-  // console.log(history)
+  // console.log(usersInfo.totalCount)
 
+  let { totalCount, pageSize } = usersInfo;
+  let pagesAmount = Math.ceil(totalCount / pageSize)
+
+  useEffect(() => {
+    if (parsedString['term'] && parsedString['term'] !== '') { setSearchMode(true); setUserSearchName(parsedString['term'] as string) }
+    if (parsedString['?page'] && totalCount && +parsedString['?page'] > pagesAmount) {
+      usersFuncs.getUsersThunk(pageSize, pagesAmount); setPortionNumber(Math.ceil(totalCount / 1000))
+    } else if (parsedString['?page']) { setPortionNumber(Math.ceil(+parsedString['?page'] / 10)) }
+  }, [totalCount])
 
   let paginator = () => {
     let pageStep = 10;
-    let pagesAmount = Math.ceil(usersInfo.totalCount / usersInfo.pageSize)
     let leftPortionPageNumber = (portionNumber - 1) * pageStep + 1
     let rightPortionPageNumber = portionNumber * pageStep;
     let portionCount = Math.ceil(pagesAmount / pageStep)
@@ -56,8 +64,8 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
             onClick={() => {
               // debugger;
               searchMode ?
-                usersInfo.currentPage !== p && usersFuncs.getCertainUserThunk(usersInfo.pageSize, userSearchName, p) :
-                usersInfo.currentPage !== p && setPageListener(usersInfo.pageSize, p)
+                usersInfo.currentPage !== p && usersFuncs.getCertainUserThunk(pageSize, userSearchName, p) :
+                usersInfo.currentPage !== p && setPageListener(pageSize, p)
             }}
           >{p}
           </span>
@@ -70,8 +78,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
     </div>
   };
 
-  // let userName = usersInfo.userSearchField;
-
   let setPageListener = (pageSize: number, page: number) => {
     usersFuncs.setCurrentPageThunk(pageSize, page);
     wrapperLocker && setWrapperLocker(''); isDisabled && setIsDisabled(false);
@@ -82,13 +88,12 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
   let parsedString = queryString.parse(queryRequest);
   // console.log(parsedString);
 
-  useEffect(() => { if (parsedString['term'] && parsedString['term'] !== '') { setSearchMode(true); setUserSearchName(parsedString['term'] as string) } }, [])
+
 
   let friendsSeekerSubmitter = (userName: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     setSearchMode(true)
     setUserSearchName(userName.text)
     history.push({ pathname: 'users', search: `?page=${usersInfo.currentPage}&term=${userName.text}` })
-    let { pageSize } = usersInfo;
     usersFuncs.getCertainUserThunk(pageSize, userName.text.trim(), 1)
     setSubmitting(false);
   }
@@ -150,7 +155,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 
   let modalCloser = (i: number, e: any) => { setIndexEl({ index: i, elem: e }) }
 
-  console.log(usersInfo)
+  // console.log(usersInfo)
 
 
   return <>
