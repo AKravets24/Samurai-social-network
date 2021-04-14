@@ -107,11 +107,18 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 
   let validator = (values: Value_Type) => { let errors: Error_Type = {}; if (!values.text.trim()) { values.text = ''; errors.text = 'Required' } return errors }
 
+
+
   type ModalMsgs_Type = { servInfo: { clientX?: number, clientY?: number, flag?: boolean, closer?: any }[] }
   let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
+
   let userIdTalkModeOn = (e: any, i: number, arr: any) => {
+
+    if (mapWrapperRef?.current && e.target.parentElement.parentElement.parentElement.parentElement.getBoundingClientRect().top <= mapWrapperRef?.current?.getBoundingClientRect().top) {
+      e.target.parentElement.parentElement.parentElement.parentElement.scrollIntoView({ behavior: "smooth" }) //плавный автоСкролл если элемент если он вызе вьюпорта
+    }
+    setTimeout(() => { setIsDisabled(true) }, 200)
     setWrapperLocker(stl.wrapperLocked);
-    // setIsDisabled(true);
     e.target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
     let newServInfo = [...writeMsgMode.servInfo]
     if (newServInfo[i] === undefined) { newServInfo[i] = {} }
@@ -142,6 +149,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 
   // console.log(usersInfo)
   let mapWrapperRef = useRef<HTMLDivElement>(null);
+
 
   return <>
     <div className={cn(stl.usersPage, themes.userPageDnmc, delayFlag && stl.delay)} >
@@ -223,14 +231,14 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
                             </button>
                             <button className={cn(stl.followBTN, themes.followBTNDnmc)}
                               disabled={isDisabled}
-                              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => userIdTalkModeOn(e, i, users)}
+                              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => { userIdTalkModeOn(e, i, users) }}
                             >Write message </button>
                           </div>
                         </div>
                       </div>
-                      {writeMsgMode.servInfo[i]?.flag ?
-                        <WriterMode themes={themes} userEl={users[i]} sendMsg={usersFuncs.sendMessageToUserThunk} index={i} srvInfo={writeMsgMode.servInfo[i]}
-                          delayFlag={delayFlag} /> : null}
+                      {writeMsgMode.servInfo[i]?.flag &&
+                        <WriterMode themes={themes} userEl={users[i]} sendMsg={usersFuncs.sendMessageToUserThunk} index={i} srvInfo={writeMsgMode.servInfo[i]} delayFlag={delayFlag} />
+                      }
                     </div >
                   )}
               </div>
@@ -254,8 +262,8 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 }
 
 // let WriterMode = ({ themes }: UsersThemes_Type) => {
-let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFlag }: any) => {  // Прикруитть нормальную типизацию
-  // console.log(1)
+let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFlag, }: any) => {  // Прикруитть нормальную типизацию
+
 
   type Error_Type = { text?: string }
   type Value_Type = { text: string }
@@ -343,95 +351,3 @@ const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProp
     // return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
     return false
   })
-
-// const FeedBacker = React.memo(({ sendingMSGStatArr, feedBackWindowCloser }: FBProps_Type) => {
-//   // console.log(sendingMSGStatArr)
-//   console.log(123)
-//   let feedBackRef = useRef<HTMLDivElement | null>(null);
-
-//   let feedBackNamer = (i: number, statNum: number, /* feedBackRef:HTMLDivElement */) => {
-
-//     // feedBackRef.current && console.log(feedBackRef.current.getAttribute('data-name'));
-//     // feedBackRef.current && feedBackRef.current.setAttribute('data-name', 'fuck-off блять!!!');
-//     // feedBackRef.current && console.log(feedBackRef.current.getAttribute('data-name'));
-
-//     // feedBackRef.current && console.log(feedBackRef.current.attributes.getNamedItem('data-name'));
-//     // feedBackRef.current && console.log(feedBackRef.current.attributes[0].nodeValue);
-//     // feedBackRef.current && feedBackRef.current.attributes.setNamedItem({'data-name': 'on'});
-//     // feedBackRef.current && console.log(feedBackRef.current.attributes.getNamedItem('data'));
-//     // feedBackRef.current && console.log(feedBackRef.current.attributes.attributes[0]);
-
-//     if (i === 0) { return `${stl.feedbackWindow0}`; }
-
-//     if (statNum === 0) { }
-//     // console.log(1); /*feedBackCloserTimeOut(i);*/}
-//     if (i === 1) return stl.feedbackWindow1
-//     if (i >= 2) return stl.feedbackWindow2
-//   }
-
-//   let attributer = (i: number) => { feedBackCloserTimeOut(i); return 'off' }
-
-//   let feedBackCloser = (i: number) => { feedBackWindowCloser(i) }
-
-//   let feedBackCloserTimeOut = (i: number) => { setTimeout(() => { feedBackWindowCloser(i) }, 5000) }
-
-//   return <>
-//     {sendingMSGStatArr.map((el, i) => {
-//       let cycleId = uuidv4()
-//       // feedBackRef.current && el.statNum !== 0 && attributer(feedBackRef, cycleId)
-
-//       return <div ref={feedBackRef}
-//         data-flag={attributer(i)}
-//         key={cycleId}
-//         id={cycleId}
-//         className={feedBackNamer(i, el.statNum)}
-//       >
-//         <button onClick={() => feedBackCloser(i)}> X</button>
-//         <p>{el.statNum === 0 && 'Sending message...' ||
-//           el.statNum === 1 && `Message delivered to ${el.userName}` ||
-//           el.statNum === 2 && `Failed to deliver message to ${el.userName} `}
-//         </p>
-//       </div>
-//     })}
-//   </>
-// },
-//   function areEqual(prevProps, nextProps) {
-//     return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
-//   })
-
-
-
-
-
-
-//         // let flag;
-//         // let res1=[];
-//         // let res2=[];
-//         //
-//         // if (!prevProps.sendingMSGStatArr.length && !nextProps.sendingMSGStatArr.length){flag = false}
-//         // else if (prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length){flag = false}
-//         // else {
-//         //
-//         //     for(let i=0,j=0; i<prevProps.sendingMSGStatArr.length,j<nextProps.sendingMSGStatArr.length; i++,j++){
-//         //         for (let key1 in prevProps.sendingMSGStatArr[i]){res1.push(key1+prevProps.sendingMSGStatArr[i][key1])}
-//         //         for (let key2 in nextProps.sendingMSGStatArr[j]){res2.push(key2+nextProps.sendingMSGStatArr[j][key2])}
-//         //     }
-//         //     console.log(res1)
-//         //     console.log(res2)
-//         //     for (let i=0; i<res1.length; i++){
-//         //         if (res1[i]==res2[i]) {
-//         //             console.log(2)
-//         //             console.log(res1[i]===res2[i])
-//         //
-//         //             flag = false;
-//         //             break;
-//         //         }
-//         //         console.log(5);
-//         //         flag = true
-//         //     }
-//         // }
-//         // // console.log(flag)
-//         // return flag
-//     }
-// )
-
