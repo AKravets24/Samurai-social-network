@@ -25,6 +25,7 @@ type DialogsActions_Types = {
   setSpamMessagesThunk: (messageId: string, index: number) => void
   deleteMessageThunk: (messageId: string, index: number) => void
   addPrevMessagesThunk: (dialogId: number, msgCount: number, pageNumber: number) => void
+  userCompCleaner: () => void,
 }
 
 type Themes_Type = {
@@ -56,11 +57,15 @@ let DialogFuncContainer = () => {
     deleteMessageThunk: (messageId: string, index: number) => dispatch(dialogACs.deleteMessageThunkAC(messageId, index)),
     addPrevMessagesThunk: (dialogId: number, msgCount: number, pageNumber: number) =>
       dispatch(dialogACs.addPrevMessagesThunkAC(dialogId, msgCount, pageNumber)),
+    userCompCleaner: () => dispatch(dialogACs.dialogCompCleaner())
   }
+
 
 
   useEffect(() => {
     match?.params?.userId ? dialogActions.talkedBeforeThunk(+match.params.userId) : dialogActions.getMyNegotiatorsListThunk();
+
+    return () => dialogActions.userCompCleaner()
   }, [])
 
   let [themes, setThemes] = useState<Themes_Type>({ dialogDnmc: '', firstScroller: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDnmc: '', msgUserDnmc: '', dialogAreaBackgroundNSecondScroll: '', nameInHeaderDnmc: '', textAreaDnmc: '', sendBTNDnmc: '', })

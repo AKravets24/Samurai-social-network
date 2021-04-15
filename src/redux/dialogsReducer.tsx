@@ -38,6 +38,7 @@ const actions = {
   toggleSendingInProgressAC: (isSending: boolean, actionKey: string) => ({ type: 'TOGGLE_SENDING_IN_PROGRESS', isSending, actionKey } as const),
   errCatcherAtSendingAC: (actionKey: string, errCode: number) => ({ type: 'ERROR_AT_SENDING_TOGGLER', actionKey, errCode } as const),
   errAtGettingPrevMsgsAC: (isErr: boolean) => ({ type: 'IS_ERROR_AT_GETTING_PREV_MSGS', isErr } as const),
+  dialogCompCleanerAC: () => ({ type: 'DIALOG_AREA_ARR_WAS_CLEANED' } as const),
 }
 
 type ActionTypes = InferActionsTypes<typeof actions>
@@ -155,6 +156,7 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
   }
   dispatch(actions.toggleSendingInProgressAC(false, actionKey));
 };
+const dialogCompCleaner = () => (dispatch: Dispatch_Type) => { dispatch(actions.dialogCompCleanerAC()) }
 
 
 
@@ -171,12 +173,13 @@ export type DialogActions_Type = {
   addPrevMessagesThunkAC: (userId: number, msgCount: number, pageNumber: number) => ThunkAC_Type
   feedBackWindowCloserAC: (arrIndex: number) => FeedBackWindowCloserAC_Type
   feedbackRefPushAC: (el: any) => FeedbackRefPushAC_Type
+  dialogCompCleaner: () => void
 }
 
 const dialogActions: DialogActions_Type = {
   getMyNegotiatorsListThunkAC, getTalkWithUserThunkAC, sendMessageToUserThunkAC, createNewDialogAC: actions.createNewDialogAC,
   talkedBeforeThunkAC, setSelectedMessagesAC: actions.setSelectedMessagesAC, setSpamMessagesThunkAC, deleteMessageThunkAC, getNewMessagesRequestThunkAC,
-  addPrevMessagesThunkAC, feedBackWindowCloserAC: actions.feedBackWindowCloserAC, feedbackRefPushAC: actions.feedbackRefPushAC
+  addPrevMessagesThunkAC, feedBackWindowCloserAC: actions.feedBackWindowCloserAC, feedbackRefPushAC: actions.feedbackRefPushAC, dialogCompCleaner,
 };
 
 export const dialogACs = (state = dialogActions) => { return state };
@@ -372,6 +375,9 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       console.log(2);
       // state.feedbackArr.push(action.el)
       return { ...state }
+
+    case 'DIALOG_AREA_ARR_WAS_CLEANED':
+      return { ...state, certainDialog: { items: [] } }
 
     default: return stateCopy;
   }
