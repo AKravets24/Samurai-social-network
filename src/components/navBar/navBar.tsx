@@ -1,4 +1,4 @@
-import React, { DOMElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import stl from './navBar.module.css';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -8,6 +8,8 @@ import { withAuthRedirect } from "../content/HOC/withAuthRedirect";
 import { getDialogACs, getMyId, getSmartPartialDialogReducer, getSmartDialogsReducer, getTheme, getUsersACs, getThemesDelayFlag } from "../../redux/selectors";
 import { AppStateType } from "../../redux/redux-store";
 import * as queryString from 'querystring'
+import { DialogActions_Type, PartDialogReducer_Type, ThunkAC_Type } from "../../redux/dialogsReducer";
+import { UsersACs_Type } from "../../redux/usersReducer";
 
 type ContainerProps_Types = {
   actions: {
@@ -37,10 +39,8 @@ type ThemesNavbar_Type = {
   dynamicClass: string,
 }
 
-let NavBarContainer: React.FC<ContainerProps_Types> = ({ state, actions }) => {
+let NavBarContainer: React.FC<ContainerProps_Types> = ({ state: { myId, colorTheme, themesDelayFlag, partDialogReducer }, actions }) => {
   // console.log(state)
-
-  let { myId, colorTheme, themesDelayFlag } = state;
 
   let [themes, setThemes] = useState({ dynamicActiveClass: '', dynamicClass: 'stl.linkNight  ', blockMenu: '', counter: '', });
   useEffect(() => {
@@ -61,7 +61,7 @@ let NavBarContainer: React.FC<ContainerProps_Types> = ({ state, actions }) => {
     themes={themes}
     delayFlag={themesDelayFlag}
     actions={actions}
-    state={state.partDialogReducer}
+    state={partDialogReducer}
   /> : null
 }
 
@@ -80,7 +80,8 @@ let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions, delayFlag })
 
   // let [isHiddenBTN, setIsHiddenBTN] = useState(stl.hidden);
   let isHiddenBTN = stl.hidden;
-  let [element, setElement] = useState<any>(null);
+
+  let [element, setElement] = useState<JSX.Element>(<span className={themes.dynamicClass}> +1? </span>);
 
   useEffect(() => { BTNRenderSelector() }, [state.newMessageBTNDisabled, state.errGettingNewMSGSCount]);
 
@@ -135,8 +136,6 @@ let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions, delayFlag })
         {myId && <li className={stl.dialogsSpan}>
           <button disabled={state.newMessageBTNDisabled} onClick={actions.getNewMessagesRequestThunk} className={isHiddenBTN}>
             {element}
-            {/* { props.btnIsDisabled && !props.errGettingNewMSGSCount ?  <img src={props.msgLoader} alt="err"/>  :
-                            <span className={themes.dynamicClass}> '+1?'</span>}*/}
           </button>
           <NavLink to={'/dialogs'}
             className={themes.dynamicClass}
@@ -148,6 +147,7 @@ let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions, delayFlag })
           className={themes.dynamicClass}
           activeClassName={themes.dynamicActiveClass}> Chat </NavLink></li>}
         {/* {props.myId && <li><NavLink to={'/users'} */}
+
         {myId && <li><NavLink to={history.location.pathname !== `/users` ? '/users' : history.location.pathname + history.location.search}
           // {props.myId && <li><NavLink to={history.location.pathname + history.location.search}
           className={themes.dynamicClass}
@@ -168,7 +168,17 @@ let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions, delayFlag })
   </>
 }
 
-const mapStateToProps = (state: AppStateType) => {
+
+type MSTP_Type = {
+  myId: number | null,
+  colorTheme: string,
+  dialogACs: DialogActions_Type,
+  usersACs: UsersACs_Type,
+  partDialogReducer: PartDialogReducer_Type,
+  themesDelayFlag: boolean,
+}
+
+const mapStateToProps = (state: AppStateType): MSTP_Type => {
   // console.log(state);
   return {
     myId: getMyId(state),
@@ -176,14 +186,16 @@ const mapStateToProps = (state: AppStateType) => {
     dialogACs: getDialogACs(state),
     usersACs: getUsersACs(state),
     partDialogReducer: getSmartPartialDialogReducer(state),
-    // partDialogReducer:     getSmartDialogsReducer(state), 
     themesDelayFlag: getThemesDelayFlag(state)
+    // partDialogReducer:     getSmartDialogsReducer(state), 
   }
 };
 
-const mergeProps = (stateProps: any, dispatchProps: any) => {                                                   // ANY !!!!!!!!!!!!!!!!!!!
+type DispatchProps_Type = { dispatch: (args: any) => ThunkAC_Type }
+
+const mergeProps = (stateProps: MSTP_Type, dispatchProps: DispatchProps_Type) => {                                                   // 
   const state = stateProps;
-  // console.log(stateProps);
+  console.log(dispatchProps);
 
   const { dispatch } = dispatchProps;
   // console.log(state)

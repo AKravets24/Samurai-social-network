@@ -43,7 +43,7 @@ const actions = {
 
 type ActionTypes = InferActionsTypes<typeof actions>
 type Dispatch_Type = Dispatch<ActionTypes>;
-type ThunkAC_Type = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
+export type ThunkAC_Type = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
 
 const getMyNegotiatorsListThunkAC = (): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
@@ -160,6 +160,8 @@ const dialogCompCleaner = () => (dispatch: Dispatch_Type) => { dispatch(actions.
 
 
 
+
+
 export type DialogActions_Type = {
   getMyNegotiatorsListThunkAC: () => ThunkAC_Type
   getTalkWithUserThunkAC: (userId: number) => ThunkAC_Type
@@ -213,6 +215,9 @@ let initialDialogsState = {
 };
 
 export type InitialDialogsState_Type = typeof initialDialogsState;
+
+export type PartDialogReducer_Type = { newMessageBTNDisabled: boolean, newMessagesCounter: number, errGettingNewMSGSCount: boolean, onError: string, envelope_GIF: string, }
+
 
 let ForUsersSomeAttrs1 = {
   // onSendMSGStatArr: initialDialogsState.onSendMSGStatArr,
