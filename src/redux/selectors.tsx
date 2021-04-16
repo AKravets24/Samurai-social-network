@@ -134,10 +134,7 @@ const getCertainDialogIsLoading = (state: AppStateType) => state.dialogsReducer.
 const getDefaultAvatar_compDialogs = (state: AppStateType) => state.dialogsReducer.defaultAvatar;
 const getNewMessagesCounter = (state: AppStateType) => state.dialogsReducer.newMessagesCounter;
 const getNewMessageBTNDisabled = (state: AppStateType) => state.dialogsReducer.newMessageBTNDisabled;
-// const getMsgLoader                      = state => state.dialogsReducer.msgLoader                                ;
 const getPrevMsgsIsLoading = (state: AppStateType) => state.dialogsReducer.prevMsgsIsLoading;
-const getOnSendMSGStatArr = (state: AppStateType) => state.dialogsReducer.onSendMSGStatArr;
-const getKeyArr = (state: AppStateType) => state.dialogsReducer.keyArr;
 const getFeedbackArr_compDialogs = (state: AppStateType) => state.dialogsReducer.feedbackArr;
 const getErrNegotiatorsListGet = (state: AppStateType) => state.dialogsReducer.errNegotiatorsListGet;
 const getErrNegotiatorsListPIC = (state: AppStateType) => state.dialogsReducer.errNegotiatorsListPIC;
@@ -149,6 +146,8 @@ const getMsgDeliveredFlagPIC = (state: AppStateType) => state.dialogsReducer.msg
 const getMsgSeenFlagPIC = (state: AppStateType) => state.dialogsReducer.msgSeenFlagPIC;
 const getArrowDownPIC = (state: AppStateType) => state.dialogsReducer.arrowDownPIC;
 const getErrAtGettingPrevMsgs = (state: AppStateType) => state.dialogsReducer.errAtGettingPrevMsgs;
+const getForDeletingMsgsArr = (state: AppStateType) => state.dialogsReducer.forDeletingMsgsArr;
+const getErrAtDeletingMsgsArr = (state: AppStateType) => state.dialogsReducer.errAtDeletingMsgsArr;
 
 
 const DialogsReducerPart_1 = createSelector(getDialogsList, getCertainDialog, getAllDialogsIsLoading, getCertainDialogIsLoading, getDefaultAvatar_compDialogs,
@@ -162,10 +161,10 @@ const DialogsReducerPart_1 = createSelector(getDialogsList, getCertainDialog, ge
         return DialogsPart_1
     })
 
-const DialogsReducerPart_2 = createSelector(getErrGettingNewMSGSCount, getOnSendMSGStatArr, getKeyArr, getFeedbackArr_compDialogs,
-    getErrNegotiatorsListGet, getErrNegotiatorsListPIC, getErrCertainDialogGet, getsendndigInProgress, getErrInSendingArr, getMsgLoaderGIF, getMsgDeliveredFlagPIC, getMsgSeenFlagPIC,
-    (errGettingNewMSGSCount, onSendMSGStatArr, keyArr, feedbackArr, errNegotiatorsListGet, errNegotiatorsListPIC, errCertainDialogGet, sendndigInProgress, errInSendingArr, msgLoaderGIF, msgDeliveredFlagPIC, msgSeenFlagPIC,) => {
-        let DialogsPart_2 = { errGettingNewMSGSCount, onSendMSGStatArr, keyArr, feedbackArr, errNegotiatorsListGet, errNegotiatorsListPIC, errCertainDialogGet, sendndigInProgress, errInSendingArr, msgLoaderGIF, msgDeliveredFlagPIC, msgSeenFlagPIC }
+const DialogsReducerPart_2 = createSelector(getErrGettingNewMSGSCount, getFeedbackArr_compDialogs,
+    getErrNegotiatorsListGet, getErrNegotiatorsListPIC, getErrCertainDialogGet, getsendndigInProgress, getErrInSendingArr, getMsgLoaderGIF, getMsgDeliveredFlagPIC, getMsgSeenFlagPIC, getForDeletingMsgsArr, getErrAtDeletingMsgsArr,
+    (errGettingNewMSGSCount, feedbackArr, errNegotiatorsListGet, errNegotiatorsListPIC, errCertainDialogGet, sendndigInProgress, errInSendingArr, msgLoaderGIF, msgDeliveredFlagPIC, msgSeenFlagPIC, forDeletingMsgsArr, errAtDeletingMsgsArr,) => {
+        let DialogsPart_2 = { errGettingNewMSGSCount, feedbackArr, errNegotiatorsListGet, errNegotiatorsListPIC, errCertainDialogGet, sendndigInProgress, errInSendingArr, msgLoaderGIF, msgDeliveredFlagPIC, msgSeenFlagPIC, forDeletingMsgsArr, errAtDeletingMsgsArr }
         return DialogsPart_2
     })
 
@@ -203,7 +202,6 @@ const getUsersGettingError = (state: AppStateType) => state.usersReducer.usersGe
 const getUserNotFound = (state: AppStateType) => state.usersReducer.userNotFound;
 const getUserFindingError = (state: AppStateType) => state.usersReducer.userFindingError;
 const getUserNotFoundGIF = (state: AppStateType) => state.usersReducer.userNotFoundGIF;
-const getMSGStat = (state: AppStateType) => state.dialogsReducer.onSendMSGStatArr;
 const getFeedbackArr = (state: AppStateType) => state.dialogsReducer.feedbackArr;
 const getGeneralLDR_GIF = (state: AppStateType) => state.backgroundReducer.usersThemes.generalLDR_GIF;
 const getBTN_FLW_GIF = (state: AppStateType) => state.backgroundReducer.usersThemes.BTN_FLW_GIF;
@@ -220,9 +218,9 @@ const UsersReducerPart_1 = createSelector(getInitialUserList, getPageSize, getTo
         return UsersPart_1
     })
 
-const UsersReducerPart_2 = createSelector(getUserFindingError, getMSGStat, getFeedbackArr, getGeneralLDR_GIF, getUserNotFoundGIF, getBTN_FLW_GIF,
-    (userFindingError, onSendMSGStatArr, feedbackArr, generalLDR_GIF, userNotFoundGIF, BTN_FLW_GIF,) => {
-        let UsersPart_2 = { userFindingError, onSendMSGStatArr, feedbackArr, generalLDR_GIF, userNotFoundGIF, BTN_FLW_GIF, }
+const UsersReducerPart_2 = createSelector(getUserFindingError, getFeedbackArr, getGeneralLDR_GIF, getUserNotFoundGIF, getBTN_FLW_GIF,
+    (userFindingError, feedbackArr, generalLDR_GIF, userNotFoundGIF, BTN_FLW_GIF,) => {
+        let UsersPart_2 = { userFindingError, feedbackArr, generalLDR_GIF, userNotFoundGIF, BTN_FLW_GIF, }
         return UsersPart_2
     })
 

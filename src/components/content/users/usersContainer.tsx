@@ -26,7 +26,6 @@ export type usersActions_Type = {
   getCertainUserThunk: (pageSize: number, userName: string, pageOfEquals: number) => void
   sendMessageToUserThunk: (userId: number, body: string, actionKey: string, userName: string) => void
   feedBackWindowCloser: (arrIndex: number) => void
-  feedbackRefPush: (el_id: number) => void
   setErrorToNull: () => void
   componentStateCleaner: () => void
 }
@@ -48,7 +47,6 @@ export let UsersFuncContainer = () => {
     getCertainUserThunk: (pageSize: number, userName: string, pageOfEquals: number) => { dispatch(usersACs.getCertainUserThunkAC(pageSize, userName, pageOfEquals)) },
     sendMessageToUserThunk: (userId: number, body: string, actionKey: string, userName: string) => dispatch(dialogsACs.sendMessageToUserThunkAC(userId, body, actionKey, userName, -1)),
     feedBackWindowCloser: (arrIndex: number) => dispatch(dialogsACs.feedBackWindowCloserAC(arrIndex)),
-    feedbackRefPush: (el_id: number) => dispatch(dialogsACs.feedbackRefPushAC(el_id)),
     setErrorToNull: () => dispatch(usersACs.setErrorToNullAC()),
     componentStateCleaner: () => { dispatch(usersACs.unMountCleaner()) }
   }

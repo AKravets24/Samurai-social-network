@@ -344,7 +344,7 @@
 .messageBlockMe,
 .messageBlockUser {
     padding: 2px 15px 5px 15px;
-    min-width: 15%;
+    min-width: 20%;
     width: auto !important;;
     max-width: 60%;
     display: inline-block;
@@ -375,8 +375,8 @@
 
 .errorMarker {
     color: red;
-    margin: 5px 0 0 0 ;
-    font-size: 18px;
+    font-size: 16px;
+    margin: 5px 0;
 }
 
 

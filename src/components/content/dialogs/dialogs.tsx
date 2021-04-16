@@ -134,10 +134,9 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   let getTalk = (userId: number) => { setDialogId(dialogId = userId); setPageNumber(2); actions.getTalkWithUserThunk(dialogId) };
 
   let oldMsgLazyLoader = () => {
-    // debugger;
+    !state.errAtGettingPrevMsgs && setPageNumber(pageNumber + 1);
     actions.addPrevMessagesThunk(dialogId, 10, pageNumber);
-    setMsgsMapDone(2)
-    !state.errAtGettingPrevMsgs && setPageNumber(pageNumber + 1)
+    setMsgsMapDone(2);
   };
 
 
@@ -252,7 +251,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       <img src={user.photos.large || state.defaultAvatar} alt="err" />
                     </NavLink>
                     <NavLink to={`/dialogs/${user.id}`}
-                      onClick={() => { getTalk(user.id); setMsgsMapDone(0); setBtnShow(false); setDialogChanging(true) }}
+                      onClick={() => { getTalk(user.id); setMsgsMapDone(0); setBtnShow(false); setDialogChanging(true); actions.userCompCleaner() }}
                       className={themes.talkerBlockA}
                       activeClassName={themes.activeLink}>
                       {user.userName}{user.hasNewMessages &&
@@ -299,15 +298,19 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       <p className={stl.messageBody} >{msg.body}</p>
 
                       <div className={stl.msgStatWrapper}>
-                        {state.sendndigInProgress.some(el => el === msg.actionKey) && <img className={stl.ldrAndErr} src={state.msgLoaderGIF} alt="Err" />}
+                        {state.sendndigInProgress.some(el => el === msg.actionKey) || state.forDeletingMsgsArr.some(id => id === msg.id) && <img className={stl.ldrAndErr} src={state.msgLoaderGIF} alt="Err" />}
                         {state.errInSendingArr.some(el => el.actionKey === msg.actionKey) && <img className={stl.ldrAndErr} src={state.onError} alt="Err" />}
                         <p className={cn(
-                          state.errInSendingArr.some(el => el.actionKey === msg.actionKey) ? stl.errorMarker :
+                          state.errInSendingArr.some(el => el.actionKey === msg.actionKey) || state.errAtDeletingMsgsArr.some(el => el.messageId === msg.id) ? stl.errorMarker :
                             myId !== null && +msg.senderId === +myId ? stl.messageBlockTimeMe : stl.messageBlockTimeUser)}
-                        > {state.sendndigInProgress.some(el => el === msg.actionKey) ? 'loading...' :                                       // сообщение  отправляется? 
-                          state.errInSendingArr.some(el => el.actionKey === msg.actionKey) ?                                                // пришла ошибка от сервера? 
-                            state.errInSendingArr.map(el => { if (el.actionKey === msg.actionKey) return `Error: ${el.error}!` }) :
-                            `${msg.addedAt.substring(2, 10)}  ${msg.addedAt.substring(11, 16)}`                                             // тогда рендерим инфо
+                        > {state.sendndigInProgress.some(el => el === msg.actionKey) ? 'loading...' :                                         // сообщение  отправляется? 
+                          state.forDeletingMsgsArr.some(id => id === msg.id) ? 'deleting...' :                                                // сообщение удаляется?
+                            state.errInSendingArr.some(el => el.actionKey === msg.actionKey) ?                                                // пришла ошибка от сервера? 
+                              state.errInSendingArr.map(el => { if (el.actionKey === msg.actionKey) return `Error: ${el.error}!` }) :
+                              state.errAtDeletingMsgsArr.some(el => el.messageId === msg.id) ?                                                // ошибка при удалении? 
+                                state.errAtDeletingMsgsArr.map(el => { if (el.messageId === msg.id) return `Deletng error!` }) :
+
+                                `${msg.addedAt.substring(2, 10)}  ${msg.addedAt.substring(11, 16)}`                                           // тогда рендерим инфо
                           } </p>
                         {state.sendndigInProgress.some(el => el === msg.actionKey) === false && state.errInSendingArr.some(el => el.actionKey === msg.actionKey) === false &&
                           <img className={stl.checkMark} src={msg.viewed ? state.msgSeenFlagPIC : state.msgDeliveredFlagPIC} alt="Err" />}

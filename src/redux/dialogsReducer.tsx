@@ -13,7 +13,6 @@ import { AppStateType, InferActionsTypes } from './redux-store';
 
 type FeedBackWindowCloserAC_Type = { type: 'FEEDBACK_WINDOW_CLOSER', arrIndex: number }
 type SetSelectedMessagesAC_Type = { type: 'SET_SELECTED_MESSAGES', messageId: string }
-type FeedbackRefPushAC_Type = { type: 'FEEDBACK_REF_PUSH', el: any }
 type CreateNewDialogAC_Type = { type: 'CREATE_AND_SET_NEW_DIALOG', userId: number, fullName: string, photos: Photos_Type }
 type Photos_Type = { large: null | string, small: null | string }
 
@@ -31,13 +30,14 @@ const actions = {
   createNewDialogAC: (userId: number, fullName: string, photos: Photos_Type) => ({ type: 'CREATE_AND_SET_NEW_DIALOG', userId, fullName, photos } as const),
   setErrCertainDialogGetAC: (error: string) => ({ type: 'ERR_CERTAIN_DIALOG_GET', error } as const),
   newMsgActonCombiner: (newMessagesCount: number, BTNIsDisabled: boolean, hasErr: boolean) => ({ type: 'NEW_MSG_ACTTION_COMBINER', newMessagesCount, BTNIsDisabled, hasErr } as const),
-  feedbackRefPushAC: (el: any) => ({ type: 'FEEDBACK_REF_PUSH', el } as const),
   setSelectedMessagesAC: (messageId: string) => ({ type: 'SET_SELECTED_MESSAGES', messageId } as const),
   deleteMessageAC: (messageId: string, index: number) => ({ type: 'DELETE_MESSAGE', messageId, index } as const),
   setAsSpamMessage: (messageId: string, index: number) => ({ type: 'SET_SPAM_MESSAGE', messageId, index } as const),
   toggleSendingInProgressAC: (isSending: boolean, actionKey: string) => ({ type: 'TOGGLE_SENDING_IN_PROGRESS', isSending, actionKey } as const),
   errCatcherAtSendingAC: (actionKey: string, errCode: number) => ({ type: 'ERROR_AT_SENDING_TOGGLER', actionKey, errCode } as const),
   errAtGettingPrevMsgsAC: (isErr: boolean) => ({ type: 'IS_ERROR_AT_GETTING_PREV_MSGS', isErr } as const),
+  addToForDeletingArrAC: (isDeleting: boolean, messageId: string) => ({ type: 'MSG_TO_FOR_DELETING_ARR', isDeleting, messageId } as const),
+  errAtDeletingMsgArrAC: (isErr: boolean, messageId: string) => ({ type: 'ERR_AT_DELETENG_MSG_ARR', isErr, messageId } as const),
   dialogCompCleanerAC: () => ({ type: 'DIALOG_AREA_ARR_WAS_CLEANED' } as const),
 }
 
@@ -111,19 +111,22 @@ const addPrevMessagesThunkAC = (userId: number, msgCount: number, pageNumber: nu
   }
   dispatch(actions.prevMsgsloadingTogglerAC(false));
 };
-
 const deleteMessageThunkAC = (messageId: string, index: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
+  dispatch(actions.addToForDeletingArrAC(true, messageId))
+  dispatch(actions.errAtDeletingMsgArrAC(false, messageId))
   try {
     let response = await usersApi.deleteMessage(messageId)
     if (response.status === 200) { dispatch(actions.deleteMessageAC(messageId, index)) }
     console.log(response)
   }
-  catch (err) { console.log(err); }
+  catch (err) { console.log(err); dispatch(actions.errAtDeletingMsgArrAC(true, messageId)) }
+  dispatch(actions.addToForDeletingArrAC(false, messageId))
 };
 const setSpamMessagesThunkAC = (messageId: string, index: number): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   try {
     let response = await usersApi.setAsSpamMessage(messageId)
     if (response.status === 200) dispatch(actions.setAsSpamMessage(messageId, index))
+    console.log(response)
   }
   catch (err) { console.log(err) }
 };
@@ -174,19 +177,19 @@ export type DialogActions_Type = {
   getNewMessagesRequestThunkAC: () => ThunkAC_Type
   addPrevMessagesThunkAC: (userId: number, msgCount: number, pageNumber: number) => ThunkAC_Type
   feedBackWindowCloserAC: (arrIndex: number) => FeedBackWindowCloserAC_Type
-  feedbackRefPushAC: (el: any) => FeedbackRefPushAC_Type
   dialogCompCleaner: () => void
 }
 
 const dialogActions: DialogActions_Type = {
   getMyNegotiatorsListThunkAC, getTalkWithUserThunkAC, sendMessageToUserThunkAC, createNewDialogAC: actions.createNewDialogAC,
   talkedBeforeThunkAC, setSelectedMessagesAC: actions.setSelectedMessagesAC, setSpamMessagesThunkAC, deleteMessageThunkAC, getNewMessagesRequestThunkAC,
-  addPrevMessagesThunkAC, feedBackWindowCloserAC: actions.feedBackWindowCloserAC, feedbackRefPushAC: actions.feedbackRefPushAC, dialogCompCleaner,
+  addPrevMessagesThunkAC, feedBackWindowCloserAC: actions.feedBackWindowCloserAC, dialogCompCleaner,
 };
 
 export const dialogACs = (state = dialogActions) => { return state };
 
 type ErrinSendingArr_Type = { actionKey: string, error: number }
+type ErrInDeletingArr_Type = { messageId: string, }
 
 let initialDialogsState = {
   dialogsList: [] as DialogsList_Type[],
@@ -195,12 +198,10 @@ let initialDialogsState = {
   certainDialogIsLoading: false as boolean,
   defaultAvatar: maleProfilePic as string,
   newMessagesCounter: 0 as number,
+  onError: errorPic as string,
   newMessageBTNDisabled: false as boolean,
   prevMsgsIsLoading: false as boolean,
-  onError: errorPic as string,
   errGettingNewMSGSCount: false as boolean,
-  onSendMSGStatArr: [] as any[],  // вроде как нафиг не нужен
-  keyArr: [] as string[],
   feedbackArr: [] as { statNum: number, userId: number, userName: string, actionKey: string }[],
   errNegotiatorsListGet: 0 as number,
   errNegotiatorsListPIC: radioTowerPIC as string,
@@ -212,6 +213,8 @@ let initialDialogsState = {
   msgSeenFlagPIC: msgSeenFlag as string,
   arrowDownPIC: arrowDownPIC as string,
   errAtGettingPrevMsgs: false as boolean,
+  forDeletingMsgsArr: [] as string[],
+  errAtDeletingMsgsArr: [] as ErrInDeletingArr_Type[],
 };
 
 export type InitialDialogsState_Type = typeof initialDialogsState;
@@ -220,7 +223,6 @@ export type PartDialogReducer_Type = { newMessageBTNDisabled: boolean, newMessag
 
 
 let ForUsersSomeAttrs1 = {
-  // onSendMSGStatArr: initialDialogsState.onSendMSGStatArr,
   feedbackArr: initialDialogsState.feedbackArr,
 }
 export type ForUsersSomeAttrs = typeof ForUsersSomeAttrs1
@@ -229,49 +231,45 @@ export type ForUsersSomeAttrs = typeof ForUsersSomeAttrs1
 export const dialogsReducer = (state = initialDialogsState, action: ActionTypes, /* date:string, time:string */): InitialDialogsState_Type => {
   let stateCopy = { ...state };
   switch (action.type) {
-    case 'NEW_MSG_ACTTION_COMBINER':
-      return {
-        ...state, newMessagesCounter: action.newMessagesCount, newMessageBTNDisabled: action.BTNIsDisabled,
-        errGettingNewMSGSCount: action.hasErr
-      };
-
+    case 'NEW_MSG_ACTTION_COMBINER': return { ...state, newMessagesCounter: action.newMessagesCount, newMessageBTNDisabled: action.BTNIsDisabled, errGettingNewMSGSCount: action.hasErr };
     case 'SEND_MESSAGE_TO_USER':
       let totalMsgCount: number = 0;                                                                                    // этот колхоз из=за TS, ибо object possibly undefined
       if (state?.certainDialog?.totalCount) totalMsgCount = state.certainDialog.totalCount + 1                          // и этот 
-
       let duplicateIndex = state.certainDialog.items.findIndex(item => item.actionKey === action.msgItem.actionKey);
       let finalArr: MessageData_Type[] = [...state.certainDialog.items];
       duplicateIndex === -1 ? finalArr = [...state.certainDialog.items, action.msgItem] : finalArr[duplicateIndex] = action.msgItem
-
       return { ...state, certainDialog: { items: finalArr } };
 
     case 'TOGGLE_SENDING_IN_PROGRESS':
-      return {
-        ...state, sendndigInProgress: action.isSending
-          ? [...state.sendndigInProgress, action.actionKey]
-          : [...state.sendndigInProgress.filter(el => el != action.actionKey)]
-      }
+      return { ...state, sendndigInProgress: action.isSending ? [...state.sendndigInProgress, action.actionKey] : [...state.sendndigInProgress.filter(el => el != action.actionKey)] }
 
     case 'ERROR_AT_SENDING_TOGGLER':
-      console.log('ERROR_AT_SENDING_TOGGLER');
       let { errCode, actionKey } = action;
       return {
-        ...state, errInSendingArr: action.errCode
-          ? [...state.errInSendingArr, { actionKey, error: errCode }]
-          : [...state.errInSendingArr.filter(el => el.actionKey != action.actionKey)]
+        ...state, errInSendingArr: action.errCode ? [...state.errInSendingArr, { actionKey, error: errCode }] : [...state.errInSendingArr.filter(el => el.actionKey != action.actionKey)]
+      }
+    case 'MSG_TO_FOR_DELETING_ARR':
+      return {
+        ...state, forDeletingMsgsArr: action.isDeleting ?
+          [...state.forDeletingMsgsArr, action.messageId] : [...state.forDeletingMsgsArr.filter(id => id != action.messageId)]
+      }
+
+    case 'ERR_AT_DELETENG_MSG_ARR':
+      console.log(action);
+
+      return {
+        ...state, errAtDeletingMsgsArr: action.isErr ?
+          [...state.errAtDeletingMsgsArr, { messageId: action.messageId }] : [...state.errAtDeletingMsgsArr.filter(el => el.messageId != action.messageId)]
       }
 
     case 'SET_MY_COMPANIONS_LIST': console.log(action); return { ...state, dialogsList: action.data };
     case 'ERR_NEGOTIATORS_LIST_GET': return { ...state, errNegotiatorsListGet: action.errorCode };
     case 'DIALOGS_ARE_LOADING_TOGGLER': return { ...state, allDialogsIsLoading: action.allDialogs, certainDialogIsLoading: action.certainDialog }
     case 'ERR_CERTAIN_DIALOG_GET': return { ...state, errCertainDialogGet: action.error.substr(1, action.error.length - 2) };
-    case 'SET_TALK_WITH_USER': console.log('SET_TALK_WITH_USER');
-      console.log(action)
-
+    case 'SET_TALK_WITH_USER':
       let certainListCopy = [...action.data.items];
       let actionDataCopy = { ...action.data };
       let newMsgCounter = state.newMessagesCounter;
-
       let dialogListCopy = [...state.dialogsList];
       dialogListCopy.find(el => {
         if (el.id === action.userId) {
@@ -284,8 +282,6 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       actionDataCopy.items = certainListCopy;
       return { ...state, certainDialog: actionDataCopy, newMessagesCounter: newMsgCounter };
     case 'CREATE_AND_SET_NEW_DIALOG':
-      console.log(action)
-
       type Photos_Type = { small: string, large: string }
       type NewDialogListItem_Type = {
         hasNewMessages: boolean,
@@ -311,78 +307,36 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       return stateCopy;
 
     case 'DELETE_MESSAGE': // console.log('DELETE_MESSAGE');
-
       let certainDialog = { ...state.certainDialog };
       let indexForDeleting = state.certainDialog.items.findIndex(item => item.id === action.messageId);
       certainDialog.items.splice(indexForDeleting, 1);
-
       return { ...state, certainDialog: { items: certainDialog.items } }
 
     case 'ADDED_PREVIOUS_MSGS':
-      console.log('ADDED_PREVIOUS_MSGS');
-
       let reverseItems = action.prevMsgs.reverse();
       reverseItems.forEach((el: MessageData_Type) => state.certainDialog.items.unshift(el))
       return stateCopy;
 
-    case 'PREV_MSGS_LOADING_TOGGLER':
-      // console.log('PREV_MSGS_LOADING_TOGGLER')
-      return { ...state, prevMsgsIsLoading: action.prevMsgsIsLoading };
-
-    case 'IS_ERROR_AT_GETTING_PREV_MSGS':
-      console.log('IS_ERROR_AT_GETTING_PREV_MSGS');
-
-      return { ...state, errAtGettingPrevMsgs: action.isErr }
+    case 'PREV_MSGS_LOADING_TOGGLER': return { ...state, prevMsgsIsLoading: action.prevMsgsIsLoading };
+    case 'IS_ERROR_AT_GETTING_PREV_MSGS': return { ...state, errAtGettingPrevMsgs: action.isErr }
 
     case 'ON_SENDING_MSG_STATUS':
-      // let index = state.keyArr.findIndex((el) => (el === action.actionKey));
       let index = state.feedbackArr.findIndex((el) => (el.actionKey === action.actionKey));
-      // console.log(action);
-
-
       let newFeedbackArr = [...state.feedbackArr]
-
       index === -1 ?
         newFeedbackArr.unshift({ statNum: action.number, userId: action.userId, userName: action.userName, actionKey: action.actionKey }) :
         newFeedbackArr[index].statNum = action.number;
       return { ...state, feedbackArr: newFeedbackArr };
 
-
-    // case 'ON_SENDING_MSG_STATUS':
-    //   // let index = state.keyArr.findIndex((el) => (el === action.actionKey));
-    //   let index = state.keyArr.findIndex((el) => (el === action.actionKey));
-    //   console.log(action)
-    //   console.log(index)
-
-    //   let newKeyArr = [...state.keyArr]
-
-    //   if (index === -1) {
-    //     state.keyArr.unshift(action.actionKey);
-    //     state.onSendMSGStatArr.unshift({ statNum: action.number, userId: action.userId, userName: action.userName });
-    //   } else {
-    //     // for (let key in state.onSendMSGStatArr[index]) {
-    //     state.onSendMSGStatArr[index].statNum = action.number;
-    //     state.onSendMSGStatArr[index].userId = action.userId;
-    //     state.onSendMSGStatArr[index].userName = action.userName;
-    //     // }
-    //   }
-    //   return { ...state };
-
     case 'FEEDBACK_WINDOW_CLOSER':
-      // console.log(1);
       let arrDelItem = [...state.feedbackArr]
       arrDelItem.splice(action.arrIndex, 1)
-      // state.onSendMSGStatArr.splice(action.arrIndex, 1);
-      // state.keyArr.splice(action.arrIndex, 1);
       return { ...state, feedbackArr: arrDelItem };
 
-    case 'FEEDBACK_REF_PUSH':
-      console.log(2);
-      // state.feedbackArr.push(action.el)
-      return { ...state }
-
-    case 'DIALOG_AREA_ARR_WAS_CLEANED':
-      return { ...state, certainDialog: { items: [] } }
+    case 'DIALOG_AREA_ARR_WAS_CLEANED': return {
+      ...state, errAtGettingPrevMsgs: false, forDeletingMsgsArr: [], certainDialog: { items: [] },
+      errInSendingArr: [], errAtDeletingMsgsArr: []
+    }
 
     default: return stateCopy;
   }
