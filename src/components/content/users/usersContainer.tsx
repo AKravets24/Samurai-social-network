@@ -25,7 +25,7 @@ export type usersActions_Type = {
   followThunkToggler: (userId: number, isFollowed: boolean, error: string) => void
   getCertainUserThunk: (pageSize: number, userName: string, pageOfEquals: number) => void
   sendMessageToUserThunk: (userId: number, body: string, actionKey: string, userName: string) => void
-  feedBackWindowCloser: (arrIndex: number) => void
+  feedBackWindowCloser: (actionKey: string) => void
   setErrorToNull: () => void
   componentStateCleaner: () => void
 }
@@ -46,7 +46,7 @@ export let UsersFuncContainer = () => {
     followThunkToggler: (userId: number, isFollowed: boolean, error: string) => dispatch(usersACs.followThunkTogglerAC(userId, isFollowed, error)),
     getCertainUserThunk: (pageSize: number, userName: string, pageOfEquals: number) => { dispatch(usersACs.getCertainUserThunkAC(pageSize, userName, pageOfEquals)) },
     sendMessageToUserThunk: (userId: number, body: string, actionKey: string, userName: string) => dispatch(dialogsACs.sendMessageToUserThunkAC(userId, body, actionKey, userName, -1)),
-    feedBackWindowCloser: (arrIndex: number) => dispatch(dialogsACs.feedBackWindowCloserAC(arrIndex)),
+    feedBackWindowCloser: (actionKey: string) => dispatch(dialogsACs.feedBackWindowCloserAC(actionKey)),
     setErrorToNull: () => dispatch(usersACs.setErrorToNullAC()),
     componentStateCleaner: () => { dispatch(usersACs.unMountCleaner()) }
   }
@@ -62,7 +62,7 @@ export let UsersFuncContainer = () => {
   let [wasClicked, setWasClicked] = useState(false)
 
   useEffect(() => {
-    console.log(1);
+    // console.log(1);
 
     if (parsedString['?page'] && Number.isInteger(+parsedString['?page']) && !wasClicked && !parsedString['term']) { // выполняет ветку один раз - инфа  берется из линка
       let pageFromLink = Math.trunc(+parsedString['?page'])
@@ -88,24 +88,6 @@ export let UsersFuncContainer = () => {
     return () => { usersActions.componentStateCleaner() }
 
   }, [currentPage])
-
-
-  // useEffect(() => {
-  //   if (parsedString['?page'] && Number.isInteger(+parsedString['?page']) && !wasClicked) { // выполняет ветку один раз - инфа  берется из линка
-  //     let pageFromLink = +parsedString['?page']
-  //     usersActions.getUsersThunk(pageSize, pageFromLink)
-  //     history.push({ pathname: 'users', search: `?page=${pageFromLink}` })
-  //     setWasClicked(true)
-  //     // @ts-ignore
-  //   } else if (!parsedString['?page'] || !Number.isInteger(+parsedString['?page']) && !wasClicked) {
-  //     history.push({ pathname: 'users', search: `?page=${currentPage}` })
-  //     usersActions.getUsersThunk(pageSize, currentPage)
-  //     setWasClicked(true)
-  //   } else {
-  //     history.push({ pathname: 'users', search: `?page=${currentPage}` })
-  //   }
-  // }, [currentPage, linkTermName])
-
 
 
   let [themes, setThemes] = useState<UsersThemes_Type>({

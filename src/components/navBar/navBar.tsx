@@ -195,7 +195,7 @@ type DispatchProps_Type = { dispatch: (args: any) => ThunkAC_Type }
 
 const mergeProps = (stateProps: MSTP_Type, dispatchProps: DispatchProps_Type) => {                                                   // 
   const state = stateProps;
-  console.log(dispatchProps);
+  // console.log(dispatchProps);
 
   const { dispatch } = dispatchProps;
   // console.log(state)

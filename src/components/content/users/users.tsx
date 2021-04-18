@@ -150,6 +150,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
   // console.log(usersInfo)
   let mapWrapperRef = useRef<HTMLDivElement>(null);
 
+  console.log(usersInfo.feedbackArr)
 
   return <>
     <div className={cn(stl.usersPage, themes.userPageDnmc, delayFlag && stl.delay)} >
@@ -261,7 +262,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
   </>
 }
 
-// let WriterMode = ({ themes }: UsersThemes_Type) => {
 let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFlag, }: any) => {  // Прикруитть нормальную типизацию
 
 
@@ -317,28 +317,29 @@ let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFla
 
 
 interface FBProps_Type {
-  feedBackWindowCloser: (arrIndex: number) => void
+  feedBackWindowCloser: (actionKey: string) => void
   statInfo: any
   index: number
 }
 
 const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProps_Type) => {
-  // console.log(statInfo);
-  console.log(index)
   let feedBackNamer = (i: number) => {
     if (i === 0) return `${stl.feedbackWindow0}`
     else if (i === 1) return `${stl.feedbackWindow1}`
     else if (i >= 2) return `${stl.feedbackWindow2}`
   }
 
-  useEffect(() => { statInfo.statNum !== 0 && setTimeout(() => { feedBackWindowCloser(index) }, 3000) }, [statInfo.statNum])
+  useEffect(() => {
+    statInfo.statNum !== 0 && setTimeout(() => {
+      feedBackWindowCloser(statInfo.actionKey)
+    }, 3000)
+  }, [statInfo.statNum])
 
-
-  let feedBackCloser = (i: number) => { feedBackWindowCloser(i) }
+  let feedBackCloser = (actionKey: string) => { feedBackWindowCloser(statInfo.actionKey) }
 
 
   return <div className={feedBackNamer(index)}>
-    <button onClick={() => feedBackCloser(index)}> X</button>
+    <button onClick={() => feedBackCloser(statInfo.actionKey)}> X</button>
     <p>{statInfo.statNum === 0 && 'Sending message...' ||
       statInfo.statNum === 1 && `Message delivered to ${statInfo.userName}` ||
       statInfo.statNum === 2 && `Failed to deliver message to ${statInfo.userName} `}

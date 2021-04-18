@@ -11,7 +11,7 @@ import { ThunkAction } from "redux-thunk";
 import { AppStateType, InferActionsTypes } from './redux-store';
 
 
-type FeedBackWindowCloserAC_Type = { type: 'FEEDBACK_WINDOW_CLOSER', arrIndex: number }
+type FeedBackWindowCloserAC_Type = { type: 'FEEDBACK_WINDOW_CLOSER', actionKey: string }
 type SetSelectedMessagesAC_Type = { type: 'SET_SELECTED_MESSAGES', messageId: string }
 type CreateNewDialogAC_Type = { type: 'CREATE_AND_SET_NEW_DIALOG', userId: number, fullName: string, photos: Photos_Type }
 type Photos_Type = { large: null | string, small: null | string }
@@ -26,7 +26,7 @@ const actions = {
   prevMsgsloadingTogglerAC: (prevMsgsIsLoading: boolean) => ({ type: 'PREV_MSGS_LOADING_TOGGLER', prevMsgsIsLoading } as const),
   sendMsgAC: (msgItem: MessageData_Type,) => ({ type: 'SEND_MESSAGE_TO_USER', msgItem } as const),
   onSendingMSGEStatusAC: (number: number, userId: number, actionKey: string, userName: string) => ({ type: 'ON_SENDING_MSG_STATUS', number, userId, actionKey, userName } as const),
-  feedBackWindowCloserAC: (arrIndex: number) => ({ type: 'FEEDBACK_WINDOW_CLOSER', arrIndex } as const),
+  feedBackWindowCloserAC: (actionKey: string) => ({ type: 'FEEDBACK_WINDOW_CLOSER', actionKey } as const),
   createNewDialogAC: (userId: number, fullName: string, photos: Photos_Type) => ({ type: 'CREATE_AND_SET_NEW_DIALOG', userId, fullName, photos } as const),
   setErrCertainDialogGetAC: (error: string) => ({ type: 'ERR_CERTAIN_DIALOG_GET', error } as const),
   newMsgActonCombiner: (newMessagesCount: number, BTNIsDisabled: boolean, hasErr: boolean) => ({ type: 'NEW_MSG_ACTTION_COMBINER', newMessagesCount, BTNIsDisabled, hasErr } as const),
@@ -176,7 +176,7 @@ export type DialogActions_Type = {
   deleteMessageThunkAC: (messageId: string, index: number) => ThunkAC_Type
   getNewMessagesRequestThunkAC: () => ThunkAC_Type
   addPrevMessagesThunkAC: (userId: number, msgCount: number, pageNumber: number) => ThunkAC_Type
-  feedBackWindowCloserAC: (arrIndex: number) => FeedBackWindowCloserAC_Type
+  feedBackWindowCloserAC: (actionKey: string) => FeedBackWindowCloserAC_Type
   dialogCompCleaner: () => void
 }
 
@@ -330,7 +330,8 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
 
     case 'FEEDBACK_WINDOW_CLOSER':
       let arrDelItem = [...state.feedbackArr]
-      arrDelItem.splice(action.arrIndex, 1)
+      let FBAindex = arrDelItem.findIndex((el) => el.actionKey === action.actionKey)
+      arrDelItem.splice(FBAindex, 1)
       return { ...state, feedbackArr: arrDelItem };
 
     case 'DIALOG_AREA_ARR_WAS_CLEANED': return {
