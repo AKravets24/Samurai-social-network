@@ -545,7 +545,16 @@
     position: relative
 }
 
+.scrollToDownBtnHidden {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+}
+
+
+.scrollToPrevHeightBTN,
 .scrollToDownBtn {
+    opacity: 1;
     position: absolute;
     top:  -90px;
     right: 45px;
@@ -554,6 +563,10 @@
     border: 3px solid grey;
     cursor: pointer;
     outline:none;
+}
+
+.scrollToPrevHeightBTN img {
+    transform: rotate(180deg)
 }
 
 .sender form {

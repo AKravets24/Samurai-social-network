@@ -216,7 +216,8 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
   let scrollToDown = (bufferBlock: any) => { bufferBlock.current && bufferBlock.current.scrollIntoView({ behavior: "auto" }) };
 
-  let [btnShow, setBtnShow] = useState<boolean>(false);
+  let [btnShow, setBtnShow] = useState<Number>(0); // 0: ничего не показывать, 1: кнопка вниз, 2: кнопка вверх (на предыдущую высоту)
+  let [prevHeight, setPrevHeight] = useState<Number>(0);
   let [dialogChanging, setDialogChanging] = useState<boolean>(false)
 
 
@@ -251,7 +252,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       <img src={user.photos.large || state.defaultAvatar} alt="err" />
                     </NavLink>
                     <NavLink to={`/dialogs/${user.id}`}
-                      onClick={() => { getTalk(user.id); setMsgsMapDone(0); setBtnShow(false); setDialogChanging(true); actions.userCompCleaner() }}
+                      onClick={() => { getTalk(user.id); setMsgsMapDone(0); setBtnShow(0); setDialogChanging(true); actions.userCompCleaner() }}
                       className={themes.talkerBlockA}
                       activeClassName={themes.activeLink}>
                       {user.userName}{user.hasNewMessages &&
@@ -266,7 +267,12 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
           <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll, delayFlag && stl.delay)}
             ref={dialogArea}
             onScroll={() => {
-              dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 >= 200 ? setBtnShow(true) : setBtnShow(false);
+              // console.log(dialogArea?.current?.scrollTop)
+
+              if (dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 >= 200) { setBtnShow(1); setPrevHeight(0) } // если отступ снизу больше 200
+              else if (dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 <= 200 /* && prevHeight */) { setBtnShow(2) }// если отступ снизу меньше 200
+              else { setBtnShow(0) }
+
               !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
                 !state.prevMsgsIsLoading && !dialogChanging && oldMsgLazyLoader()
             }}
@@ -331,10 +337,17 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
             <div ref={bufferBlock} />
           </div>
           <div className={stl.sender}>
-            {btnShow && <button className={stl.scrollToDownBtn} onClick={() => scrollToDown(bufferBlock)}>
+            {/* {btnShow && <button className={stl.scrollToDownBtn} onClick={() => scrollToDown(bufferBlock)}> */}
+
+            <button className={btnShow === 0 ? stl.scrollToDownBtnHidden : btnShow === 1 ? stl.scrollToDownBtn : stl.scrollToPrevHeightBTN}
+
+              onClick={() => {
+                if (btnShow === 1) { setPrevHeight(dialogArea?.current?.scrollTop); scrollToDown(bufferBlock); }
+                else if (btnShow === 2) { dialogArea?.current?.scrollTo(0, prevHeight); setPrevHeight(0) }
+              }}>
               <img src={state.arrowDownPIC} alt="Err" />
             </button>
-            }
+
             <Formik initialValues={{ text: '' }} validate={validator} onSubmit={submitter} >
               {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
                 <form onSubmit={handleSubmit} >
