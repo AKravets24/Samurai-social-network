@@ -216,7 +216,8 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
   let scrollToDown = (bufferBlock: any) => { bufferBlock.current && bufferBlock.current.scrollIntoView({ behavior: "auto" }) };
 
-  let [btnShow, setBtnShow] = useState<Number>(0); // 0: ничего не показывать, 1: кнопка вниз, 2: кнопка вверх (на предыдущую высоту)
+  let [btnShow, setBtnShow] = useState<Number>(0); // 0: ничего не показывать, 1: кнопка вниз, 2: кнопка вверх (возвращает на предыдущую высоту)
+  let [wasClicked, setWasClicked] = useState(false)
   let [prevHeight, setPrevHeight] = useState<Number>(0);
   let [dialogChanging, setDialogChanging] = useState<boolean>(false)
 
@@ -269,9 +270,10 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
             onScroll={() => {
               // console.log(dialogArea?.current?.scrollTop)
 
-              if (dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 >= 200) { setBtnShow(1); setPrevHeight(0) } // если отступ снизу больше 200
-              else if (dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 <= 200 /* && prevHeight */) { setBtnShow(2) }// если отступ снизу меньше 200
+              if (dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 >= 200) { setBtnShow(1); setPrevHeight(0) }       // если отступ снизу больше 200
+              else if (dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 <= 200 && wasClicked) { setBtnShow(2) }      // если отступ снизу меньше 200
               else { setBtnShow(0) }
+              if (wasClicked) setWasClicked(false)
 
               !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
                 !state.prevMsgsIsLoading && !dialogChanging && oldMsgLazyLoader()
@@ -337,12 +339,11 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
             <div ref={bufferBlock} />
           </div>
           <div className={stl.sender}>
-            {/* {btnShow && <button className={stl.scrollToDownBtn} onClick={() => scrollToDown(bufferBlock)}> */}
 
             <button className={btnShow === 0 ? stl.scrollToDownBtnHidden : btnShow === 1 ? stl.scrollToDownBtn : stl.scrollToPrevHeightBTN}
 
               onClick={() => {
-                if (btnShow === 1) { setPrevHeight(dialogArea?.current?.scrollTop); scrollToDown(bufferBlock); }
+                if (btnShow === 1) { setPrevHeight(dialogArea?.current?.scrollTop); scrollToDown(bufferBlock); setWasClicked(true) }
                 else if (btnShow === 2) { dialogArea?.current?.scrollTo(0, prevHeight); setPrevHeight(0) }
               }}>
               <img src={state.arrowDownPIC} alt="Err" />
