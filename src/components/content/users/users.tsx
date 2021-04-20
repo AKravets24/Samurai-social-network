@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, } from "react";
+import React, { useState, useEffect, useRef, Children, } from "react";
 import stl from './users.module.css';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Field, Formik } from 'formik';
@@ -113,12 +113,11 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
   let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
 
   let userIdTalkModeOn = (e: any, i: number, arr: any) => {
-
     if (mapWrapperRef?.current && e.target.parentElement.parentElement.parentElement.parentElement.getBoundingClientRect().top <= mapWrapperRef?.current?.getBoundingClientRect().top) {
       e.target.parentElement.parentElement.parentElement.parentElement.scrollIntoView({ behavior: "smooth" }) //плавный автоСкролл если элемент если он вызе вьюпорта
     }
-    setTimeout(() => { setIsDisabled(true) }, 200)
-    setWrapperLocker(stl.wrapperLocked);
+    // setTimeout(() => { setIsDisabled(true) }, 200)
+    // setWrapperLocker(stl.wrapperLocked);
     e.target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
     let newServInfo = [...writeMsgMode.servInfo]
     if (newServInfo[i] === undefined) { newServInfo[i] = {} }
@@ -128,6 +127,33 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
     newServInfo[i].closer = (index: number, event: any) => modalCloser(index, event)
     let finalState = { servInfo: newServInfo }
     setWriteMsgMode(writeMsgMode = finalState)
+  }
+
+  // let mapWrapperRef = useRef<HTMLDivElement>(null);
+  let mapWrapperRef = React.createRef<HTMLDivElement>();
+
+  window.onkeyup = (e: any) => {
+    // console.log(e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children[0].children[0].className) // эталон
+    // console.log(e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children) // 100 юзеров на странице
+    //@ts-ignore
+    // mapWrapperRef?.current?.childNodes?.forEach((el: any, i: any) => modalCloser(-1, ''))
+
+    if (writeMsgMode.servInfo.length) {
+      console.log(1);
+
+
+      let arr = Array.from(e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children)
+      arr.forEach((el: any) => el.children[0].className = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed))
+
+      // e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children
+
+      writeMsgMode.servInfo.forEach(el => {
+        if (el !== undefined) { el.flag = false }
+      })
+      setWrapperLocker('');
+
+      // setWriteMsgMode({ servInfo: [] })
+    }
   }
 
   type indexEl_Type = { index: number, elem: any }  // хз какой тип элемента должен быть
@@ -148,9 +174,9 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
   let modalCloser = (i: number, e: any) => { setIndexEl({ index: i, elem: e }) }
 
   // console.log(usersInfo)
-  let mapWrapperRef = useRef<HTMLDivElement>(null);
 
-  console.log(usersInfo.feedbackArr)
+
+  // console.log(usersInfo.feedbackArr)
 
   return <>
     <div className={cn(stl.usersPage, themes.userPageDnmc, delayFlag && stl.delay)} >
@@ -160,7 +186,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
           {paginator()}
           <div className={stl.searchBlock} >
             <Formik initialValues={{ text: parsedString.term as string || '' }} validate={validator} onSubmit={friendsSeekerSubmitter}>
-              {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting, handleReset }) => (
+              {({ values, errors, handleChange, handleSubmit, isSubmitting, handleReset }) => (
                 <form onSubmit={handleSubmit} onReset={handleReset}>
                   <Field name="text" type="text" value={values.text} onChange={handleChange} placeholder={errors.text}
                     className={cn(stl.searchInput, themes.searchInputDnmc, delayFlag && stl.delay)} />
