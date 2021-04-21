@@ -9,6 +9,7 @@ import { InitialUsersInfo_Type } from "../../../redux/usersReducer";
 import { UsersThemesBGR_Type } from "../../../redux/backGroundSetter";
 import * as queryString from 'querystring';
 import cn from 'classnames/bind';
+import { UsersArr } from "../../../redux/app";
 // import UnAuthorised                       from "../unAuthorised/unAuthorised";
 
 
@@ -19,6 +20,8 @@ type UsersProps_Type = {
   delayFlag: boolean
 }
 
+type ModalMsgs_Type = { servInfo: { flag?: boolean, closer?: (i: number, e: any) => void }[] }
+
 export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, delayFlag }) => {
   // console.log(usersInfo.BTN_FLW_GIF)
   // console.log(usersInfo.feedbackArr)
@@ -26,7 +29,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
   type Error_Type = { text?: string }
   type Value_Type = { text: string }
 
-  let [isDisabled, setIsDisabled] = useState(false);
   let [wrapperLocker, setWrapperLocker] = useState('');
   let [portionNumber, setPortionNumber] = useState(1);
   let [searchMode, setSearchMode] = useState(false);
@@ -45,7 +47,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
     } else if (parsedString['?page']) { setPortionNumber(Math.ceil(+parsedString['?page'] / 10)) }
   }, [totalCount])
 
-  let paginator = () => {
+  let Paginator = () => {
     let pageStep = 10;
     let leftPortionPageNumber = (portionNumber - 1) * pageStep + 1
     let rightPortionPageNumber = portionNumber * pageStep;
@@ -53,7 +55,13 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
     let pagesArr = [];
     for (let i = 1; i <= pagesAmount; i++) { pagesArr.push(i) }
 
-    return !!pagesAmount && <div className={stl.paginationBlockOutside} >
+    let defaultStylesUsersSetter = (e: any) => {
+      let userUnitStlArr: HTMLDivElement[] = Array.from(e.target.parentElement.parentElement.parentElement.children[1]?.children)
+      userUnitStlArr.forEach((el) => el.children[0].className = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed))
+      setWriteMsgMode(writeMsgMode = { servInfo: [] });
+
+    }
+    return !!pagesAmount ? <div className={stl.paginationBlockOutside} >
       <button className={`${stl.pagBTN} ${themes.pagBTNDnmc}`} onClick={() => setPortionNumber(portionNumber - 1)}
         disabled={portionNumber === 1}> &#171; {pageStep} </button>
       {pagesArr
@@ -61,11 +69,10 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
         .map(p => {
           return <span key={p} className={usersInfo.currentPage === p ? `${stl.paginationSelected} ${themes.paginationSelectedDnmc}` :
             `${stl.pagination} ${themes.paginationDnmc}`}
-            onClick={() => {
+            onClick={(e) => {
               mapWrapperRef?.current?.scrollTo(0, 0)
-              searchMode ?
-                usersInfo.currentPage !== p && usersFuncs.getCertainUserThunk(pageSize, userSearchName, p) :
-                usersInfo.currentPage !== p && setPageListener(pageSize, p)
+              if (searchMode && usersInfo.currentPage !== p) { usersFuncs.getCertainUserThunk(pageSize, userSearchName, p); defaultStylesUsersSetter(e) }
+              else { setPageListener(pageSize, p); defaultStylesUsersSetter(e) }
             }}
           >{p}
           </span>
@@ -75,19 +82,16 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
           // pageStep > pagesAmount ||
           portionNumber > portionCount - 1
         }> {pageStep} &#187;</button>
-    </div>
+    </div> : null
   };
 
   let setPageListener = (pageSize: number, page: number) => {
     usersFuncs.setCurrentPageThunk(pageSize, page);
-    wrapperLocker && setWrapperLocker(''); isDisabled && setIsDisabled(false);
+    wrapperLocker && setWrapperLocker('');
   };
-
 
   let queryRequest = useLocation().search;
   let parsedString = queryString.parse(queryRequest);
-  // console.log(parsedString);
-
 
 
   let friendsSeekerSubmitter = (userName: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
@@ -109,15 +113,14 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 
 
 
-  type ModalMsgs_Type = { servInfo: { clientX?: number, clientY?: number, flag?: boolean, closer?: any }[] }
+
   let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
 
-  let userIdTalkModeOn = (e: any, i: number, arr: any) => {
+  let userIdTalkModeOn = (e: any, i: number,) => {
     if (mapWrapperRef?.current && e.target.parentElement.parentElement.parentElement.parentElement.getBoundingClientRect().top <= mapWrapperRef?.current?.getBoundingClientRect().top) {
       e.target.parentElement.parentElement.parentElement.parentElement.scrollIntoView({ behavior: "smooth" }) //плавный автоСкролл если элемент если он вызе вьюпорта
     }
-    // setTimeout(() => { setIsDisabled(true) }, 200)
-    // setWrapperLocker(stl.wrapperLocked);
+    setWrapperLocker(stl.wrapperLocked);
     e.target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
     let newServInfo = [...writeMsgMode.servInfo]
     if (newServInfo[i] === undefined) { newServInfo[i] = {} }
@@ -129,35 +132,24 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
     setWriteMsgMode(writeMsgMode = finalState)
   }
 
-  // let mapWrapperRef = useRef<HTMLDivElement>(null);
   let mapWrapperRef = React.createRef<HTMLDivElement>();
 
-  window.onkeyup = (e: any) => {
+  let userUnitStlDefolter = (e: any) => {
     // console.log(e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children[0].children[0].className) // эталон
     // console.log(e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children) // 100 юзеров на странице
-    //@ts-ignore
-    // mapWrapperRef?.current?.childNodes?.forEach((el: any, i: any) => modalCloser(-1, ''))
-
     if (writeMsgMode.servInfo.length) {
-      console.log(1);
-
-
-      let arr = Array.from(e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children)
-      arr.forEach((el: any) => el.children[0].className = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed))
-
-      // e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children
-
-      writeMsgMode.servInfo.forEach(el => {
-        if (el !== undefined) { el.flag = false }
-      })
+      let userUnitStlArr: HTMLDivElement[] = Array.from(e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children)
+      userUnitStlArr.forEach((el) => { el.children[0].className = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed) })
+      setWriteMsgMode(writeMsgMode = { servInfo: [] });
       setWrapperLocker('');
-
-      // setWriteMsgMode({ servInfo: [] })
     }
   }
 
+  window.onkeyup = (e: KeyboardEvent) => { e.key === 'Escape' && userUnitStlDefolter(e) }
+
   type indexEl_Type = { index: number, elem: any }  // хз какой тип элемента должен быть
   let [indexEl, setIndexEl] = useState<indexEl_Type>({ index: -1, elem: '' })
+  // console.log(writeMsgMode.servInfo);
   useEffect(() => {
     if (indexEl.index >= 0) {
       let newServInfo = [...writeMsgMode.servInfo]
@@ -166,24 +158,19 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
       // indexEl.elem.className = firstBlockClass
       indexEl.elem.className = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed)
       setWriteMsgMode(writeMsgMode = finalState)
-      setWrapperLocker(stl.wrapperUnlocked);
-      setIsDisabled(false);
+      if (newServInfo.filter(el => el !== undefined).every(el => el.flag === false)) setWrapperLocker(stl.wrapperUnlocked);
     }
   }, [indexEl])
 
   let modalCloser = (i: number, e: any) => { setIndexEl({ index: i, elem: e }) }
 
-  // console.log(usersInfo)
-
-
-  // console.log(usersInfo.feedbackArr)
 
   return <>
     <div className={cn(stl.usersPage, themes.userPageDnmc, delayFlag && stl.delay)} >
       <div className={stl.userInfo}>
         <div className={cn(stl.generalHeader, themes.generalHeaderDnmc, delayFlag && stl.delay)}>
           <h2 className={stl.userHeader}>Users</h2>
-          {paginator()}
+          <Paginator />
           <div className={stl.searchBlock} >
             <Formik initialValues={{ text: parsedString.term as string || '' }} validate={validator} onSubmit={friendsSeekerSubmitter}>
               {({ values, errors, handleChange, handleSubmit, isSubmitting, handleReset }) => (
@@ -257,8 +244,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
                               </div>
                             </button>
                             <button className={cn(stl.followBTN, themes.followBTNDnmc)}
-                              disabled={isDisabled}
-                              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => { userIdTalkModeOn(e, i, users) }}
+                              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => { userIdTalkModeOn(e, i) }}
                             >Write message </button>
                           </div>
                         </div>
@@ -288,7 +274,18 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
   </>
 }
 
-let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFlag, }: any) => {  // Прикруитть нормальную типизацию
+type WriterMode_Type = {
+  themes: UsersThemes_Type,
+  userEl: UsersArr,
+  sendMsg: usersActions_Type['sendMessageToUserThunk'],
+  index: number,
+  srvInfo: { flag?: boolean, closer: (i: number, el: any) => void } | any
+  delayFlag: boolean
+}
+
+let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFlag, }: WriterMode_Type) => {  // Прикруитть нормальную типизацию
+
+  console.log(srvInfo);
 
 
   type Error_Type = { text?: string }
@@ -361,7 +358,7 @@ const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProp
     }, 3000)
   }, [statInfo.statNum])
 
-  let feedBackCloser = (actionKey: string) => { feedBackWindowCloser(statInfo.actionKey) }
+  let feedBackCloser = (actionKey: string) => { feedBackWindowCloser(actionKey) }
 
 
   return <div className={feedBackNamer(index)}>
