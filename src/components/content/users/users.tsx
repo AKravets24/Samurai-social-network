@@ -71,8 +71,10 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
             `${stl.pagination} ${themes.paginationDnmc}`}
             onClick={(e) => {
               mapWrapperRef?.current?.scrollTo(0, 0)
-              if (searchMode && usersInfo.currentPage !== p) { usersFuncs.getCertainUserThunk(pageSize, userSearchName, p); defaultStylesUsersSetter(e) }
-              else { setPageListener(pageSize, p); defaultStylesUsersSetter(e) }
+              if (!usersInfo.isLoading) {
+                if (searchMode && usersInfo.currentPage !== p) { usersFuncs.getCertainUserThunk(pageSize, userSearchName, p); defaultStylesUsersSetter(e) }
+                else { setPageListener(pageSize, p); defaultStylesUsersSetter(e) }
+              }
             }}
           >{p}
           </span>
@@ -184,8 +186,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
             </Formik>
           </div>
         </div>
-        {/*props.usersInfo.usersGettingError*/}
-        {usersInfo.isLoading ?                      // список юзеров грузится?
+        {usersInfo.isLoading ?                                                                    // список юзеров грузится?
           <div className={stl.loaderDiv}>
             <img className={stl.loader} src={usersInfo.generalLDR_GIF} alt="Err" />
           </div> :

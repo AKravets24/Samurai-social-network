@@ -27,7 +27,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%;
+    width: 95%;
     margin: 15px auto;
     border-bottom: 1px solid green;
     height: 50px;
@@ -38,19 +38,21 @@
 .generalHeaderD {border-bottom: 1px solid green;     }
 .generalHeaderE {border-bottom: 1px solid darkred;   }
 
+
 .userHeader {
     color: red;
     /*margin-left: 30px;*/
     /*width: 100px;*/
     margin: 0;
     display: inline;
+    padding-bottom: 10px;
 }
 
 .paginationBlockOutside {
     display: flex;
-    width: 52%;
+    /* width: 58%; */
     height: 45px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
 }
 
 .pagBTN {
@@ -58,6 +60,8 @@
     height: 40px;
     border-radius: 10px;
     outline: none;
+    font-size: 20px;
+
 }
 
 .pagBTN:enabled {
@@ -117,13 +121,16 @@
 .paginationSelectedE   {color: red}
 
 
-.searchBlock {}
+.searchBlock {
+    padding-bottom: 4px;
+}
 .searchInput {
     cursor: text;
     border-radius: 10px;
     outline: none;
     height: 35px;
-    font-size: 20px;
+    font-size: 25px;
+    width: 200px
 }
 
 .searchInputN       {background-color: #fdfdfd    ; }
@@ -131,6 +138,14 @@
 .searchInputD       {background-color: lightyellow; }
 .searchInputE       {background-color: #ffe1e1    ; }
 
+.searchBlock form {
+    display: flex;
+    align-items: center;
+}
+
+.searchBlock button {
+    margin-left: 2px;
+}
 
 .friendsGeneral li,
 .userInfo ul {
@@ -606,11 +621,12 @@
 .moreUsersShower {
     width: 200px;
     height: 50px;
-    margin-top: 10px;
+    /* margin-top: 10px; */
     border-radius: 10px;
     outline: none;
     font-size: 20px ;
     padding-top: 9px;
+    padding-bottom: 10px;
 }
 
 .moreUsersShower:enabled {
