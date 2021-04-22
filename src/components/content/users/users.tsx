@@ -3,7 +3,6 @@ import stl from './users.module.css';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Field, Formik } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
-import { ForUsersSomeAttrs } from "../../../redux/dialogsReducer";
 import { UsersThemes_Type, usersActions_Type } from "./usersContainer";
 import { InitialUsersInfo_Type } from "../../../redux/usersReducer";
 import { UsersThemesBGR_Type } from "../../../redux/backGroundSetter";
@@ -15,7 +14,7 @@ import { UsersArr } from "../../../redux/app";
 
 type UsersProps_Type = {
   themes: UsersThemes_Type
-  usersInfo: InitialUsersInfo_Type & UsersThemesBGR_Type & ForUsersSomeAttrs
+  usersInfo: InitialUsersInfo_Type & UsersThemesBGR_Type
   usersFuncs: usersActions_Type
   delayFlag: boolean
 }
@@ -264,14 +263,14 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
                 </button>
       </div>
     </div>
-    {usersInfo.feedbackArr.map((el, i, arr) => {
+    {/* {usersInfo.feedbackArr.map((el, i, arr) => {
       // console.log(1);
       return <FeedBacker key={el.actionKey}
         feedBackWindowCloser={usersFuncs.feedBackWindowCloser}
         statInfo={arr[i]}
         index={i}
       />
-    })}
+    })} */}
   </>
 }
 
@@ -340,39 +339,39 @@ let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFla
 })
 
 
-interface FBProps_Type {
-  feedBackWindowCloser: (actionKey: string) => void
-  statInfo: any
-  index: number
-}
+// interface FBProps_Type {
+//   feedBackWindowCloser: (actionKey: string) => void
+//   statInfo: any
+//   index: number
+// }
 
-const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProps_Type) => {
-  let feedBackNamer = (i: number) => {
-    if (i === 0) return `${stl.feedbackWindow0}`
-    else if (i === 1) return `${stl.feedbackWindow1}`
-    else if (i >= 2) return `${stl.feedbackWindow2}`
-  }
+// const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProps_Type) => {
+//   let feedBackNamer = (i: number) => {
+//     if (i === 0) return `${stl.feedbackWindow0}`
+//     else if (i === 1) return `${stl.feedbackWindow1}`
+//     else if (i >= 2) return `${stl.feedbackWindow2}`
+//   }
 
-  useEffect(() => {
-    statInfo.statNum !== 0 && setTimeout(() => {
-      feedBackWindowCloser(statInfo.actionKey)
-    }, 3000)
-  }, [statInfo.statNum])
+//   useEffect(() => {
+//     statInfo.statNum !== 0 && setTimeout(() => {
+//       feedBackWindowCloser(statInfo.actionKey)
+//     }, 3000)
+//   }, [statInfo.statNum])
 
-  let feedBackCloser = (actionKey: string) => { feedBackWindowCloser(actionKey) }
-
-
-  return <div className={feedBackNamer(index)}>
-    <button onClick={() => feedBackCloser(statInfo.actionKey)}> X</button>
-    <p>{statInfo.statNum === 0 && 'Sending message...' ||
-      statInfo.statNum === 1 && `Message delivered to ${statInfo.userName}` ||
-      statInfo.statNum === 2 && `Failed to deliver message to ${statInfo.userName} `}
-    </p>
-  </div>
-},
-  function areEqual(prevProps, nextProps) {
+//   let feedBackCloser = (actionKey: string) => { feedBackWindowCloser(actionKey) }
 
 
-    // return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
-    return false
-  })
+//   return <div className={feedBackNamer(index)}>
+//     <button onClick={() => feedBackCloser(statInfo.actionKey)}> X</button>
+//     <p>{statInfo.statNum === 0 && 'Sending message...' ||
+//       statInfo.statNum === 1 && `Message delivered to ${statInfo.userName}` ||
+//       statInfo.statNum === 2 && `Failed to deliver message to ${statInfo.userName} `}
+//     </p>
+//   </div>
+// },
+//   function areEqual(prevProps, nextProps) {
+
+
+//     // return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
+//     return false
+//   })

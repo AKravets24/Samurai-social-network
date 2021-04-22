@@ -1,9 +1,10 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { Route, Redirect, withRouter, useLocation } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import stl from './content.module.css';
-import { getSmartIdAndIsAuth } from "../../redux/selectors";
+import { getDialogsACs_compUsers, getFeedbackArr, getSmartIdAndIsAuth } from "../../redux/selectors";
 import { withSuspense } from './HOC/withSuspense';
+import { FeedBackArr_Type } from "../../redux/dialogsReducer";
 // import {withAuthRedirect} from "./HOC/withAuthRedirect";  // ? нужен ли
 
 // const ProfileComposer = lazy(()=> import("./profile/profileCompWithContainer").then((m:any) => ({default: m.ProfileComposer}))) // as React.ComponentType
@@ -33,15 +34,20 @@ let NotFoundComp = withSuspense(NotFound)
 
 export function ContentCompContainer() {
   let smartData = useSelector(getSmartIdAndIsAuth);
+  let feedBackArr = useSelector(getFeedbackArr)
+  let feedBackPopUpCloser = useSelector(getDialogsACs_compUsers).feedBackPopUpCloser;
   let pathname = useLocation().pathname;
 
 
-  return <Content authData={smartData} pathname={pathname} />
+
+  return <Content authData={smartData} pathname={pathname} feedBackArr={feedBackArr} feedBackPopUpCloser={feedBackPopUpCloser} />
 };
 
-type PropsType = { authData: { isAuth: boolean, id: null | number }, pathname: string }
+type PropsType = { authData: { isAuth: boolean, id: null | number }, pathname: string, feedBackArr: FeedBackArr_Type[], feedBackPopUpCloser: (actionKey: string) => void }
 
-let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname }) => {                       // два рендера - первичный и из-за withRouter
+let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname, feedBackArr, feedBackPopUpCloser }) => {       // два рендера - первичный и из-за withRouter
+
+  console.log(pathname);
 
   //users?count=${pageSize}&page=${currentPage}
   let loginChecker = () => { // console.log(props)
@@ -53,7 +59,6 @@ let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname }
       return <>
         <Route onLoad={true} exact path='/profile/:userId?' render={() => <ProfileComp />} />
         <Route onLoad={true} exact path='/friends' render={() => <FriendsComp />} />
-        {/* <Route onLoad={true} exact path={`/dialogs/:userId?/:messages?`} render={() => <DialogsComp />} /> */}
         <Route onLoad={true} exact path={`/dialogs/:userId?`} render={() => <DialogsComp />} />
         <Route onLoad={true} exact path={'/chat'} render={() => <ChatComp />} />
         <Route onLoad={true} exact path={`/users`} render={() => <UsersComp />} />
@@ -61,6 +66,7 @@ let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname }
         <Route onLoad={true} exact path='/music' render={() => <MusicComp />} />
         <Route onLoad={true} exact path='/settings' render={() => <SettingsComp />} />
         <Route onLoad={true} exact path='/404' render={() => <NotFoundComp />} />
+
       </>
     }
     else {                      // НЕ ЗАЛОГИНЕН
@@ -75,5 +81,56 @@ let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname }
       </>
     }
   };
-  return <div className={stl.content2}> {loginChecker()} </div>
+  return <div className={stl.content2}> {loginChecker()}
+    {!pathname.includes('/dialogs') && feedBackArr.map((el, i, arr) => {
+      // console.log(1);
+      return <FeedBacker key={el.actionKey}
+        feedBackWindowCloser={feedBackPopUpCloser}
+        statInfo={arr[i]}
+        index={i}
+      />
+    })}
+  </div>
 }
+
+
+
+interface FBProps_Type {
+  feedBackWindowCloser: (actionKey: string) => void
+  statInfo: any
+  index: number
+}
+
+const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProps_Type) => {
+  // console.log(statInfo);
+  let dispatch = useDispatch()
+
+  let feedBackNamer = (i: number) => {
+    if (i === 0) return `${stl.feedbackWindow0}`
+    else if (i === 1) return `${stl.feedbackWindow1}`
+    else if (i >= 2) return `${stl.feedbackWindow2}`
+  }
+
+  useEffect(() => {
+    statInfo.statNum !== 0 && setTimeout(() => {
+      dispatch(feedBackWindowCloser(statInfo.actionKey))
+    }, 3000)
+  }, [statInfo.statNum])
+
+  let feedBackCloser = (actionKey: string) => { feedBackWindowCloser(actionKey) }
+
+
+  return <div className={feedBackNamer(index)}>
+    <button onClick={() => feedBackCloser(statInfo.actionKey)}> X</button>
+    <p>{statInfo.statNum === 0 && 'Sending message...' ||
+      statInfo.statNum === 1 && `Message delivered to ${statInfo.userName}` ||
+      statInfo.statNum === 2 && `Failed to deliver message to ${statInfo.userName} `}
+    </p>
+  </div>
+},
+  function areEqual(prevProps, nextProps) {
+
+
+    // return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
+    return false
+  })

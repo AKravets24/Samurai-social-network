@@ -159,6 +159,7 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
   }
   dispatch(actions.toggleSendingInProgressAC(false, actionKey));
 };
+const feedBackPopUpCloser = (actionKey: string) => (dispatch: Dispatch_Type) => { dispatch(actions.feedBackWindowCloserAC(actionKey)) }
 const dialogCompCleaner = () => (dispatch: Dispatch_Type) => { dispatch(actions.dialogCompCleanerAC()) }
 
 
@@ -176,20 +177,22 @@ export type DialogActions_Type = {
   deleteMessageThunkAC: (messageId: string, index: number) => ThunkAC_Type
   getNewMessagesRequestThunkAC: () => ThunkAC_Type
   addPrevMessagesThunkAC: (userId: number, msgCount: number, pageNumber: number) => ThunkAC_Type
-  feedBackWindowCloserAC: (actionKey: string) => FeedBackWindowCloserAC_Type
+  // feedBackWindowCloserAC: (actionKey: string) => FeedBackWindowCloserAC_Type
+  feedBackPopUpCloser: (actionKey: string) => void
   dialogCompCleaner: () => void
 }
 
 const dialogActions: DialogActions_Type = {
   getMyNegotiatorsListThunkAC, getTalkWithUserThunkAC, sendMessageToUserThunkAC, createNewDialogAC: actions.createNewDialogAC,
   talkedBeforeThunkAC, setSelectedMessagesAC: actions.setSelectedMessagesAC, setSpamMessagesThunkAC, deleteMessageThunkAC, getNewMessagesRequestThunkAC,
-  addPrevMessagesThunkAC, feedBackWindowCloserAC: actions.feedBackWindowCloserAC, dialogCompCleaner,
+  addPrevMessagesThunkAC, /* feedBackWindowCloserAC: actions.feedBackWindowCloserAC, */ feedBackPopUpCloser, dialogCompCleaner,
 };
 
 export const dialogACs = (state = dialogActions) => { return state };
 
 type ErrinSendingArr_Type = { actionKey: string, error: number }
 type ErrInDeletingArr_Type = { messageId: string, }
+export type FeedBackArr_Type = { statNum: number, userId: number, userName: string, actionKey: string }
 
 let initialDialogsState = {
   dialogsList: [] as DialogsList_Type[],
@@ -202,7 +205,7 @@ let initialDialogsState = {
   newMessageBTNDisabled: false as boolean,
   prevMsgsIsLoading: false as boolean,
   errGettingNewMSGSCount: false as boolean,
-  feedbackArr: [] as { statNum: number, userId: number, userName: string, actionKey: string }[],
+  feedbackArr: [] as FeedBackArr_Type[],
   errNegotiatorsListGet: 0 as number,
   errNegotiatorsListPIC: radioTowerPIC as string,
   errCertainDialogGet: '' as string,
@@ -220,12 +223,6 @@ let initialDialogsState = {
 export type InitialDialogsState_Type = typeof initialDialogsState;
 
 export type PartDialogReducer_Type = { newMessageBTNDisabled: boolean, newMessagesCounter: number, errGettingNewMSGSCount: boolean, onError: string, envelope_GIF: string, }
-
-
-let ForUsersSomeAttrs1 = {
-  feedbackArr: initialDialogsState.feedbackArr,
-}
-export type ForUsersSomeAttrs = typeof ForUsersSomeAttrs1
 
 
 export const dialogsReducer = (state = initialDialogsState, action: ActionTypes, /* date:string, time:string */): InitialDialogsState_Type => {
@@ -329,6 +326,8 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       return { ...state, feedbackArr: newFeedbackArr };
 
     case 'FEEDBACK_WINDOW_CLOSER':
+      console.log('FEEDBACK_WINDOW_CLOSER');
+
       let arrDelItem = [...state.feedbackArr]
       let FBAindex = arrDelItem.findIndex((el) => el.actionKey === action.actionKey)
       arrDelItem.splice(FBAindex, 1)

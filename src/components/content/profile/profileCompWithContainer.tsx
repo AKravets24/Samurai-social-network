@@ -164,8 +164,6 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
     actions.addPost(values.text); values.text = ''; setSubmitting(false);
   }
 
-  console.log(delayFlag)
-
 
   return <>
     {writeMode &&
