@@ -122,6 +122,8 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
       e.target.parentElement.parentElement.parentElement.parentElement.scrollIntoView({ behavior: "smooth" }) //плавный автоСкролл если элемент если он вызе вьюпорта
     }
     setWrapperLocker(stl.wrapperLocked);
+    console.log(e.target.parentElement.parentElement.parentElement.parentElement.children[0].className);
+
     e.target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
     let newServInfo = [...writeMsgMode.servInfo]
     if (newServInfo[i] === undefined) { newServInfo[i] = {} }
@@ -216,7 +218,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
                           </NavLink>
                         </div>
                         <div className={stl.nameStateBTNs}>
-
                           <div className={stl.userBlockInfo}>
                             <NavLink to={`/profile/${user.id}`}>
                               <h2 className={cn(stl.userName, themes.userNameDnmc)}>{user.name} </h2>
@@ -263,14 +264,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
                 </button>
       </div>
     </div>
-    {/* {usersInfo.feedbackArr.map((el, i, arr) => {
-      // console.log(1);
-      return <FeedBacker key={el.actionKey}
-        feedBackWindowCloser={usersFuncs.feedBackWindowCloser}
-        statInfo={arr[i]}
-        index={i}
-      />
-    })} */}
   </>
 }
 
@@ -286,6 +279,7 @@ type WriterMode_Type = {
 let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFlag, }: WriterMode_Type) => {  // Прикруитть нормальную типизацию
 
   console.log(srvInfo);
+  console.log(userEl);
 
 
   type Error_Type = { text?: string }
@@ -311,9 +305,13 @@ let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFla
 
     <div className={stl.miniHeadWrapper}>
       <h2 className={cn(stl.userName, themes.userNameDnmc)}>{userEl.name}</h2>
-      <button className={cn(stl.followBTN, themes.followBTNDnmc)}>Go to chat</button>   {/* // добавить логику перехода в чат */}
+      <NavLink to={`/dialogs/${userEl.id}`} >
+        <button className={cn(stl.followBTN, themes.followBTNDnmc)}>
+          Go to chat
+        </button>
+      </NavLink>
+
       <button className={cn(stl.closeBTN, stl.followBTN, themes.followBTNDnmc)}
-        // onClick={e => { userIdTalkModeOff(e) }}
         onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => { closeAction(index, e.target) }}
       >X</button>
     </div>
@@ -337,41 +335,3 @@ let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFla
   </div>
 
 })
-
-
-// interface FBProps_Type {
-//   feedBackWindowCloser: (actionKey: string) => void
-//   statInfo: any
-//   index: number
-// }
-
-// const FeedBacker = React.memo(({ feedBackWindowCloser, statInfo, index }: FBProps_Type) => {
-//   let feedBackNamer = (i: number) => {
-//     if (i === 0) return `${stl.feedbackWindow0}`
-//     else if (i === 1) return `${stl.feedbackWindow1}`
-//     else if (i >= 2) return `${stl.feedbackWindow2}`
-//   }
-
-//   useEffect(() => {
-//     statInfo.statNum !== 0 && setTimeout(() => {
-//       feedBackWindowCloser(statInfo.actionKey)
-//     }, 3000)
-//   }, [statInfo.statNum])
-
-//   let feedBackCloser = (actionKey: string) => { feedBackWindowCloser(actionKey) }
-
-
-//   return <div className={feedBackNamer(index)}>
-//     <button onClick={() => feedBackCloser(statInfo.actionKey)}> X</button>
-//     <p>{statInfo.statNum === 0 && 'Sending message...' ||
-//       statInfo.statNum === 1 && `Message delivered to ${statInfo.userName}` ||
-//       statInfo.statNum === 2 && `Failed to deliver message to ${statInfo.userName} `}
-//     </p>
-//   </div>
-// },
-//   function areEqual(prevProps, nextProps) {
-
-
-//     // return prevProps.sendingMSGStatArr.length !== nextProps.sendingMSGStatArr.length
-//     return false
-//   })

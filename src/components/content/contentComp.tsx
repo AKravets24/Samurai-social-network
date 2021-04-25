@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from "react";
+import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Route, Redirect, withRouter, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import stl from './content.module.css';
@@ -47,9 +47,11 @@ type PropsType = { authData: { isAuth: boolean, id: null | number }, pathname: s
 
 let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname, feedBackArr, feedBackPopUpCloser }) => {       // два рендера - первичный и из-за withRouter
 
-  console.log(pathname);
+  let [link, setLink] = useState(pathname)
+  let prevLinkRef = useRef<string | undefined>();
+  let prevLink = prevLinkRef.current;
+  useEffect(() => { prevLinkRef.current = link; setLink(pathname) }, [pathname]);
 
-  //users?count=${pageSize}&page=${currentPage}
   let loginChecker = () => { // console.log(props)
     if (isAuth) {         // ЗАЛОГИНЕН
 
@@ -81,9 +83,21 @@ let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname, 
       </>
     }
   };
+
+  let [wasMaped, setWasMaped] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (pathname.includes('/dialogs') && !prevLink?.includes('/dialogs')) { setWasMaped(false) } // если в Диалог пришли из др к-ты
+    else if (pathname.includes('/dialogs') && prevLink?.includes('/dialogs')) {
+      feedBackArr.length ? setTimeout(() => { setWasMaped(false) }, 3000) : setWasMaped(false)
+    }                                                                                            //  если Диалог был со старта, то массив не мапим
+    else if (!pathname.includes('/dialogs')) { setWasMaped(true) }                               // если установлена др к-та
+  }, [pathname])
+
+
   return <div className={stl.content2}> {loginChecker()}
-    {!pathname.includes('/dialogs') && feedBackArr.map((el, i, arr) => {
-      // console.log(1);
+
+    {wasMaped && feedBackArr.map((el, i, arr) => {
       return <FeedBacker key={el.actionKey}
         feedBackWindowCloser={feedBackPopUpCloser}
         statInfo={arr[i]}

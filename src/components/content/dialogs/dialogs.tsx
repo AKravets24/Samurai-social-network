@@ -164,7 +164,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
   let keyCodeChecker = (e: KeyboardEvent, values: Value_Type, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     if (e.keyCode == 13 && e.shiftKey) { return } // для переноса строки =)
-    else if (e.keyCode === 13) {
+    else if (e.keyCode === 13 && !state.certainDialogIsLoading && !state.errCertainDialogGet) {
       submitter(values, { setSubmitting })
     }
   }
@@ -221,12 +221,20 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   let [prevHeight, setPrevHeight] = useState<Number>(0);
   let [dialogChanging, setDialogChanging] = useState<boolean>(false)
 
+  let scrollControler = () => {
+    if (dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 >= 200) { setBtnShow(1); setPrevHeight(0) }// если отступ снизу больше 200
+    else if (dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 <= 200 && wasClicked) { setBtnShow(2) }// если отступ снизу меньше 200
+    else { setBtnShow(0) }
+    if (wasClicked) setWasClicked(false)
+    !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
+      !state.prevMsgsIsLoading && !dialogChanging && oldMsgLazyLoader()
+  }
+  console.log(state.certainDialog)
 
   return <>
     <div className={cn(stl.dialogsPage, themes.dialogDnmc, delayFlag && stl.delay)}>
       <div className={stl.dialogListAndArea}>
         <div className={cn(stl.dialogList, themes.firstScroller, delayFlag && stl.delay)}>
-          {/* {state.dialogsList.length === 0 && !state.errNegotiatorsListGet ? */}
           {state.allDialogsIsLoading ?                                                 // диалоги загружаются?
             <div className={stl.dialogListLoaderWrapper}>
               <img className={stl.dialogListLoader} src={loaders.halfCircle_GIF} alt="Err" />
@@ -266,20 +274,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
             <h2 className={themes.nameInHeaderDnmc}>{userNameInHeader}</h2>
           </div>
           <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll, delayFlag && stl.delay)}
-            ref={dialogArea}
-            onScroll={() => {
-              // console.log(dialogArea?.current?.scrollTop)
-
-              if (dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 >= 200) { setBtnShow(1); setPrevHeight(0) }       // если отступ снизу больше 200
-              else if (dialogArea?.current?.scrollHeight - dialogArea?.current?.scrollTop - dialogArea?.current?.clientHeight + 1 <= 200 && wasClicked) { setBtnShow(2) }      // если отступ снизу меньше 200
-              else { setBtnShow(0) }
-              if (wasClicked) setWasClicked(false)
-
-              !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
-                !state.prevMsgsIsLoading && !dialogChanging && oldMsgLazyLoader()
-            }}
-            onContextMenu={e => e.preventDefault()}
-          >
+            ref={dialogArea} onScroll={() => scrollControler()} onContextMenu={e => e.preventDefault()} >
             {!state.dialogsList.length && !state.allDialogsIsLoading && !state.errNegotiatorsListGet &&            // если ни с кем еще не было диалогов
               <div className={stl.noDialogsList}>
                 <p>No dialogs here so far...</p>
@@ -291,7 +286,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
             </div>
             {state.certainDialogIsLoading ? <div className={stl.certainLDRWrapper}><img src={loaders.certainLDR_GIF} alt="err" /></div> :
               state.errCertainDialogGet ? <div className={stl.errorBlock}> {state.errCertainDialogGet}</div> :
-                state?.certainDialog?.items
+                dialogId ? state?.certainDialog?.items
                   .map((msg, i, arr) => {
                     if (msgsMapDone === 0 && i === arr.length - 1) { setMsgsMapDone(1); setDialogAreaHeight(dialogArea?.current?.scrollHeight); setDialogChanging(false) }
                     if (msgsMapDone === 2 && i === arr.length - 1) { setMsgsMapDone(3); setDialogAreaHeight(dialogArea?.current?.scrollHeight); setDialogChanging(false) }
@@ -335,7 +330,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                         servInfoCorrecter={servInfoCorrecter}
                       /> : null}
                     </div>
-                  })}
+                  }) : null}
             <div ref={bufferBlock} />
           </div>
           <div className={stl.sender}>
@@ -359,7 +354,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                     }))}
                   />
                   {dialogId ?
-                    <button disabled={isSubmitting} className={cn(stl.sendBTN, themes.sendBTNDnmc)}
+                    <button disabled={isSubmitting || state.certainDialogIsLoading || !!state.errCertainDialogGet} className={cn(stl.sendBTN, themes.sendBTNDnmc)}
                     > Send </button> : null}
                 </form>
               )}

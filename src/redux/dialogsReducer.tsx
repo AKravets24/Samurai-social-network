@@ -51,7 +51,7 @@ const getMyNegotiatorsListThunkAC = (): ThunkAC_Type => async (dispatch: Dispatc
   actions.setErrMyNegotiatorsList(0)
   try {
     let response = await usersApi.getMyNegotiatorsList();
-    console.log(response)
+    // console.log(response)
     if (response.status === 200) dispatch(actions.setMyCompanions(response.data))
   }
   catch (err) {
@@ -143,6 +143,7 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
   dispatch(actions.onSendingMSGEStatusAC(0, userId, actionKey, userName));  //for friends, users comps
   dispatch(actions.errCatcherAtSendingAC(actionKey, 0));
   dispatch(actions.toggleSendingInProgressAC(true, actionKey));
+  console.log(senderId)
   let pseudoMsg = { body, actionKey, senderId, isSending: false, addedAt: '', deletedByRecipient: false, deletedBySender: false, distributionId: null, id: '', isSpam: false, recipientId: -1, recipientName: '', senderName: '', translatedBody: null, viewed: false };
 
   dispatch(actions.sendMsgAC(pseudoMsg))
