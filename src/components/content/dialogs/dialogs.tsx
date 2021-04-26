@@ -111,9 +111,20 @@ type DialogsProps_Type = {
   loaders: DialoguesThemes_Type
 }
 
-type ModalMsgs_Type = {
-  msgArr: MessageData_Type[], servInfo: { flag?: boolean, isMyMsg?: boolean, myId?: any, dialogId?: number, wasError?: boolean, }[]
+
+type ModalMsgs_Type1 = {
+  servInfo: {
+    flag?: boolean, isMyMsg: boolean,
+    myId: number | null,
+    dialogId: number,
+    wasError: boolean,
+    deleteMsg: (messageId: string, index: number) => void,
+    markAsSpam: (messageId: string, index: number) => void,
+    sendMsg: (userId: number, msg: string, actionKey: string, userName: string, senderId: number) => void,
+    servInfoCorrecter: (index: number) => void,
+  }[]
 }
+
 
 let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, actions, loaders, delayFlag }) => {
   // console.log(loaders)
@@ -172,14 +183,13 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
 
 
-  let [modalMsggs, setModalMsggs] = useState<ModalMsgs_Type>({ msgArr: [], servInfo: [] })
+  let [modalMsggs, setModalMsggs] = useState<any>({ servInfo: [] })
   let onRightClickListener = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, i: number, arr: MessageData_Type[]) => {
     e.preventDefault();
-    let newArr: MessageData_Type[] = [...arr]
+
     let newServInfo = [...modalMsggs.servInfo]
 
-    if (newServInfo[i] === undefined) { newServInfo[i] = {} }
-    if (newServInfo[i]?.flag === undefined) { newServInfo[i].flag = true; }
+    if (newServInfo[i] === undefined) { newServInfo[i] = { flag: true } }  // да что блятььб сука ебучая тебе пиздахлёбина все время не нравится??? иди в ОЧКО К ДЬЯВОЛУ БЛЯДЬ!!!!!
     else if (newServInfo[i].flag === true) { newServInfo[i].flag = false; }
     else if (newServInfo[i].flag === false) { newServInfo[i].flag = true; }
 
@@ -189,26 +199,28 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
     newServInfo[i].dialogId = dialogId;
     newServInfo[i].wasError = state.errInSendingArr.some(el => el.actionKey === arr[i].actionKey)
 
+    newServInfo[i].deleteMsg = actions.deleteMessageThunk
+    newServInfo[i].markAsSpam = actions.setSpamMessagesThunk
+    newServInfo[i].sendMsg = actions.sendMessageToUserThunk
+    newServInfo[i].servInfoCorrecter = servInfoCorrecter
 
-    let finalState = { msgArr: newArr, servInfo: newServInfo }
+
+    let finalState = { servInfo: newServInfo }
     setModalMsggs(modalMsggs = finalState)
   }
 
   let servInfoCorrecter = (index: number) => {
     let newServInfo = [...modalMsggs.servInfo]
-    let newMsgArr = [...modalMsggs.msgArr]
     newServInfo[index].flag = false
-    let finalState = { msgArr: newMsgArr, servInfo: newServInfo }
+    let finalState = { servInfo: newServInfo }
     setModalMsggs(modalMsggs = finalState)
   }
 
   window.onkeyup = ({ key }: KeyboardEvent) => {
     if (key === "Escape") {
       let newServInfo = [...modalMsggs.servInfo]
-      let newMsgArr = [...modalMsggs.msgArr]
       newServInfo.forEach(el => { if (el !== undefined) el.flag = false })
-      // newServInfo.forEach(el => console.log(el))
-      let finalState = { msgArr: newMsgArr, servInfo: newServInfo }
+      let finalState = { servInfo: newServInfo }
       setModalMsggs(modalMsggs = finalState)
     }
   };
@@ -229,7 +241,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
     !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
       !state.prevMsgsIsLoading && !dialogChanging && oldMsgLazyLoader()
   }
-  console.log(state.certainDialog)
+  // console.log(state.certainDialog)
 
   return <>
     <div className={cn(stl.dialogsPage, themes.dialogDnmc, delayFlag && stl.delay)}>
@@ -287,16 +299,16 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
             {state.certainDialogIsLoading ? <div className={stl.certainLDRWrapper}><img src={loaders.certainLDR_GIF} alt="err" /></div> :
               state.errCertainDialogGet ? <div className={stl.errorBlock}> {state.errCertainDialogGet}</div> :
                 dialogId ? state?.certainDialog?.items
-                  .map((msg, i, arr) => {
-                    if (msgsMapDone === 0 && i === arr.length - 1) { setMsgsMapDone(1); setDialogAreaHeight(dialogArea?.current?.scrollHeight); setDialogChanging(false) }
-                    if (msgsMapDone === 2 && i === arr.length - 1) { setMsgsMapDone(3); setDialogAreaHeight(dialogArea?.current?.scrollHeight); setDialogChanging(false) }
+                  .map((msg, i, msgs) => {
+                    if (msgsMapDone === 0 && i === msgs.length - 1) { setMsgsMapDone(1); setDialogAreaHeight(dialogArea?.current?.scrollHeight); setDialogChanging(false) }
+                    if (msgsMapDone === 2 && i === msgs.length - 1) { setMsgsMapDone(3); setDialogAreaHeight(dialogArea?.current?.scrollHeight); setDialogChanging(false) }
 
                     return <div
                       // key={msg.id}
                       key={uuidv4()}
                       className={cn(myId !== null && +msg.senderId === +myId ? `${stl.messageBlockMe} ${themes.msgMeDnmc} ${delayFlag && stl.delay} ` : `${stl.messageBlockUser} ${themes.msgUserDnmc} ${delayFlag && stl.delay}`)}
                       id={msg.id}
-                      onContextMenu={(e) => { return state.sendndigInProgress.some(el => el === msg.actionKey) ? null : onRightClickListener(e, i, arr) }}
+                      onContextMenu={(e) => { return state.sendndigInProgress.some(el => el === msg.actionKey) ? null : onRightClickListener(e, i, msgs) }}
                     >
                       <p className={stl.messageBody} >{msg.body}</p>
 
@@ -319,16 +331,12 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                           <img className={stl.checkMark} src={msg.viewed ? state.msgSeenFlagPIC : state.msgDeliveredFlagPIC} alt="Err" />}
                       </div>
 
-                      {modalMsggs.servInfo[i]?.flag ? <ModalMenu
+                      {modalMsggs.servInfo[i]?.flag && <ModalMenu
                         index={i}
-                        msgs={arr[i]}
+                        msgEl={msgs[i]}
                         servInfo={modalMsggs.servInfo[i]}
 
-                        deleteMsg={actions.deleteMessageThunk}
-                        markAsSpam={actions.setSpamMessagesThunk}
-                        sendMsg={actions.sendMessageToUserThunk}
-                        servInfoCorrecter={servInfoCorrecter}
-                      /> : null}
+                      />}
                     </div>
                   }) : null}
             <div ref={bufferBlock} />
@@ -368,27 +376,25 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
 
 type ModalMenuProps_Type = {
-  index: number, msgs: MessageData_Type, servInfo: ModalMsgs_Type['servInfo'][] | any,
-  deleteMsg: (messageId: string, index: number) => void,
-  markAsSpam: (messageId: string, index: number) => void,
-  sendMsg: (userId: number, msg: string, actionKey: string, userName: string, senderId: number) => void,
-  servInfoCorrecter: (index: number) => void
+  index: number,
+  msgEl: MessageData_Type,
+  servInfo: any
 }
 
 let ModalMenu = React.memo((props: ModalMenuProps_Type) => {
 
   console.log(props)
 
-  let spamMarker = (msgId: string, index: number) => { props.markAsSpam(msgId, index); props.servInfoCorrecter(props.index) }
-  let msgDeleter = (msgId: string, index: number) => { props.deleteMsg(msgId, index); props.servInfoCorrecter(props.index) }
-  let msgSender = (dialogId: number, mesgBody: string, actionKey: string, userName: string, myId: number) => { props.sendMsg(dialogId, mesgBody, actionKey, userName, myId); props.servInfoCorrecter(props.index) }
+  let spamMarker = (msgId: string, index: number) => { props?.servInfo.markAsSpam(msgId, index); props.servInfo.servInfoCorrecter(props.index) }
+  let msgDeleter = (msgId: string, index: number) => { props?.servInfo.deleteMsg(msgId, index); props.servInfo.servInfoCorrecter(props.index) }
+  let msgSender = (dialogId: number, mesgBody: string, actionKey: string, userName: string, myId: number) => { props.servInfo.sendMsg(dialogId, mesgBody, actionKey, userName, myId); props.servInfo.servInfoCorrecter(props.index) }
 
   return <div className={cn(props.servInfo.isMyMsg ? `${stl.contextMenu} ${stl.contMenuMyMsg}` : `${stl.contextMenu} ${stl.contMenuFriendMsg}`)}>
     <div className={stl.contextMenuUpper} >
-      <div className={stl.repeatNSpam} onClick={() => spamMarker(props.msgs.id, props.index)}>Mark as spam</div>
-      <button onClick={() => props.servInfoCorrecter(props.index)}>X</button>
+      <div className={stl.repeatNSpam} onClick={() => spamMarker(props.msgEl.id, props.index)}>Mark as spam</div>
+      <button onClick={() => props.servInfo.servInfoCorrecter(props.index)}>X</button>
     </div>
-    <div className={stl.deleteMsg} onClick={() => props.servInfo.wasError ? msgSender(props.servInfo.dialogId, props.msgs.body, props.msgs.actionKey, '', props.servInfo.myId) : msgDeleter(props.msgs.id, props.index)}>
+    <div className={stl.deleteMsg} onClick={() => props.servInfo.wasError ? msgSender(props.servInfo.dialogId, props.msgEl.body, props.msgEl.actionKey, '', props.servInfo.myId) : msgDeleter(props.msgEl.id, props.index)}>
       {props.servInfo.wasError ? 'Resend' : 'Delete message'}</div>
   </div>
 }, function areEqual(prevProps, nextProps) {

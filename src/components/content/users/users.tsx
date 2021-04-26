@@ -22,8 +22,6 @@ type UsersProps_Type = {
 type ModalMsgs_Type = { servInfo: { flag?: boolean, closer?: (i: number, e: any) => void }[] }
 
 export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, delayFlag }) => {
-  // console.log(usersInfo.BTN_FLW_GIF)
-  // console.log(usersInfo.feedbackArr)
 
   type Error_Type = { text?: string }
   type Value_Type = { text: string }
@@ -112,9 +110,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 
   let validator = (values: Value_Type) => { let errors: Error_Type = {}; if (!values.text.trim()) { values.text = ''; errors.text = 'Required' } return errors }
 
-
-
-
   let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
 
   let userIdTalkModeOn = (e: any, i: number,) => {
@@ -124,10 +119,9 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
     setWrapperLocker(stl.wrapperLocked);
     console.log(e.target.parentElement.parentElement.parentElement.parentElement.children[0].className);
 
-    e.target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
     let newServInfo = [...writeMsgMode.servInfo]
-    if (newServInfo[i] === undefined) { newServInfo[i] = {} }
-    if (newServInfo[i]?.flag === undefined) { newServInfo[i].flag = true; }
+
+    if (newServInfo[i] === undefined) { newServInfo[i] = { flag: true } }
     else if (newServInfo[i].flag === true) { newServInfo[i].flag = false; }
     else if (newServInfo[i].flag === false) { newServInfo[i].flag = true; }
     newServInfo[i].closer = (index: number, event: any) => modalCloser(index, event)
@@ -137,18 +131,17 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 
   let mapWrapperRef = React.createRef<HTMLDivElement>();
 
-  let userUnitStlDefolter = (e: any) => {
-    // console.log(e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children[0].children[0].className) // эталон
-    // console.log(e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children) // 100 юзеров на странице
+  let userUnitStlDefolter = () => {
     if (writeMsgMode.servInfo.length) {
-      let userUnitStlArr: HTMLDivElement[] = Array.from(e.target.children[0].children[0].children[2].children[0].children[0].children[0].children[1].children)
-      userUnitStlArr.forEach((el) => { el.children[0].className = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed) })
-      setWriteMsgMode(writeMsgMode = { servInfo: [] });
-      setWrapperLocker('');
+
+      let newServInfo = [...writeMsgMode.servInfo]
+      newServInfo.forEach(el => { if (el !== undefined) el.flag = false })
+      let finalState = { servInfo: newServInfo }
+      setWriteMsgMode(writeMsgMode = finalState); setWrapperLocker('');
     }
   }
 
-  window.onkeyup = (e: KeyboardEvent) => { e.key === 'Escape' && userUnitStlDefolter(e) }
+  window.onkeyup = (e: KeyboardEvent) => { e.key === 'Escape' && userUnitStlDefolter() }
 
   type indexEl_Type = { index: number, elem: any }  // хз какой тип элемента должен быть
   let [indexEl, setIndexEl] = useState<indexEl_Type>({ index: -1, elem: '' })
@@ -158,7 +151,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
       let newServInfo = [...writeMsgMode.servInfo]
       newServInfo[indexEl.index].flag = false
       let finalState = { servInfo: newServInfo }
-      // indexEl.elem.className = firstBlockClass
       indexEl.elem.className = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed)
       setWriteMsgMode(writeMsgMode = finalState)
       if (newServInfo.filter(el => el !== undefined).every(el => el.flag === false)) setWrapperLocker(stl.wrapperUnlocked);
@@ -210,7 +202,9 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
                 {usersInfo?.initialUsersList
                   .map((user, i, users) =>
                     <div className={stl.userUnitContainer} key={i}>
-                      <div className={cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed)} >
+                      <div className={!writeMsgMode.servInfo[i]?.flag ? cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed) :
+                        cn(stl.userUnitHidden)
+                      } >
                         <div className={stl.avaDiv}>
                           <NavLink to={`/profile/${user.id}`}>
                             <img src={user.photos.large || usersInfo.defaultAvatar} alt='err'
@@ -251,7 +245,13 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
                         </div>
                       </div>
                       {writeMsgMode.servInfo[i]?.flag &&
-                        <WriterMode themes={themes} userEl={users[i]} sendMsg={usersFuncs.sendMessageToUserThunk} index={i} srvInfo={writeMsgMode.servInfo[i]} delayFlag={delayFlag} />
+                        <WriterMode
+                          index={i}
+                          userEl={users[i]}
+                          themes={themes}
+                          sendMsg={usersFuncs.sendMessageToUserThunk}
+                          closer={writeMsgMode.servInfo[i].closer}
+                          delayFlag={delayFlag} />
                       }
                     </div >
                   )}
@@ -272,14 +272,14 @@ type WriterMode_Type = {
   userEl: UsersArr,
   sendMsg: usersActions_Type['sendMessageToUserThunk'],
   index: number,
-  srvInfo: { flag?: boolean, closer: (i: number, el: any) => void } | any
-  delayFlag: boolean
+  delayFlag: boolean,
+  closer: ((i: number, el: any) => void) | undefined
+
 }
 
-let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFlag, }: WriterMode_Type) => {  // Прикруитть нормальную типизацию
+let WriterMode = React.memo(({ themes, userEl, sendMsg, index, closer, delayFlag, }: WriterMode_Type) => {  // Прикруитть нормальную типизацию
 
-  console.log(srvInfo);
-  console.log(userEl);
+  console.log(index);
 
 
   type Error_Type = { text?: string }
@@ -297,8 +297,8 @@ let WriterMode = React.memo(({ themes, userEl, sendMsg, index, srvInfo, delayFla
   }
 
   let closeAction = (index: number, elem: any) => {
-    let element = elem.parentElement.parentElement.parentElement.parentElement.children[index].children[0]
-    srvInfo.closer(index, element)
+    let element = elem?.parentElement?.parentElement?.parentElement?.parentElement?.children[index]?.children[0]
+    if (closer) closer(index, element)
   }
 
   return <div className={cn(stl.userWriteMode, themes.userWriteModeDnmc, stl.userUnitShowed, delayFlag && stl.delay)}>
