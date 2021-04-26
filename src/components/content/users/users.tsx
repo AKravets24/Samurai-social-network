@@ -9,6 +9,7 @@ import { UsersThemesBGR_Type } from "../../../redux/backGroundSetter";
 import * as queryString from 'querystring';
 import cn from 'classnames/bind';
 import { UsersArr } from "../../../redux/app";
+import { PalsThemes_Type } from "../friends/friendsContainer";
 // import UnAuthorised                       from "../unAuthorised/unAuthorised";
 
 
@@ -19,7 +20,7 @@ type UsersProps_Type = {
   delayFlag: boolean
 }
 
-type ModalMsgs_Type = { servInfo: { flag?: boolean, closer?: (i: number, e: any) => void }[] }
+export type ModalMsgs_Type = { servInfo: { flag?: boolean, closer?: (i: number, e: any) => void }[] }
 
 export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, delayFlag }) => {
 
@@ -32,7 +33,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
   let [userSearchName, setUserSearchName] = useState<string>('')
 
   let history = useHistory();
-  // console.log(usersInfo.totalCount)
 
   let { totalCount, pageSize } = usersInfo;
   let pagesAmount = Math.ceil(totalCount / pageSize)
@@ -110,6 +110,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 
   let validator = (values: Value_Type) => { let errors: Error_Type = {}; if (!values.text.trim()) { values.text = ''; errors.text = 'Required' } return errors }
 
+
   let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
 
   let userIdTalkModeOn = (e: any, i: number,) => {
@@ -133,7 +134,6 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 
   let userUnitStlDefolter = () => {
     if (writeMsgMode.servInfo.length) {
-
       let newServInfo = [...writeMsgMode.servInfo]
       newServInfo.forEach(el => { if (el !== undefined) el.flag = false })
       let finalState = { servInfo: newServInfo }
@@ -145,7 +145,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 
   type indexEl_Type = { index: number, elem: any }  // хз какой тип элемента должен быть
   let [indexEl, setIndexEl] = useState<indexEl_Type>({ index: -1, elem: '' })
-  // console.log(writeMsgMode.servInfo);
+
   useEffect(() => {
     if (indexEl.index >= 0) {
       let newServInfo = [...writeMsgMode.servInfo]
@@ -179,7 +179,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
             </Formik>
           </div>
         </div>
-        {usersInfo.isLoading ?                                                                    // список юзеров грузится?
+        {usersInfo.isLoading ?                                                                   // список юзеров грузится?
           <div className={stl.loaderDiv}>
             <img className={stl.loader} src={usersInfo.generalLDR_GIF} alt="Err" />
           </div> :
@@ -193,7 +193,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
               >Try again</button>}
             </div>
             :
-            usersInfo.userNotFound && !usersInfo.initialUsersList.length ?                           // ничего не найдено при кастомном поиске?
+            usersInfo.userNotFound && !usersInfo.initialUsersList.length ?                       // ничего не найдено при кастомном поиске?
               <div className={stl.nobodyFound}>
                 <img src={usersInfo.userNotFoundGIF} alt="Err" />
                 <h2>{usersInfo.userNotFound} =(</h2>
@@ -268,7 +268,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 }
 
 type WriterMode_Type = {
-  themes: UsersThemes_Type,
+  themes: UsersThemes_Type | PalsThemes_Type,
   userEl: UsersArr,
   sendMsg: usersActions_Type['sendMessageToUserThunk'],
   index: number,
@@ -277,10 +277,9 @@ type WriterMode_Type = {
 
 }
 
-let WriterMode = React.memo(({ themes, userEl, sendMsg, index, closer, delayFlag, }: WriterMode_Type) => {  // Прикруитть нормальную типизацию
+export let WriterMode = React.memo(({ themes, userEl, sendMsg, index, closer, delayFlag, }: WriterMode_Type) => {  // Прикруитть нормальную типизацию
 
   console.log(index);
-
 
   type Error_Type = { text?: string }
   type Value_Type = { text: string }

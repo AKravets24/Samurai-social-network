@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import stl from './../users/users.module.css'
-import { Field, Formik } from 'formik';
-import { v4 as uuidv4 } from 'uuid';
 import { PalsThemes_Type, FriendsActions_Type } from './friendsContainer';
 import { InitialFriendsInfo_Type } from '../../../redux/friendsReducer';
 import { UsersArr } from '../../../redux/app';
 import { UsersThemesBGR_Type } from '../../../redux/backGroundSetter';
 import cn from 'classnames/bind';
+import { ModalMsgs_Type, WriterMode } from '../users/users';
 
 
 type FriendsProps_Type = {
@@ -18,60 +17,62 @@ type FriendsProps_Type = {
 }
 
 export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo, delayFlag }) => {
-  // console.log(palsInfo.BTN_FLW_GIF)
 
-
-  type Error_Type = { text?: string }
-
-  let [isDisabled, setIsDisabled] = useState<boolean>(false);
-  let [msgStat, setMsgStat] = useState(null);
-  let [feedBack, setFeedBack] = useState<boolean>(false);
-  let [feedBackClass, setFeedBackClass] = useState<boolean | string>(stl.feedBackVisible); // false normal
   let [wrapperLocker, setWrapperLocker] = useState<string>('');
-
-  let firstBlockClass = `${stl.userUnit} ${themes.userUnitDnmc} ${stl.userUnitShowed}`;
-  let secondBlockClass = `${stl.userWriteMode} ${themes.userWriteModeDnmc} ${stl.userUnitShowed}`;
-
-  let userIdTalkModeOff = (e: React.SyntheticEvent) => {
-    setWrapperLocker(''); setIsDisabled(false);
-    let target = e.target as HTMLInputElement
-    if (target.parentElement?.parentElement?.parentElement?.parentElement?.children) {
-      target.parentElement.parentElement.parentElement.children[0].className = firstBlockClass;
-      target.parentElement.parentElement.parentElement.children[1].className = stl.userUnitHidden;
-    }
-  };
-
-  let userIdTalkModeOn = (e: React.SyntheticEvent) => {
-    let target = e.target as HTMLInputElement
-    setWrapperLocker(stl.wrapperLocked);
-    setIsDisabled(true);
-    if (target?.parentElement?.parentElement?.parentElement?.parentElement?.children) {
-      target.parentElement.parentElement.parentElement.parentElement.children[0].className = stl.userUnitHidden;
-      target.parentElement.parentElement.parentElement.parentElement.children[1].className = secondBlockClass;
-    }
-  };
+  let [friendsListPage, setFriendsListPage] = useState<number>(1);
 
   let followTogglerListener = (userId: number, userIsFollowed: boolean, error: string) => { palsFuncs.followThunkToggler(userId, userIsFollowed, error) }
   let getMyFriendsListener = (page: number) => { palsFuncs.getMyFriendsListThunk(page) }
 
-  // console.log(palsInfo.friendsList)
 
-  type Value_Type = { text: string }
-  let formValidator = (values: Value_Type) => { const errors: Error_Type = {}; if (!values.text) { errors.text = 'Required' } return errors }
+  let mapWrapperRef = React.createRef<HTMLDivElement>();
 
-  let formSubmitter = (userId: number, textValue: Value_Type, userName: string, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
-    let actionKey: string = uuidv4()
-    palsFuncs.sendMessageToUserThunk(userId, textValue.text, actionKey, userName);
-    setIsDisabled(false); textValue.text = ''; setSubmitting(false);
+  let [writeMsgMode, setWriteMsgMode] = useState<ModalMsgs_Type>({ servInfo: [] })
+
+  let userIdTalkModeOn = (e: any, i: number) => {
+    console.log(e.target.parentElement.parentElement.parentElement.parentElement)
+    if (mapWrapperRef?.current && e.target.parentElement.parentElement.parentElement.parentElement.getBoundingClientRect().top <= mapWrapperRef?.current?.getBoundingClientRect().top) {
+      e.target.parentElement.parentElement.parentElement.parentElement.scrollIntoView({ behavior: "smooth" }) //плавный автоСкролл если элемент если он вызе вьюпорта
+    }
+    setWrapperLocker(stl.wrapperLocked);
+    console.log(e.target.parentElement.parentElement.parentElement.parentElement.children[0].className);
+
+    let newServInfo = [...writeMsgMode.servInfo]
+
+    if (newServInfo[i] === undefined) { newServInfo[i] = { flag: true } }
+    else if (newServInfo[i].flag === true) { newServInfo[i].flag = false; }
+    else if (newServInfo[i].flag === false) { newServInfo[i].flag = true; }
+    newServInfo[i].closer = (index: number, event: any) => modalCloser(index, event)
+    let finalState = { servInfo: newServInfo }
+    setWriteMsgMode(writeMsgMode = finalState)
   }
 
-  let keyCodeChecker = (e: KeyboardEvent, userId: number, values: Value_Type, userName: string, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
-    if (e.keyCode == 13 && e.shiftKey) { return } // для переноса строки =)
-    else if (e.keyCode === 13) { formSubmitter(userId, values, userName, { setSubmitting }) }
+  let userUnitStlDefolter = () => {
+    if (writeMsgMode.servInfo.length) {
+      let newServInfo = [...writeMsgMode.servInfo]
+      newServInfo.forEach(el => { if (el !== undefined) el.flag = false })
+      let finalState = { servInfo: newServInfo }
+      setWriteMsgMode(writeMsgMode = finalState); setWrapperLocker('');
+    }
   }
 
-  // let friendsListPage = 1;
-  let [friendsListPage, setFriendsListPage] = useState<number>(1);
+  window.onkeyup = (e: KeyboardEvent) => { e.key === 'Escape' && userUnitStlDefolter() }
+
+  type indexEl_Type = { index: number, elem: any }  // хз какой тип элемента должен быть
+  let [indexEl, setIndexEl] = useState<indexEl_Type>({ index: -1, elem: '' })
+
+  useEffect(() => {
+    if (indexEl.index >= 0) {
+      let newServInfo = [...writeMsgMode.servInfo]
+      newServInfo[indexEl.index].flag = false
+      let finalState = { servInfo: newServInfo }
+      indexEl.elem.className = cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed)
+      setWriteMsgMode(writeMsgMode = finalState)
+      if (newServInfo.filter(el => el !== undefined).every(el => el.flag === false)) setWrapperLocker(stl.wrapperUnlocked);
+    }
+  }, [indexEl])
+
+  let modalCloser = (i: number, e: any) => { setIndexEl({ index: i, elem: e }) }
 
   return <>
     <div className={cn(stl.friendsGeneral, themes.friendsGeneralDnmc, delayFlag && stl.delay)}>
@@ -92,11 +93,14 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
               <p>No friends here so far...</p>
             </div> :
             <>
-              <h2 className={stl.userHeader}>Friends {palsInfo.friendsCount ? `(${palsInfo.friendsList.length} / ${palsInfo.friendsCount})` : null}</h2>
-              <div className={cn(stl.mapWrapper, themes.mapWrapperDnmc, wrapperLocker, delayFlag && stl.delay)}>
-                {palsInfo.friendsList.map((user: UsersArr) =>
+              <div className={cn(stl.friendsHeader, themes.generalHeaderDnmc, delayFlag && stl.delay)}>
+                <h2 className={stl.friendsHeaderH2}>Friends {palsInfo.friendsCount ? `(${palsInfo.friendsList.length} / ${palsInfo.friendsCount})` : null}</h2>
+              </div>
+              <div ref={mapWrapperRef} className={cn(stl.mapWrapper, themes.mapWrapperDnmc, wrapperLocker, delayFlag && stl.delay)}>
+                {palsInfo.friendsList.map((user: UsersArr, i, users) =>
                   <div className={stl.userUnitContainer} key={user.id}>
-                    <div className={cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed)}>
+                    <div className={!writeMsgMode.servInfo[i]?.flag ? cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed) :
+                      cn(stl.userUnitHidden)} >
                       <div className={stl.avaDiv}>
                         <NavLink to={`/profile/${user.id}`}>
                           <img src={user.photos.large || palsInfo.defaultAvatar} alt='err'
@@ -130,41 +134,21 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
                             </div>
                           </button>
                           <button className={`${stl.followBTN} ${themes.followBTNDnmc}`}
-                            disabled={isDisabled}
-                            onClick={(e) => userIdTalkModeOn(e)}
-                          >
-                            Write message
-                                        </button>
+                            onClick={(e) => userIdTalkModeOn(e, i)}
+                          > Write message
+                          </button>
                         </div>
                       </div>
                     </div>
-                    <div className={`${stl.userUnitHidden}`}>
-                      <div className={stl.miniHeadWrapper}>
-                        <h2 className={cn(stl.userName, themes.userNameDnmc)}>{user.name}</h2>
-                        <button className={cn(stl.followBTN, themes.followBTNDnmc)}>Go to chat</button>
-                        <button className={cn(stl.closeBTN, stl.followBTN, themes.followBTNDnmc)}
-                          onClick={(e: any) => { userIdTalkModeOff(e) }}
-                        >X
-                  </button>
-                      </div>
-                      <div className={stl.textAreaWrapper}>
-                        <Formik initialValues={{ text: '' }} validate={formValidator}
-                          onSubmit={(values, { setSubmitting }) => {
-                            formSubmitter(user.id, values, user.name, { setSubmitting });
-                          }}>
-                          {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
-                            <form onSubmit={handleSubmit} >
-                              <Field name="text" className={stl.talkTextarea} as='textarea' onChange={handleChange} value={values.text}
-                                placeholder={errors.text} onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, user.id, values, user.name, {
-                                  setSubmitting
-                                }))} />
-                              <button type="submit" disabled={isSubmitting} className={cn(stl.followBTN, themes.followBTNDnmc)}
-                              > Send Msg </button>
-                            </form>
-                          )}
-                        </Formik>
-                      </div>
-                    </div>
+                    {writeMsgMode.servInfo[i]?.flag &&
+                      <WriterMode
+                        index={i}
+                        userEl={users[i]}
+                        themes={themes}
+                        sendMsg={palsFuncs.sendMessageToUserThunk}
+                        closer={writeMsgMode.servInfo[i].closer}
+                        delayFlag={delayFlag} />
+                    }
                   </div>
                 )}
               </div>
@@ -194,9 +178,3 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
   </>
 };
 
-//<button disabled={palsInfo.friendsCount === palsInfo.friendsList.length}
-//                  className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`} onClick={() => { setFriendsListPage(++friendsListPage); getMyFriendsListener//(friendsListPage) }}>
-//                  {palsInfo.friendsCount === palsInfo.friendsList.length ? 'All list loaded!' : " Show more!"}
-//
-//                  {/* <img src={palsInfo.generalLDR_GIF} alt="Err" /> */}
-//                </button>

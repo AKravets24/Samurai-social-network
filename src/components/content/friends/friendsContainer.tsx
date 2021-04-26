@@ -11,7 +11,7 @@ import { FriendsThemesBGR_Type } from "../../../redux/backGroundSetter";
 
 
 export type PalsThemes_Type = {
-  friendsGeneralDnmc: string, pagBTNDnmc: string, paginationSelectedDnmc: string, paginationDnmc: string, searchInputDnmc: string, userAvaDnmc: string,
+  friendsGeneralDnmc: string, generalHeaderDnmc: string, pagBTNDnmc: string, paginationSelectedDnmc: string, paginationDnmc: string, searchInputDnmc: string, userAvaDnmc: string,
   followBTNDnmc: string, followBTN_ERR_DNMC: string, userNameDnmc: string, mapWrapperDnmc: string, userUnitDnmc: string, userWriteModeDnmc: string, moreUserUnitsDnmc: string
 }
 
@@ -31,8 +31,6 @@ let FriendsFuncContainer = () => {
   let friendsACs: FriendsACs = useSelector(getFriendsACs)
   let dialogsACs: DialogActions_Type = useSelector(getDialogsACs_compUsers)
 
-  // console.log(friendsACs)
-
 
   let getMyFriendsListThunk = (page: number) => { dispatch(friendsACs.getMyFriendsListThunkAC(page)) };
   let followThunkToggler = (userId: number, isFollowed: boolean, error: string) => { dispatch(friendsACs.followThunkTogglerAC(userId, isFollowed, error)) };
@@ -49,7 +47,7 @@ let FriendsFuncContainer = () => {
 
 
   let [themes, setThemes] = useState<PalsThemes_Type>({
-    friendsGeneralDnmc: '', pagBTNDnmc: '', paginationSelectedDnmc: '', paginationDnmc: '', searchInputDnmc: '', userAvaDnmc: '', followBTNDnmc: '', followBTN_ERR_DNMC: '', userNameDnmc: '', mapWrapperDnmc: '', userUnitDnmc: '', userWriteModeDnmc: '', moreUserUnitsDnmc: '',
+    friendsGeneralDnmc: '', generalHeaderDnmc: '', pagBTNDnmc: '', paginationSelectedDnmc: '', paginationDnmc: '', searchInputDnmc: '', userAvaDnmc: '', followBTNDnmc: '', followBTN_ERR_DNMC: '', userNameDnmc: '', mapWrapperDnmc: '', userUnitDnmc: '', userWriteModeDnmc: '', moreUserUnitsDnmc: '',
   });
 
   useEffect(() => {
@@ -58,6 +56,7 @@ let FriendsFuncContainer = () => {
         return setThemes({
           ...themes,
           friendsGeneralDnmc: stl.friendsGeneralN,
+          generalHeaderDnmc: stl.generalHeaderN,
           pagBTNDnmc: stl.pagBTN_N,
           paginationSelectedDnmc: stl.paginationSelectedN,
           paginationDnmc: stl.paginationN,
@@ -75,6 +74,7 @@ let FriendsFuncContainer = () => {
         return setThemes({
           ...themes,
           friendsGeneralDnmc: stl.friendsGeneralM,
+          generalHeaderDnmc: stl.generalHeaderM,
           pagBTNDnmc: stl.pagBTN_M,
           paginationSelectedDnmc: stl.paginationSelectedM,
           paginationDnmc: stl.paginationM,
@@ -92,6 +92,7 @@ let FriendsFuncContainer = () => {
         return setThemes({
           ...themes,
           friendsGeneralDnmc: stl.friendsGeneralD,
+          generalHeaderDnmc: stl.generalHeaderD,
           pagBTNDnmc: stl.pagBTN_D,
           paginationSelectedDnmc: stl.paginationSelectedD,
           paginationDnmc: stl.paginationD,
@@ -109,6 +110,7 @@ let FriendsFuncContainer = () => {
         return setThemes({
           ...themes,
           friendsGeneralDnmc: stl.friendsGeneralE,
+          generalHeaderDnmc: stl.generalHeaderE,
           pagBTNDnmc: stl.pagBTN_E,
           paginationSelectedDnmc: stl.paginationSelectedE,
           paginationDnmc: stl.paginationE,
