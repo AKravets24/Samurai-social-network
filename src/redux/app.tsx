@@ -65,6 +65,7 @@
 //================================================================================================================
 
 import axios, { AxiosResponse } from "axios";
+import { PseudoMsg_Type } from "./dialogsReducer";
 
 const instance = axios.create({
   withCredentials: true,
@@ -157,7 +158,10 @@ export type DialogsList_Type = {
   photos: { small: null | string, large: null | string }
   userName: string
 };
-export type MessageData_Type = { addedAt: string, body: string, id: string, recipientId: number, senderId: number, translatedBody: null | boolean, viewed: boolean, actionKey?: string | any }
+// PseudoMsg_Type
+export type MessageData_Type = { addedAt: string, body: string, id: string, recipientId: number, senderId: number, translatedBody: null | boolean, viewed: boolean, actionKey?: string | any } |
+{ pseudoId: string, body: string, actionKey: string, senderId: number, isSending: boolean, addedAt: string, deletedByRecipient: boolean, deletedBySender: boolean, distributionId: null, id: string, isSpam: boolean, recipientId: number, recipientName: string, senderName: string, translatedBody: null, viewed: boolean } | any
+
 export type CertainDialog_Type = { error?: null | string, items: MessageData_Type[], totalCount?: number }
 type SendMsgToTalker_Type = {
   data: {

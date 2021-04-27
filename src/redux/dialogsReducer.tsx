@@ -9,6 +9,7 @@ import msgSeenFlag from './img/dialogs/seen.png'
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { AppStateType, InferActionsTypes } from './redux-store';
+import { v4 as uuidv4 } from 'uuid';
 
 
 type FeedBackWindowCloserAC_Type = { type: 'FEEDBACK_WINDOW_CLOSER', actionKey: string }
@@ -44,6 +45,8 @@ const actions = {
 type ActionTypes = InferActionsTypes<typeof actions>
 type Dispatch_Type = Dispatch<ActionTypes>;
 export type ThunkAC_Type = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
+
+export type PseudoMsg_Type = { pseudoId: string, body: string, actionKey: string, senderId: number, isSending: boolean, addedAt: string, deletedByRecipient: boolean, deletedBySender: boolean, distributionId: null, id: string, isSpam: boolean, recipientId: number, recipientName: string, senderName: string, translatedBody: null, viewed: boolean }
 
 
 const getMyNegotiatorsListThunkAC = (): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
@@ -143,8 +146,8 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
   dispatch(actions.onSendingMSGEStatusAC(0, userId, actionKey, userName));  //for friends, users comps
   dispatch(actions.errCatcherAtSendingAC(actionKey, 0));
   dispatch(actions.toggleSendingInProgressAC(true, actionKey));
-  console.log(senderId)
-  let pseudoMsg = { body, actionKey, senderId, isSending: false, addedAt: '', deletedByRecipient: false, deletedBySender: false, distributionId: null, id: '', isSpam: false, recipientId: -1, recipientName: '', senderName: '', translatedBody: null, viewed: false };
+  // console.log(senderId)
+  let pseudoMsg: PseudoMsg_Type = { pseudoId: uuidv4(), body, actionKey, senderId, isSending: false, addedAt: '', deletedByRecipient: false, deletedBySender: false, distributionId: null, id: '', isSpam: false, recipientId: -1, recipientName: '', senderName: '', translatedBody: null, viewed: false };
 
   dispatch(actions.sendMsgAC(pseudoMsg))
   try {
