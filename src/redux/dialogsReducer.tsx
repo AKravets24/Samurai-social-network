@@ -46,7 +46,7 @@ type ActionTypes = InferActionsTypes<typeof actions>
 type Dispatch_Type = Dispatch<ActionTypes>;
 export type ThunkAC_Type = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>
 
-export type PseudoMsg_Type = { pseudoId: string, body: string, actionKey: string, senderId: number, isSending: boolean, addedAt: string, deletedByRecipient: boolean, deletedBySender: boolean, distributionId: null, id: string, isSpam: boolean, recipientId: number, recipientName: string, senderName: string, translatedBody: null, viewed: boolean }
+export type PseudoMsg_Type = { /* pseudoId: string, */ body: string, actionKey: string, senderId: number, isSending: boolean, addedAt: string, deletedByRecipient: boolean, deletedBySender: boolean, distributionId: null, id: string, isSpam: boolean, recipientId: number, recipientName: string, senderName: string, translatedBody: null, viewed: boolean }
 
 
 const getMyNegotiatorsListThunkAC = (): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
@@ -147,7 +147,7 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
   dispatch(actions.errCatcherAtSendingAC(actionKey, 0));
   dispatch(actions.toggleSendingInProgressAC(true, actionKey));
   // console.log(senderId)
-  let pseudoMsg: PseudoMsg_Type = { pseudoId: uuidv4(), body, actionKey, senderId, isSending: false, addedAt: '', deletedByRecipient: false, deletedBySender: false, distributionId: null, id: '', isSpam: false, recipientId: -1, recipientName: '', senderName: '', translatedBody: null, viewed: false };
+  let pseudoMsg: PseudoMsg_Type = { /* pseudoId: uuidv4(), */ body, actionKey, senderId, isSending: false, addedAt: '', deletedByRecipient: false, deletedBySender: false, distributionId: null, id: uuidv4(), isSpam: false, recipientId: -1, recipientName: '', senderName: '', translatedBody: null, viewed: false };
 
   dispatch(actions.sendMsgAC(pseudoMsg))
   try {

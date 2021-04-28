@@ -159,8 +159,8 @@ export type DialogsList_Type = {
   userName: string
 };
 // PseudoMsg_Type
-export type MessageData_Type = { addedAt: string, body: string, id: string, recipientId: number, senderId: number, translatedBody: null | boolean, viewed: boolean, actionKey?: string | any } |
-{ pseudoId: string, body: string, actionKey: string, senderId: number, isSending: boolean, addedAt: string, deletedByRecipient: boolean, deletedBySender: boolean, distributionId: null, id: string, isSpam: boolean, recipientId: number, recipientName: string, senderName: string, translatedBody: null, viewed: boolean } | any
+export type MessageData_Type = { addedAt: string, body: string, id: string, recipientId: number, senderId: number, translatedBody: null | boolean, viewed: boolean, actionKey?: string | any } /* |
+{ body: string, actionKey: string, senderId: number, isSending: boolean, addedAt: string, deletedByRecipient: boolean, deletedBySender: boolean, distributionId: null, id: string, isSpam: boolean, recipientId: number, recipientName: string, senderName: string, translatedBody: null, viewed: boolean } */
 
 export type CertainDialog_Type = { error?: null | string, items: MessageData_Type[], totalCount?: number }
 type SendMsgToTalker_Type = {
