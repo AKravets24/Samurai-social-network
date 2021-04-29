@@ -148,15 +148,17 @@ const getArrowDownPIC = (state: AppStateType) => state.dialogsReducer.arrowDownP
 const getErrAtGettingPrevMsgs = (state: AppStateType) => state.dialogsReducer.errAtGettingPrevMsgs;
 const getForDeletingMsgsArr = (state: AppStateType) => state.dialogsReducer.forDeletingMsgsArr;
 const getErrAtDeletingMsgsArr = (state: AppStateType) => state.dialogsReducer.errAtDeletingMsgsArr;
+const getPrevMSGsCounter = (state: AppStateType) => state.dialogsReducer.prevMSGsCounter;
 
 
 const DialogsReducerPart_1 = createSelector(getDialogsList, getCertainDialog, getAllDialogsIsLoading, getCertainDialogIsLoading, getDefaultAvatar_compDialogs,
     getNewMessagesCounter, getNewMessageBTNDisabled, getPrevMsgsIsLoading, getOnErrorPic, getArrowDownPIC, getErrAtGettingPrevMsgs,
+    getPrevMSGsCounter,
     (dialogsList, certainDialog, allDialogsIsLoading, certainDialogIsLoading, defaultAvatar, newMessagesCounter,
-        newMessageBTNDisabled, prevMsgsIsLoading, onError, arrowDownPIC, errAtGettingPrevMsgs) => {
+        newMessageBTNDisabled, prevMsgsIsLoading, onError, arrowDownPIC, errAtGettingPrevMsgs, prevMSGsCounter) => {
         let DialogsPart_1 = {
             dialogsList, certainDialog, allDialogsIsLoading, certainDialogIsLoading, defaultAvatar, newMessagesCounter,
-            newMessageBTNDisabled, prevMsgsIsLoading, onError, arrowDownPIC, errAtGettingPrevMsgs,
+            newMessageBTNDisabled, prevMsgsIsLoading, onError, arrowDownPIC, errAtGettingPrevMsgs, prevMSGsCounter
         }
         return DialogsPart_1
     })

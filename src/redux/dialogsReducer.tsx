@@ -40,6 +40,7 @@ const actions = {
   addToForDeletingArrAC: (isDeleting: boolean, messageId: string) => ({ type: 'MSG_TO_FOR_DELETING_ARR', isDeleting, messageId } as const),
   errAtDeletingMsgArrAC: (isErr: boolean, messageId: string) => ({ type: 'ERR_AT_DELETENG_MSG_ARR', isErr, messageId } as const),
   dialogCompCleanerAC: () => ({ type: 'DIALOG_AREA_ARR_WAS_CLEANED' } as const),
+  prevMSGsCounterSetterAC: (counter: number) => ({ type: 'PREV_MSGS_COUNTER_SET', counter } as const),
 }
 
 type ActionTypes = InferActionsTypes<typeof actions>
@@ -106,8 +107,9 @@ const addPrevMessagesThunkAC = (userId: number, msgCount: number, pageNumber: nu
   dispatch(actions.prevMsgsloadingTogglerAC(true));
   dispatch(actions.errAtGettingPrevMsgsAC(false));
   try {
-    let response = await usersApi.getTalkWithUser(userId, msgCount, pageNumber)
+    let response = await usersApi.getTalkWithUser2(userId, msgCount, pageNumber)
     dispatch(actions.addPrevMSGS(response.data.items))
+    dispatch(actions.prevMSGsCounterSetterAC(pageNumber + 1))
   }
   catch (err) {
     dispatch(actions.errAtGettingPrevMsgsAC(true));
@@ -152,6 +154,7 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
   dispatch(actions.sendMsgAC(pseudoMsg))
   try {
     let response = await usersApi.sendMsgToTalker(userId, body)
+    console.log(response)
     let modifiedmsgItem = response.data.data.message;
     modifiedmsgItem.actionKey = actionKey
     // console.log(modifiedmsgItem)
@@ -165,6 +168,7 @@ const sendMessageToUserThunkAC = (userId: number, body: string, actionKey: strin
 };
 const feedBackPopUpCloser = (actionKey: string) => (dispatch: Dispatch_Type) => { dispatch(actions.feedBackWindowCloserAC(actionKey)) }
 const dialogCompCleaner = () => (dispatch: Dispatch_Type) => { dispatch(actions.dialogCompCleanerAC()) }
+const prevMSGsCounterSetter = (counter: number) => (dispatch: Dispatch_Type) => { dispatch(actions.prevMSGsCounterSetterAC(counter)) }
 
 
 
@@ -181,15 +185,15 @@ export type DialogActions_Type = {
   deleteMessageThunkAC: (messageId: string, index: number) => ThunkAC_Type
   getNewMessagesRequestThunkAC: () => ThunkAC_Type
   addPrevMessagesThunkAC: (userId: number, msgCount: number, pageNumber: number) => ThunkAC_Type
-  // feedBackWindowCloserAC: (actionKey: string) => FeedBackWindowCloserAC_Type
   feedBackPopUpCloser: (actionKey: string) => void
   dialogCompCleaner: () => void
+  prevMSGsCounterSetter: (counter: number) => void
 }
 
 const dialogActions: DialogActions_Type = {
   getMyNegotiatorsListThunkAC, getTalkWithUserThunkAC, sendMessageToUserThunkAC, createNewDialogAC: actions.createNewDialogAC,
   talkedBeforeThunkAC, setSelectedMessagesAC: actions.setSelectedMessagesAC, setSpamMessagesThunkAC, deleteMessageThunkAC, getNewMessagesRequestThunkAC,
-  addPrevMessagesThunkAC, /* feedBackWindowCloserAC: actions.feedBackWindowCloserAC, */ feedBackPopUpCloser, dialogCompCleaner,
+  addPrevMessagesThunkAC, feedBackPopUpCloser, dialogCompCleaner, prevMSGsCounterSetter,
 };
 
 export const dialogACs = (state = dialogActions) => { return state };
@@ -222,6 +226,7 @@ let initialDialogsState = {
   errAtGettingPrevMsgs: false as boolean,
   forDeletingMsgsArr: [] as string[],
   errAtDeletingMsgsArr: [] as ErrInDeletingArr_Type[],
+  prevMSGsCounter: 2 as number,
 };
 
 export type InitialDialogsState_Type = typeof initialDialogsState;
@@ -232,14 +237,10 @@ export type PartDialogReducer_Type = { newMessageBTNDisabled: boolean, newMessag
 export const dialogsReducer = (state = initialDialogsState, action: ActionTypes, /* date:string, time:string */): InitialDialogsState_Type => {
   let stateCopy = { ...state };
   switch (action.type) {
+
+    case 'PREV_MSGS_COUNTER_SET': console.log(action.counter); return { ...state, prevMSGsCounter: action.counter }
+
     case 'NEW_MSG_ACTTION_COMBINER': return { ...state, newMessagesCounter: action.newMessagesCount, newMessageBTNDisabled: action.BTNIsDisabled, errGettingNewMSGSCount: action.hasErr };
-    case 'SEND_MESSAGE_TO_USER':
-      let totalMsgCount: number = 0;                                                                                    // этот колхоз из=за TS, ибо object possibly undefined
-      if (state?.certainDialog?.totalCount) totalMsgCount = state.certainDialog.totalCount + 1                          // и этот 
-      let duplicateIndex = state.certainDialog.items.findIndex(item => item.actionKey === action.msgItem.actionKey);
-      let finalArr: MessageData_Type[] = [...state.certainDialog.items];
-      duplicateIndex === -1 ? finalArr = [...state.certainDialog.items, action.msgItem] : finalArr[duplicateIndex] = action.msgItem
-      return { ...state, certainDialog: { items: finalArr } };
 
     case 'TOGGLE_SENDING_IN_PROGRESS':
       return { ...state, sendndigInProgress: action.isSending ? [...state.sendndigInProgress, action.actionKey] : [...state.sendndigInProgress.filter(el => el != action.actionKey)] }
@@ -307,11 +308,22 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
       stateCopy = { ...state, certainDialog: { items: [] } }
       return stateCopy;
 
-    case 'DELETE_MESSAGE': // console.log('DELETE_MESSAGE');
+    case 'SEND_MESSAGE_TO_USER':
+      let totalMsgCountInc: number = 0;                                                                   // этот колхоз из=за TS, ибо object possibly undefined
+      if (state?.certainDialog?.totalCount) totalMsgCountInc = state.certainDialog.totalCount + 1         // и этот 
+      let duplicateIndex = state.certainDialog.items.findIndex(item => item.actionKey === action.msgItem.actionKey);
+      let finalArr: MessageData_Type[] = [...state.certainDialog.items];
+      duplicateIndex === -1 ? finalArr = [...state.certainDialog.items, action.msgItem] : finalArr[duplicateIndex] = action.msgItem
+      return { ...state, certainDialog: { items: finalArr, totalCount: duplicateIndex === -1 ? totalMsgCountInc : state.certainDialog.totalCount } };
+
+    case 'DELETE_MESSAGE': console.log('DELETE_MESSAGE');
       let certainDialog = { ...state.certainDialog };
       let indexForDeleting = state.certainDialog.items.findIndex(item => item.id === action.messageId);
       certainDialog.items.splice(indexForDeleting, 1);
-      return { ...state, certainDialog: { items: certainDialog.items } }
+
+      let totalMsgCountDec: number = 0;                                                                   // этот колхоз из=за TS, ибо object possibly undefined
+      if (state?.certainDialog?.totalCount) totalMsgCountDec = state.certainDialog.totalCount - 1
+      return { ...state, certainDialog: { items: certainDialog.items, totalCount: totalMsgCountDec } }
 
     case 'ADDED_PREVIOUS_MSGS':
       let reverseItems = action.prevMsgs.reverse();
@@ -339,7 +351,7 @@ export const dialogsReducer = (state = initialDialogsState, action: ActionTypes,
 
     case 'DIALOG_AREA_ARR_WAS_CLEANED': return {
       ...state, errAtGettingPrevMsgs: false, forDeletingMsgsArr: [], certainDialog: { items: [] },
-      errInSendingArr: [], errAtDeletingMsgsArr: []
+      errInSendingArr: [], errAtDeletingMsgsArr: [], prevMSGsCounter: 2
     }
 
     default: return stateCopy;

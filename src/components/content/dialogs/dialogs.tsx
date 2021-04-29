@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter, NavLink, useRouteMatch } from 'react-router-dom';
+import { withRouter, NavLink, useRouteMatch, useLocation } from 'react-router-dom';
 import { Field, Formik } from 'formik';
 import stl from './dialogs.module.css';
 import {
   getColorTheme, getDialogsACs_compDialogs,
   getMyId, getSmartDialogsReducer, getThemesDelayFlag
 } from "../../../redux/selectors";
-import { InitialDialogsState_Type } from '../../../redux/dialogsReducer';
+import { dialogACs, InitialDialogsState_Type } from '../../../redux/dialogsReducer';
 import { DialoguesThemes_Type } from '../../../redux/backGroundSetter';
 import { getSmartDialogsLoaders } from '../../../redux/selectors';
 import { MatchHook_Type } from "../../RouterHooksTypes";
@@ -34,8 +34,6 @@ type Themes_Type = {
 
 let DialogFuncContainer = () => {
   let match: MatchHook_Type = useRouteMatch();
-  // console.log(match)
-
   let dialogsInfo = useSelector(getSmartDialogsReducer);
   let myId = useSelector(getMyId);
   let themesDelayFlag = useSelector(getThemesDelayFlag);
@@ -139,17 +137,19 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   type Error_Type = { text?: string }
 
   let [dialogId, setDialogId] = useState(userIdInURL === undefined ? 0 : +userIdInURL);
-  let [pageNumber, setPageNumber] = useState(2);
   let [msgsMapDone, setMsgsMapDone] = useState(0); //диалог:  0 = не загружен, 1 = загружен первично, 2 = загрузка предыдущей части 3 = загружена предыдущая часть
   let [dialogAreaHeight, setDialogAreaHeight] = useState<AreaHeight | any>(0);
   let [userNameInHeader, setUserNameInHeader] = useState('');
 
+  let counterSetter = useSelector(getDialogsACs_compDialogs).prevMSGsCounterSetter;
+  let dispatch = useDispatch();
 
-  let getTalk = (userId: number) => { setDialogId(dialogId = userId); setPageNumber(2); actions.getTalkWithUserThunk(dialogId) };
+  let getTalk = (userId: number) => {
+    setDialogId(dialogId = userId); dispatch(counterSetter(2)); actions.getTalkWithUserThunk(dialogId)
+  };
 
   let oldMsgLazyLoader = () => {
-    !state.errAtGettingPrevMsgs && setPageNumber(pageNumber + 1);
-    actions.addPrevMessagesThunk(dialogId, 10, pageNumber);
+    actions.addPrevMessagesThunk(dialogId, 10, state.prevMSGsCounter);
     setMsgsMapDone(2);
   };
 
@@ -222,7 +222,29 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
     if (wasClicked) setWasClicked(false)
     !dialogArea?.current?.scrollTop && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
       !state.prevMsgsIsLoading && !dialogChanging && oldMsgLazyLoader()
+
   }
+
+
+  let [prevBTNisShown, setPrevBTNisShown] = useState<boolean>(false);
+  let hasScroll = () => {
+    if (state.certainDialog.items.length)
+      dialogArea?.current?.scrollHeight > dialogArea?.current?.clientHeight ? setPrevBTNisShown(false) : setPrevBTNisShown(true);
+  }
+  (function () {
+    window.addEventListener("resize", resizeThrottler, false);
+    let resizeTimeout: any;
+    function resizeThrottler() { if (!resizeTimeout) { resizeTimeout = setTimeout(() => { resizeTimeout = null; hasScroll(); }, 500); } }
+  }())
+
+
+  useEffect(() => {
+    hasScroll()
+  }, [state.certainDialogIsLoading, state.prevMsgsIsLoading])
+
+
+
+  // console.log(state.certainDialog.totalCount)
 
 
   return <>
@@ -275,8 +297,12 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
               </div>}
             <div className={stl.oldMsgsLoader}>
               {state.prevMsgsIsLoading ? <img src={loaders.prevMSGLDR_GIF} alt="Err" /> :                          // предыдущие сообщения грузятся? | лодер
-                state.errAtGettingPrevMsgs && <p>Failed to load previous messages. Try again.</p>                  // есть ошибка?                   | соболезнования
+                state.errAtGettingPrevMsgs && <button
+                  className={cn(stl.prevBTNLdrBasic, prevBTNisShown ? stl.BTNActive : stl.BTNPassive)}
+                  onClick={() => { return prevBTNisShown ? oldMsgLazyLoader() : null }}
+                >Failed to load previous messages. Try again.</button>                                             // есть ошибка?                   | соболезнования
               }
+              {prevBTNisShown && !state.errAtGettingPrevMsgs && !state.prevMsgsIsLoading && <button onClick={oldMsgLazyLoader} className={prevBTNisShown ? stl.addPrevBTNShown : stl.addPrevBTNHidden} >Add previous messages</button>}
             </div>
             {state.certainDialogIsLoading ? <div className={stl.certainLDRWrapper}><img src={loaders.certainLDR_GIF} alt="err" /></div> :
               state.errCertainDialogGet ? <div className={stl.errorBlock}> {state.errCertainDialogGet}</div> :
@@ -287,7 +313,6 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
                     return <div
                       key={msg.id}
-                      onClick={() => console.log(msg)}
                       className={cn(myId !== null && +msg.senderId === +myId ? `${stl.messageBlockMe} ${themes.msgMeDnmc} ${delayFlag && stl.delay} ` : `${stl.messageBlockUser} ${themes.msgUserDnmc} ${delayFlag && stl.delay}`)}
                       id={msg.id}
                       onContextMenu={(e) => {
@@ -297,6 +322,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                       <p className={stl.messageBody} >{msg.body}</p>
                       <div className={stl.msgStatWrapper}>
                         {state.sendndigInProgress.some(el => el === msg.actionKey) || state.forDeletingMsgsArr.some(id => id === msg.id) && <img className={stl.ldrAndErr} src={state.msgLoaderGIF} alt="Err" />}
+                        {/* при отправке лодырь не показывается */}
                         {state.errInSendingArr.some(el => el.actionKey === msg.actionKey) && <img className={stl.ldrAndErr} src={state.onError} alt="Err" />}
                         <p className={cn(
                           state.errInSendingArr.some(el => el.actionKey === msg.actionKey) || state.errAtDeletingMsgsArr.some(el => el.messageId === msg.id) ? stl.errorMarker :
