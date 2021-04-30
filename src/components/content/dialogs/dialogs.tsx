@@ -29,7 +29,7 @@ type DialogsActions_Types = {
 }
 
 type Themes_Type = {
-  activeLink: string, dialogAreaBackgroundNSecondScroll: string, dialogDnmc: string, firstScroller: string, msgMeDnmc: string, msgUserDnmc: string, sendBTNDnmc: string, talkerBlockA: string, nameInHeaderDnmc: string, talkerBlockTheme: string, textAreaDnmc: string
+  activeLink: string, dialogAreaBackgroundNSecondScroll: string, dialogDnmc: string, firstScroller: string, errBTNDnmc: string, msgMeDnmc: string, msgUserDnmc: string, sendBTNDnmc: string, talkerBlockA: string, nameInHeaderDnmc: string, talkerBlockTheme: string, textAreaDnmc: string
 }
 
 let DialogFuncContainer = () => {
@@ -66,23 +66,23 @@ let DialogFuncContainer = () => {
     return () => dialogActions.userCompCleaner()
   }, [])
 
-  let [themes, setThemes] = useState<Themes_Type>({ dialogDnmc: '', firstScroller: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDnmc: '', msgUserDnmc: '', dialogAreaBackgroundNSecondScroll: '', nameInHeaderDnmc: '', textAreaDnmc: '', sendBTNDnmc: '', })
+  let [themes, setThemes] = useState<Themes_Type>({ dialogDnmc: '', firstScroller: '', errBTNDnmc: '', talkerBlockTheme: '', activeLink: '', talkerBlockA: '', msgMeDnmc: '', msgUserDnmc: '', dialogAreaBackgroundNSecondScroll: '', nameInHeaderDnmc: '', textAreaDnmc: '', sendBTNDnmc: '', })
   useEffect(() => {
     switch (colorTheme) {
       case 'NIGHT': return setThemes({
-        ...themes, dialogDnmc: stl.dialogN, firstScroller: stl.dialogListN, talkerBlockTheme: stl.talkerBlockN, activeLink: stl.activeLinkN, talkerBlockA: stl.talkerBlockA_N, msgMeDnmc: stl.myMsgN,
+        ...themes, dialogDnmc: stl.dialogN, firstScroller: stl.dialogListN, errBTNDnmc: stl.followBTN_ERR_N, talkerBlockTheme: stl.talkerBlockN, activeLink: stl.activeLinkN, talkerBlockA: stl.talkerBlockA_N, msgMeDnmc: stl.myMsgN,
         msgUserDnmc: stl.userMsgN, dialogAreaBackgroundNSecondScroll: stl.dialogAreaN, nameInHeaderDnmc: stl.nameInHeaderN, textAreaDnmc: stl.textareaN, sendBTNDnmc: stl.sendBTN_N,
       });
       case 'MORNING': return setThemes({
-        ...themes, dialogDnmc: stl.dialogM, firstScroller: stl.dialogListM, talkerBlockTheme: stl.talkerBlockM, activeLink: stl.activeLinkM, talkerBlockA: stl.talkerBlockA_M, msgMeDnmc: stl.myMsgM,
+        ...themes, dialogDnmc: stl.dialogM, firstScroller: stl.dialogListM, errBTNDnmc: stl.followBTN_ERR_M, talkerBlockTheme: stl.talkerBlockM, activeLink: stl.activeLinkM, talkerBlockA: stl.talkerBlockA_M, msgMeDnmc: stl.myMsgM,
         msgUserDnmc: stl.userMsgM, dialogAreaBackgroundNSecondScroll: stl.dialogAreaM, nameInHeaderDnmc: stl.nameInHeaderM, textAreaDnmc: stl.textareaM, sendBTNDnmc: stl.sendBTN_M,
       });
       case 'DAY': return setThemes({
-        ...themes, dialogDnmc: stl.dialogD, firstScroller: stl.dialogListD, talkerBlockTheme: stl.talkerBlockD, activeLink: stl.activeLinkD, talkerBlockA: stl.talkerBlockA_D, msgMeDnmc: stl.myMsgD,
+        ...themes, dialogDnmc: stl.dialogD, firstScroller: stl.dialogListD, errBTNDnmc: stl.followBTN_ERR_D, talkerBlockTheme: stl.talkerBlockD, activeLink: stl.activeLinkD, talkerBlockA: stl.talkerBlockA_D, msgMeDnmc: stl.myMsgD,
         msgUserDnmc: stl.userMsgD, dialogAreaBackgroundNSecondScroll: stl.dialogAreaD, nameInHeaderDnmc: stl.nameInHeaderD, textAreaDnmc: stl.textareaD, sendBTNDnmc: stl.sendBTN_D,
       });
       case 'EVENING': return setThemes({
-        ...themes, dialogDnmc: stl.dialogE, firstScroller: stl.dialogListE, talkerBlockTheme: stl.talkerBlockE, activeLink: stl.activeLinkE, talkerBlockA: stl.talkerBlockA_E, msgMeDnmc: stl.myMsgE,
+        ...themes, dialogDnmc: stl.dialogE, firstScroller: stl.dialogListE, errBTNDnmc: stl.followBTN_ERR_E, talkerBlockTheme: stl.talkerBlockE, activeLink: stl.activeLinkE, talkerBlockA: stl.talkerBlockA_E, msgMeDnmc: stl.myMsgE,
         msgUserDnmc: stl.userMsgE, dialogAreaBackgroundNSecondScroll: stl.dialogAreaE, nameInHeaderDnmc: stl.nameInHeaderE, textAreaDnmc: stl.textareaE, sendBTNDnmc: stl.sendBTN_E,
       });
     }
@@ -244,46 +244,52 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
 
 
 
-  // console.log(state.certainDialog.totalCount)
+  console.log(state.errNegotiatorsListGet)
 
 
   return <>
     <div className={cn(stl.dialogsPage, themes.dialogDnmc, delayFlag && stl.delay)}>
       <div className={stl.dialogListAndArea}>
-        <div className={cn(stl.dialogList, themes.firstScroller, delayFlag && stl.delay)}>
-          {state.allDialogsIsLoading ?                                                 // диалоги загружаются?
-            <div className={stl.dialogListLoaderWrapper}>
-              <img className={stl.dialogListLoader} src={loaders.halfCircle_GIF} alt="Err" />
-              <img className={stl.dialogListLoader} src={loaders.interSector_GIF} alt="Err" />
-              <img className={stl.dialogListLoader} src={loaders.halfCircle_GIF} alt="Err" />
-            </div>
-            :
-            state.errNegotiatorsListGet ?                                               // есть оштбки при загрузке?
-              <div className={stl.errorBlock}>
-                <h2>Error!</h2>
-                <div>
-                  <img /* onLoad={true} */ src={state.errNegotiatorsListPIC} alt="Err" />
-                </div>
-                <p>{state.errNegotiatorsListGet} Connection lost!</p>
-                <button className={`${stl.errBTN} ${themes.sendBTNDnmc}`}
-                  onClick={() => actions.getMyNegotiatorsListThunk()}
-                >Try again</button>
+        <div className={cn(stl.dialogList, /* themes.firstScroller, */ delayFlag && stl.delay)}>
+          <div className={cn(stl.constrictor, themes.firstScroller)}>
+            {state.allDialogsIsLoading ?                                                 // диалоги загружаются?
+              <div className={stl.dialogListLoaderWrapper}>
+                <img className={stl.dialogListLoader} src={loaders.halfCircle_GIF} alt="Err" />
+                <img className={stl.dialogListLoader} src={loaders.interSector_GIF} alt="Err" />
+                <img className={stl.dialogListLoader} src={loaders.halfCircle_GIF} alt="Err" />
               </div>
               :
-              state.dialogsList
-                .map((user, i) =>
-                  <div className={cn(stl.talkerBlock, themes.talkerBlockTheme, delayFlag && stl.delay)} key={i} >
-                    <NavLink to={`/profile/${user.id}`} >
-                      <img src={user.photos.large || state.defaultAvatar} alt="err" />
-                    </NavLink>
-                    <NavLink to={`/dialogs/${user.id}`}
-                      onClick={() => { getTalk(user.id); setMsgsMapDone(0); setBtnShow(0); setDialogChanging(true); actions.userCompCleaner() }}
-                      className={themes.talkerBlockA}
-                      activeClassName={themes.activeLink}>
-                      {user.userName}{user.hasNewMessages &&
-                        <span>({user.newMessagesCount})</span>}
-                    </NavLink>
-                  </div>)}
+              state.errNegotiatorsListGet ?                                               // есть оштбки при загрузке?
+                <div className={stl.errorBlock}>
+                  <h2>Error!</h2>
+                  <div>
+                    <img /* onLoad={true} */ src={state.errNegotiatorsListPIC} alt="Err" />
+                  </div>
+                  <p>{state.errNegotiatorsListGet} Connection lost!</p>
+                  <button className={`${stl.errBTN} ${themes.sendBTNDnmc}`}
+                    onClick={() => actions.getMyNegotiatorsListThunk()}
+                  >Try again</button>
+                </div>
+                :
+                state.dialogsList
+                  .map((user, i) =>
+                    <div className={cn(stl.talkerBlock, themes.talkerBlockTheme, delayFlag && stl.delay)} key={i} >
+                      <div className={stl.avaWrapper}>
+                        <NavLink to={`/profile/${user.id}`} >
+                          <img src={user.photos.large || state.defaultAvatar} alt="err" />
+                          <span className={cn(stl.msgCounter, themes.talkerBlockA)}> {user.hasNewMessages && user.newMessagesCount}</span>
+                        </NavLink>
+                      </div>
+                      <div className={stl.userNameWrapper}>
+                        <NavLink to={`/dialogs/${user.id}`}
+                          onClick={() => { getTalk(user.id); setMsgsMapDone(0); setBtnShow(0); setDialogChanging(true); actions.userCompCleaner() }}
+                          className={themes.talkerBlockA}
+                          activeClassName={themes.activeLink}>
+                          {user.userName}
+                        </NavLink>
+                      </div>
+                    </div>)}
+          </div>
         </div>
         <div className={stl.dialogsAreaAndSender}>
           <div className={stl.editWrapper}>
@@ -298,11 +304,16 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
             <div className={stl.oldMsgsLoader}>
               {state.prevMsgsIsLoading ? <img src={loaders.prevMSGLDR_GIF} alt="Err" /> :                          // предыдущие сообщения грузятся? | лодер
                 state.errAtGettingPrevMsgs && <button
-                  className={cn(stl.prevBTNLdrBasic, prevBTNisShown ? stl.BTNActive : stl.BTNPassive)}
+                  // className={cn(stl.prevBTNLdrBasic, prevBTNisShown ? stl.BTNActive && themes.errBTNDnmc : stl.BTNPassive)}
+                  className={cn(stl.prevBTNLdrBasic, prevBTNisShown ? themes.errBTNDnmc : stl.BTNPassive)}
                   onClick={() => { return prevBTNisShown ? oldMsgLazyLoader() : null }}
                 >Failed to load previous messages. Try again.</button>                                             // есть ошибка?                   | соболезнования
               }
-              {prevBTNisShown && !state.errAtGettingPrevMsgs && !state.prevMsgsIsLoading && <button onClick={oldMsgLazyLoader} className={prevBTNisShown ? stl.addPrevBTNShown : stl.addPrevBTNHidden} >Add previous messages</button>}
+              {prevBTNisShown && !state.errAtGettingPrevMsgs && !state.prevMsgsIsLoading &&
+                !state.certainDialogIsLoading && state?.certainDialog.items.length !== state.certainDialog.totalCount &&
+                <button onClick={oldMsgLazyLoader}
+                  className={cn(stl.prevBTNLdrBasic, prevBTNisShown ? stl.addPrevBTNShown : stl.addPrevBTNHidden, themes.sendBTNDnmc)}
+                >Add previous messages</button>}
             </div>
             {state.certainDialogIsLoading ? <div className={stl.certainLDRWrapper}><img src={loaders.certainLDR_GIF} alt="err" /></div> :
               state.errCertainDialogGet ? <div className={stl.errorBlock}> {state.errCertainDialogGet}</div> :
@@ -358,22 +369,26 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
               }}>
               <img src={state.arrowDownPIC} alt="Err" />
             </button>
-
-            <Formik initialValues={{ text: '' }} validate={validator} onSubmit={submitter} >
-              {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
-                <form onSubmit={handleSubmit} >
-                  <Field name="text" onChange={handleChange} value={values.text} placeholder={errors.text} as='textarea'
-                    className={cn(stl.txtAreaField, themes.textAreaDnmc, delayFlag && stl.delay)} disabled={!dialogId}
-                    onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, values, {
-                      setSubmitting
-                    }))}
-                  />
-                  {dialogId ?
-                    <button disabled={isSubmitting || state.certainDialogIsLoading || !!state.errCertainDialogGet} className={cn(stl.sendBTN, themes.sendBTNDnmc)}
-                    > Send </button> : null}
-                </form>
-              )}
-            </Formik>
+            <div className={stl.senderWrapper}>
+              <Formik initialValues={{ text: '' }} validate={validator} onSubmit={submitter} >
+                {({ values, errors, handleChange, handleSubmit, isSubmitting, setSubmitting }) => (
+                  <form onSubmit={handleSubmit} >
+                    <Field name="text" onChange={handleChange} value={values.text} placeholder={errors.text} as='textarea'
+                      className={cn(stl.txtAreaField, themes.textAreaDnmc, delayFlag && stl.delay)} disabled={!dialogId}
+                      onKeyDown={(e: KeyboardEvent) => (keyCodeChecker(e, values, {
+                        setSubmitting
+                      }))}
+                    />
+                    <div className={stl.sendBTNWrapper}>
+                      {dialogId ?
+                        <button disabled={isSubmitting || state.certainDialogIsLoading || !!state.errCertainDialogGet} className={cn(stl.sendBTN, themes.sendBTNDnmc)}
+                        > Send </button> : null
+                      }
+                    </div>
+                  </form>
+                )}
+              </Formik>
+            </div>
           </div>
         </div>
       </div>

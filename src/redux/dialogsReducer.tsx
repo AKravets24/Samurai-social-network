@@ -52,7 +52,7 @@ export type PseudoMsg_Type = { /* pseudoId: string, */ body: string, actionKey: 
 
 const getMyNegotiatorsListThunkAC = (): ThunkAC_Type => async (dispatch: Dispatch_Type) => {
   dispatch(actions.setDialogsAreLoadingToggleAC(true, false))
-  actions.setErrMyNegotiatorsList(0)
+  dispatch(actions.setErrMyNegotiatorsList(0))
   try {
     let response = await usersApi.getMyNegotiatorsList();
     // console.log(response)
