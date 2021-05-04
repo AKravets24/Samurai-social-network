@@ -107,7 +107,7 @@ const addPrevMessagesThunkAC = (userId: number, msgCount: number, pageNumber: nu
   dispatch(actions.prevMsgsloadingTogglerAC(true));
   dispatch(actions.errAtGettingPrevMsgsAC(false));
   try {
-    let response = await usersApi.getTalkWithUser2(userId, msgCount, pageNumber)
+    let response = await usersApi.getTalkWithUser(userId, msgCount, pageNumber)
     dispatch(actions.addPrevMSGS(response.data.items))
     dispatch(actions.prevMSGsCounterSetterAC(pageNumber + 1))
   }

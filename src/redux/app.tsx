@@ -96,14 +96,13 @@ export const usersApi = {
   // DIALOGS ------------------------------------------------------------------------------------------------------------------- DIALOGS
   getMyNegotiatorsList() { return instance.get<DialogsList_Type[]>(`dialogs`) },
   getTalkWithUser(userId: number, msgCount: number = 10 /* 20 */, pageNumber: number = 1) { return instance.get<CertainDialog_Type>(`dialogs/${userId}/messages?count=${msgCount}&page=${pageNumber}`) },
-  getTalkWithUser2(userId: number, msgCount: number = 10 /* 20 */, pageNumber: number = 1) { return instance.get<CertainDialog_Type>(`dialogs1/${userId}/messages?count=${msgCount}&page=${pageNumber}`) },
   sendMsgToTalker(userId: null | number, body: string) { return instance.post<SendMsgToTalker_Type>(`dialogs/${userId}/messages`, { body }) },
   getNewMessages() { return instance.get<number>(`dialogs/messages/new/count`) },
   deleteMessage(messageId: string) { return instance.delete<DeleteMSG_Type>(`dialogs/messages/${messageId}`) },
   setAsSpamMessage(messageId: string) { return instance.post<SetAsSpamMSG_Type>(`dialogs/messages/${messageId}/spam`) },
   // USERS --------------------------------------------------------------------------------------------------------------------- USERS
-  getUsers(pageSize = 10, currentPage: number = 1) { /* debugger; */ return instance.get<UsersListData_Type>(`users?count=${pageSize}&page=${currentPage}`) },
-  getCertainUser(pageSize: number | null, userName: string, pageOfEquals: number = 1) { /* debugger; */ return instance.get<UsersListData_Type>(`users?count=${pageSize}&term=${userName}&page=${pageOfEquals}`) },
+  getUsers(pageSize = 10, currentPage: number = 1) { return instance.get<UsersListData_Type>(`users?count=${pageSize}&page=${currentPage}`) },
+  getCertainUser(pageSize: number | null, userName: string, pageOfEquals: number = 1) { return instance.get<UsersListData_Type>(`users?count=${pageSize}&term=${userName}&page=${pageOfEquals}`) },
   followRequest(userId: null | number) { return instance.post<Un_Follow_Type>(`follow/${userId}`) },
   unFollowRequest(userId: null | number) { return instance.delete<Un_Follow_Type>(`follow/${userId}`) },
 };

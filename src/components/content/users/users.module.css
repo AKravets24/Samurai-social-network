@@ -29,7 +29,6 @@
     align-items: center;
     width: 95%;
     margin: 4px auto 4px auto;
-    border-bottom: 1px solid green;
     height: 50px;
 }
 
@@ -161,11 +160,20 @@
     padding: 0;
 }
 
-.loaderDiv {
-    /* margin: 150px auto; */
+.loaderDiv_Friends,
+.loaderDiv_Users {
     display: flex;
     align-self: center;
     justify-content: center;
+    min-height: 500px;
+}
+
+.loaderDiv_Friends {
+    height: calc(100vh - 120px);
+}
+
+.loaderDiv_Users {
+    height: calc(100vh - 270px);
 }
 
 .Houston {
@@ -200,7 +208,7 @@
 
 .loader{
     height: 250px;
-    margin: 150px auto;
+    margin: auto;
 }
 
 .nobodyFound {
@@ -540,7 +548,6 @@
 
 .userNameD          {color: green;        }
 .userNameD:hover    {color: darkgreen;    }
-/*.userNameD:active   {color: #08ac08;      }*/
 .userNameD:active   {color: #034b03;      }
 
 

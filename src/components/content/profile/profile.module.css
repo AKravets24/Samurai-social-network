@@ -13,6 +13,7 @@
 
 .profile {
     opacity: 0.9;
+    border-radius: 0 0 20px 0;
 }
 
 .delay {
@@ -27,12 +28,13 @@
 .loaderDiv {
     width: 100%;
     display: flex;
-    height: inherit;
+    /* height: inherit; */
     opacity: 0.9;
     justify-content: center;
     flex-direction: column;
     align-items: center;
     border-radius: 0 0 20px 0;
+    height: calc(100vh - 120px);
 }
 
 .loader {

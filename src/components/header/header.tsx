@@ -1,7 +1,7 @@
 import React, { useState, useEffect, } from "react";
 import stl from './header.module.css';
 import cn from 'classnames/bind';
-import logo from './img/logo.jpg';
+import logo from './img/logo.png';
 import logout from './img/logout.png';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -47,8 +47,9 @@ let Header: React.FC<PropsTypes> = ({ state: { logIn }, actions, themes, delayFl
   return <div className={cn(stl.header, themes.headerDNMC, delayFlag && stl.delay)}>
     <div className={cn(stl.buffer)} />
     <div className={cn(stl.logotype)}>
+      <h1 className={cn(themes.logotypeH1, delayFlag && stl.delay)} >Rocket</h1>
       <img src={logo} alt="#err" />
-      <h1 className={cn(themes.logotypeH1, delayFlag && stl.delay)} >Rocket Network</h1>
+      <h1 className={cn(themes.logotypeH1, delayFlag && stl.delay)} >Network</h1>
     </div>
     <div className={cn(stl.login)}>
       {logIn ?

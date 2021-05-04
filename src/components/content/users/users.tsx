@@ -180,7 +180,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
           </div>
         </div>
         {usersInfo.isLoading ?                                                                   // список юзеров грузится?
-          <div className={stl.loaderDiv}>
+          <div className={stl.loaderDiv_Users}>
             <img className={stl.loader} src={usersInfo.generalLDR_GIF} alt="Err" />
           </div> :
           usersInfo.usersGettingError || usersInfo.userFindingError ?                            // ошибка при поиске юзеров?
@@ -258,11 +258,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
               </div>
         }
       </div>
-      <div className={cn(stl.moreUserUnits, themes.moreUserUnitsDnmc)}>
-        <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`}
-          onClick={() => console.log('show more content')}>Show More
-                </button>
-      </div>
+      <div className={cn(stl.moreUserUnits, themes.moreUserUnitsDnmc)} />
     </div>
   </>
 }

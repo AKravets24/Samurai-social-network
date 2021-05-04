@@ -238,19 +238,17 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
   }())
 
 
-  useEffect(() => {
-    hasScroll()
-  }, [state.certainDialogIsLoading, state.prevMsgsIsLoading])
+  useEffect(() => { hasScroll() }, [state.certainDialogIsLoading, state.prevMsgsIsLoading])
 
 
 
-  console.log(state.errNegotiatorsListGet)
+  // console.log(state.errNegotiatorsListGet)
 
 
   return <>
     <div className={cn(stl.dialogsPage, themes.dialogDnmc, delayFlag && stl.delay)}>
       <div className={stl.dialogListAndArea}>
-        <div className={cn(stl.dialogList, /* themes.firstScroller, */ delayFlag && stl.delay)}>
+        <div className={cn(stl.dialogList)}>
           <div className={cn(stl.constrictor, themes.firstScroller)}>
             {state.allDialogsIsLoading ?                                                 // диалоги загружаются?
               <div className={stl.dialogListLoaderWrapper}>
@@ -332,8 +330,8 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
                     >
                       <p className={stl.messageBody} >{msg.body}</p>
                       <div className={stl.msgStatWrapper}>
-                        {state.sendndigInProgress.some(el => el === msg.actionKey) || state.forDeletingMsgsArr.some(id => id === msg.id) && <img className={stl.ldrAndErr} src={state.msgLoaderGIF} alt="Err" />}
-                        {/* при отправке лодырь не показывается */}
+                        {state.forDeletingMsgsArr.some(id => id === msg.id) && <img className={stl.ldrAndErr} src={state.msgLoaderGIF} alt="Err" />}
+                        {state.sendndigInProgress.some(el => el === msg.actionKey) && <img className={stl.ldrAndErr} src={state.msgLoaderGIF} alt="Err" />}
                         {state.errInSendingArr.some(el => el.actionKey === msg.actionKey) && <img className={stl.ldrAndErr} src={state.onError} alt="Err" />}
                         <p className={cn(
                           state.errInSendingArr.some(el => el.actionKey === msg.actionKey) || state.errAtDeletingMsgsArr.some(el => el.messageId === msg.id) ? stl.errorMarker :

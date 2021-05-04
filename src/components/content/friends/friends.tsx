@@ -77,11 +77,11 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
   return <>
     <div className={cn(stl.friendsGeneral, themes.friendsGeneralDnmc, delayFlag && stl.delay)}>
       {palsInfo.friendsListIsLoading ?                                                    // список друзей загружается? 
-        <div className={stl.loaderDiv}>
+        <div className={stl.loaderDiv_Friends}>
           <img className={stl.loader} src={palsInfo.generalLDR_GIF} alt="Err" />
         </div> :
         palsInfo.errOnGettingFriends ?                                                    // есть ошибка при загрузке?
-          <div className={cn(stl.Houston, themes.friendsGeneralDnmc, delayFlag && stl.delay)}>
+          <div className={cn(stl.Houston, themes.friendsGeneralDnmc, /* delayFlag && stl.delay */)}>
             <h2>Houston, we've got a problem...</h2>
             <h2>{palsInfo.errOnGettingFriends}</h2>
             <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`} onClick={() => getMyFriendsListener(friendsListPage)}
@@ -93,10 +93,10 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
               <p>No friends here so far...</p>
             </div> :
             <>
-              <div className={cn(stl.friendsHeader, themes.generalHeaderDnmc, delayFlag && stl.delay)}>
+              <div className={cn(stl.friendsHeader, themes.generalHeaderDnmc, /* delayFlag && stl.delay */)}>
                 <h2 className={stl.friendsHeaderH2}>Friends {palsInfo.friendsCount ? `(${palsInfo.friendsList.length} / ${palsInfo.friendsCount})` : null}</h2>
               </div>
-              <div ref={mapWrapperRef} className={cn(stl.mapWrapper, themes.mapWrapperDnmc, wrapperLocker, delayFlag && stl.delay)}>
+              <div ref={mapWrapperRef} className={cn(stl.mapWrapper, themes.mapWrapperDnmc, wrapperLocker, /* delayFlag && stl.delay */)}>
                 {palsInfo.friendsList.map((user: UsersArr, i, users) =>
                   <div className={stl.userUnitContainer} key={user.id}>
                     <div className={!writeMsgMode.servInfo[i]?.flag ? cn(stl.userUnit, themes.userUnitDnmc, stl.userUnitShowed) :
