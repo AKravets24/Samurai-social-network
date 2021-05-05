@@ -40,9 +40,6 @@ export let StatusCompFunc: React.FC<StatusProps> = ({ colorTheme, errOnStatusLoa
     let el = target as HTMLInputElement; el.getAttribute('data-name') === 'modalBackground' && setStatusEdit(false)
   }
 
-  let changeColor1 = (e: any) => { console.log(e.target.parentElement.parentElement.className = stl.first) }
-  let changeColor2 = (e: any) => { console.log(e.target.parentElement.parentElement.className = stl.second) }
-
   // console.log(props)
 
   return <>
@@ -71,8 +68,6 @@ export let StatusCompFunc: React.FC<StatusProps> = ({ colorTheme, errOnStatusLoa
         <div className={stl.twoBTNs} >
           <button className={stl.BTNChangeSaver} onClick={() => { confirmStatus() }}> Apply changes</button>
           <button className={stl.BTNChangeReject} onClick={rejectStatus}> Reject changes </button>
-          <button onClick={e => { changeColor1(e) }}>1</button>
-          <button onClick={e => { changeColor2(e) }}>2</button>
         </div>
       </div>
     </div>

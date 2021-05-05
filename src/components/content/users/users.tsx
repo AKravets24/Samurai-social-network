@@ -159,6 +159,7 @@ export let Users: React.FC<UsersProps_Type> = ({ themes, usersInfo, usersFuncs, 
 
   let modalCloser = (i: number, e: any) => { setIndexEl({ index: i, elem: e }) }
 
+  console.log(usersInfo.initialUsersList)
 
   return <>
     <div className={cn(stl.usersPage, themes.userPageDnmc, delayFlag && stl.delay)} >

@@ -133,6 +133,7 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
   }, [state.profileMedia.MSGToUserSended || state.profileMedia.errAtMSGSending])
 
 
+
   const getContacts = (obj: any, logos: any) => {
     const result = [];
     let { faceBookLogo, gitHubLogo, instagramLogo, mainLinkLogo, twitterLogo, vkLogo, websiteLogo, youTubeLogo } = logos;
@@ -164,6 +165,20 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
     actions.addPost(values.text); values.text = ''; setSubmitting(false);
   }
 
+
+  let forbiddenIdArr = [1, 17, 21, 23, 31, 1031];
+  let [userIdlacking, setUserIdlacking] = useState<boolean>(false)
+  let match: MatchHook_Type | any = useRouteMatch();
+  useEffect(() => {
+    // if (+match.params.userId === 1 || +match.params.userId === 17 /* || 17 || 21 || 23  *//* || match.params.userId >= 31 && match.params.userId <= 1031 */) {
+    if (forbiddenIdArr.some(el => el === +match.params.userId) || match.params.userId >= 31 && match.params.userId <= 1031) {
+      setUserIdlacking(true)
+    } else setUserIdlacking(false)
+  }, [match.params.userId])
+
+  console.log(match.params.userId)
+
+  console.log(forbiddenIdArr.some(el => el === +match.params.userId))
 
   return <>
     {writeMode &&
@@ -206,11 +221,15 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
     }
 
     {/* {!userId && !errOnGettingProfile && isLoading && <div className={stl.loaderDiv}> */}
-    {isLoading && <div className={cn(stl.loaderDiv, themes.profileDnmc, delayFlag && stl.delay)}>
+    {!userIdlacking && isLoading && <div className={cn(stl.loaderDiv, themes.profileDnmc, delayFlag && stl.delay)}>
       <img className={stl.loader} src={state.picsNLoaders.auth_LDR_GIF} alt="Err" />
       <p className={themes.fontClrsDnmc}>Loading profile...</p>
     </div>}
-    {errOnGettingProfile && !isLoading &&
+    {userIdlacking && <div className={`${stl.Houston} ${themes.profileDnmc}`}>
+      <h2>Houston, we've got a problem...</h2>
+      <h2>We have no user with such Id</h2>
+    </div>}
+    {!userIdlacking && errOnGettingProfile && !isLoading &&
       // <div className={stl.onGettingErrorDiv}> {errOnGettingProfile} </div>
       <div className={`${stl.Houston} ${themes.profileDnmc}`}>
         <h2>Houston, we've got a problem...</h2>
@@ -222,7 +241,7 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
       </div>
     }
 
-    {userId && !errOnGettingProfile && !isLoading &&
+    {!userIdlacking && userId && !errOnGettingProfile && !isLoading &&
       <div className={`${stl.profile} ${themes.profileDnmc}`}>
         <div className={stl.panorama}>
           <img
@@ -245,14 +264,6 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
                 state.myId === userId ?
                   <label htmlFor="file" className={`${stl.fileChooser} ${themes.BTNs}`}
                   >
-                    {/*<>*/}
-                    {/*    {props.state.profileMedia.errOnAvatarUpdate ?*/}
-                    {/*    <div> {props.state.profileMedia.errOnAvatarUpdate} </div> :*/}
-                    {/*    <><div> Choose your new picture</div>*/}
-                    {/*    <div> Choose your <s>destiny!</s></div></>*/}
-                    {/*    }*/}
-                    {/*</>*/}
-
                     <>
                       {state.profileMedia.errOnAvatarUpdate ?
                         <div className={themes.BTN_ERR_DNMC}> {state.profileMedia.errOnAvatarUpdate} </div> :
@@ -266,11 +277,6 @@ const Profile: React.FC<Profile_Types> = ({ state, actions, themes, colorTheme, 
                   <button className={`${stl.writeMessage} ${themes.BTNs}`}
                     disabled={writeMode} onClick={() => setWriteMode(true)}
                   >Write Message</button>
-                //     <label htmlFor="file" className={`${stl.fileChooser} ${props.themes.BTNs}`}>
-                //     <NavLink className={stl.writeMessage} to={`/dialogs/${userId}` }
-                //     > Write Message
-                //     </NavLink>
-                // </label>
               }
             </div>
             <div className={stl.profileInfo}>
