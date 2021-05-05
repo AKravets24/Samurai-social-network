@@ -74,7 +74,7 @@
 .dialogListE::-webkit-scrollbar-thumb, .dialogAreaE::-webkit-scrollbar-thumb                       {background-color: darkred;      }
 
 .dialogListLoaderWrapper {
-    height: 90%;
+    height: 92%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -617,7 +617,7 @@
 /*.dialogAreaEvening::-webkit-scrollbar-button:single-button  {background-color: darkred;}*/
 
 .senderWrapper {
-    height: 160px;
+    /* height: 160px; */
 }
 
 .sender {

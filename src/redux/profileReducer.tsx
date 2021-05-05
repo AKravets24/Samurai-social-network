@@ -196,7 +196,7 @@ export const profileReducer = (state: InitialProfileState_Type = initialProfileS
       let text = { id: state.wallPosts.length + 1, likesCount: 0, date: action.date, time: action.time, message: action.finalPost };
       state.wallPosts.unshift(text);
       return { ...state };
-    case 'SET_PROFILE': return { ...state, profileData: action.profileData, isFollowed: action.isFollowed, statusField: action.status };
+    case 'SET_PROFILE': return { ...state, profileData: action.profileData, isFollowed: action.isFollowed, statusField: action.status, onFollowingErr: '' };
     case 'ERROR_AT_GETTING_PROFILE': return { ...state, errOnProfileLoading: action.errorCode };
     case 'ERROR_AT_GETTING_STATUS': console.log('ERROR_AT_GETTING_STATUS'); return { ...state, errOnStatusLoading: action.errorCode };
     case 'ERROR_AT_STATUS_UPDATE': console.log('ERROR_AT_STATUS_UPDATE'); return { ...state, errOnStatusUpdate: action.error.substr(1, action.error.length - 2) };

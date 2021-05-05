@@ -70,8 +70,7 @@ let initialChatState = {
 export const chatReducer = (state = initialChatState, action: ActionTypes): InitialChatState_Type => {
   switch (action.type) {
     case 'SET_NEW_WEB_SOCKET': return { ...state, webSocket: action.newWebSosket }
-    case 'SET_NEW_CHAT_ARR':
-      return { ...state, chatArr: [...action.newchatArr.reverse(), ...state.chatArr] }
+    case 'SET_NEW_CHAT_ARR': return { ...state, chatArr: [...action.newchatArr.reverse(), ...state.chatArr] }
     case 'SET_NEW_READY_STATUS': return { ...state, readyStatus: action.newReadyStatus }
     case 'SET_UNMOUNT_CLEAN': return { ...state, chatArr: [], readyStatus: 'undefined' }
     default: return { ...state }

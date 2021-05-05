@@ -5,7 +5,7 @@ import { Field, Formik } from 'formik';
 // import "antd/dist/antd.css";
 // import "antd/lib/date-picker/style/css";
 import { useDispatch, useSelector } from 'react-redux';
-import { getChatACs, getColorTheme, getSmartChatReducer } from '../../../redux/selectors';
+import { getChatACs, getColorTheme, getSmartChatReducer, getSmartPicsNLoaders } from '../../../redux/selectors';
 import { ReadyStatus_Type } from '../../../redux/chatReducer'
 import { NavLink } from 'react-router-dom';
 import cn from 'classnames/bind';
@@ -21,6 +21,7 @@ export default function ChatContainer() {
   let chatACs = useSelector(getChatACs);
   let colorTheme = useSelector(getColorTheme);
   let dispatch = useDispatch()
+  let loaderGIF = useSelector(getSmartPicsNLoaders).auth_LDR_GIF;
 
   console.log(chatACs);
 
@@ -54,15 +55,15 @@ export default function ChatContainer() {
   }, [colorTheme])
 
 
-  return <> { smartData.webSocket === null ? null : <Chat chatData={smartData.chatArr} msgSender={chatMSGSender} readyStatus={smartData.readyStatus} defaultAva={smartData.defaultAvatar} themes={themes} />} </>
+  return <> { smartData.webSocket === null ? null : <Chat chatData={smartData.chatArr} msgSender={chatMSGSender} readyStatus={smartData.readyStatus} defaultAva={smartData.defaultAvatar} themes={themes} ldrGIF={loaderGIF} />} </>
 
 }
 
 
 
-type ChatProps_Type = { chatData: ChatArr_Type[], msgSender: (arg: string) => void, readyStatus: ReadyStatus_Type, defaultAva: string, themes: Themes_Type }
+type ChatProps_Type = { chatData: ChatArr_Type[], msgSender: (arg: string) => void, readyStatus: ReadyStatus_Type, defaultAva: string, themes: Themes_Type, ldrGIF: string }
 
-let Chat: React.FC<ChatProps_Type> = ({ chatData, msgSender, readyStatus, defaultAva, themes }) => {
+let Chat: React.FC<ChatProps_Type> = ({ chatData, msgSender, readyStatus, defaultAva, ldrGIF, themes }) => {
 
   console.log(readyStatus);
 
@@ -83,7 +84,11 @@ let Chat: React.FC<ChatProps_Type> = ({ chatData, msgSender, readyStatus, defaul
       <p>There are more than 15 thousand of us!</p>
     </div>
     <div className={cn(stl.chatWrapper, themes.chatGeneralDnmc)}>
-
+      {readyStatus === 'pending' &&
+        <div className={stl.loaderDiv_Users}>
+          <img className={stl.loader} src={ldrGIF} alt="Err" />
+        </div>
+      }
       {chatData.map((el, i) =>
         <div key={i} className={cn(stl.msgBlock, themes.headerDnmc)}>
           <div className={cn(stl.avaAndLink, themes.avaDnmc)}>
