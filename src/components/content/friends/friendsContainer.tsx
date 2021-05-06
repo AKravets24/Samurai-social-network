@@ -25,7 +25,6 @@ let FriendsFuncContainer = () => {
 
   let colorTheme = useSelector(getColorTheme)
   let palsInfo: InitialFriendsInfo_Type & FriendsThemesBGR_Type = useSelector(GetSmartFriendsReducer)
-  let themesDelayFlag = useSelector(getThemesDelayFlag)
 
   let dispatch = useDispatch();
   let friendsACs: FriendsACs = useSelector(getFriendsACs)
@@ -127,7 +126,7 @@ let FriendsFuncContainer = () => {
     }
   }, [colorTheme]);
 
-  return <Friends themes={themes} palsFuncs={palsFuncs} palsInfo={palsInfo} delayFlag={themesDelayFlag} />
+  return <Friends themes={themes} palsFuncs={palsFuncs} palsInfo={palsInfo} />
 }
 
 export default FriendsFuncContainer;

@@ -13,10 +13,9 @@ type FriendsProps_Type = {
   themes: PalsThemes_Type
   palsInfo: InitialFriendsInfo_Type & UsersThemesBGR_Type
   palsFuncs: FriendsActions_Type
-  delayFlag: boolean,
 }
 
-export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo, delayFlag }) => {
+export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo }) => {
 
   let [wrapperLocker, setWrapperLocker] = useState<string>('');
   let [friendsListPage, setFriendsListPage] = useState<number>(1);
@@ -74,6 +73,11 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
 
   let modalCloser = (i: number, e: any) => { setIndexEl({ index: i, elem: e }) }
 
+  let [delayFlag, setDelayFlag] = useState(false)
+  useEffect(() => {
+    setTimeout(() => { setDelayFlag(true) }, 4000)
+  }, [])
+
   return <>
     <div className={cn(stl.friendsGeneral, themes.friendsGeneralDnmc, delayFlag && stl.delay)}>
       {palsInfo.friendsListIsLoading ?                                                    // список друзей загружается? 
@@ -81,7 +85,7 @@ export let Friends: React.FC<FriendsProps_Type> = ({ themes, palsFuncs, palsInfo
           <img className={stl.loader} src={palsInfo.generalLDR_GIF} alt="Err" />
         </div> :
         palsInfo.errOnGettingFriends ?                                                    // есть ошибка при загрузке?
-          <div className={cn(stl.Houston, themes.friendsGeneralDnmc, /* delayFlag && stl.delay */)}>
+          <div className={cn(stl.Houston,/*  themes.friendsGeneralDnmc, delayFlag && stl.delay */)}>
             <h2>Houston, we've got a problem...</h2>
             <h2>{palsInfo.errOnGettingFriends}</h2>
             <button className={`${stl.moreUsersShower} ${themes.pagBTNDnmc}`} onClick={() => getMyFriendsListener(friendsListPage)}

@@ -293,7 +293,7 @@ let Dialogs: React.FC<DialogsProps_Type> = ({ myId, state, themes, userIdInURL, 
           <div className={stl.editWrapper}>
             <h2 className={themes.nameInHeaderDnmc}>{userNameInHeader}</h2>
           </div>
-          <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll, delayFlag && stl.delay)}
+          <div className={cn(stl.dialogArea, themes.dialogAreaBackgroundNSecondScroll)}
             ref={dialogArea} onScroll={() => scrollControler()} onContextMenu={e => e.preventDefault()} >
             {!state.dialogsList.length && !state.allDialogsIsLoading && !state.errNegotiatorsListGet &&            // если ни с кем еще не было диалогов
               <div className={stl.noDialogsList}>

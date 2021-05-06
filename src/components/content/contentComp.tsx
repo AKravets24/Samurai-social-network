@@ -15,9 +15,6 @@ let FriendsComposer = lazy(() => import("./friends/friendsContainer"));
 let DialogsComposer = lazy(() => import("./dialogs/dialogs"));
 let ChatContainer = lazy(() => import("./chat/chat"))
 let UsersComposer = lazy(() => import("./users/usersContainer"));
-let News = lazy(() => import('./news/News'));
-let Music = lazy(() => import('./news/News'));
-let Settings = lazy(() => import("./settings/settings"));
 let UnAuthorised = lazy(() => import("./unAuthorised/unAuthorised"));
 let NotFound = lazy(() => import("./404/404"));
 
@@ -27,9 +24,6 @@ let FriendsComp = withSuspense(FriendsComposer)
 let DialogsComp = withSuspense(DialogsComposer)
 let ChatComp = withSuspense(ChatContainer)
 let UsersComp = withSuspense(UsersComposer)
-let NewsComp = withSuspense(News)
-let MusicComp = withSuspense(Music)
-let SettingsComp = withSuspense(Settings)
 let NotFoundComp = withSuspense(NotFound)
 
 export function ContentCompContainer() {
@@ -56,7 +50,7 @@ let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname, 
     if (isAuth) {         // ЗАЛОГИНЕН
 
       if (pathname.match(/^\/profile\b$|^\/login$|^\/$/)) return <Redirect to={`profile/${myId}`} />
-      if (!pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/chat$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/)) return <Redirect to='/404' />
+      if (!pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/chat$|^\/friends$|^\/users$|^\/$|^\/404$/)) return <Redirect to='/404' />
       // if (!pathname.match(/^\/profile\/\d{1,5}\b$|^\/dialogs\/\d{1,5}\b$|^\/dialogs$|^\/dialogs\/\d{1,5}\/messages$|^\/chat$|^\/friends$|^\/users$|^\/$|^\/news$|^\/music$|^\/settings$|^\/$|^\/404$/)) return <Redirect to='/404' />
       return <>
         <Route onLoad={true} exact path='/profile/:userId?' render={() => <ProfileComp />} />
@@ -64,9 +58,6 @@ let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname, 
         <Route onLoad={true} exact path={`/dialogs/:userId?`} render={() => <DialogsComp />} />
         <Route onLoad={true} exact path={'/chat'} render={() => <ChatComp />} />
         <Route onLoad={true} exact path={`/users`} render={() => <UsersComp />} />
-        <Route onLoad={true} exact path='/news' render={() => <NewsComp />} />
-        <Route onLoad={true} exact path='/music' render={() => <MusicComp />} />
-        <Route onLoad={true} exact path='/settings' render={() => <SettingsComp />} />
         <Route onLoad={true} exact path='/404' render={() => <NotFoundComp />} />
 
       </>
@@ -76,9 +67,6 @@ let Content: React.FC<PropsType> = ({ authData: { isAuth, id: myId }, pathname, 
       if (!pathname.match(/^\/news$|^\/music$|^\/settings$|^\/$|^\/login$|^\/404$/)) return <Redirect to='/404' />
       return <>
         <Route onLoad={true} exact path='/login' render={withSuspense(UnAuthorised)} />
-        <Route onLoad={true} exact path='/news' render={withSuspense(News)} />
-        <Route onLoad={true} exact path='/music' render={withSuspense(Music)} />
-        <Route onLoad={true} exact path='/settings' render={withSuspense(Settings)} />
         <Route onLoad={true} exact path='/404' render={withSuspense(NotFound)} />
       </>
     }

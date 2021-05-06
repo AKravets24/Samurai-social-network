@@ -76,38 +76,30 @@ type PropsTypes = {
 
 
 let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions, delayFlag }) => {
-  // console.log(delayFlag)
-
-  // let [isHiddenBTN, setIsHiddenBTN] = useState(stl.hidden);
   let isHiddenBTN = stl.hidden;
-
   let [element, setElement] = useState<JSX.Element>(<span className={themes.dynamicClass}> +1? </span>);
 
-  useEffect(() => { BTNRenderSelector() }, [state.newMessageBTNDisabled, state.errGettingNewMSGSCount]);
+  useEffect(() => { BTNRenderSelector() }, [state.newMessageBTNDisabled, state.errGettingNewMSGSCount, themes.dynamicClass]);
 
   const BTNRenderSelector = () => {
     if (state.newMessageBTNDisabled) {
-      // setIsHiddenBTN(stl.hidden);
       isHiddenBTN = stl.hidden;
-      setElement(<img src={state.envelope_GIF} alt="err" />); // лодер конверта
+      setElement(<img className={stl.envelope} src={state.envelope_GIF} alt="err" />); // лодер конверта
       return element
     }
     else if (state.errGettingNewMSGSCount) {
-      // setIsHiddenBTN(stl.showed)
       isHiddenBTN = stl.showed;
       setElement(<img className={stl.errorImg} src={state.onError} alt='err' />); // пиктограмма ошибки
       return element
     }
     else {
-      setElement(<span className={themes.dynamicClass}> +1? </span>)
+      setElement(<span className={cn(stl.extraMsg, themes.dynamicClass)}> +1? </span>)
       return element
     }
   };
 
   let queryRequest = useLocation().search;
   let history = useHistory()
-  // console.log(history)
-  // let usersLink = '/users'
 
   let finalUsersLink = () => {
     let parsedString = queryString.parse(queryRequest);
@@ -126,12 +118,9 @@ let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions, delayFlag })
   return <>
     <div className={cn(stl.blockMenu, themes.blockMenu, delayFlag && stl.delay)}>
       <ul className={stl.menu}>
-        {!myId && <li><NavLink to={`/login`} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}
-        >Get Login</NavLink></li>}
-        {myId && <li><NavLink to={`/profile`} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}
-        > Profile </NavLink></li>}
-        {myId && <li><NavLink to={'/friends'} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}
-        > Friends </NavLink></li>}
+        {!myId && <li><NavLink to={`/login`} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass} > Get Login</NavLink></li>}
+        {myId && <li><NavLink to={`/profile`} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}> Profile </NavLink></li>}
+        {myId && <li><NavLink to={'/friends'} className={themes.dynamicClass} activeClassName={themes.dynamicActiveClass}> Friends </NavLink></li>}
 
         {myId && <li className={stl.dialogsSpan}>
           <button disabled={state.newMessageBTNDisabled} onClick={actions.getNewMessagesRequestThunk} className={isHiddenBTN}>
@@ -146,23 +135,11 @@ let NavBar: React.FC<PropsTypes> = ({ myId, themes, state, actions, delayFlag })
         {myId && <li><NavLink to={'/chat'}
           className={themes.dynamicClass}
           activeClassName={themes.dynamicActiveClass}> Chat </NavLink></li>}
-        {/* {props.myId && <li><NavLink to={'/users'} */}
-
         {myId && <li><NavLink to={history.location.pathname !== `/users` ? '/users' : history.location.pathname + history.location.search}
-          // {props.myId && <li><NavLink to={history.location.pathname + history.location.search}
           className={themes.dynamicClass}
           activeClassName={themes.dynamicActiveClass}
           onClick={(e) => history.location.pathname === `/users` ? finalUsersLink() : null}
         > Users </NavLink></li>}
-        <li><NavLink to='/news'
-          className={themes.dynamicClass}
-          activeClassName={themes.dynamicActiveClass}> News </NavLink></li>
-        <li><NavLink to='/music'
-          className={themes.dynamicClass}
-          activeClassName={themes.dynamicActiveClass}> Music </NavLink></li>
-        <li><NavLink to='/settings'
-          className={themes.dynamicClass}
-          activeClassName={themes.dynamicActiveClass}> Settings </NavLink></li>
       </ul>
     </div>
   </>

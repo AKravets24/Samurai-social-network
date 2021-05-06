@@ -28,7 +28,7 @@
 }
 
 .menu li:first-child {
-    margin-top: 15px;
+    margin-top: 25px;
 }
 
 .menu li {
@@ -102,7 +102,13 @@
     opacity: 1;
 }
 
-.dialogsSpan button img {
+.extraMsg {
+    position: absolute;
+    margin-top: -14px;
+    margin-left: -10px;
+}
+
+.envelope {
     position: absolute;
     margin-top: -25px;
     margin-left: -25px;
@@ -119,11 +125,9 @@
 }
 
 .errorImg {
-    /*opacity: 1;*/
-    /*background-color: red;*/
     position: absolute;
     width: 30px;
-    margin-top: 15px;
+    margin-top: -15px;
 }
 
 

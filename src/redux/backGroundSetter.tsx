@@ -167,7 +167,7 @@ export const backgroundReducer = (state = initialState, action: ActionTypes): BG
         case 'THEMES_TRANSITION_FLAG': return { ...state, themesDelayFlag: true }
 
         case 'TIMER':
-            // console.log(TIMER);
+            console.log(action.timer);
             // console.log(action.timer, ':таймер в редюсере');
             if (action.timer >= 1440 || action.timer < 180) {  //  if (action.timer >= 1440 || action.timer < 180) {
                 // console.log('NIGHT_THEME')

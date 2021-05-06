@@ -48,12 +48,7 @@
 .constrictor {
     width: 100%;
     overflow: auto;
-    /* overflow-wrap: break-word; */
-    margin: 43px 0 70px 0;
-    /* min-height: 92%; */
-    /* height: inherit; */
-    /* max-height: inherit; */
-    /* max-height: 92%; */
+    margin: 43px 0 90px 0;
 }
 
 

@@ -16,10 +16,10 @@
     transition: 4000ms
 }
 
-.usersPageN,.friendsGeneralN { background-color: #cfedff;     }
-.usersPageM,.friendsGeneralM { background-color: #fbc498;     }
-.usersPageD,.friendsGeneralD { background-color: lightyellow; }
-.usersPageE,.friendsGeneralE { background-color: #fef0f0;     }
+.usersPageN, .friendsGeneralN { background-color: #cfedff;     }
+.usersPageM, .friendsGeneralM { background-color: #fbc498;     }
+.usersPageD, .friendsGeneralD { background-color: lightyellow; }
+.usersPageE, .friendsGeneralE { background-color: #fef0f0;     }
 
 .userInfo {}
 
